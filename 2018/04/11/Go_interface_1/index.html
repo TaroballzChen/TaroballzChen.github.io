@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang物件導向初識-day18-接口(interface) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang接口(interface)多態結構體(struct)排序(sort)">
+  
+  
+  
+  
+  <meta name="description" content="實現 String()方法如果一個變量實現了String()這個方法，那麼fmt.Printf默認會調用這個變量的String()進行輸出">
+<meta name="keywords" content="2018,Golang,接口(interface),多態,結構體(struct),排序(sort)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang物件導向初識-day18-接口(interface)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/11/Go_interface_1/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="實現 String()方法如果一個變量實現了String()這個方法，那麼fmt.Printf默認會調用這個變量的String()進行輸出">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/HdNq8gQ.jpg">
+<meta property="og:updated_time" content="2018-04-10T16:41:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang物件導向初識-day18-接口(interface)">
+<meta name="twitter:description" content="實現 String()方法如果一個變量實現了String()這個方法，那麼fmt.Printf默認會調用這個變量的String()進行輸出">
+<meta name="twitter:image" content="https://i.imgur.com/HdNq8gQ.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_interface_1" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/HdNq8gQ.jpg" rel="gallery_ck4x0bhqo004wgdq76qngr6mv">
+        <img src="https://i.imgur.com/HdNq8gQ.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang物件導向初識-day18-接口(interface)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/11/Go_interface_1/" class="article-date">
+	  <time datetime="2018-04-10T16:00:00.000Z" itemprop="datePublished">四月 11, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="實現-String-方法"><a href="#實現-String-方法" class="headerlink" title="實現 String()方法"></a>實現 String()方法</h1><p>如果一個變量實現了<code>String()</code>這個方法，那麼<code>fmt.Printf</code>默認會調用這個變量的<code>String()</code>進行輸出</p>
+<a id="more"></a>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> ClassRoom <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Teacher <span class="keyword">string</span></span><br><span class="line">	RoomNum <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *ClassRoom)</span><span class="title">String</span><span class="params">()</span><span class="title">string</span></span>&#123;</span><br><span class="line">	result := fmt.Sprintf(<span class="string">"%s Class %d - %s"</span>,self.Name,self.RoomNum,self.Teacher)</span><br><span class="line">	<span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> chem *ClassRoom = &amp;ClassRoom&#123;&#125;</span><br><span class="line">	chem.Name = <span class="string">"Chemistry"</span></span><br><span class="line">	chem.Teacher = <span class="string">"Dr.Chang"</span></span><br><span class="line">	chem.RoomNum = <span class="number">101</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//調用fmt.Printf方法，格式化輸出會調用String方法</span></span><br><span class="line">	fmt.Printf(<span class="string">"%s"</span>,chem)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Chemistry Class 101 - Dr.Chang</span><br></pre></td></tr></table></figure>
+<ul>
+<li>以上為一接口的實現</li>
+</ul>
+<hr>
+<h1 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h1><ul>
+<li>Interface為一種<strong>類型</strong>可以<strong>定義多個方法</strong>，但是本身不需要實現，由調用接口者實現</li>
+<li>Interface<strong>不能包含任何字段、變量</strong></li>
+<li>Interface類型默認就是一個<strong>指針</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> 接口名 <span class="keyword">interface</span>&#123;</span><br><span class="line">	方法<span class="number">1</span>(參數列表) 返回值列表</span><br><span class="line">	方法<span class="number">2</span>(參數列表) 返回值列表</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Test <span class="keyword">interface</span>&#123;</span><br><span class="line">	Print()</span><br><span class="line">	Sleep()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只要某個類型實現了<code>Print()</code>及<code>Sleep()</code>這兩個方法，這個類型也同時實現了<code>Test</code>這個接口</li>
+<li>要是接口裡定義多個方法，某個類型也要<strong>同時實現這些多個方法</strong>，才算是實現接口</li>
+<li><strong>不能部份實現方法</strong>(只實現一種方法)，必須全部實現</li>
+</ul>
+<hr>
+<h1 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h1><ul>
+<li>要是接口裡<strong>沒有任任何方法</strong>，我們稱為<strong>空接口</strong></li>
+<li>任何類型皆實現空接口 (空接口能<strong>指向任何類型</strong>)</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">interface</span>&#123;&#125;      <span class="comment">//聲明一個空接口</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">int</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//空接口指向int類型的實例化變量b</span></span><br><span class="line">	a = b     </span><br><span class="line">	fmt.Printf(<span class="string">"%T"</span>,a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="接口調用"><a href="#接口調用" class="headerlink" title="接口調用"></a>接口調用</h1><ul>
+<li>Goalng中的接口，不需要顯式的實現(只要自定義的類型裡，方法名、參數、返回類型有對上即可)</li>
+<li>只要某種類型<strong>實現接口裡的所有方法</strong>，就可以<strong>將實例化的接口變量指向某種類型</strong>，並使用<strong>實例化的接口調用方法</strong></li>
+</ul>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span>(</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義car接口，裡面只有一個方法run()</span></span><br><span class="line"><span class="keyword">type</span> car <span class="keyword">interface</span> &#123;</span><br><span class="line">	run()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Bike <span class="keyword">struct</span>&#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Speed <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Bike實現了car接口裡的所有方法，因此亦實現了car接口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *Bike)</span> <span class="title">run</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"Bike running"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Train <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Speed <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//Train實現了car接口裡的所有方法，因此亦實現了car接口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *Train)</span><span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Train running"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//實例化一個Bike類型</span></span><br><span class="line">	<span class="keyword">var</span> Giant Bike</span><br><span class="line">	Giant.Name = <span class="string">"Giant"</span></span><br><span class="line">	Giant.Speed = <span class="number">20</span></span><br><span class="line">    </span><br><span class="line">	<span class="comment">//實例化一個Train類型</span></span><br><span class="line">	<span class="keyword">var</span> Tze_Chiang Train</span><br><span class="line">	Tze_Chiang.Name = <span class="string">"Tze_Chiang"</span></span><br><span class="line">	Tze_Chiang.Speed = <span class="number">2000</span></span><br><span class="line">    </span><br><span class="line">	<span class="comment">//實例化一個car類型的接口(car_interface為接口類型的變量)</span></span><br><span class="line">	<span class="keyword">var</span> car_interface car</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//將實例化的接口(就是一個指針)指向實例化的Bike類型 </span></span><br><span class="line">	car_interface = &amp;Giant</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//調用方法</span></span><br><span class="line">	car_interface.run()</span><br><span class="line">	</span><br><span class="line">	car_interface = &amp;Tze_Chiang</span><br><span class="line">	car_interface.run()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Bike running</span><br><span class="line">Train running</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="實現多接口"><a href="#實現多接口" class="headerlink" title="實現多接口"></a>實現多接口</h2><ul>
+<li>如果一個變量含有了多個interface類型的方法，那麼這個變量就實現了多個接口</li>
+</ul>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Message <span class="keyword">interface</span>&#123;</span><br><span class="line">	Send()</span><br><span class="line">	Receive()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> call <span class="keyword">interface</span>&#123;</span><br><span class="line">	Call()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> cellphone <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	price <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *cellphone)</span><span class="title">Send</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"SendMessage"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *cellphone)</span><span class="title">Receive</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"ReceiveMessage..."</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *cellphone)</span><span class="title">Call</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Calling...."</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> Nokia *cellphone = &amp;cellphone&#123;</span><br><span class="line">		Name:<span class="string">"Nokia"</span>,</span><br><span class="line">		price : <span class="number">100</span>,</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">var</span> message Message</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//Nokia實現了message的接口</span></span><br><span class="line">	message = Nokia</span><br><span class="line">	message.Send()</span><br><span class="line">	message.Receive()</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> c call</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//Nokia亦實現了call的接口</span></span><br><span class="line">	c = Nokia</span><br><span class="line">	c.Call()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Nokia</code>變量實現了多個接口</li>
+</ul>
+<h4 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SendMessage</span><br><span class="line">ReceiveMessage...</span><br><span class="line">Calling....</span><br></pre></td></tr></table></figure>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>struct中必須全部實踐interface的所有方法 才算是成功調用接口 (不能部分實踐)  </li>
+<li>實例化的接口 可以指向多種不同的實例化類型 (多態)</li>
+</ul>
+<hr>
+<h1 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h1><p>每種不同的類型，皆有排序的需求，因此將排序的功能做成一個接口<br>只要實現排序接口的各個方法就能實現排序的功能<br>Golang中的sort package也有這樣的接口<br><a href="https://golang.org/pkg/sort/" target="_blank" rel="noopener">https://golang.org/pkg/sort/</a></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Interface <span class="keyword">interface</span> &#123;</span><br><span class="line">        <span class="comment">// Len is the number of elements in the collection.</span></span><br><span class="line">        Len() <span class="keyword">int</span></span><br><span class="line">        <span class="comment">// Less reports whether the element with</span></span><br><span class="line">        <span class="comment">// index i should sort before the element with index j.</span></span><br><span class="line">        Less(i, j <span class="keyword">int</span>) <span class="keyword">bool</span></span><br><span class="line">        <span class="comment">// Swap swaps the elements with indexes i and j.</span></span><br><span class="line">        Swap(i, j <span class="keyword">int</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Interface <span class="keyword">interface</span>&#123;</span><br><span class="line">	Len() <span class="keyword">int</span></span><br><span class="line">	Less(i,j <span class="keyword">int</span>)<span class="keyword">bool</span></span><br><span class="line">	Swap(i,j <span class="keyword">int</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span>&#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	ID <span class="keyword">int</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//接口是針對特定類型的 因此需定義一個Student切片的別名</span></span><br><span class="line"><span class="keyword">type</span> StudentArray []Student</span><br><span class="line"></span><br><span class="line"><span class="comment">//以下為實現Sort包中Interface的三個方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self StudentArray)</span><span class="title">Len</span><span class="params">()</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="built_in">len</span>(self)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//按照ID由小到大排序</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self StudentArray)</span><span class="title">Less</span><span class="params">(i,j <span class="keyword">int</span>)</span><span class="title">bool</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> self[i].ID &lt; self[j].ID</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self StudentArray)</span><span class="title">Swap</span><span class="params">(i,j <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	self[i],self[j] = self[j],self[i]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Tom := Student&#123;</span><br><span class="line">		Name : <span class="string">"Tom"</span>,</span><br><span class="line">		ID : rand.Intn(<span class="number">10000</span>),</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		score : <span class="number">60.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Amy := Student&#123;</span><br><span class="line">		Name : <span class="string">"Amy"</span>,</span><br><span class="line">		ID : rand.Intn(<span class="number">10000</span>),</span><br><span class="line">		Age : <span class="number">17</span>,</span><br><span class="line">		score : <span class="number">70.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Tony := Student&#123;</span><br><span class="line">		Name : <span class="string">"Tony"</span>,</span><br><span class="line">		ID : rand.Intn(<span class="number">10000</span>),</span><br><span class="line">		Age : <span class="number">16</span>,</span><br><span class="line">		score : <span class="number">80.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	Student_list := <span class="built_in">make</span>(StudentArray,<span class="number">3</span>)</span><br><span class="line">	Student_list[<span class="number">0</span>] = Tom</span><br><span class="line">	Student_list[<span class="number">1</span>] = Amy</span><br><span class="line">	Student_list[<span class="number">2</span>] = Tony</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"Before Sort:"</span>,Student_list)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//因為StudentArray類型實現了Interface這個接口</span></span><br><span class="line">	<span class="comment">//因此可直接傳入StudentArray類型的變量</span></span><br><span class="line">	sort.Sort(Student_list)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"After Sort:"</span>,Student_list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可依照自己的需求 調整自訂義類型的排序方法</li>
+</ul>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Before Sort: [&#123;Tom 8081 18 60&#125; &#123;Amy 7887 17 70&#125; &#123;Tony 1847 16 80&#125;]</span><br><span class="line">After Sort: [&#123;Tony 1847 16 80&#125; &#123;Amy 7887 17 70&#125; &#123;Tom 8081 18 60&#125;]</span><br></pre></td></tr></table></figure>
+<h2 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>只要實現<code>sort</code>包中<code>Interface</code>這個接口的規範，任何自訂義類型接能調用此接口使用<code>sort.Sort()</code>方法排序</li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多態/">多態</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/排序-sort/">排序(sort)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口-interface/">接口(interface)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/12/Go_interface_2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang物件導向初識-day19-接口嵌套、類型斷言
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/10/Go_struct_method_/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang物件導向初識-day17-結構體方法2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#實現-String-方法"><span class="nav-number">1.</span> <span class="nav-text">實現 String()方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定義"><span class="nav-number">2.</span> <span class="nav-text">定義</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#空接口"><span class="nav-number">3.</span> <span class="nav-text">空接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#接口調用"><span class="nav-number">4.</span> <span class="nav-text">接口調用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">4.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">4.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#實現多接口"><span class="nav-number">4.2.</span> <span class="nav-text">實現多接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">4.2.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.3.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序"><span class="nav-number">5.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">5.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">5.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">5.2.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

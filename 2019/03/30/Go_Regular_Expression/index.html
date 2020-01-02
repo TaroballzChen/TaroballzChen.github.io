@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-正則表達式 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang正則表達式">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
+<meta name="keywords" content="2018,Golang,正則表達式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-正則表達式">
+<meta property="og:url" content="http://www.taroballz.com/2019/03/30/Go_Regular_Expression/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/Rz5B4zu.jpg">
+<meta property="og:updated_time" content="2019-03-30T17:32:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-正則表達式">
+<meta name="twitter:description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
+<meta name="twitter:image" content="https://i.imgur.com/Rz5B4zu.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_Regular_Expression" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Rz5B4zu.jpg" rel="gallery_ck4x0bhq2003cgdq7t598xr7t">
+        <img src="https://i.imgur.com/Rz5B4zu.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-正則表達式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/03/30/Go_Regular_Expression/" class="article-date">
+	  <time datetime="2019-03-29T16:00:00.000Z" itemprop="datePublished">三月 30, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>正則表達式常用來處理字符串的匹配</li>
+<li>Go語言標準庫內建提供了regexp包，來處理正則表達式的問題</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="正則表達式規則"><a href="#正則表達式規則" class="headerlink" title="正則表達式規則"></a>正則表達式規則</h1><h2 id="匹配字符"><a href="#匹配字符" class="headerlink" title="匹配字符"></a>匹配字符</h2><ul>
+<li><code>.</code>：匹配除換行符以外的任意字符</li>
+<li><code>\w</code>：匹配字母或數字或下劃線或漢字</li>
+<li><code>\s</code>：匹配任意的空白符號</li>
+<li><code>\d</code>：匹配數字</li>
+<li><code>\b</code>：匹配單詞的開始或結束</li>
+<li><code>^</code>：匹配字符串的開始</li>
+<li><code>$</code>：匹配字符串的結束<h2 id="匹配數量"><a href="#匹配數量" class="headerlink" title="匹配數量"></a>匹配數量</h2></li>
+<li><code>*</code>：重複零次或更多次</li>
+<li><code>+</code>:重複一次或更多次</li>
+<li><code>?</code>:重複零次或一次</li>
+<li><code>{n}</code>:重複<code>n</code>次</li>
+<li><code>{n,}</code>：重複n次或更多次</li>
+<li><code>{n,m}</code>：重複<code>n</code>到<code>m</code>次</li>
+</ul>
+<hr>
+<h1 id="Golang中的正則匹配"><a href="#Golang中的正則匹配" class="headerlink" title="Golang中的正則匹配"></a>Golang中的正則匹配</h1><h2 id="是否匹配到該字符串"><a href="#是否匹配到該字符串" class="headerlink" title="是否匹配到該字符串"></a>是否匹配到該字符串</h2><ul>
+<li>使用<code>Match</code>函數來進行匹配<ul>
+<li><code>func Match(pattern string, b []byte)(matched bool, err error)</code><ul>
+<li><code>pattern</code> : 欲匹配的格式(模式)</li>
+<li><code>b</code> : 被匹配的字符串(須轉換成<code>[]byte</code>類型)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>使用<code>MatchString</code>函數進行匹配<ul>
+<li><code>func MatchString(pattern string, s string)(matched bool, err error)</code><ul>
+<li><code>s</code> :被匹配的字符串(字符串格式)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">"He"</span></span><br><span class="line">	matchbool,err := regexp.MatchString(<span class="string">"[a-zA-Z]&#123;3&#125;"</span>,s)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">"wow!!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"match:"</span>,matchbool)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">match: false</span><br></pre></td></tr></table></figure>
+<h2 id="返回匹配到的字符串"><a href="#返回匹配到的字符串" class="headerlink" title="返回匹配到的字符串"></a>返回匹配到的字符串</h2><p>以下兩函式常搭配一起使用</p>
+<ul>
+<li><code>func MustCompile(str string) *Regexp</code><ul>
+<li><code>str</code>：欲匹配的正則表達式格式(模式)</li>
+<li>返回一個正則表達的對象</li>
+</ul>
+</li>
+<li><code>func (re *Regexp) FindAllString(s string, n int) []string</code><ul>
+<li><code>s</code>:被匹配的字符串(字符串格式)</li>
+<li><code>n</code>：滿足正則表達對象<strong>前n個</strong>字符串<ul>
+<li>n為-1時則返回全部滿足正則表達式的字符串</li>
+</ul>
+</li>
+<li>返回一個字符串陣列</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">"Hello World"</span></span><br><span class="line">	</span><br><span class="line">	re := regexp.MustCompile(<span class="string">"\\w&#123;3&#125;"</span>)    <span class="comment">//填入欲匹配的正則表達式（有斜槓時須轉譯）</span></span><br><span class="line">	result := re.FindAllString(s,<span class="number">-1</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="捕獲"><a href="#捕獲" class="headerlink" title="捕獲"></a>捕獲</h1><ul>
+<li>捕獲(exp)：匹配exp,並捕獲文本到自動命名的組裡<ul>
+<li><code>(?&lt;name&gt;exp)</code>:匹配exp，並捕獲文本到名稱為name的組裡，也可以寫成<code>(?&#39;name&#39;exp)</code></li>
+<li><code>(?:exp)</code>：匹配exp,<strong>不捕獲</strong>匹配的文本，也不給此分組分配組號</li>
+</ul>
+</li>
+<li>其會捕獲到<code>()</code>中匹配的字符串並放置在字符串陣列中</li>
+<li><code>func (re *Regexp)FindStringSubmatch(s string)[]string</code><ul>
+<li><code>s</code>:被匹配的字符串(字符串格式)</li>
+<li>返回一個字符串陣列<ul>
+<li>字符串陣列的第0個值為匹配到的字符串</li>
+<li>第1個值之後為欲捕獲<code>()</code>中的字符串<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	flysnowRegexp := regexp.MustCompile(<span class="string">`^http://www.flysnow.org/([\d]&#123;4&#125;)/([\d]&#123;2&#125;)/([\d]&#123;2&#125;)/([\w-]+).html$`</span>)</span><br><span class="line">	params := flysnowRegexp.FindStringSubmatch(<span class="string">"http://www.flysnow.org/2018/01/20/golang-goquery-examples-selector.html"</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"年份为："</span>+params[<span class="number">1</span>])</span><br><span class="line">	fmt.Println(<span class="string">"月份为："</span>+params[<span class="number">2</span>])</span><br><span class="line">	fmt.Println(<span class="string">"天数为："</span>+params[<span class="number">3</span>])</span><br><span class="line">	fmt.Println(<span class="string">"文章名为："</span>+params[<span class="number">4</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">年份为：2018</span><br><span class="line">月份为：01</span><br><span class="line">天数为：20</span><br><span class="line">文章名为：golang-goquery-examples-selector</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html" target="_blank" rel="noopener">https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正則表達式/">正則表達式</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/15/ML_decision_tree_detail/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/30/Go_crypto_md5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-MD5加密</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正則表達式規則"><span class="nav-number">2.</span> <span class="nav-text">正則表達式規則</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配字符"><span class="nav-number">2.1.</span> <span class="nav-text">匹配字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配數量"><span class="nav-number">2.2.</span> <span class="nav-text">匹配數量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang中的正則匹配"><span class="nav-number">3.</span> <span class="nav-text">Golang中的正則匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#是否匹配到該字符串"><span class="nav-number">3.1.</span> <span class="nav-text">是否匹配到該字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回匹配到的字符串"><span class="nav-number">3.2.</span> <span class="nav-text">返回匹配到的字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#捕獲"><span class="nav-number">4.</span> <span class="nav-text">捕獲</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result-1"><span class="nav-number">4.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

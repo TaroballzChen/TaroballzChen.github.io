@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day9-內置函數 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang錯誤處理內置函數">
+  
+  
+  
+  
+  <meta name="description" content="內置函數內置函數可以直接使用，且不需要導入特定的package  close: 主要用來關閉channel len: 用來求長度，比如sting,array,slice,map,channel new: 用來分配內存，主要用來分配值類型，比如int,struct等基本類型，返回的是指針(注意!!) make: 用來分配內存，主要用來分配引用類型，比如channel,map,slice等 appen">
+<meta name="keywords" content="2018,Golang,錯誤處理,內置函數">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day9-內置函數">
+<meta property="og:url" content="http://www.taroballz.com/2018/03/31/Go_inner_function/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="內置函數內置函數可以直接使用，且不需要導入特定的package  close: 主要用來關閉channel len: 用來求長度，比如sting,array,slice,map,channel new: 用來分配內存，主要用來分配值類型，比如int,struct等基本類型，返回的是指針(注意!!) make: 用來分配內存，主要用來分配引用類型，比如channel,map,slice等 appen">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/x5R9Tva.png">
+<meta property="og:updated_time" content="2018-05-07T17:14:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day9-內置函數">
+<meta name="twitter:description" content="內置函數內置函數可以直接使用，且不需要導入特定的package  close: 主要用來關閉channel len: 用來求長度，比如sting,array,slice,map,channel new: 用來分配內存，主要用來分配值類型，比如int,struct等基本類型，返回的是指針(注意!!) make: 用來分配內存，主要用來分配引用類型，比如channel,map,slice等 appen">
+<meta name="twitter:image" content="https://i.imgur.com/x5R9Tva.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_inner_function" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day9-內置函數
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/31/Go_inner_function/" class="article-date">
+	  <time datetime="2018-03-30T16:00:00.000Z" itemprop="datePublished">三月 31, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="內置函數"><a href="#內置函數" class="headerlink" title="內置函數"></a>內置函數</h1><p>內置函數可以直接使用，且不需要導入特定的package</p>
+<ul>
+<li><code>close</code>: 主要用來關閉channel</li>
+<li><code>len</code>: 用來求長度，比如<code>sting</code>,<code>array</code>,<code>slice</code>,<code>map</code>,<code>channel</code></li>
+<li><code>new</code>: 用來分配內存，主要用來分配<strong>值類型</strong>，比如<code>int</code>,<code>struct</code>等基本類型，返回的是<strong>指針</strong>(注意!!)</li>
+<li><code>make</code>: 用來分配內存，主要用來分配<strong>引用類型</strong>，比如<code>channel</code>,<code>map</code>,<code>slice</code>等</li>
+<li><code>append</code>:用來追加元素到<code>slice</code>中</li>
+<li><code>panic</code>和<code>recover</code>: 用來作錯誤處理</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="new"><a href="#new" class="headerlink" title="new"></a>new</h1><p>通常用來分配<strong>值類型</strong>的數據<br>返回的是<strong>指針</strong></p>
+<h2 id="聲明"><a href="#聲明" class="headerlink" title="聲明"></a>聲明</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">變量 := new(類型)</span><br></pre></td></tr></table></figure>
+<h2 id="比較"><a href="#比較" class="headerlink" title="比較"></a>比較</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span>            <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(<span class="string">"i ="</span>,i) </span><br><span class="line">	</span><br><span class="line">	j := <span class="built_in">new</span>(<span class="keyword">int</span>)        <span class="comment">//[2]</span></span><br><span class="line">	fmt.Println(<span class="string">"j ="</span>,j)</span><br><span class="line">	*j = <span class="number">100</span>             <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(<span class="string">"*j ="</span>,*j)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 一般聲明值類型的方式，返回的是值<br>[2] 使用<code>new</code>來定義一個<code>int</code>類型的<strong>指針</strong><br>[3] 使用<code>*</code>對指向地址裡儲存的值賦值</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">i = 0</span><br><span class="line">j = 0xc042060088 //[1]</span><br><span class="line">*j = 100</span><br></pre></td></tr></table></figure></p>
+<p>[1] <code>j</code>變量為一<strong>指針類型</strong></p>
+<hr>
+<h1 id="make"><a href="#make" class="headerlink" title="make"></a>make</h1><p>通常用來分配<strong>引用類型</strong><br>比如<code>channel</code>,<code>map</code>,<code>slice</code></p>
+<hr>
+<h1 id="new-與-make的區別"><a href="#new-與-make的區別" class="headerlink" title="new 與 make的區別"></a>new 與 make的區別</h1><p><img src="https://i.imgur.com/x5R9Tva.png" alt="new different from make"></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">new</span>([]<span class="keyword">int</span>)</span><br><span class="line">	b := <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(a)</span><br><span class="line">	fmt.Println(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>result</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&amp;[]</span><br><span class="line">[]</span><br></pre></td></tr></table></figure>
+<p>可以看到new返回的是指針類型，<strong>指向一個空切片的地址</strong><br>make直接返回的就是切片，而不是指針</p>
+<hr>
+<h1 id="append"><a href="#append" class="headerlink" title="append"></a>append</h1><p>用來追加元素到<code>slice</code>中<br>append函數的<strong>第二</strong>參數為<strong>可變參數</strong>，可追加一個值或多個值</p>
+<hr>
+<h2 id="追加一個值"><a href="#追加一個值" class="headerlink" title="追加一個值"></a>追加一個值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a []<span class="keyword">int</span></span><br><span class="line">a = <span class="built_in">append</span>(a,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [1]</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="追加多個值"><a href="#追加多個值" class="headerlink" title="追加多個值"></a>追加多個值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a []<span class="keyword">int</span></span><br><span class="line">a = <span class="built_in">append</span>(a,<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>,<span class="number">7</span>,<span class="number">9</span>)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [1 3 5 7 9]</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="追加一個slice中的元素"><a href="#追加一個slice中的元素" class="headerlink" title="追加一個slice中的元素"></a>追加一個slice中的元素</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a []<span class="keyword">int</span> = []<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> b []<span class="keyword">int</span> = []<span class="keyword">int</span>&#123;<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>,&#125;</span><br><span class="line">a = <span class="built_in">append</span>(a,b...)               <span class="comment">//[1]</span></span><br></pre></td></tr></table></figure>
+<p>[1] 使用<code>...</code>將<code>b</code>切片展開追加到<code>a</code>切片中</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = [1 2 3 11 22 33]</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="panic-amp-recover"><a href="#panic-amp-recover" class="headerlink" title="panic &amp; recover"></a>panic &amp; recover</h1><h2 id="panic-錯誤處裡"><a href="#panic-錯誤處裡" class="headerlink" title="panic 錯誤處裡"></a>panic 錯誤處裡</h2><p>程序執行時遇到某些極端情況，無法繼續執行，可拋出<code>panic</code>異常<br>且Go本身就有自帶一些已知panic異常，可快速發現問題</p>
+<ul>
+<li>且通常拋出<code>panic</code>且未捕獲的狀態下，程序會停止運行</li>
+</ul>
+<h3 id="系統自拋-panic"><a href="#系統自拋-panic" class="headerlink" title="系統自拋 panic"></a>系統自拋 panic</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="number">0</span></span><br><span class="line">	b := <span class="number">100</span>/a          <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(b)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] <code>b</code>變量應是無解值</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">panic: runtime error: integer divide by zero  //[1]</span><br><span class="line"></span><br><span class="line">goroutine 1 [running]:</span><br><span class="line">main.main()</span><br><span class="line">	D:/GoWork/test.go:7 +0x11                 //[2]</span><br></pre></td></tr></table></figure></p>
+<p>[1] 拋出<code>panic</code>異常並跟隨原因<br>[2] 並顯示於第7行語句發生異常</p>
+<hr>
+<h3 id="主動拋出-panic"><a href="#主動拋出-panic" class="headerlink" title="主動拋出 panic"></a>主動拋出 panic</h3><p>遇到一些代碼可正常執行，但邏輯錯誤，可自己主動拋出異常</p>
+<h4 id="模擬配置文件載入出錯"><a href="#模擬配置文件載入出錯" class="headerlink" title="模擬配置文件載入出錯"></a>模擬配置文件載入出錯</h4><p>模擬配置文件讀取失敗，但是程序仍能正常運行，屬<strong>邏輯錯誤</strong><br>設計者應主動拋出<code>panic</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"errors"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義一個函數 模擬初始化配置文件出錯</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">initConfig_Failed</span><span class="params">()</span><span class="params">(err error)</span></span>&#123;          <span class="comment">//[1]</span></span><br><span class="line">	<span class="keyword">return</span> errors.New(<span class="string">"initConfig Failed!!"</span>)  <span class="comment">//[2]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">panic_test</span><span class="params">()</span></span>&#123;</span><br><span class="line">	err := initConfig_Failed()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="built_in">panic</span>(err)                            <span class="comment">//[3]</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	panic_test()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 返回<code>err</code>變量，其為<code>error</code>類型(保存錯誤訊息)<br>[2] <code>errors.New</code>初始化一個<code>error</code>類型的自訂義錯誤訊息實例<br>[3] 主動調用<code>panic</code>函數，參數為錯誤信息</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">panic: initConfig Failed!!</span><br><span class="line"></span><br><span class="line">goroutine 1 [running]:</span><br><span class="line">main.panic_test()</span><br><span class="line">	D:/GoWork/test.go:15 +0x9f</span><br><span class="line">main.main()</span><br><span class="line">	D:/GoWork/test.go:20 +0x27</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>panic錯誤訊息為自訂義之訊息，並明指了發生錯誤的行數</li>
+</ul>
+<hr>
+<h2 id="recover-捕獲異常"><a href="#recover-捕獲異常" class="headerlink" title="recover 捕獲異常"></a>recover 捕獲異常</h2><ul>
+<li>有時程序上線時，即使發生異常，也不希望程序退出</li>
+<li>發生的錯誤並不是致命性的</li>
+<li>發生錯誤並不影響程序繼續運行，或是不影響下一次請求</li>
+</ul>
+<p>基於以上原因，希望能藉由捕獲異常(記錄日誌)，以防止程序崩潰或停擺</p>
+<h3 id="搭配-defer-及-匿名函數"><a href="#搭配-defer-及-匿名函數" class="headerlink" title="搭配 defer 及 匿名函數"></a>搭配 defer 及 匿名函數</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">test_recover</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span> &#123;                   <span class="comment">//[1]</span></span><br><span class="line">	    err := <span class="built_in">recover</span>()              <span class="comment">//[2]</span></span><br><span class="line">	    <span class="keyword">if</span>  err != <span class="literal">nil</span> &#123;   </span><br><span class="line">			fmt.Println(<span class="string">"Error:"</span>,err) </span><br><span class="line">			</span><br><span class="line">			<span class="comment">//捕獲異常後，欲執行的事項，如紀錄日誌，除錯處理...等</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()                               <span class="comment">//[3]   </span></span><br><span class="line">	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//以下為發生異常代碼</span></span><br><span class="line">    a := <span class="number">0</span></span><br><span class="line">    b := <span class="number">100</span>/a          </span><br><span class="line">    fmt.Println(b)</span><br><span class="line">    <span class="keyword">return</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;                                <span class="comment">//模擬不斷的請求處裡</span></span><br><span class="line">		test_recover()                   </span><br><span class="line">		time.Sleep(time.Second)          <span class="comment">//延遲一秒</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 使用<code>defer</code>於函數發生<code>panic</code>要退出函數時，搭配匿名函數捕獲異常<br>[2] 如發生異常，調用<code>recover</code>函數捕獲，並將獲取的<code>panic</code>信息賦值給<code>err</code>變量<br>[3] 匿名函數<strong>聲明時即調用</strong>需再聲明完畢<code>}</code>左邊加上<code>()</code>調用並填入參數</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Error: runtime error: integer divide by zero</span><br><span class="line">Error: runtime error: integer divide by zero</span><br><span class="line">Error: runtime error: integer divide by zero</span><br><span class="line">Error: runtime error: integer divide by zero</span><br><span class="line">Error: runtime error: integer divide by zero</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
+<p>從結果可發現程序不斷地在發出<code>panic</code>，但是沒有退出程序</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/內置函數/">內置函數</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/錯誤處理/">錯誤處理</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/01/Go_closure/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day10-閉包(closure)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/31/Go_recusive/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day9-遞歸函數</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#內置函數"><span class="nav-number">1.</span> <span class="nav-text">內置函數</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#new"><span class="nav-number">2.</span> <span class="nav-text">new</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聲明"><span class="nav-number">2.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比較"><span class="nav-number">2.2.</span> <span class="nav-text">比較</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#make"><span class="nav-number">3.</span> <span class="nav-text">make</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#new-與-make的區別"><span class="nav-number">4.</span> <span class="nav-text">new 與 make的區別</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#append"><span class="nav-number">5.</span> <span class="nav-text">append</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#追加一個值"><span class="nav-number">5.1.</span> <span class="nav-text">追加一個值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#追加多個值"><span class="nav-number">5.2.</span> <span class="nav-text">追加多個值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#追加一個slice中的元素"><span class="nav-number">5.3.</span> <span class="nav-text">追加一個slice中的元素</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#panic-amp-recover"><span class="nav-number">6.</span> <span class="nav-text">panic &amp; recover</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#panic-錯誤處裡"><span class="nav-number">6.1.</span> <span class="nav-text">panic 錯誤處裡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系統自拋-panic"><span class="nav-number">6.1.1.</span> <span class="nav-text">系統自拋 panic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主動拋出-panic"><span class="nav-number">6.1.2.</span> <span class="nav-text">主動拋出 panic</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模擬配置文件載入出錯"><span class="nav-number">6.1.2.1.</span> <span class="nav-text">模擬配置文件載入出錯</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#recover-捕獲異常"><span class="nav-number">6.2.</span> <span class="nav-text">recover 捕獲異常</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#搭配-defer-及-匿名函數"><span class="nav-number">6.2.1.</span> <span class="nav-text">搭配 defer 及 匿名函數</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

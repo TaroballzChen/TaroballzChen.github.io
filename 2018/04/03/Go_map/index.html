@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day12-map類型(key-value pair) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golangmap">
+  
+  
+  
+  
+  <meta name="description" content="introductionkey-value的數據結構，又名關聯數組或是hash table在python中被稱為字典(dictionary)  map本身是無序的 map的key是唯一的 map為引用類型">
+<meta name="keywords" content="2018,Golang,map">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day12-map類型(key-value pair)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/03/Go_map/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introductionkey-value的數據結構，又名關聯數組或是hash table在python中被稱為字典(dictionary)  map本身是無序的 map的key是唯一的 map為引用類型">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://c1.staticflickr.com/1/693/23066277453_d92039b298_b.jpg">
+<meta property="og:updated_time" content="2018-04-02T19:33:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day12-map類型(key-value pair)">
+<meta name="twitter:description" content="introductionkey-value的數據結構，又名關聯數組或是hash table在python中被稱為字典(dictionary)  map本身是無序的 map的key是唯一的 map為引用類型">
+<meta name="twitter:image" content="https://c1.staticflickr.com/1/693/23066277453_d92039b298_b.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_map" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://c1.staticflickr.com/1/693/23066277453_d92039b298_b.jpg" rel="gallery_ck4x0bhqv005kgdq7u2n6w8oe">
+        <img src="https://c1.staticflickr.com/1/693/23066277453_d92039b298_b.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day12-map類型(key-value pair)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/03/Go_map/" class="article-date">
+	  <time datetime="2018-04-02T16:00:00.000Z" itemprop="datePublished">四月 3, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><p>key-value的數據結構，又名關聯數組或是hash table<br>在python中被稱為<strong>字典(dictionary)</strong></p>
+<ul>
+<li>map本身是無序的</li>
+<li>map的key是唯一的</li>
+<li>map為<strong>引用類型</strong></li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="聲明"><a href="#聲明" class="headerlink" title="聲明"></a>聲明</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 <span class="keyword">map</span>[key的類型]value的類型</span><br></pre></td></tr></table></figure>
+<ul>
+<li>聲明是不會分配內存的，只是聲明變量為map類型而已</li>
+<li>必須初始化(<code>make</code>)才能使用</li>
+<li>若無初始化，表示此變量並無內存空間存放，操作會發生<code>panic</code></li>
+</ul>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>key為<code>string</code>類型</li>
+<li>value為<code>map</code>類型</li>
+</ul>
+<hr>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><h2 id="make"><a href="#make" class="headerlink" title="make"></a>make</h2><h3 id="語法"><a href="#語法" class="headerlink" title="語法"></a>語法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">變量 := <span class="built_in">make</span>(<span class="keyword">map</span>[key的類型]值的類型,容量)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>容量可以不填寫，會有一個<strong>默認map所儲存的容量值</strong>，如<strong>超過容量值，會觸發內存重新分配</strong> (效能降低)</li>
+<li>容量值有填寫的情況下，會<strong>提前分配一個相對應容量值的內存空間</strong> (效能較高)</li>
+<li>可根據自己的需求定義容量會獲得比較好的效能</li>
+<li>如果儲存的值一直沒有超過初始化的容量，就不會觸發內存重新分配，性能最高</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">a = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br></pre></td></tr></table></figure>
+<p>可簡寫成<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="初始化-1"><a href="#初始化-1" class="headerlink" title="{}初始化"></a>{}初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">a = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>可簡寫成<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="聲明時並初始化"><a href="#聲明時並初始化" class="headerlink" title="聲明時並初始化"></a>聲明時並初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>:<span class="string">"apple"</span>,<span class="string">"2"</span>:<span class="string">"banana"</span>&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="添加鍵值對、更新鍵值"><a href="#添加鍵值對、更新鍵值" class="headerlink" title="添加鍵值對、更新鍵值"></a>添加鍵值對、更新鍵值</h1><h2 id="語法-1"><a href="#語法-1" class="headerlink" title="語法"></a>語法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">變量[key] = value</span><br></pre></td></tr></table></figure>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span> = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"1"</span>:<span class="string">"apple"</span>,<span class="string">"2"</span>:<span class="string">"banana"</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"initialize"</span>,a)</span><br><span class="line">	a[<span class="string">"3"</span>] = <span class="string">"cake"</span></span><br><span class="line">	a[<span class="string">"1"</span>] = <span class="string">"APPLE"</span></span><br><span class="line">	fmt.Println(<span class="string">"modify"</span>,a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result"><a href="#result" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">initialize map[1:apple 2:banana]</span><br><span class="line">modify map[3:cake 1:APPLE 2:banana]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="操作嵌套的map"><a href="#操作嵌套的map" class="headerlink" title="操作嵌套的map"></a>操作嵌套的map</h1><ul>
+<li>在對第一層<code>key1</code>賦值時，其value也為<code>map</code>類型，不要忘記將value的<code>map</code>類型<strong>初始化</strong></li>
+<li>對第一層的其他key賦值時，value需再重新初始化<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line">	a[<span class="string">"key1"</span>]= <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//賦值</span></span><br><span class="line">	a[<span class="string">"key1"</span>][<span class="string">"key1_1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key1"</span>][<span class="string">"key1_2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//對第一層其他key賦值,需再重新初始化</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//才能賦值</span></span><br><span class="line">	a[<span class="string">"key2"</span>][<span class="string">"key2_1"</span>] = <span class="string">"value3"</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//覺得以上稍嫌麻煩</span></span><br><span class="line">	<span class="comment">//你可以直接使用&#123;&#125;方法直接多個賦值</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;<span class="string">"key3_1"</span>:<span class="string">"value4"</span>,<span class="string">"key3_2"</span>:<span class="string">"value5"</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[key1:map[key1_1:value1 key1_2:value2] key2:map[key2_1:value3] key3:map[key3_1:value4 key3_2:value5]]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h1><p>查找對應的key是不是在<code>map</code>中</p>
+<h2 id="語法-2"><a href="#語法-2" class="headerlink" title="語法"></a>語法</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">value,ok := name[key]</span><br></pre></td></tr></table></figure>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	value,ok := a[<span class="string">"key4"</span>]</span><br><span class="line">	fmt.Println(<span class="string">"key4_status:"</span>,ok,<span class="string">"key4_value:"</span>,value)</span><br><span class="line"></span><br><span class="line">	value2,ok2 := a[<span class="string">"key3"</span>]</span><br><span class="line">	fmt.Println(<span class="string">"key3_status:"</span>,ok2,<span class="string">"key3_value:"</span>,value2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">key4_status: false key4_value: </span><br><span class="line">key3_status: true key3_value: value3</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>要是<code>key</code>存在於<code>map</code>類型的<code>name</code>中<br><code>ok</code>會返回<code>true</code> 且 <code>value</code>會返回key對應的值</p>
+</li>
+<li><p>要是<code>key</code>不存在於<code>name</code>中<br><code>ok</code>會返回<code>false</code> 且 <code>value</code>為空</p>
+</li>
+</ul>
+<hr>
+<h1 id="遍歷"><a href="#遍歷" class="headerlink" title="遍歷"></a>遍歷</h1><p>使用<code>for range</code>遍歷</p>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> k,v := <span class="keyword">range</span> a &#123;</span><br><span class="line">		fmt.Println(k,<span class="string">":"</span>,v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">key1 : value1</span><br><span class="line">key2 : value2</span><br><span class="line">key3 : value3</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="刪除-delete"><a href="#刪除-delete" class="headerlink" title="刪除 (delete)"></a>刪除 (delete)</h1><p>刪除map中的鍵使用<code>delete</code>內置函數刪除<br>語法: <code>delete(map,key)</code></p>
+<h2 id="example-3"><a href="#example-3" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">delete</span>(a,<span class="string">"key1"</span>)   <span class="comment">//*</span></span><br><span class="line"></span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[key2:value2 key3:value3]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="求長度"><a href="#求長度" class="headerlink" title="求長度"></a>求長度</h1><p>求map的長度使用<code>len(map)</code></p>
+<h2 id="example-4"><a href="#example-4" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"length of map:"</span>,<span class="built_in">len</span>(a))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">length of map: 3</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="map為引用類型"><a href="#map為引用類型" class="headerlink" title="map為引用類型"></a>map為引用類型</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">modify_map</span><span class="params">(aa <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	aa[<span class="string">"key1"</span>] = <span class="string">"VALUE_ONE"</span>                 <span class="comment">//*</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"Before Modify:"</span>)</span><br><span class="line">	fmt.Println(a)</span><br><span class="line"></span><br><span class="line">	modify_map(a)   <span class="comment">//*</span></span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"Afer Modify:"</span>)</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-6"><a href="#result-6" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Before Modify:</span><br><span class="line">map[key3:value3 key1:value1 key2:value2]</span><br><span class="line">Afer Modify:</span><br><span class="line">map[key1:VALUE_ONE key2:value2 key3:value3]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="map類型的切片是允許的"><a href="#map類型的切片是允許的" class="headerlink" title="map類型的切片是允許的"></a>map類型的切片是允許的</h1><p>比較少人使用</p>
+<h2 id="example-1-1"><a href="#example-1-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> m <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>   <span class="comment">//[1]</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := []<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>&#123;m&#123;<span class="number">1</span>:<span class="string">"A"</span>&#125;,m&#123;<span class="number">2</span>:<span class="string">"B"</span>&#125;,m&#123;<span class="number">3</span>:<span class="string">"C"</span>&#125;&#125;</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 使用<code>type</code>將<code>map[int]string</code>類型取一個為<code>m</code>的別名</p>
+<h3 id="result-7"><a href="#result-7" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[map[1:A] map[2:B] map[3:C]]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="example-2-1"><a href="#example-2-1" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>([]<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>,<span class="number">3</span>)       <span class="comment">//[1] </span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;=<span class="number">3</span>;i++ &#123;</span><br><span class="line">		a[i<span class="number">-1</span>] = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)   <span class="comment">//[2]</span></span><br><span class="line">		a[i<span class="number">-1</span>][i] = <span class="keyword">string</span>(<span class="string">'A'</span>+i<span class="number">-1</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 用<code>make</code>初始化一切片<br>[2] 搭配<code>for</code>循環將切片裡<code>map</code>類型的元素 逐一使用<code>make</code>初始化</p>
+<h3 id="result-8"><a href="#result-8" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[map[1:A] map[2:B] map[3:C]]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="map中的排序"><a href="#map中的排序" class="headerlink" title="map中的排序"></a>map中的排序</h1><ul>
+<li>map中的key是無序的</li>
+<li>並沒有函數可以直接傳入map類型進行排序</li>
+</ul>
+<ol>
+<li>先獲取map所有key，把key進行排序</li>
+<li>按照排序好的key對map進行遍歷</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traversal</span><span class="params">(key_list []<span class="keyword">string</span>,m <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> key_list&#123;</span><br><span class="line">		fmt.Println(v,<span class="string">"-"</span>,m[v])</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map_key_sort</span><span class="params">(aa <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span>[]<span class="title">string</span></span>&#123;</span><br><span class="line">	slice := <span class="built_in">make</span>([]<span class="keyword">string</span>,<span class="number">0</span>)</span><br><span class="line">	<span class="keyword">for</span> k,_ := <span class="keyword">range</span> aa &#123;</span><br><span class="line">		slice = <span class="built_in">append</span>(slice,k)</span><br><span class="line">	&#125;</span><br><span class="line">	sort.Strings(slice)</span><br><span class="line">	<span class="keyword">return</span> slice</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>)</span><br><span class="line"></span><br><span class="line">	a[<span class="string">"key1"</span>] = <span class="string">"value9"</span></span><br><span class="line">	a[<span class="string">"key2"</span>] = <span class="string">"value8"</span></span><br><span class="line">	a[<span class="string">"key3"</span>] = <span class="string">"value7"</span></span><br><span class="line">	a[<span class="string">"key7"</span>] = <span class="string">"value6"</span></span><br><span class="line">	a[<span class="string">"key9"</span>] = <span class="string">"value5"</span></span><br><span class="line">	a[<span class="string">"key8"</span>] = <span class="string">"value4"</span></span><br><span class="line">	a[<span class="string">"key6"</span>] = <span class="string">"value3"</span></span><br><span class="line">	a[<span class="string">"key4"</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="string">"key5"</span>] = <span class="string">"value1"</span></span><br><span class="line"></span><br><span class="line">	key_list := map_key_sort(a)</span><br><span class="line">	traversal(key_list,a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-9"><a href="#result-9" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">key1 - value9</span><br><span class="line">key2 - value8</span><br><span class="line">key3 - value7</span><br><span class="line">key4 - value2</span><br><span class="line">key5 - value1</span><br><span class="line">key6 - value3</span><br><span class="line">key7 - value6</span><br><span class="line">key8 - value4</span><br><span class="line">key9 - value5</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="map反轉-鍵值互換"><a href="#map反轉-鍵值互換" class="headerlink" title="map反轉 (鍵值互換)"></a>map反轉 (鍵值互換)</h1><p>初始化另一個map將key及value互換即可</p>
+<ul>
+<li>新初始化的map其key與value的類型也必須相反</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">key_value_change</span><span class="params">(source <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)</span><span class="title">map</span>[<span class="title">string</span>]<span class="title">int</span></span>&#123;</span><br><span class="line">	target := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">for</span> k,v :=  <span class="keyword">range</span> source &#123;</span><br><span class="line">		target[v] = k</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> target</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)</span><br><span class="line">	a[<span class="number">1</span>] = <span class="string">"value1"</span></span><br><span class="line">	a[<span class="number">2</span>] = <span class="string">"value2"</span></span><br><span class="line">	a[<span class="number">3</span>] = <span class="string">"value3"</span></span><br><span class="line"></span><br><span class="line">	trans := key_value_change(a)</span><br><span class="line">	fmt.Println(trans)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-10"><a href="#result-10" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[value3:3 value1:1 value2:2]</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/map/">map</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/04/Go_struct/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang物件導向初識-day13-結構體(struct)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/02/Go_sort/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day11-排序與查找</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聲明"><span class="nav-number">2.</span> <span class="nav-text">聲明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">2.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">2.2.</span> <span class="nav-text">example 2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#make"><span class="nav-number">3.1.</span> <span class="nav-text">make</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#語法"><span class="nav-number">3.1.1.</span> <span class="nav-text">語法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化-1"><span class="nav-number">3.2.</span> <span class="nav-text">{}初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聲明時並初始化"><span class="nav-number">3.3.</span> <span class="nav-text">聲明時並初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#添加鍵值對、更新鍵值"><span class="nav-number">4.</span> <span class="nav-text">添加鍵值對、更新鍵值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#語法-1"><span class="nav-number">4.1.</span> <span class="nav-text">語法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">4.1.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作嵌套的map"><span class="nav-number">5.</span> <span class="nav-text">操作嵌套的map</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">5.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查找操作"><span class="nav-number">6.</span> <span class="nav-text">查找操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#語法-2"><span class="nav-number">6.1.</span> <span class="nav-text">語法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">6.1.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-2"><span class="nav-number">6.1.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遍歷"><span class="nav-number">7.</span> <span class="nav-text">遍歷</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">7.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-3"><span class="nav-number">7.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#刪除-delete"><span class="nav-number">8.</span> <span class="nav-text">刪除 (delete)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">8.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">8.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#求長度"><span class="nav-number">9.</span> <span class="nav-text">求長度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-4"><span class="nav-number">9.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-5"><span class="nav-number">9.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map為引用類型"><span class="nav-number">10.</span> <span class="nav-text">map為引用類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-6"><span class="nav-number">10.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map類型的切片是允許的"><span class="nav-number">11.</span> <span class="nav-text">map類型的切片是允許的</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-1"><span class="nav-number">11.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-7"><span class="nav-number">11.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-1"><span class="nav-number">11.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-8"><span class="nav-number">11.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map中的排序"><span class="nav-number">12.</span> <span class="nav-text">map中的排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-9"><span class="nav-number">12.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#map反轉-鍵值互換"><span class="nav-number">13.</span> <span class="nav-text">map反轉 (鍵值互換)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-10"><span class="nav-number">13.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

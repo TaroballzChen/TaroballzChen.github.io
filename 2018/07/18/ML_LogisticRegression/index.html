@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-邏輯回歸(Logistic Regression) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 邏輯回歸是一種分類(classfication)演算法 一種廣泛使用於分類問題中的廣義回歸演算法 一種名為＂回歸＂的線性分類器   由線性回歸變化而來的 求解能夠讓模型對數據擬合程度最高的參數$w$的值   線性回歸(linear regression)的式子作為邏輯回歸的輸入 與linear regression一樣為一迭代演算法 存在cost function 不斷的">
+<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-邏輯回歸(Logistic Regression)">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/18/ML_LogisticRegression/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 邏輯回歸是一種分類(classfication)演算法 一種廣泛使用於分類問題中的廣義回歸演算法 一種名為＂回歸＂的線性分類器   由線性回歸變化而來的 求解能夠讓模型對數據擬合程度最高的參數$w$的值   線性回歸(linear regression)的式子作為邏輯回歸的輸入 與linear regression一樣為一迭代演算法 存在cost function 不斷的">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/09NP35J.jpg">
+<meta property="og:updated_time" content="2019-06-27T17:38:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-邏輯回歸(Logistic Regression)">
+<meta name="twitter:description" content="Introduction 邏輯回歸是一種分類(classfication)演算法 一種廣泛使用於分類問題中的廣義回歸演算法 一種名為＂回歸＂的線性分類器   由線性回歸變化而來的 求解能夠讓模型對數據擬合程度最高的參數$w$的值   線性回歸(linear regression)的式子作為邏輯回歸的輸入 與linear regression一樣為一迭代演算法 存在cost function 不斷的">
+<meta name="twitter:image" content="https://i.imgur.com/09NP35J.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_LogisticRegression" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/09NP35J.jpg" rel="gallery_ck4x0bhrs008igdq78aip7xev">
+        <img src="https://i.imgur.com/09NP35J.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-邏輯回歸(Logistic Regression)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/18/ML_LogisticRegression/" class="article-date">
+	  <time datetime="2018-07-17T17:00:00.000Z" itemprop="datePublished">七月 18, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li><strong>邏輯回歸是一種分類(classfication)演算法</strong><ul>
+<li>一種廣泛使用於分類問題中的廣義回歸演算法</li>
+<li>一種名為＂回歸＂的線性分類器</li>
+</ul>
+</li>
+<li>由線性回歸變化而來的<ul>
+<li>求解能夠讓模型對數據擬合程度最高的參數$w$的值</li>
+</ul>
+</li>
+<li>線性回歸(linear regression)的式子作為<strong>邏輯回歸的輸入</strong><ul>
+<li>與linear regression一樣為一迭代演算法<ul>
+<li>存在cost function</li>
+<li>不斷的迭代優化並更新權重$w$</li>
+</ul>
+</li>
+<li>通過引入<strong>聯繫函數</strong>(link function)，將線性回歸方程$Z(x)$轉換為$g(z)$<ul>
+<li>令$g(z)$的值分布在 <strong>0-1</strong> 之間，而得到<strong>分類模型</strong><ul>
+<li>當$g(z)$接近0時樣本的label為0; $g(z)$接近1時樣本的label為1</li>
+</ul>
+</li>
+<li>此聯繫函數就是<strong>Sigmoid函數</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>只適用於<strong>二元分類</strong>的場景，邏輯回歸是解決二分類問題的利器<ul>
+<li>sklearn的邏輯回歸也可以做多分類的問題<ul>
+<li>一對多(One-vs-rest;OvR)<ul>
+<li>把某種分類看作1，剩下的分類類型都為0</li>
+<li>在sklearn中為<code>&quot;ovr&quot;</code></li>
+</ul>
+</li>
+<li>多對多(Many-vs-Many;MvM)<ul>
+<li>把好幾個分類劃為1，剩下的分類類型劃為0</li>
+<li>在sklearn中為<code>&quot;Multinominal&quot;</code></li>
+</ul>
+</li>
+<li>配合L1, L2正則項使用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>也能得出具體的<strong>概率值</strong></li>
+<li>對邏輯回歸中過擬合的控制，<strong>通過正則化來實現</strong></li>
+</ul>
+<a id="more"></a>
+<h1 id="應用"><a href="#應用" class="headerlink" title="應用"></a>應用</h1><ul>
+<li>廣告點擊率<ul>
+<li>用戶有點擊</li>
+<li>用戶無點擊</li>
+</ul>
+</li>
+<li>是否為垃圾郵件</li>
+<li>是否患病</li>
+<li>金融詐騙</li>
+<li>虛假帳號</li>
+<li>評分卡製作</li>
+</ul>
+<h1 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h1><ol>
+<li>邏輯回歸對線性關係的擬合效果極佳<ul>
+<li>若已知數據之間聯繫是非線性的，千萬不要應使用邏輯回歸進行分類</li>
+</ul>
+</li>
+<li>邏輯回歸計算快<ul>
+<li>計算效率優於SVM和隨機森林</li>
+</ul>
+</li>
+<li>邏輯回歸返回的分類結果不是固定的0,1，<strong>而是以小數形式呈現的類概率數字</strong><ul>
+<li>可把回歸返回的結果當成連續型數據來利用</li>
+</ul>
+</li>
+<li>抗噪聲能力強</li>
+<li>適合需要得到一個  <strong>二元分類概率</strong>  的場景，簡單，速度快</li>
+</ol>
+<h1 id="輸入"><a href="#輸入" class="headerlink" title="輸入"></a>輸入</h1><script type="math/tex; mode=display">
+Z(x) = w_0 + w_1x_1 + w_2x_2 + ... + w_dx_d = w^Tx (x_0 = 1)</script><ul>
+<li>因邏輯回歸與線性回歸的式子是一樣的，因此邏輯回歸也有<strong>過擬合</strong>的問題</li>
+<li>$w$被統稱為模型的參數，$w_0$為截距(intercept)，$w_1 ~ w_d$被稱為係數(coefficient)</li>
+</ul>
+<hr>
+<h1 id="Sigmoid函數"><a href="#Sigmoid函數" class="headerlink" title="Sigmoid函數"></a>Sigmoid函數</h1><p>$\require{AMScd}$<br>\begin{CD}<br>    \text{線性回歸的輸入} @&gt;{\text{sigmoid}}&gt;&gt; \text{分類(邏輯回歸的核心)}<br>\end{CD}</p>
+<p><img src="https://i.imgur.com/FBLqGab.png" alt="sigmoid"></p>
+<ul>
+<li>能夠將輸入的值轉換，且最後輸出的值(y)一定會落在<strong>0-1</strong>之間(概率)</li>
+<li>函數中間與y軸交叉的地方一定為0.5</li>
+<li>其為一種歸一化(normalize)方法，與<code>MinMaxScaler</code>同理<ul>
+<li>Sigmoid函數只能<strong>無限趨近於0和1</strong>，所以仍與<code>MinMaxScaler</code>為不同的數據預處理方法</li>
+</ul>
+</li>
+</ul>
+<h2 id="公式"><a href="#公式" class="headerlink" title="公式"></a>公式</h2><script type="math/tex; mode=display">
+h_{\theta}(x) = g(z) = g(\theta^Tx) = y(x) =  \frac{1}{1+e^{-\theta^Tx}}</script><p>整理完$g(z)$如下所示：sigmoid函數</p>
+<script type="math/tex; mode=display">
+g(z) = \frac{1}{1+e^{-z}}</script><ul>
+<li>$z$代表回歸的結果(輸入值)</li>
+<li>輸出，也就是$g(z)$：為[0,1]區間的概率值，預設0.5為threshold<ul>
+<li>$g(z)$ 小於 0.5 則歸為 0(False)</li>
+<li>$g(z)$ 大於 0.5 則歸為 1(True)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="二元邏輯回歸的損失函數-cost-function"><a href="#二元邏輯回歸的損失函數-cost-function" class="headerlink" title="二元邏輯回歸的損失函數(cost function)"></a>二元邏輯回歸的損失函數(cost function)</h1><p>其與linear regression原理相同，但由於是<strong>分類</strong>問題，損失函數固然不一樣，只能通過<strong>梯度下降</strong>求解</p>
+<ul>
+<li>衡量參數$\theta$($w$)<strong>重要的評估指標</strong><ul>
+<li>用來求解最優參數$\theta$($w$)的工具</li>
+</ul>
+</li>
+<li>衡量參數為$\theta$($w$)的模型 <strong>擬訓練集時產生的信息損失大小</strong><ul>
+<li>並以此衡量參數$\theta$($w$)的優劣(損失越大，$\theta$($w$)就越差；損失越小，$\theta$($w$)就越好)</li>
+</ul>
+</li>
+<li>在求解參數$\theta$($w$)時，<strong>追求損失函數最小，讓模型在<em>訓練數據</em>上的擬合效果最優</strong><ul>
+<li>模型預測的準確率在<strong>訓練集</strong>上需盡量接近100%</li>
+</ul>
+</li>
+<li>旨在<strong>追求能夠讓損失函數最小化的$\theta$($w$)的組合</strong></li>
+<li>注意！！ 沒有<strong>求解參數$\theta$($w$)</strong>需求的模型就沒有損失函數<ul>
+<li>例如KNN，決策樹等模型</li>
+</ul>
+</li>
+</ul>
+<p>對數似然損失函數：</p>
+<script type="math/tex; mode=display">
+        cost(h_{\theta}(x),y) =
+        \begin{cases}
+        -\log{h(x)},  & \text{if y=1} \\\\
+        -\log{(1-h(x))}, & \text{if y=2}
+        \end{cases}</script><ul>
+<li>$y$為目標類別為1(True)或是0(False)</li>
+<li>$h_{\theta}(x)$為概率值</li>
+</ul>
+<p>完整的cost function(類似信息熵計算)</p>
+<p><img src="http://chart.googleapis.com/chart?cht=tx&chl= cost(h_{\theta}(x),y) =   \sum_{i=1}^{m} -y_i\log{(h(x))} - (1-y_i) \log{(1-h(x))}" style="border:none;"></p>
+<ul>
+<li>$\theta$ or $w$:表示求解出來的一組參數(權重)</li>
+<li>$m$：樣本的個數</li>
+<li>$y_i$：為樣本$i$上真實的Label</li>
+<li>$cost$損失的值越小，那麼預測類別的準確度會越高</li>
+</ul>
+<hr>
+<h1 id="優化"><a href="#優化" class="headerlink" title="優化"></a>優化</h1><p>邏輯回歸透過<strong>梯度下降</strong>求解<br><img src="https://i.imgur.com/EdqCqXV.jpg" alt="Gradient Descent"></p>
+<ul>
+<li>有可能存在<strong>多個局部最小值</strong>(linear regression只有一個全局最小值)<ul>
+<li>在梯度下降過程中，可能到達某個局部最低點，但不一定是全局函數的最低點<ul>
+<li>目前沒有有效的解決方式<ul>
+<li>多次的隨機初始化值來進行梯度下降，多次比較最後最小值的結果</li>
+<li>求解過程中調整學習率</li>
+<li>以上兩種方法都是盡量改善</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>儘管沒有達到全局最低點，仍維持一定不錯的效果</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="正則化"><a href="#正則化" class="headerlink" title="正則化"></a>正則化</h2><ul>
+<li><p>正則化是用來<strong>防止模型過擬合的過程</strong></p>
+<ul>
+<li>常用的有 <strong>L1正則化</strong> 及 <strong>L2正則化</strong> 兩種</li>
+<li><p>分別通過在 損失函數 後面加上 參數向量(權重向量)$\theta$($w$) 的 <strong>L1範式</strong> 和 <strong>L2範式</strong> 的倍數來實現</p>
+<script type="math/tex; mode=display">
+  J(\theta)_{L1} = C \times J(\theta) + \sum_{j=1}^{n} \mid \theta_j \mid (j \geq 1)</script><script type="math/tex; mode=display">
+  J(\theta)_{L2} = C \times J(\theta) + \sqrt{\sum_{j=1}^{n} (\theta_j)^2} (j \geq 1)</script><ul>
+<li>L1範式：參數$\theta$($w$)向量中的每個參數的絕對值之和</li>
+<li>L2範式：參數$\theta$($w$)向量中的每個參數的平方和的開方值</li>
+<li>$C$是用來控制正則化程度的 <strong>超參數</strong></li>
+</ul>
+<ul>
+<li>增加的範式被稱為<strong>正則項</strong>(懲罰項)</li>
+<li>求解的參數$\theta$($w$)取值必然改變，藉此來調節模型的擬合程度</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>L1正則化會將參數壓縮至0；L2正則化只會將參數壓縮盡量小，但不會到0</strong><ul>
+<li>L1正則化的本質是一個<strong>特徵選擇</strong>的過程，掌管了參數的<strong>稀疏性</strong><ul>
+<li>L1正則化越強，參數$\theta$($w$)向量中就越多參數為0<ul>
+<li>參數越稀疏，選出來的特徵越少，以此防止過擬合</li>
+<li><strong>適用於數據維度很高的情況</strong></li>
+<li>其在特徵選擇時可以由嵌入法(Embedded)來完成</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>L2正則化，會<strong>盡量讓每個特徵對模型都有一些微小貢獻</strong><ul>
+<li>攜帶信息少，<strong>對模型貢獻度不大的特徵參數會非常接近0</strong></li>
+<li>為防止過擬合，通常使用L2正則化就足夠<ul>
+<li>若還是過擬合，再使用L1正則化</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="sklearn邏輯回歸API"><a href="#sklearn邏輯回歸API" class="headerlink" title="sklearn邏輯回歸API"></a>sklearn邏輯回歸API</h1><ul>
+<li>使用<code>sklearn.linear_model.LogisticRegression</code></li>
+<li>雖然為分類演算法，但卻在linear_model中</li>
+</ul>
+<h2 id="LogisticRegression"><a href="#LogisticRegression" class="headerlink" title="LogisticRegression"></a>LogisticRegression</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.linear_model.LogisticRegression(penalty=’l2’, </span><br><span class="line">dual=False, tol=0.0001, C=1.0, fit_intercept=True, intercept_scaling=1, </span><br><span class="line">class_weight=None, random_state=None, solver=’warn’, max_iter=100, </span><br><span class="line">multi_class=’warn’, verbose=0, warm_start=False, n_jobs=None, </span><br><span class="line">l1_ratio=None)</span><br></pre></td></tr></table></figure>
+<h3 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h3><h4 id="penalty"><a href="#penalty" class="headerlink" title="penalty"></a>penalty</h4><p>正則化方法</p>
+<ul>
+<li>可輸入<code>l1</code>及<code>l2</code>，預設為<code>l2</code>正則化<ul>
+<li>若選擇<code>l1</code>正則化，參數<code>solver</code>僅能使用<code>&quot;liblinear&quot;</code> 和 <code>&quot;saga&quot;</code></li>
+<li><code>l2</code>正則化參數<code>solver</code>中所有求解方式都可以使用</li>
+</ul>
+</li>
+<li>解決回歸造成<strong>過擬合</strong>的情況</li>
+</ul>
+<h4 id="C"><a href="#C" class="headerlink" title="C"></a>C</h4><p>正則化力度的倒數，<strong>必須是一個大於0的浮點數</strong></p>
+<ul>
+<li>預設為1.0<ul>
+<li><strong>正則項與損失函數的比值為1:1</strong></li>
+</ul>
+</li>
+<li><code>C</code>越小則損失函數會越小，模型對損失函數的懲罰越重，正則化的效力越強<ul>
+<li>參數$\theta$($w$)會逐漸壓縮得越來越小</li>
+</ul>
+</li>
+<li>不同正則化方法，<code>C</code>的取值，使用<strong>學習曲線</strong>最優化<ul>
+<li><code>C</code>為一 <strong>超參數</strong></li>
+</ul>
+</li>
+<li>可調用<code>coef_</code>屬性查看訓練後的權重($w$)</li>
+</ul>
+<h4 id="max-iter"><a href="#max-iter" class="headerlink" title="max_iter"></a>max_iter</h4><p>梯度下降所使用的限制步數(最大迭代次數)</p>
+<ul>
+<li>預設為100</li>
+<li>用來代替步長</li>
+<li>其值越大，代表步長越小，模型迭代時間越長</li>
+<li>其值越小，代表步長越大，模型迭代時間越短</li>
+<li>使用屬性 <code>estimator.n_iter_</code> 來<strong>查看真正實現的迭代次數</strong></li>
+</ul>
+<h4 id="solver"><a href="#solver" class="headerlink" title="solver"></a>solver</h4><p><code>&quot;liblinear&quot;</code>:座標下降法</p>
+<ul>
+<li>支持的懲罰項：L1, L2 </li>
+<li>為預設的<code>solver</code></li>
+<li><p>只支持 一對多ovr分類 與 單純二分類 邏輯回歸</p>
+</li>
+<li><p>參考<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html</a>  <code>solver</code>項查看其他選項</p>
+</li>
+</ul>
+<h4 id="multi-class"><a href="#multi-class" class="headerlink" title="multi_class"></a>multi_class</h4><p>告知模型，預測標籤 屬於何種分類問題的類型，常用於<strong>多元回歸</strong></p>
+<ul>
+<li>預設為<code>&quot;ovr&quot;</code>：二分類問題，或使用<strong>一對多</strong>形式來處理多分類問題<ul>
+<li>當標籤為多分類時才會使用一對多的形式</li>
+</ul>
+</li>
+<li><code>&quot;multinomial&quot;</code>：表示處理多分類問題，使用 <strong>多對多(MvM)</strong> 形式來處理多分類問題<ul>
+<li>但在參數<code>solver</code>為<code>&quot;liblinear&quot;</code>時不可用<ul>
+<li><code>&quot;liblinear</code>：是用來處理二分類的</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>&quot;auto&quot;</code>:表示根據數據的分類情況和其他參數來確定模型要處理的分類問題的類型</li>
+</ul>
+<h4 id="class-weight"><a href="#class-weight" class="headerlink" title="class_weight"></a>class_weight</h4><ul>
+<li><p>處理<strong>樣本不平衡</strong>問題</p>
+<ul>
+<li>標籤的某個類別佔有很大的比例<ul>
+<li>新客戶違約</li>
+</ul>
+</li>
+<li>誤分類代價很高<ul>
+<li>分類失敗會付出慘痛代價，例如：潛在犯罪者誤識別成普通人；有癌症徵兆情況被判斷為沒有癌症</li>
+<li>誤分類：捕捉某種特定分類，但是非常困難的情況</li>
+<li>寧願錯殺一百也不放過一個</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>給少量的標籤更多的權重</strong></p>
+<ul>
+<li>讓模型更偏向少數類</li>
+<li>向捕獲少數類的方向建模</li>
+</ul>
+</li>
+<li>預設為<code>None</code><ul>
+<li>自動給予數據集中所有的標籤相同的權重</li>
+</ul>
+</li>
+<li><code>&quot;balanced&quot;</code>：解決樣本不均衡問題，對少數類進行加權</li>
+</ul>
+<h3 id="重要屬性"><a href="#重要屬性" class="headerlink" title="重要屬性"></a>重要屬性</h3><h4 id="coef"><a href="#coef" class="headerlink" title="coef_"></a>coef_</h4><p>查看訓練後每個特徵所對應的參數$\theta$($w$)</p>
+<h4 id="n-iter"><a href="#n-iter" class="headerlink" title="n_iter_"></a>n_iter_</h4><p>返回求解中真正實現的迭代次</p>
+<hr>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>使用logistic regression檢測良/惡性乳腺癌數據<br>數據網址<a href="https://www.kaggle.com/uciml/breast-cancer-wisconsin-data" target="_blank" rel="noopener">https://www.kaggle.com/uciml/breast-cancer-wisconsin-data</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix,classification_report</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line">cancer_data = <span class="string">"./Kaggle Dataset/breastcancer/data.csv"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Logistic_Test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 讀取數據</span></span><br><span class="line">    data = pd.read_csv(cancer_data)</span><br><span class="line">    target = data[<span class="string">"diagnosis"</span>]</span><br><span class="line">    data = data.drop([<span class="string">"diagnosis"</span>,<span class="string">"id"</span>,<span class="string">"Unnamed: 32"</span>], axis=<span class="number">1</span>)</span><br><span class="line">    </span><br><span class="line">    X_train,X_test,y_train,y_test = train_test_split(data,target)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 標準化處理</span></span><br><span class="line">    Std = StandardScaler()</span><br><span class="line">    X_train = Std.fit_transform(X_train)</span><br><span class="line">    X_test = Std.transform(X_test)</span><br><span class="line"></span><br><span class="line">    Rg = LogisticRegression(C=<span class="number">1.0</span>)</span><br><span class="line">    Rg.fit(X_train,y_train)</span><br><span class="line">    y_predict = Rg.predict(X_test)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 查看confusion matrix</span></span><br><span class="line">    mat = confusion_matrix(y_test,y_predict)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"score:"</span>,Rg.score(X_test,y_test))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 查看recall，及f1-score</span></span><br><span class="line">    print(<span class="string">"report:\n"</span>,classification_report(y_test,y_predict,labels=[<span class="string">"B"</span>,<span class="string">"M"</span>],target_names=[<span class="string">"良性"</span>,<span class="string">"惡性"</span>])) <span class="comment"># target_names可自定義，但要對應label傳入的目標值的順序</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 顯示confusion matrix</span></span><br><span class="line">    sns.heatmap(mat,square=<span class="literal">True</span>,annot=<span class="literal">True</span>,cbar=<span class="literal">False</span>)</span><br><span class="line">    plt.xlabel(<span class="string">"predict value"</span>)</span><br><span class="line">    plt.ylabel(<span class="string">"true value"</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Logistic_Test()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>邏輯回歸中會將數量比較少的樣本視為True，假設數據中的良性data較少，則良性就為True，惡性則為False</li>
+</ul>
+<hr>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">score: 0.993006993006993</span><br><span class="line">report:</span><br><span class="line">              precision    recall  f1-score   support</span><br><span class="line"></span><br><span class="line">         良性       0.99      1.00      0.99        92</span><br><span class="line">         惡性       1.00      0.98      0.99        51</span><br><span class="line"></span><br><span class="line">avg / total       0.99      0.99      0.99       143</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/NWGYxip.png" alt="result"></p>
+<hr>
+<h1 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h1><ul>
+<li>缺點<ul>
+<li>不好處理<strong>多分類</strong>的問題<ul>
+<li>softmax方法 - 邏輯回歸在多分類問題上的推廣(神經網路) - 用於圖像識別</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="比較naive-bayes"><a href="#比較naive-bayes" class="headerlink" title="比較naive bayes"></a>比較naive bayes</h1><p>以下兩種演算法皆透過<strong>概率</strong>計算，得到的最後分類的結果</p>
+<ul>
+<li><p>naive bayes</p>
+<ul>
+<li>屬<strong>生成模型</strong><ul>
+<li>須提前在數據集中去獲取不同樣本屬於各個類別的概率(<strong>先驗概率</strong>)<ul>
+<li>先驗概率 ： 需要從歷史數據中總結出概率信息</li>
+</ul>
+</li>
+<li>非常仰賴歷史訓練集得到的概率進行計算</li>
+</ul>
+</li>
+<li>適合解決<strong>多分類問題</strong>(常用於<strong>文本分類</strong>)</li>
+<li>沒有超參數</li>
+</ul>
+</li>
+<li><p>logistic regression</p>
+<ul>
+<li>屬<strong>判別模型</strong><ul>
+<li>不需先得出<strong>先驗概率</strong></li>
+</ul>
+</li>
+<li>適合解決<strong>二元分類問題</strong></li>
+<li>應用在<strong>二分類</strong>需要<strong>概率</strong>的場景(癌症有無)</li>
+<li>超參數：正則化力度(<code>C</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/19/ML_unsupervise_Kmeans/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-非監督學習- K-means
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/16/ML_overfit/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-Ridge回歸</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#應用"><span class="nav-number">2.</span> <span class="nav-text">應用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優點"><span class="nav-number">3.</span> <span class="nav-text">優點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#輸入"><span class="nav-number">4.</span> <span class="nav-text">輸入</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sigmoid函數"><span class="nav-number">5.</span> <span class="nav-text">Sigmoid函數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#公式"><span class="nav-number">5.1.</span> <span class="nav-text">公式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二元邏輯回歸的損失函數-cost-function"><span class="nav-number">6.</span> <span class="nav-text">二元邏輯回歸的損失函數(cost function)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優化"><span class="nav-number">7.</span> <span class="nav-text">優化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#正則化"><span class="nav-number">7.1.</span> <span class="nav-text">正則化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn邏輯回歸API"><span class="nav-number">8.</span> <span class="nav-text">sklearn邏輯回歸API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#LogisticRegression"><span class="nav-number">8.1.</span> <span class="nav-text">LogisticRegression</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重要參數"><span class="nav-number">8.1.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#penalty"><span class="nav-number">8.1.1.1.</span> <span class="nav-text">penalty</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#C"><span class="nav-number">8.1.1.2.</span> <span class="nav-text">C</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#max-iter"><span class="nav-number">8.1.1.3.</span> <span class="nav-text">max_iter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#solver"><span class="nav-number">8.1.1.4.</span> <span class="nav-text">solver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#multi-class"><span class="nav-number">8.1.1.5.</span> <span class="nav-text">multi_class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class-weight"><span class="nav-number">8.1.1.6.</span> <span class="nav-text">class_weight</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#重要屬性"><span class="nav-number">8.1.2.</span> <span class="nav-text">重要屬性</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#coef"><span class="nav-number">8.1.2.1.</span> <span class="nav-text">coef_</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#n-iter"><span class="nav-number">8.1.2.2.</span> <span class="nav-text">n_iter_</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">8.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">8.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缺點"><span class="nav-number">9.</span> <span class="nav-text">缺點</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#比較naive-bayes"><span class="nav-number">10.</span> <span class="nav-text">比較naive bayes</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

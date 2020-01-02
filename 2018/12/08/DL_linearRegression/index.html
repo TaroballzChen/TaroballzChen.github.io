@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-實現簡單線性回歸 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018演算法">
+  
+  
+  
+  
+  <meta name="description" content="線性回歸定義：權重($w$)與特徵的乘積相加之和  一個樣本有多少特徵就有多少權重(構建模型)">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018,演算法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-實現簡單線性回歸">
+<meta property="og:url" content="http://www.taroballz.com/2018/12/08/DL_linearRegression/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="線性回歸定義：權重($w$)與特徵的乘積相加之和  一個樣本有多少特徵就有多少權重(構建模型)">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/cJ5WXuV.png">
+<meta property="og:updated_time" content="2019-07-27T08:46:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-實現簡單線性回歸">
+<meta name="twitter:description" content="線性回歸定義：權重($w$)與特徵的乘積相加之和  一個樣本有多少特徵就有多少權重(構建模型)">
+<meta name="twitter:image" content="https://i.imgur.com/cJ5WXuV.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_linearRegression" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/cJ5WXuV.png" rel="gallery_ck4x0bhpc001ngdq7tzn6nnda">
+        <img src="https://i.imgur.com/cJ5WXuV.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-實現簡單線性回歸
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/12/08/DL_linearRegression/" class="article-date">
+	  <time datetime="2018-12-08T12:08:00.000Z" itemprop="datePublished">十二月 8, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="線性回歸"><a href="#線性回歸" class="headerlink" title="線性回歸"></a>線性回歸</h1><p>定義：權重($w$)與特徵的乘積相加之和</p>
+<ul>
+<li>一個樣本有多少特徵就有多少權重(構建模型)<a id="more"></a>
+<script type="math/tex; mode=display">
+y_predict = w_1x_1 + w_2x_2 + .... + w_nx_n + bias(w_0x_0)</script></li>
+<li>線性回歸是許多演算法的基礎</li>
+<li>策略：構造損失函數<ul>
+<li>預測值與目標值相減平方的和之平均(均方誤差)</li>
+</ul>
+</li>
+<li>優化：梯度下降API<ul>
+<li>學習率(參數)</li>
+</ul>
+</li>
+</ul>
+<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><ol>
+<li>準備數據(含有<strong>特徵值</strong>及<strong>目標值</strong>)</li>
+<li>建立線性回歸模型<ul>
+<li>準備相對應特徵個數的<strong>權重變量(w)</strong></li>
+<li>建立一個<strong>偏置項(bias)變量</strong></li>
+<li>注意：權重(w)與偏置是在訓練過程中<strong>不斷改變</strong>的因此需用<code>tf.Variable()</code>來初始化並儲存</li>
+</ul>
+</li>
+<li>隨機初始化權重及偏置項</li>
+<li>求損失值(loss)：<strong>真實值與預測值之誤差</strong>(均方誤差)</li>
+<li>優化損失的過程：<strong>梯度下降</strong>，指定學習率</li>
+</ol>
+<ul>
+<li>模型中的參數(權重、偏置需用 <strong>變量(variable)</strong> 定義)</li>
+</ul>
+<h1 id="矩陣運算API"><a href="#矩陣運算API" class="headerlink" title="矩陣運算API"></a>矩陣運算API</h1><p>線性回歸最後的目標值(y_predict)應為</p>
+<script type="math/tex; mode=display">
+y_predict = w^Tx</script><script type="math/tex; mode=display">
+(n行,1列)矩陣 \cdot (m行,n列)矩陣 + bias = (m行,1列)矩陣</script><ul>
+<li><strong>矩陣相乘時必須為二維(請注意寫入代碼時注意維度)</strong></li>
+</ul>
+<h2 id="tf-matmul-a-b"><a href="#tf-matmul-a-b" class="headerlink" title="tf.matmul(a, b)"></a>tf.matmul(a, b)</h2><p>用於矩陣相乘</p>
+<h2 id="tf-square-x"><a href="#tf-square-x" class="headerlink" title="tf.square(x)"></a>tf.square(x)</h2><p>求平方值</p>
+<h2 id="tf-reduce-mean-input-tensor"><a href="#tf-reduce-mean-input-tensor" class="headerlink" title="tf.reduce_mean(input_tensor)"></a>tf.reduce_mean(input_tensor)</h2><p>相加求均值</p>
+<h1 id="梯度下降API"><a href="#梯度下降API" class="headerlink" title="梯度下降API"></a>梯度下降API</h1><p>使用<code>tf.train.GradientDescentOptimizer(learning_rate)</code>完成梯度下降優化</p>
+<ul>
+<li>learning_rate：須<strong>手動指定</strong>一般介於0-1之間</li>
+<li>返回一個梯度下降的op(於seesion中運行)</li>
+</ul>
+<h2 id="梯度下降op可調用的方法"><a href="#梯度下降op可調用的方法" class="headerlink" title="梯度下降op可調用的方法"></a>梯度下降op可調用的方法</h2><ul>
+<li><code>minimize(loss)</code>：最小化損失<ul>
+<li><code>loss</code>參數填入要最小化的損失函數</li>
+</ul>
+</li>
+</ul>
+<h1 id="實現一個線性回歸"><a href="#實現一個線性回歸" class="headerlink" title="實現一個線性回歸"></a>實現一個線性回歸</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 自實現的線性回歸預測</span></span><br><span class="line">    <span class="comment"># 1. 準備數據 如:[100 sample,1 feature];[100 label]</span></span><br><span class="line">    X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">"x_data"</span>)</span><br><span class="line">    y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) <span class="comment"># 矩陣相乘必須為二維的</span></span><br><span class="line">    y_true += <span class="number">0.8</span> <span class="comment"># bias(偏置項)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 建立線性回歸模型 1個特徵，1個權重，1個偏置 y = kx + b</span></span><br><span class="line">    <span class="comment"># 隨機初始化 權重 及 偏置項 讓模型去計算損失然後優化</span></span><br><span class="line">    weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">"w"</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">    bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">"bias"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 建立損失函數(均方誤差)</span></span><br><span class="line">    loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 優化損失函數，使用梯度下降 設置參數learning_rate 0 ~ 1之間</span></span><br><span class="line">    train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 定義一個初始化變量(Variable)的op</span></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 通過會話運行程序</span></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="comment">#初始化變量</span></span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"起始初始化權重：%f, 初始化偏置：%f"</span>%(weight.eval(),bias.eval()))</span><br><span class="line"></span><br><span class="line">        <span class="comment">#運行優化(優化不可能一次就完成，迭代的過程需不斷的循環訓練)</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"優化%d次後 權重：%f, 優化偏置：%f"</span> % (i,weight.eval(), bias.eval()))</span><br></pre></td></tr></table></figure>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">起始初始化權重：1.111157, 初始化偏置：0.000000</span><br><span class="line">優化0次後 權重：1.117272, 優化偏置：0.017270</span><br><span class="line">優化50次後 權重：0.926479, 優化偏置：0.370782</span><br><span class="line">優化100次後 權重：0.821177, 優化偏置：0.566434</span><br><span class="line">優化150次後 權重：0.768934, 優化偏置：0.670404</span><br><span class="line">優化200次後 權重：0.739766, 優化偏置：0.729816</span><br><span class="line">優化250次後 權重：0.720606, 優化偏置：0.761604</span><br><span class="line">優化300次後 權重：0.711568, 優化偏置：0.779086</span><br><span class="line">優化350次後 權重：0.706206, 優化偏置：0.788234</span><br><span class="line">優化400次後 權重：0.703404, 優化偏置：0.793436</span><br><span class="line">優化450次後 權重：0.701960, 優化偏置：0.796371</span><br><span class="line">優化500次後 權重：0.701060, 優化偏置：0.797973</span><br><span class="line">優化550次後 權重：0.700607, 優化偏置：0.798889</span><br><span class="line">優化600次後 權重：0.700331, 優化偏置：0.799383</span><br><span class="line">優化650次後 權重：0.700190, 優化偏置：0.799654</span><br><span class="line">優化700次後 權重：0.700104, 優化偏置：0.799809</span><br><span class="line">優化750次後 權重：0.700059, 優化偏置：0.799892</span><br><span class="line">優化800次後 權重：0.700033, 優化偏置：0.799939</span><br><span class="line">優化850次後 權重：0.700018, 優化偏置：0.799966</span><br><span class="line">優化900次後 權重：0.700010, 優化偏置：0.799981</span><br><span class="line">優化950次後 權重：0.700006, 優化偏置：0.799989</span><br></pre></td></tr></table></figure>
+<h1 id="學習率與步數的設置"><a href="#學習率與步數的設置" class="headerlink" title="學習率與步數的設置"></a>學習率與步數的設置</h1><h2 id="學習率-learning-rate"><a href="#學習率-learning-rate" class="headerlink" title="學習率(learning_rate)"></a>學習率(learning_rate)</h2><ul>
+<li><p>要是設置太大，會造成數值overload，跨過最小的loss值使得權重與偏置變得正負無窮大，稱之為<strong>梯度爆炸</strong></p>
+<ul>
+<li>在極端情況下，權重的值變得非常大，以至於溢出，導致<code>Nan</code>值<blockquote>
+<p>解決梯度爆炸(深度神經網路，如RNN當中更容易出現)</p>
+<ol>
+<li>重新設計網路</li>
+<li>調整學習率</li>
+<li>使用梯度<strong>截斷</strong>(在訓練過程中檢查和限制梯度的大小)<ul>
+<li>要是在學習的過程中發現速度過快，去抑制進行變化</li>
+</ul>
+</li>
+<li>使用<strong>激活函數</strong><ul>
+<li>神經網路常用到</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>要是設置過小，會造成損失函數很慢才會達到最小，使得學習的步數就必須增加</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/09/DL_Variable_scope/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-變量作用域(命名空間)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/02/Threading/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python-多任務執行-多線程(threading)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#線性回歸"><span class="nav-number">1.</span> <span class="nav-text">線性回歸</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程"><span class="nav-number">2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣運算API"><span class="nav-number">3.</span> <span class="nav-text">矩陣運算API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-matmul-a-b"><span class="nav-number">3.1.</span> <span class="nav-text">tf.matmul(a, b)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-square-x"><span class="nav-number">3.2.</span> <span class="nav-text">tf.square(x)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tf-reduce-mean-input-tensor"><span class="nav-number">3.3.</span> <span class="nav-text">tf.reduce_mean(input_tensor)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#梯度下降API"><span class="nav-number">4.</span> <span class="nav-text">梯度下降API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降op可調用的方法"><span class="nav-number">4.1.</span> <span class="nav-text">梯度下降op可調用的方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實現一個線性回歸"><span class="nav-number">5.</span> <span class="nav-text">實現一個線性回歸</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">5.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#學習率與步數的設置"><span class="nav-number">6.</span> <span class="nav-text">學習率與步數的設置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#學習率-learning-rate"><span class="nav-number">6.1.</span> <span class="nav-text">學習率(learning_rate)</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

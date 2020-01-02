@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang資料結構-day15-二元樹(binary tree) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang結構體(struct)二元樹(binary tree)">
+  
+  
+  
+  
+  <meta name="description" content="introduction結構體會有一些自己的字段(屬性)但單一節點中定有兩個為自身指針類型的字段，分別指向左子樹及右子樹  最上方的節點稱為根節點 最下方未在指向任何節點的節點，稱為葉節點">
+<meta name="keywords" content="2018,Golang,結構體(struct),二元樹(binary tree)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang資料結構-day15-二元樹(binary tree)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/06/Go_binarytree/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction結構體會有一些自己的字段(屬性)但單一節點中定有兩個為自身指針類型的字段，分別指向左子樹及右子樹  最上方的節點稱為根節點 最下方未在指向任何節點的節點，稱為葉節點">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/ZqHQcDq.jpg">
+<meta property="og:updated_time" content="2018-04-05T19:48:02.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang資料結構-day15-二元樹(binary tree)">
+<meta name="twitter:description" content="introduction結構體會有一些自己的字段(屬性)但單一節點中定有兩個為自身指針類型的字段，分別指向左子樹及右子樹  最上方的節點稱為根節點 最下方未在指向任何節點的節點，稱為葉節點">
+<meta name="twitter:image" content="https://i.imgur.com/ZqHQcDq.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_binarytree" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/ZqHQcDq.jpg" rel="gallery_ck4x0bhqb003ygdq71s1eb52f">
+        <img src="https://i.imgur.com/ZqHQcDq.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang資料結構-day15-二元樹(binary tree)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/06/Go_binarytree/" class="article-date">
+	  <time datetime="2018-04-05T16:00:00.000Z" itemprop="datePublished">四月 6, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><p>結構體會有一些自己的字段(屬性)<br>但單一節點中定有兩個為<strong>自身指針類型</strong>的字段，分別指向左子樹及右子樹<br><img src="https://i.imgur.com/Obsqfx5.png" alt="binary tree"></p>
+<ul>
+<li>最上方的節點稱為<strong>根節點</strong></li>
+<li>最下方<strong>未在指向任何節點</strong>的節點，稱為<strong>葉節點</strong></li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="定義"><a href="#定義" class="headerlink" title="定義"></a>定義</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//資訊域</span></span><br><span class="line">	Name  <span class="keyword">string</span></span><br><span class="line">	Age   <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//指標域</span></span><br><span class="line">	Left  *Student</span><br><span class="line">	Right *Student</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>指標域的指針可為<code>nil</code>，不一定要指向其他節點</li>
+</ul>
+<hr>
+<h1 id="創建節點並插入子樹"><a href="#創建節點並插入子樹" class="headerlink" title="創建節點並插入子樹"></a>創建節點並插入子樹</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	score <span class="keyword">float64</span></span><br><span class="line">	Left *Student</span><br><span class="line">	Right *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//創建節點</span></span><br><span class="line">	<span class="keyword">var</span> Root *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Tom"</span>,</span><br><span class="line">		Age : <span class="number">20</span>,</span><br><span class="line">		score : <span class="number">70.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> Left Student = Student&#123;</span><br><span class="line">		Name : <span class="string">"Amy"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		score : <span class="number">60.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//於根節點插入左子樹</span></span><br><span class="line">	Root.Left = &amp;Left</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> Right *Student = <span class="built_in">new</span>(Student)</span><br><span class="line">	Right.Name = <span class="string">"Tommy"</span></span><br><span class="line">	Right.Age = <span class="number">19</span></span><br><span class="line">	Right.score = <span class="number">50</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//於根節點插入右子樹</span></span><br><span class="line">	Root.Right = Right</span><br><span class="line"></span><br><span class="line">	left_2 := Student&#123;</span><br><span class="line">		Name : <span class="string">"Tony"</span>,</span><br><span class="line">		Age : <span class="number">50</span>,</span><br><span class="line">		score : <span class="number">87.5</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//於左子樹節點再插入左子樹</span></span><br><span class="line">	Left.Left = &amp;left_2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="遍歷二元樹"><a href="#遍歷二元樹" class="headerlink" title="遍歷二元樹"></a>遍歷二元樹</h1><ul>
+<li>二元樹可以拆分成無數個小二元樹，使用<strong>遞歸</strong>解決遍歷問題</li>
+<li>深度優先遍歷 : 逐條分支遍歷 [V]</li>
+<li>廣度優先遍歷 : 層層向外遍歷</li>
+</ul>
+<hr>
+<h2 id="前序遍歷"><a href="#前序遍歷" class="headerlink" title="前序遍歷"></a>前序遍歷</h2><p>先遍歷根節點資訊-前序遍歷<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	score <span class="keyword">float64</span></span><br><span class="line">	Left *Student</span><br><span class="line">	Right *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traversal</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//設定出口條件：當前節點為空則return</span></span><br><span class="line">	<span class="keyword">if</span> Node == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//1.遍歷根節點</span></span><br><span class="line">	fmt.Println(*Node)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//2.遍歷左子樹</span></span><br><span class="line">	traversal(Node.Left)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3.遍歷右子樹</span></span><br><span class="line">	traversal(Node.Right)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> Root *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Tom"</span>,</span><br><span class="line">		Age : <span class="number">20</span>,</span><br><span class="line">		score : <span class="number">70.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> Left Student = Student&#123;</span><br><span class="line">		Name : <span class="string">"Amy"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		score : <span class="number">60.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	Root.Left = &amp;Left</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> Right *Student = <span class="built_in">new</span>(Student)</span><br><span class="line">	Right.Name = <span class="string">"Tommy"</span></span><br><span class="line">	Right.Age = <span class="number">19</span></span><br><span class="line">	Right.score = <span class="number">50</span></span><br><span class="line">	Root.Right = Right</span><br><span class="line"></span><br><span class="line">	left_2 := Student&#123;</span><br><span class="line">		Name : <span class="string">"Tony"</span>,</span><br><span class="line">		Age : <span class="number">50</span>,</span><br><span class="line">		score : <span class="number">87.5</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	Left.Left = &amp;left_2</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//遍歷二元樹</span></span><br><span class="line">	traversal(Root)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="中序遍歷"><a href="#中序遍歷" class="headerlink" title="中序遍歷"></a>中序遍歷</h2><p>先遍歷左(右)子樹節點的資訊，再遍歷根節點-中序遍歷<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traversal</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//設定出口條件：當前節點為空則return</span></span><br><span class="line">	<span class="keyword">if</span> Node == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//1.遍歷左子樹</span></span><br><span class="line">	traversal(Node.Left)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//2.遍歷根節點</span></span><br><span class="line">	fmt.Println(*Node)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3.遍歷右子樹</span></span><br><span class="line">	traversal(Node.Right)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="後序遍歷"><a href="#後序遍歷" class="headerlink" title="後序遍歷"></a>後序遍歷</h2><p>先遍歷左(右)子樹，再遍歷右(左)子樹，<strong>最後為根節點資訊</strong>-後序遍歷<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">traversal</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//設定出口條件：當前節點為空則return</span></span><br><span class="line">	<span class="keyword">if</span> Node == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//1.遍歷左子樹</span></span><br><span class="line">	traversal(Node.Left)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//2.遍歷右子樹</span></span><br><span class="line">	traversal(Node.Right)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//3.遍歷根節點</span></span><br><span class="line">	fmt.Println(*Node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>根節點再不同時候遍歷，決定了為前序，中序、還是後序遍歷</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/二元樹-binary-tree/">二元樹(binary tree)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/09/Go_struct_METHOD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang物件導向初識-day16-結構體方法1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/05/Go_linklist/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang資料結構-day14-鏈表(Linked list)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定義"><span class="nav-number">2.</span> <span class="nav-text">定義</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#創建節點並插入子樹"><span class="nav-number">3.</span> <span class="nav-text">創建節點並插入子樹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遍歷二元樹"><span class="nav-number">4.</span> <span class="nav-text">遍歷二元樹</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#前序遍歷"><span class="nav-number">4.1.</span> <span class="nav-text">前序遍歷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中序遍歷"><span class="nav-number">4.2.</span> <span class="nav-text">中序遍歷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#後序遍歷"><span class="nav-number">4.3.</span> <span class="nav-text">後序遍歷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

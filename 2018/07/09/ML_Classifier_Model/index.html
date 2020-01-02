@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-分類模型評估 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 前面對兩種分類模型皆調用score()方法查看準確率，其就是一種對模型的評估， 返回預測結果正確的百分比   sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics中 這一章節只著重在對分類模型的評估 還有其他對分類模型評估的指標包括 精確率(precision) 與 召回率(recall)">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-分類模型評估">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/09/ML_Classifier_Model/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 前面對兩種分類模型皆調用score()方法查看準確率，其就是一種對模型的評估， 返回預測結果正確的百分比   sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics中 這一章節只著重在對分類模型的評估 還有其他對分類模型評估的指標包括 精確率(precision) 與 召回率(recall)">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/MGJQEfX.jpg">
+<meta property="og:updated_time" content="2018-07-10T08:11:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-分類模型評估">
+<meta name="twitter:description" content="Introduction 前面對兩種分類模型皆調用score()方法查看準確率，其就是一種對模型的評估， 返回預測結果正確的百分比   sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics中 這一章節只著重在對分類模型的評估 還有其他對分類模型評估的指標包括 精確率(precision) 與 召回率(recall)">
+<meta name="twitter:image" content="https://i.imgur.com/MGJQEfX.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_Classifier_Model" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/MGJQEfX.jpg" rel="gallery_ck4x0bhr9006tgdq77m4cw5xe">
+        <img src="https://i.imgur.com/MGJQEfX.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-分類模型評估
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/09/ML_Classifier_Model/" class="article-date">
+	  <time datetime="2018-07-08T18:42:00.000Z" itemprop="datePublished">七月 9, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>前面對兩種分類模型皆調用<code>score()</code>方法查看準確率，其就是一種對模型的評估，<ul>
+<li>返回預測結果正確的百分比</li>
+</ul>
+</li>
+<li>sklearn還存在許多對預測模型評估的方法皆收錄在<code>sklearn.metrics</code>中</li>
+<li>這一章節只著重在對分類模型的評估</li>
+<li>還有其他對分類模型評估的指標包括 <strong>精確率(precision)</strong> 與 <strong>召回率(recall)</strong></li>
+</ul>
+<a id="more"></a>
+<h1 id="混淆矩陣-confusion-matrix"><a href="#混淆矩陣-confusion-matrix" class="headerlink" title="混淆矩陣(confusion matrix)"></a>混淆矩陣(confusion matrix)</h1><p>在分類任務下，預測結果(predicted condition)與正確標記(true condition)之間存在四種不同的組合，構成所謂的混淆矩陣(適用於多分類)<br><img src="https://i.imgur.com/GwlR2n4.jpg" alt="confusion matrix"></p>
+<ul>
+<li>可使用<code>sklearn.metrics.confusion_matrix</code>搭配<code>matplotlib</code>及<code>seaborn.heatmap</code>來繪製</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.classification <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns </span><br><span class="line"></span><br><span class="line">iris_data = load_iris()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ConfusinMatrix</span><span class="params">()</span>:</span></span><br><span class="line">    x_train, x_test, y_train, y_test = train_test_split(iris_data.data, iris_data.target)</span><br><span class="line"></span><br><span class="line">    KNN = KNeighborsClassifier(n_neighbors=<span class="number">5</span>)</span><br><span class="line">    KNN.fit(x_train, y_train)</span><br><span class="line">    y_predict = KNN.predict(x_test)</span><br><span class="line"></span><br><span class="line">    mat = confusion_matrix(y_test,y_predict)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"accuracy score:"</span>, accuracy_score(y_test, y_predict))</span><br><span class="line">    </span><br><span class="line">    sns.heatmap(mat,square= <span class="literal">True</span>, annot=<span class="literal">True</span>, cbar= <span class="literal">False</span>)</span><br><span class="line">    plt.xlabel(<span class="string">"predicted value"</span>)</span><br><span class="line">    plt.ylabel(<span class="string">"true value"</span>)</span><br><span class="line">    plt.show()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ConfusinMatrix()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要是使用jupyter notebook進行繪製可在導入<code>matplotlib.pyplot</code>後添加以下code，取代<code>plt.show()</code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>可讓圖形不會在新視窗呈現</p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">accuracy score: 0.9736842105263158</span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/WoHQW69.png" alt="heatmap plot"></p>
+<h1 id="其他評估方法"><a href="#其他評估方法" class="headerlink" title="其他評估方法"></a>其他評估方法</h1><h2 id="精確率-precision"><a href="#精確率-precision" class="headerlink" title="精確率(precision)"></a>精確率(precision)</h2><p><strong>預測值</strong>為True情況下真實值仍為True所佔的比例(查得準)</p>
+<ul>
+<li>一般較少使用精確率來評估模型</li>
+</ul>
+<h2 id="召回率-recall"><a href="#召回率-recall" class="headerlink" title="召回率(recall)"></a>召回率(recall)</h2><p><strong>真實值</strong>為True的情況下預測值仍為True所佔的比例(查得全，對正樣本的區分能力)</p>
+<ul>
+<li>例如癌症的分析，寧願錯估沒有癌症的人得癌，也不能將得癌症的人錯估成沒有癌症</li>
+<li>上述案例我們會希望召回率越高越好甚至100%，而沒有那麼在乎準確率</li>
+</ul>
+<h2 id="F1-score"><a href="#F1-score" class="headerlink" title="F1-score"></a>F1-score</h2><ul>
+<li>是一種用來評估<strong>模型穩健程度</strong>的標準</li>
+<li><p>其公式如下</p>
+<script type="math/tex; mode=display">
+F1 = \frac {2TP} {2TP+FN+FP} = \frac {2 \cdot Precision \cdot Recall} {Precision + Recall}</script></li>
+<li><p>其反應的是再提高召回率的同時是不是有維持一定的準確率</p>
+</li>
+<li>仍是越大越好，是一個綜合的評判標準</li>
+</ul>
+<h2 id="分類模型評估的API"><a href="#分類模型評估的API" class="headerlink" title="分類模型評估的API"></a>分類模型評估的API</h2><ul>
+<li>使用<code>sklearn.metrics.classification_report</code></li>
+</ul>
+<h1 id="classification-report"><a href="#classification-report" class="headerlink" title="classification_report"></a>classification_report</h1><ul>
+<li>調用<code>classification_report(y_true,y_pred,target_names=None)</code></li>
+<li>y_true: 真實目標值</li>
+<li>y_pred: estimator預測的目標值</li>
+<li>target_names : 目標不同類別的名稱</li>
+<li>返回每個類別precision及recall</li>
+</ul>
+<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> GaussianNB</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.classification <span class="keyword">import</span> accuracy_score</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report</span><br><span class="line"></span><br><span class="line">iris_data = load_iris()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">model_metrics</span><span class="params">()</span>:</span></span><br><span class="line">    x_train,x_test,y_train,y_test = train_test_split(iris_data.data,iris_data.target)</span><br><span class="line">    </span><br><span class="line">    NB = GaussianNB()</span><br><span class="line">    NB.fit(x_train,y_train)</span><br><span class="line">    y_predict = NB.predict(x_test)</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">"accuracy score:"</span>, accuracy_score(y_test,y_predict))</span><br><span class="line">    print(<span class="string">"report:\n"</span>,classification_report(y_test,y_predict,target_names=iris_data.target_names))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    model_metrics()</span><br></pre></td></tr></table></figure>
+<h3 id="結果"><a href="#結果" class="headerlink" title="結果"></a>結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">accuracy score: 0.8947368421052632</span><br><span class="line">report:</span><br><span class="line">              precision    recall  f1-score   support</span><br><span class="line"></span><br><span class="line">     setosa       1.00      1.00      1.00        16</span><br><span class="line"> versicolor       0.77      0.91      0.83        11</span><br><span class="line">  virginica       0.89      0.73      0.80        11</span><br><span class="line"></span><br><span class="line">avg / total       0.90      0.89      0.89        38</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/10/ML_Model_Select_optimize/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-模型的選擇與調校參數
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/08/ML_Naive_Bayes_Classifier/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-演算法-Naive Bayes Classifier</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#混淆矩陣-confusion-matrix"><span class="nav-number">2.</span> <span class="nav-text">混淆矩陣(confusion matrix)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">2.2.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他評估方法"><span class="nav-number">3.</span> <span class="nav-text">其他評估方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#精確率-precision"><span class="nav-number">3.1.</span> <span class="nav-text">精確率(precision)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#召回率-recall"><span class="nav-number">3.2.</span> <span class="nav-text">召回率(recall)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F1-score"><span class="nav-number">3.3.</span> <span class="nav-text">F1-score</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分類模型評估的API"><span class="nav-number">3.4.</span> <span class="nav-text">分類模型評估的API</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#classification-report"><span class="nav-number">4.</span> <span class="nav-text">classification_report</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">4.1.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#結果"><span class="nav-number">4.1.1.</span> <span class="nav-text">結果</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

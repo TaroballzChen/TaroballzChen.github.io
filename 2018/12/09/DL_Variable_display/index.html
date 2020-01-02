@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-變量顯示 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 目的是為了觀察模型的參數(權重、偏置)，損失值等變量值的變化 觀察訓練情形如何，可以實時的於tensorboard中以圖形化的方式顯示 在大量資料且長時間的訓練能快速掌握目前訓練的情況   因此需添加變量在tensorboard中，觀察其變化狀況 收集變量 合併變量寫入事件文件中">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-變量顯示">
+<meta property="og:url" content="http://www.taroballz.com/2018/12/09/DL_Variable_display/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 目的是為了觀察模型的參數(權重、偏置)，損失值等變量值的變化 觀察訓練情形如何，可以實時的於tensorboard中以圖形化的方式顯示 在大量資料且長時間的訓練能快速掌握目前訓練的情況   因此需添加變量在tensorboard中，觀察其變化狀況 收集變量 合併變量寫入事件文件中">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/KL7kUM8.jpg">
+<meta property="og:updated_time" content="2019-07-28T08:35:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-變量顯示">
+<meta name="twitter:description" content="Introduction 目的是為了觀察模型的參數(權重、偏置)，損失值等變量值的變化 觀察訓練情形如何，可以實時的於tensorboard中以圖形化的方式顯示 在大量資料且長時間的訓練能快速掌握目前訓練的情況   因此需添加變量在tensorboard中，觀察其變化狀況 收集變量 合併變量寫入事件文件中">
+<meta name="twitter:image" content="https://i.imgur.com/KL7kUM8.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_Variable_display" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/KL7kUM8.jpg" rel="gallery_ck4x0bhoy0010gdq77xx5u7j4">
+        <img src="https://i.imgur.com/KL7kUM8.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-變量顯示
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/12/09/DL_Variable_display/" class="article-date">
+	  <time datetime="2018-12-09T10:27:00.000Z" itemprop="datePublished">十二月 9, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>目的是為了觀察模型的參數(權重、偏置)，損失值等變量值的變化</li>
+<li>觀察訓練情形如何，可以實時的於tensorboard中以圖形化的方式顯示<ul>
+<li>在大量資料且長時間的訓練能快速掌握目前訓練的情況</li>
+</ul>
+</li>
+<li>因此需添加變量在tensorboard中，觀察其變化狀況<ol>
+<li>收集變量</li>
+<li>合併變量寫入事件文件中<a id="more"></a>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h1 id="收集變量"><a href="#收集變量" class="headerlink" title="收集變量"></a>收集變量</h1><p>收集變量的代碼一般是寫在執行會話(Session)之前</p>
+<h2 id="scalar"><a href="#scalar" class="headerlink" title="scalar"></a>scalar</h2><p>使用<code>tf.summary.scalar(name=&#39;&#39;,tensor)</code>收集對於<strong>損失函數</strong>、<strong>準確率</strong>等<strong>單值變量</strong></p>
+<ul>
+<li><code>name</code>：變量的名字 (在tensorboard後台顯示的名字) </li>
+<li><code>tensor</code>：欲蒐集哪個tensor變量</li>
+</ul>
+<h2 id="histogram"><a href="#histogram" class="headerlink" title="histogram"></a>histogram</h2><p>使用<code>tf.summary.histogram(name=&#39;&#39;,tensor)</code>收集<strong>高維度</strong>的變量參數，<strong>權重(weight)</strong>、<strong>偏置(bias)</strong> 等</p>
+<ul>
+<li><code>name</code>：變量的名字 (在tensorboard後台顯示的名字) </li>
+<li><code>tensor</code>：欲蒐集哪個tensor變量</li>
+</ul>
+<h2 id="image"><a href="#image" class="headerlink" title="image"></a>image</h2><p>使用<code>tf.summary.image(name=&#39;&#39;,tensor)</code>收集輸入的<strong>圖片張量</strong>能顯示圖片</p>
+<ul>
+<li><code>name</code>：變量的名字 (在tensorboard後台顯示的名字) </li>
+<li><code>tensor</code>：欲蒐集哪個tensor變量</li>
+</ul>
+<hr>
+<h1 id="合併變量寫入事件文件"><a href="#合併變量寫入事件文件" class="headerlink" title="合併變量寫入事件文件"></a>合併變量寫入事件文件</h1><p>使用<code>tf.summary.merge_all()</code>，定義合併tensor的op，其會返回合併的op(於graph中定義)</p>
+<ul>
+<li><code>merged = tf.summary.merge_all()</code> <ul>
+<li>固定寫法</li>
+<li>必須運行op才能執行</li>
+</ul>
+</li>
+<li>運行合併：<code>summary = sess.run(merged)</code> <ul>
+<li><strong>每次迭代都必須運行</strong></li>
+<li>返回一個事件文件的物件，用於添加到事件文件中<ul>
+<li>添加：<code>FileWriter.add_summary(summary,i)</code><ul>
+<li><code>i</code>:表示第幾次的值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><p>以之前使用的線性回歸範例代碼為例<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"data_preparation"</span>):</span><br><span class="line">        X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">"x_data"</span>)</span><br><span class="line">        y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"LinearRegression_model_build"</span>):</span><br><span class="line">        weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">"w"</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">        bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">"bias"</span>)</span><br><span class="line">        y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"loss_calculate"</span>):</span><br><span class="line">        loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"optimize"</span>):</span><br><span class="line">        train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#收集單值變量tensor</span></span><br><span class="line">    tf.summary.scalar(<span class="string">"Loss"</span>,loss)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#收集高維度變量tensor</span></span><br><span class="line">    tf.summary.histogram(<span class="string">"Weight"</span>,weight)</span><br><span class="line">    tf.summary.histogram(<span class="string">"Bias"</span>,bias)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定義一個tensor合併的op</span></span><br><span class="line">    merged = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"起始初始化權重：%f, 初始化偏置：%f"</span>%(weight.eval(),bias.eval()))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 建立事件文件(指定存放文件夾及graph)</span></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">"./summary/"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 運行tensor互相合併的op</span></span><br><span class="line">            summary = sess.run(merged)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 將結果寫入事件文件</span></span><br><span class="line">            FileWriter.add_summary(summary,i)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"優化%d次後 權重：%f, 優化偏置：%f"</span> % (i,weight.eval(), bias.eval()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure></p>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><h3 id="SCALARS"><a href="#SCALARS" class="headerlink" title="SCALARS"></a>SCALARS</h3><p><img src="https://i.imgur.com/kTzPI6p.png" alt="Imgur"></p>
+<ul>
+<li>可以看到隨著迭代的次數增加loss值不斷地在下降，最後趨於收斂</li>
+</ul>
+<h3 id="HISTOGRAM"><a href="#HISTOGRAM" class="headerlink" title="HISTOGRAM"></a>HISTOGRAM</h3><p><img src="https://i.imgur.com/rahDm7N.png" alt="Imgur"></p>
+<ul>
+<li>weights及bias顯示不盡理想的原因是因為，histogram是以高維度去展示結果，而我們只有定一個值，使得其高斯分布的情性變得很奇怪</li>
+<li>可以SCALARS蒐集只有單值的變量</li>
+</ul>
+<h3 id="DISTRIBUTIONS"><a href="#DISTRIBUTIONS" class="headerlink" title="DISTRIBUTIONS"></a>DISTRIBUTIONS</h3><p><img src="https://i.imgur.com/FMcdGVo.png" alt="Imgur"></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/10/DL_model_SaveRestore/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-模型的保存與加載
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/09/DL_Variable_scope/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-變量作用域(命名空間)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#收集變量"><span class="nav-number">2.</span> <span class="nav-text">收集變量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#scalar"><span class="nav-number">2.1.</span> <span class="nav-text">scalar</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#histogram"><span class="nav-number">2.2.</span> <span class="nav-text">histogram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#image"><span class="nav-number">2.3.</span> <span class="nav-text">image</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#合併變量寫入事件文件"><span class="nav-number">3.</span> <span class="nav-text">合併變量寫入事件文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#範例"><span class="nav-number">4.</span> <span class="nav-text">範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">4.1.</span> <span class="nav-text">Result</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SCALARS"><span class="nav-number">4.1.1.</span> <span class="nav-text">SCALARS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HISTOGRAM"><span class="nav-number">4.1.2.</span> <span class="nav-text">HISTOGRAM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DISTRIBUTIONS"><span class="nav-number">4.1.3.</span> <span class="nav-text">DISTRIBUTIONS</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

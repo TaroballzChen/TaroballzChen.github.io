@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-數據集(dataset) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)數據集(dataset)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning),數據集(dataset)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-數據集(dataset)">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/06/ML_SklearDataSet/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/3rhDugK.jpg">
+<meta property="og:updated_time" content="2019-04-03T17:38:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-數據集(dataset)">
+<meta name="twitter:description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
+<meta name="twitter:image" content="https://i.imgur.com/3rhDugK.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_SklearDataSet" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/3rhDugK.jpg" rel="gallery_ck4x0bhrq008egdq7o0zukvjt">
+        <img src="https://i.imgur.com/3rhDugK.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-數據集(dataset)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/06/ML_SklearDataSet/" class="article-date">
+	  <time datetime="2018-07-06T15:22:00.000Z" itemprop="datePublished">七月 6, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>在對model進行訓練及評估時不能使用同樣的數據集<br>即便是同一數據集也需劃分成訓練集與測試集</p>
+<ul>
+<li>訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分）</li>
+<li>訓練集用於訓練構建模型</li>
+<li>測試數據則用於模型檢驗使用，用於評估模型是否有效</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>學習階段可用的數據集：sklearn, kaggle, UCI<ul>
+<li>UCI:<a href="http://archive.ics.uci.edu/ml/index.php" target="_blank" rel="noopener">http://archive.ics.uci.edu/ml/index.php</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="sklearn數據集"><a href="#sklearn數據集" class="headerlink" title="sklearn數據集"></a>sklearn數據集</h1><p>於<code>sklearn.datasets</code>中</p>
+<h2 id="sklearn-datasets"><a href="#sklearn-datasets" class="headerlink" title="sklearn.datasets"></a>sklearn.datasets</h2><p>加載此模塊獲取幾個流行的數據集</p>
+<h3 id="datasets-load"><a href="#datasets-load" class="headerlink" title="datasets.load_*()"></a>datasets.load_*()</h3><ul>
+<li>將<code>*</code>替換成數據集的名字</li>
+<li>獲取<strong>小規模</strong>數據集，數據包含在datasets裡</li>
+</ul>
+<h4 id="分類數據集"><a href="#分類數據集" class="headerlink" title="分類數據集"></a>分類數據集</h4><ul>
+<li>datasets.load_iris()<ul>
+<li>加載並返回鳶尾花數據集</li>
+</ul>
+</li>
+<li>datasets.load_digits()</li>
+</ul>
+<h4 id="回歸數據集"><a href="#回歸數據集" class="headerlink" title="回歸數據集"></a>回歸數據集</h4><ul>
+<li>datasets.load_boston()：波士頓房價數據集</li>
+<li>datasets.load_diabetes()：糖尿病數據集</li>
+</ul>
+<h3 id="datasets-fetch-data-home-None"><a href="#datasets-fetch-data-home-None" class="headerlink" title="datasets.fetch_*(data_home=None)"></a>datasets.fetch_*(data_home=None)</h3><ul>
+<li>將<code>*</code>替換成數據集的名字</li>
+<li>獲取<strong>大規模</strong>數據集，需要從網路上下載</li>
+<li><code>data_home</code>參數表示數據集下載的目錄，預設是 <code>~/scikit_leaern_data/</code></li>
+</ul>
+<h4 id="datasets-fetch-20newgroups-data-home-None-subset-’train’"><a href="#datasets-fetch-20newgroups-data-home-None-subset-’train’" class="headerlink" title="datasets.fetch_20newgroups(data_home=None,subset=’train’)"></a>datasets.fetch_20newgroups(data_home=None,subset=’train’)</h4><ul>
+<li>為一用於<strong>分類</strong>的大型數據集</li>
+<li>為一新聞數據集(文章)，共有20個類別</li>
+<li>subset: ‘train’ , ‘test’ , ‘all’ 可選 選擇要加載的數據集<ul>
+<li>一般都選擇’all’在使用<code>train_test_split</code>劃分</li>
+</ul>
+</li>
+</ul>
+<h3 id="datasets-clear-data-home-data-home-None"><a href="#datasets-clear-data-home-data-home-None" class="headerlink" title="datasets.clear_data_home(data_home=None)"></a>datasets.clear_data_home(data_home=None)</h3><p>清除目錄下的所有數據</p>
+<h3 id="數據集返回的類型"><a href="#數據集返回的類型" class="headerlink" title="數據集返回的類型"></a>數據集返回的類型</h3><p>load<em>* 和 fetch</em><em> 返回的數據類型為<em>*datasets.base.Bunch</em></em>(字典格式)</p>
+<ul>
+<li>可用字典的方式去查看屬性：<code>dict[&quot;key&quot;] --&gt; value</code></li>
+<li>可用類屬性的方式(<code>.</code>)查看：<code>class.property --&gt; value</code></li>
+</ul>
+<p>以下為數據集可調用的屬性：</p>
+<ul>
+<li>data: 返回特徵值array；是[n_samples x nfeatures]的二維numpy.ndarray陣列</li>
+<li>target: 返回目標值array；是n_samples的一維numpy.ndarray陣列</li>
+<li>DESCR: 數據描述</li>
+<li>feature_names: 特徵名(新聞數據、手寫數字、回歸數據集沒有)</li>
+<li>target_names: 目標名 </li>
+</ul>
+<h1 id="數據集分割"><a href="#數據集分割" class="headerlink" title="數據集分割"></a>數據集分割</h1><ul>
+<li>將數據集畫分成訓練集及測試集<ul>
+<li>訓練集：用於訓練，<strong>構建模型</strong></li>
+<li>測試集：在模型檢驗時使用，用於<strong>評估模型是否有效</strong></li>
+</ul>
+</li>
+<li>使用<code>sklearn.model_selection.train_test_split</code></li>
+</ul>
+<h2 id="train-test-split-arrays-options"><a href="#train-test-split-arrays-options" class="headerlink" title="train_test_split( *arrays **options)"></a>train_test_split( *arrays **options)</h2><p>返回的為亂序的結果</p>
+<ul>
+<li>X : <strong>數據集的特徵值array</strong></li>
+<li>y : <strong>數據集的目標值array</strong></li>
+<li>test_size : 測試集的大小，一般為float類型，表示百分比</li>
+<li>random_state : 隨機數Seed，不同的Seed會造成不同的隨機採樣結果。相同Seed採樣結果相同</li>
+<li>return ： 訓練集特徵值(X_train)、測試集特徵值(X_test)、訓練集目標值(y_train)、測試集目標值(y_test)</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line">iris_data = load_iris()</span><br><span class="line">data = iris_data.data</span><br><span class="line">target = iris_data.target</span><br><span class="line"></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(data, target, test_size=<span class="number">0.25</span>)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/數據集-dataset/">數據集(dataset)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/07/ML_Transformer_Estimator/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-轉換器&amp;估計器(Transformer &amp; Estimator)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/06/ML_DecreaseFeature/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-特徵工程-降維</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn數據集"><span class="nav-number">2.</span> <span class="nav-text">sklearn數據集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-datasets"><span class="nav-number">2.1.</span> <span class="nav-text">sklearn.datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-load"><span class="nav-number">2.1.1.</span> <span class="nav-text">datasets.load_*()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分類數據集"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">分類數據集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回歸數據集"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">回歸數據集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-fetch-data-home-None"><span class="nav-number">2.1.2.</span> <span class="nav-text">datasets.fetch_*(data_home=None)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datasets-fetch-20newgroups-data-home-None-subset-’train’"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">datasets.fetch_20newgroups(data_home=None,subset=’train’)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-clear-data-home-data-home-None"><span class="nav-number">2.1.3.</span> <span class="nav-text">datasets.clear_data_home(data_home=None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#數據集返回的類型"><span class="nav-number">2.1.4.</span> <span class="nav-text">數據集返回的類型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據集分割"><span class="nav-number">3.</span> <span class="nav-text">數據集分割</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#train-test-split-arrays-options"><span class="nav-number">3.1.</span> <span class="nav-text">train_test_split( *arrays **options)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

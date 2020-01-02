@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day4-格式化輸出、基本字符串操作 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang格式化輸出字符串操作">
+  
+  
+  
+  
+  <meta name="description" content="格式化輸出至終端使用fmt.Printf()調用格式化輸出至終端 一般類型%v:以原樣打印，輸出相應值的默認格式 —&amp;gt; 不知道如何輸出也可用%T:打印相應值的類型(type)%%:打印出百分號 bool類型%t:打印true或是false —&amp;gt; 一般也可用%v完成">
+<meta name="keywords" content="2018,Golang,格式化輸出,字符串操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day4-格式化輸出、基本字符串操作">
+<meta property="og:url" content="http://www.taroballz.com/2018/03/26/Go_fmt/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="格式化輸出至終端使用fmt.Printf()調用格式化輸出至終端 一般類型%v:以原樣打印，輸出相應值的默認格式 —&amp;gt; 不知道如何輸出也可用%T:打印相應值的類型(type)%%:打印出百分號 bool類型%t:打印true或是false —&amp;gt; 一般也可用%v完成">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-03-26T14:35:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day4-格式化輸出、基本字符串操作">
+<meta name="twitter:description" content="格式化輸出至終端使用fmt.Printf()調用格式化輸出至終端 一般類型%v:以原樣打印，輸出相應值的默認格式 —&amp;gt; 不知道如何輸出也可用%T:打印相應值的類型(type)%%:打印出百分號 bool類型%t:打印true或是false —&amp;gt; 一般也可用%v完成">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_fmt" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day4-格式化輸出、基本字符串操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/26/Go_fmt/" class="article-date">
+	  <time datetime="2018-03-25T16:00:00.000Z" itemprop="datePublished">三月 26, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="格式化輸出至終端"><a href="#格式化輸出至終端" class="headerlink" title="格式化輸出至終端"></a>格式化輸出至終端</h1><p>使用<code>fmt.Printf()</code>調用格式化輸出至終端</p>
+<h2 id="一般類型"><a href="#一般類型" class="headerlink" title="一般類型"></a>一般類型</h2><p><code>%v</code>:以原樣打印，輸出相應值的默認格式 —&gt; 不知道如何輸出也可用<br><code>%T</code>:打印相應值的類型(type)<br><code>%%</code>:打印出百分號</p>
+<h2 id="bool類型"><a href="#bool類型" class="headerlink" title="bool類型"></a>bool類型</h2><p><code>%t</code>:打印true或是false —&gt; 一般也可用<code>%v</code>完成<br><a id="more"></a></p>
+<h2 id="整數"><a href="#整數" class="headerlink" title="整數"></a>整數</h2><p><code>%b</code>:二進制表示<br><code>%d</code>:十進制表示<br><code>%o</code>:八進制表示<br><code>%c</code>:相應的Unicode碼所表示的<strong>字符</strong></p>
+<h2 id="浮點數及其複合構成"><a href="#浮點數及其複合構成" class="headerlink" title="浮點數及其複合構成"></a>浮點數及其複合構成</h2><p><code>%e</code>:科學記號表示，-1234.56e+78<br><code>%E</code>:科學記號表示，-1234.56E+78<br><code>%f</code>:有小數點而無指數表示，123.456</p>
+<h2 id="字符串與字符切片"><a href="#字符串與字符切片" class="headerlink" title="字符串與字符切片"></a>字符串與字符切片</h2><p><code>%s</code>:打印字符串<br><code>%q</code>:打印字符串時，兩邊也會加入雙引號<br><code>%x</code>:十六進制，小寫字母<br><code>%X</code>:十六進制，大寫字母</p>
+<h2 id="指針"><a href="#指針" class="headerlink" title="指針"></a>指針</h2><p><code>%p</code>:打印內存地址，時溜進制表示，前綴為0x</p>
+<hr>
+<h1 id="格式化輸出到字符串"><a href="#格式化輸出到字符串" class="headerlink" title="格式化輸出到字符串"></a>格式化輸出到字符串</h1><p>使用<code>fmt.Sprintf()</code>調用格式化輸出至字符串中<br><strong>可用於數字類型轉換成字符串類型</strong><br>與前一節使用方法一樣，只是返回的為字符串類型</p>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> integer <span class="keyword">int</span> = <span class="number">10000</span></span><br><span class="line">	<span class="keyword">var</span> float_num <span class="keyword">float64</span> = <span class="number">0.0005</span></span><br><span class="line">	</span><br><span class="line">	integer_str := fmt.Sprintf(<span class="string">"%d"</span>,integer)</span><br><span class="line">	float_num_str := fmt.Sprintf(<span class="string">"%f"</span>,float_num)</span><br><span class="line">	</span><br><span class="line">	fmt.Printf(<span class="string">"integer_str type:%T,Value:%s\n"</span>,integer_str,integer_str)</span><br><span class="line">	fmt.Printf(<span class="string">"float_num_str type:%T,Value:%s\n"</span>,float_num_str,float_num_str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">integer_str type:string,Value:10000</span><br><span class="line">float_num_str type:string,Value:0.000500</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="拼接字符串"><a href="#拼接字符串" class="headerlink" title="拼接字符串"></a>拼接字符串</h1><h2 id="使用運算符拼接"><a href="#使用運算符拼接" class="headerlink" title="使用運算符拼接"></a>使用運算符拼接</h2><p>字符串之間可用運算符<code>+</code>拼接</p>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello"</span></span><br><span class="line">	b := <span class="string">"World"</span></span><br><span class="line">	</span><br><span class="line">	str := a + <span class="string">" "</span> + b</span><br><span class="line">	fmt.Println(str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+<h2 id="使用輸出格式化拼接"><a href="#使用輸出格式化拼接" class="headerlink" title="使用輸出格式化拼接"></a>使用輸出格式化拼接</h2><p>使用<code>fmt.Sprintf()</code>拼接</p>
+<h3 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello"</span></span><br><span class="line">	b := <span class="string">"World"</span></span><br><span class="line">	</span><br><span class="line">	str := fmt.Sprintf(<span class="string">"%s %s"</span>,a,b)</span><br><span class="line">	fmt.Println(str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="字符串長度"><a href="#字符串長度" class="headerlink" title="字符串長度"></a>字符串長度</h1><p>使用<code>len()</code>方法求字符串長度</p>
+<h2 id="example-3"><a href="#example-3" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> a = <span class="string">"Hello World"</span></span><br><span class="line">    length_a := <span class="built_in">len</span>(a)</span><br><span class="line">    fmt.Printf(<span class="string">"string a length is %d"</span>,length_a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">string a length is 11</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="字符串切片"><a href="#字符串切片" class="headerlink" title="字符串切片"></a>字符串切片</h1><p>擷取字符串中想要的部分</p>
+<h2 id="example-4"><a href="#example-4" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello new World"</span></span><br><span class="line">	</span><br><span class="line">	Hello_str := a[:<span class="number">5</span>]   <span class="comment">//[1]</span></span><br><span class="line">	new_str := a[<span class="number">6</span>:<span class="number">9</span>]    <span class="comment">//[2]</span></span><br><span class="line">	World_str := a[<span class="number">10</span>:]  <span class="comment">//[3]</span></span><br><span class="line">	</span><br><span class="line">	fmt.Println(Hello_str)</span><br><span class="line">	fmt.Println(new_str)</span><br><span class="line">	fmt.Println(World_str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 若取值index從0開始，可省略不寫<br>[2] 取值<code>:</code>左邊為要開始取值的index,右邊為取值結束的index+1<br>[3] 若取值結束需取到最後<code>:</code>右邊可省略不寫</p>
+<h2 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">new</span><br><span class="line">World</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="字符串反轉"><a href="#字符串反轉" class="headerlink" title="字符串反轉"></a>字符串反轉</h1><h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">string_reverse</span><span class="params">(a <span class="keyword">string</span>)</span><span class="title">string</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> result <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(a);i++&#123;</span><br><span class="line">		pick := a[<span class="built_in">len</span>(a)<span class="number">-1</span>-i:<span class="built_in">len</span>(a)-i]</span><br><span class="line">		result += pick</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello World"</span></span><br><span class="line">	result := string_reverse(a)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">string_reverse</span><span class="params">(str <span class="keyword">string</span>)</span><span class="title">string</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> result <span class="keyword">string</span></span><br><span class="line">	strLen := <span class="built_in">len</span>(str)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;strLen;i++&#123;</span><br><span class="line">		result += fmt.Sprintf(<span class="string">"%c"</span>,str[<span class="built_in">len</span>(str)-i<span class="number">-1</span>])</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello World"</span></span><br><span class="line">	result := string_reverse(a)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dlroW olleH</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/字符串操作/">字符串操作</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/格式化輸出/">格式化輸出</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/27/Go_string_operate/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day5-字符串操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/26/Go_variables_location/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day4-作用域、數據類型與操作符</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#格式化輸出至終端"><span class="nav-number">1.</span> <span class="nav-text">格式化輸出至終端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一般類型"><span class="nav-number">1.1.</span> <span class="nav-text">一般類型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bool類型"><span class="nav-number">1.2.</span> <span class="nav-text">bool類型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整數"><span class="nav-number">1.3.</span> <span class="nav-text">整數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮點數及其複合構成"><span class="nav-number">1.4.</span> <span class="nav-text">浮點數及其複合構成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串與字符切片"><span class="nav-number">1.5.</span> <span class="nav-text">字符串與字符切片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指針"><span class="nav-number">1.6.</span> <span class="nav-text">指針</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#格式化輸出到字符串"><span class="nav-number">2.</span> <span class="nav-text">格式化輸出到字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拼接字符串"><span class="nav-number">3.</span> <span class="nav-text">拼接字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用運算符拼接"><span class="nav-number">3.1.</span> <span class="nav-text">使用運算符拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用輸出格式化拼接"><span class="nav-number">3.2.</span> <span class="nav-text">使用輸出格式化拼接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.2.2.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串長度"><span class="nav-number">4.</span> <span class="nav-text">字符串長度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">4.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result-3"><span class="nav-number">4.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串切片"><span class="nav-number">5.</span> <span class="nav-text">字符串切片</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-4"><span class="nav-number">5.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result-4"><span class="nav-number">5.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串反轉"><span class="nav-number">6.</span> <span class="nav-text">字符串反轉</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">6.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">6.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result-5"><span class="nav-number">6.3.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

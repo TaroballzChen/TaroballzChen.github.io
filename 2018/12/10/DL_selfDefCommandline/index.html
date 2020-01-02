@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-自定義命令行參數 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introduction可在程序運行前在不修改程序的情況下，去實時修改一些我們定義好可改變的參數  類似於sys.argv的功能 tensorflow本身自帶一樣的功能 常應用在設定訓練次數或是學習率   流程: 首先定義有哪些參數需要在運行時指定 程序當中獲取定義命令行參數 替換要改變的參數">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-自定義命令行參數">
+<meta property="og:url" content="http://www.taroballz.com/2018/12/10/DL_selfDefCommandline/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction可在程序運行前在不修改程序的情況下，去實時修改一些我們定義好可改變的參數  類似於sys.argv的功能 tensorflow本身自帶一樣的功能 常應用在設定訓練次數或是學習率   流程: 首先定義有哪些參數需要在運行時指定 程序當中獲取定義命令行參數 替換要改變的參數">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/ikLDKMS.jpg">
+<meta property="og:updated_time" content="2018-12-09T19:45:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-自定義命令行參數">
+<meta name="twitter:description" content="Introduction可在程序運行前在不修改程序的情況下，去實時修改一些我們定義好可改變的參數  類似於sys.argv的功能 tensorflow本身自帶一樣的功能 常應用在設定訓練次數或是學習率   流程: 首先定義有哪些參數需要在運行時指定 程序當中獲取定義命令行參數 替換要改變的參數">
+<meta name="twitter:image" content="https://i.imgur.com/ikLDKMS.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_selfDefCommandline" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/ikLDKMS.jpg" rel="gallery_ck4x0bhpb001kgdq7ys9k9mlf">
+        <img src="https://i.imgur.com/ikLDKMS.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-自定義命令行參數
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/12/10/DL_selfDefCommandline/" class="article-date">
+	  <time datetime="2018-12-09T19:44:00.000Z" itemprop="datePublished">十二月 10, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>可在程序運行前在不修改程序的情況下，去實時修改一些我們定義好可改變的參數</p>
+<ul>
+<li>類似於<code>sys.argv</code>的功能</li>
+<li>tensorflow本身自帶一樣的功能<ul>
+<li>常應用在設定<strong>訓練次數</strong>或是<strong>學習率</strong></li>
+</ul>
+</li>
+<li>流程:<ol>
+<li>首先定義有哪些參數需要在運行時指定</li>
+<li>程序當中獲取定義命令行參數</li>
+<li>替換要改變的參數<a id="more"></a>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h1 id="定義需要修改的參數-app-flags"><a href="#定義需要修改的參數-app-flags" class="headerlink" title="定義需要修改的參數(app.flags)"></a>定義需要修改的參數(app.flags)</h1><p>使用<code>tf.app.flags</code>支持應用從命令行接受參數，可以用來指定集群配置等。在<code>tf.app.flags</code>下面有各種定義接受不同參數的類型</p>
+<ul>
+<li><code>DEFINE_string(flag_name,default_value,docstring)</code></li>
+<li><code>DEFINE_integer(flag_name,default_value,docstring)</code></li>
+<li><code>DEFINE_boolean(flag_name,default_value,docstring)</code></li>
+<li><code>DEFINE_float(flag_name,default_value,docstring)</code><blockquote>
+<ul>
+<li><code>flag_name</code>：指定參數名字</li>
+<li><code>default_value</code>：指定默認值</li>
+<li><code>docstring</code>：對此參數的說明</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h1 id="獲取定義命令行參數-app-flags-FLAGS"><a href="#獲取定義命令行參數-app-flags-FLAGS" class="headerlink" title="獲取定義命令行參數(app.flags.FLAGS)"></a>獲取定義命令行參數(app.flags.FLAGS)</h1><p>使用<code>tf.app.flags.FLAGS</code>獲取定義好的參數</p>
+<ul>
+<li>之後可以使用<code>tf.app.flags.FLAGS.參數名字</code>獲取道參數</li>
+<li>但每次獲取參數名字太長，可以先把前面賦值給一變量在獲取<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FLAGS = tf.app.flags.FLAGS</span><br><span class="line">FLAGS.參數名字</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 定義有哪些參數需要在運行時指定</span></span><br><span class="line">tf.app.flags.DEFINE_integer(<span class="string">"max_step"</span>,<span class="number">100</span>,<span class="string">"模型訓練的步數"</span>)</span><br><span class="line">tf.app.flags.DEFINE_float(<span class="string">"learning_rate"</span>,<span class="number">0.1</span>,<span class="string">"學習率"</span>)</span><br><span class="line">tf.app.flags.DEFINE_string(<span class="string">"ckpt_path"</span>,<span class="string">" "</span>,<span class="string">"模型文件加載路徑"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 定義獲取上面 定義命令行參數的物件</span></span><br><span class="line">FLAGS = tf.app.flags.FLAGS</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 替換要改變的參數</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"data_preparation"</span>):</span><br><span class="line">        X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">"x_data"</span>)</span><br><span class="line">        y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"LinearRegression_model_build"</span>):</span><br><span class="line">        weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">"w"</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">        bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">"bias"</span>)</span><br><span class="line">        y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"loss_calculate"</span>):</span><br><span class="line">        loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"optimize"</span>):</span><br><span class="line">        <span class="comment">#替換學習率</span></span><br><span class="line">        train_op = tf.train.GradientDescentOptimizer(FLAGS.learning_rate).minimize(loss)</span><br><span class="line"></span><br><span class="line">    tf.summary.scalar(<span class="string">"Loss"</span>,loss)</span><br><span class="line"></span><br><span class="line">    tf.summary.histogram(<span class="string">"Weight"</span>,weight)</span><br><span class="line">    tf.summary.scalar(<span class="string">"Bias"</span>,bias)</span><br><span class="line"></span><br><span class="line">    merged = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">    Saver = tf.train.Saver()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line">        print(<span class="string">"起始初始化權重：%f, 初始化偏置：%f"</span>%(weight.eval(),bias.eval()))</span><br><span class="line"></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">"./summary/"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> os.path.exists(<span class="string">"/Volumes/MacData/MEGA/pythonwork/ML_study/tensorflow_tutorial/checkpoint_document/checkpoint"</span>):</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 替換模型加載路徑</span></span><br><span class="line">            Saver.restore(sess,FLAGS.ckpt_path)</span><br><span class="line">            print(<span class="string">"加載模型後 權重：%f, 偏置：%f"</span> % (weight.eval(), bias.eval()))</span><br><span class="line"></span><br><span class="line">        <span class="comment">#替換學習步數</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(FLAGS.max_step):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line"></span><br><span class="line">            summary = sess.run(merged)</span><br><span class="line"></span><br><span class="line">            FileWriter.add_summary(summary,i)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"優化%d次後 權重：%f, 優化偏置：%f"</span> % (i,weight.eval(), bias.eval()))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            Saver.save(sess, <span class="string">"/Volumes/MacData/MEGA/pythonwork/ML_study/tensorflow_tutorial/checkpoint_document/LinearRegressionModel"</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure>
+<h1 id="執行腳本"><a href="#執行腳本" class="headerlink" title="執行腳本"></a>執行腳本</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python commandline.py --max_step=300 --learning_rate=0.05 --ckpt_path=/Volumes/MacData/MEGA/pythonwork/ML_study/tensorflow_tutorial/checkpoint_document/LinearRegressionModel</span><br></pre></td></tr></table></figure>
+<h1 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">起始初始化權重：0.258629, 初始化偏置：0.000000</span><br><span class="line">加載模型後 權重：0.700000, 偏置：0.799999</span><br><span class="line">優化0次後 權重：0.700000, 優化偏置：0.799999</span><br><span class="line">優化50次後 權重：0.700000, 優化偏置：0.799999</span><br><span class="line">優化100次後 權重：0.700000, 優化偏置：0.799999</span><br><span class="line">優化150次後 權重：0.700000, 優化偏置：0.799999</span><br><span class="line">優化200次後 權重：0.700000, 優化偏置：0.799999</span><br><span class="line">優化250次後 權重：0.700000, 優化偏置：0.799999</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/30/DL_Queue/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-讀取數據-隊列與線程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/10/DL_model_SaveRestore/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-模型的保存與加載</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定義需要修改的參數-app-flags"><span class="nav-number">2.</span> <span class="nav-text">定義需要修改的參數(app.flags)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#獲取定義命令行參數-app-flags-FLAGS"><span class="nav-number">3.</span> <span class="nav-text">獲取定義命令行參數(app.flags.FLAGS)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#範例"><span class="nav-number">4.</span> <span class="nav-text">範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#執行腳本"><span class="nav-number">5.</span> <span class="nav-text">執行腳本</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Result"><span class="nav-number">6.</span> <span class="nav-text">Result</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

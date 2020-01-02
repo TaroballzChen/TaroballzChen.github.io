@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Git基礎使用2 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Git">
+  
+  
+  
+  
+  <meta name="description" content="返回過去版本在我們不斷更新原代碼的過程中，有可能還未完成，但是項目必須本機持續work，因此只能先運行過去的版本，必須將本機的專案返回到過去的狀態">
+<meta name="keywords" content="2018,Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git基礎使用2">
+<meta property="og:url" content="http://www.taroballz.com/2018/06/27/GitNote2/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="返回過去版本在我們不斷更新原代碼的過程中，有可能還未完成，但是項目必須本機持續work，因此只能先運行過去的版本，必須將本機的專案返回到過去的狀態">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/3IdxkCr.jpg">
+<meta property="og:updated_time" content="2018-07-02T16:00:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git基礎使用2">
+<meta name="twitter:description" content="返回過去版本在我們不斷更新原代碼的過程中，有可能還未完成，但是項目必須本機持續work，因此只能先運行過去的版本，必須將本機的專案返回到過去的狀態">
+<meta name="twitter:image" content="https://i.imgur.com/3IdxkCr.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-GitNote2" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/3IdxkCr.jpg" rel="gallery_ck4x0bhpn002dgdq77161exba">
+        <img src="https://i.imgur.com/3IdxkCr.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Git基礎使用2
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/06/27/GitNote2/" class="article-date">
+	  <time datetime="2018-06-26T16:00:00.000Z" itemprop="datePublished">六月 27, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="返回過去版本"><a href="#返回過去版本" class="headerlink" title="返回過去版本"></a>返回過去版本</h1><p>在我們不斷更新原代碼的過程中，有可能還未完成，但是項目必須本機持續work，因此只能先運行過去的版本，必須將本機的專案返回到過去的狀態</p>
+<a id="more"></a>
+<hr>
+<h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><h3 id="強制返回-—hard"><a href="#強制返回-—hard" class="headerlink" title="強制返回(—hard)"></a>強制返回(—hard)</h3><ul>
+<li>後面須填入參數為返回的版本<br>版本：<br>HEAD：上一次commit版本<br>HEAD~ (HEAD^)：上上次commit的版本 (HEAD版本-1)<br>HEAD~n：前N代的版本<blockquote>
+<ul>
+<li>HEAD^^(前二代版本);HEAD^^^(前三代版本) 依此類推</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p>git log —oneline 所顯示的版本號</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">git reset --hard HEAD</span><br><span class="line">git reset --hard HEAD~</span><br><span class="line">git reset --hard HEAD~4 # 返回前四個版本</span><br><span class="line">git reset --hard b4f2d74 # 返回到指定版本號</span><br><span class="line">(即使是比當前版本更新的版本號也可以，只要還記得版本號就可以)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>因為此命令會修改本地文件 使用時務必做好備份</li>
+</ul>
+<hr>
+<h2 id="reflog"><a href="#reflog" class="headerlink" title="reflog"></a>reflog</h2><p>要是沒有記住特定的版本號可使用reflog查看做了那些移動HEAD的操作來推估版本號<br>再搭配reset一起使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git reflog </span><br><span class="line">git reflog -4 #指定顯示前四條操作</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="使用分支-branch"><a href="#使用分支-branch" class="headerlink" title="使用分支(branch)"></a>使用分支(branch)</h1><h2 id="查看分支狀態"><a href="#查看分支狀態" class="headerlink" title="查看分支狀態"></a>查看分支狀態</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>*</code>所指向的分支為當前所在分支</li>
+<li>如要列出包含<strong>遠程庫</strong>的所有分支須加 <code>-a</code> 參數<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -a</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="建立分支"><a href="#建立分支" class="headerlink" title="建立分支"></a>建立分支</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git branch 分支名</span><br><span class="line">git branch 分支名 分支點基礎</span><br><span class="line">git branch dev remotes/origin/dev  #以遠程的remotes/origin/dev分支，作為興建本地dev分支的基礎</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果只填入分支名，默認以本地主分支(master)作為興建分支的基礎</li>
+</ul>
+<h2 id="切換分支-checkout"><a href="#切換分支-checkout" class="headerlink" title="切換分支(checkout)"></a>切換分支(checkout)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout 分支名</span><br></pre></td></tr></table></figure>
+<h3 id="建立分支的同時切換到該分支-b"><a href="#建立分支的同時切換到該分支-b" class="headerlink" title="建立分支的同時切換到該分支(-b)"></a>建立分支的同時切換到該分支(-b)</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b 分支名</span><br></pre></td></tr></table></figure>
+<ul>
+<li>切換過去的分支狀態與主分支狀態是一樣的</li>
+<li>再次使用<code>git branch</code>確認<code>*</code>所指向的分支</li>
+</ul>
+<h2 id="刪除分支-d"><a href="#刪除分支-d" class="headerlink" title="刪除分支(-d)"></a>刪除分支(-d)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch -d 分支名</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="合併分支-merge"><a href="#合併分支-merge" class="headerlink" title="合併分支(merge)"></a>合併分支(merge)</h1><p>將開發分支的內容合併到主分支(合併成最新版本)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge 分支名</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>切換到主分支底下操作</li>
+<li>合併完後記得刪除分支</li>
+</ul>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>通常合併分支時，git會用快速合併(fast forward)模式，但是有些快速合併不能成功，但是合併並沒有發生衝突，git會在此時合併之後幫忙進行新的提交</li>
+<li>要是要禁止使用快速合併<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git merge --no-ff -m &quot;信息備註&quot; 分支名1022222今天他透視嗎與可喔嗎耨黑獄</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="分支衝突"><a href="#分支衝突" class="headerlink" title="分支衝突"></a>分支衝突</h1><p>當團隊中多人同時編輯一個文件的時候，難免會出現源碼合併時產生衝突問題<br>在merge之後會產生衝突conflict，需手動修改衝突代碼，再重新提交</p>
+<hr>
+<h1 id="使用tag標籤"><a href="#使用tag標籤" class="headerlink" title="使用tag標籤"></a>使用tag標籤</h1><p>任何軟體或是應用程序在發布時都應該給一個版本號，來管理每次的發布內容，便於今後的管理</p>
+<h2 id="顯示tag狀態"><a href="#顯示tag狀態" class="headerlink" title="顯示tag狀態"></a>顯示tag狀態</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git tag</span><br></pre></td></tr></table></figure>
+<h2 id="為當前git庫的狀態打tag"><a href="#為當前git庫的狀態打tag" class="headerlink" title="為當前git庫的狀態打tag"></a>為當前git庫的狀態打tag</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag 版本號</span><br><span class="line">git tag v1.0.0 #將當前的git庫狀態作為1.0.0版本</span><br></pre></td></tr></table></figure>
+<h2 id="查看不同tag的狀態"><a href="#查看不同tag的狀態" class="headerlink" title="查看不同tag的狀態"></a>查看不同tag的狀態</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git show tag名</span><br><span class="line">git show v1.0.1 #查看tag為v1.0.1的狀態</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="連接遠程伺服器"><a href="#連接遠程伺服器" class="headerlink" title="連接遠程伺服器"></a>連接遠程伺服器</h1><p>將編寫完成的代碼提交到服務器端，其他開發人員可從服務器拉取你推送的代碼，完成團隊的協同開發</p>
+<h2 id="把遠程庫拷貝到本地-clone"><a href="#把遠程庫拷貝到本地-clone" class="headerlink" title="把遠程庫拷貝到本地(clone)"></a>把遠程庫拷貝到本地(clone)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone 網址</span><br></pre></td></tr></table></figure>
+<h2 id="生成ssh-key"><a href="#生成ssh-key" class="headerlink" title="生成ssh-key"></a>生成ssh-key</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa &quot;郵件地址&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="連接服務器信息-remote"><a href="#連接服務器信息-remote" class="headerlink" title="連接服務器信息(remote)"></a>連接服務器信息(remote)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+<ul>
+<li>用作確認pull或是fetch是對哪個遠程庫載入 push是對哪個遠程庫進行推送</li>
+</ul>
+<h2 id="本地推送至服務器-push"><a href="#本地推送至服務器-push" class="headerlink" title="本地推送至服務器(push)"></a>本地推送至服務器(push)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git push origin 分支名稱</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要是遠程庫上沒有此分支名稱，遠程庫會建立一個新的分支</li>
+</ul>
+<h2 id="本地的分支跟蹤遠程的分支"><a href="#本地的分支跟蹤遠程的分支" class="headerlink" title="本地的分支跟蹤遠程的分支"></a>本地的分支跟蹤遠程的分支</h2><p>本地的提交與遠程的提交記錄要是不一致，會給出提示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git branch --set-upstream-to=origin/分支名 本地分支名</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如果有不一致的地方可用<code>git status</code>查看</li>
+<li>且如果設置跟蹤遠程分支<code>git push</code>時可不加任何參數,將自己目前所在的庫往遠程庫推送</li>
+</ul>
+<h2 id="從遠程分支拉取代碼-pull"><a href="#從遠程分支拉取代碼-pull" class="headerlink" title="從遠程分支拉取代碼(pull)"></a>從遠程分支拉取代碼(pull)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git pull origin 分支名稱</span><br></pre></td></tr></table></figure>
+<ul>
+<li>將遠程分支上的代碼下載並合併到本地的所在分支</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Git/">Git</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/02/Git_fixbug/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (補充)修復bug分支
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/06/25/GitNote1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Git基礎使用</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#返回過去版本"><span class="nav-number">1.</span> <span class="nav-text">返回過去版本</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#reset"><span class="nav-number">1.1.</span> <span class="nav-text">reset</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#強制返回-—hard"><span class="nav-number">1.1.1.</span> <span class="nav-text">強制返回(—hard)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#reflog"><span class="nav-number">1.2.</span> <span class="nav-text">reflog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用分支-branch"><span class="nav-number">2.</span> <span class="nav-text">使用分支(branch)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看分支狀態"><span class="nav-number">2.1.</span> <span class="nav-text">查看分支狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立分支"><span class="nav-number">2.2.</span> <span class="nav-text">建立分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切換分支-checkout"><span class="nav-number">2.3.</span> <span class="nav-text">切換分支(checkout)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#建立分支的同時切換到該分支-b"><span class="nav-number">2.3.1.</span> <span class="nav-text">建立分支的同時切換到該分支(-b)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刪除分支-d"><span class="nav-number">2.4.</span> <span class="nav-text">刪除分支(-d)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#合併分支-merge"><span class="nav-number">3.</span> <span class="nav-text">合併分支(merge)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">3.1.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#分支衝突"><span class="nav-number">4.</span> <span class="nav-text">分支衝突</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用tag標籤"><span class="nav-number">5.</span> <span class="nav-text">使用tag標籤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#顯示tag狀態"><span class="nav-number">5.1.</span> <span class="nav-text">顯示tag狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#為當前git庫的狀態打tag"><span class="nav-number">5.2.</span> <span class="nav-text">為當前git庫的狀態打tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看不同tag的狀態"><span class="nav-number">5.3.</span> <span class="nav-text">查看不同tag的狀態</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#連接遠程伺服器"><span class="nav-number">6.</span> <span class="nav-text">連接遠程伺服器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#把遠程庫拷貝到本地-clone"><span class="nav-number">6.1.</span> <span class="nav-text">把遠程庫拷貝到本地(clone)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成ssh-key"><span class="nav-number">6.2.</span> <span class="nav-text">生成ssh-key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#連接服務器信息-remote"><span class="nav-number">6.3.</span> <span class="nav-text">連接服務器信息(remote)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地推送至服務器-push"><span class="nav-number">6.4.</span> <span class="nav-text">本地推送至服務器(push)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地的分支跟蹤遠程的分支"><span class="nav-number">6.5.</span> <span class="nav-text">本地的分支跟蹤遠程的分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#從遠程分支拉取代碼-pull"><span class="nav-number">6.6.</span> <span class="nav-text">從遠程分支拉取代碼(pull)</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

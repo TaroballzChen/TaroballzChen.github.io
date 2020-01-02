@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang多線程初識-day27-goroutine通信-管道(channel) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang多線程goroutine管道(channel)">
+  
+  
+  
+  
+  <meta name="description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
+<meta name="keywords" content="2018,Golang,多線程,goroutine,管道(channel)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang多線程初識-day27-goroutine通信-管道(channel)">
+<meta property="og:url" content="http://www.taroballz.com/2018/05/17/Go_channel/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/7rD7VuU.jpg">
+<meta property="og:updated_time" content="2018-05-17T14:53:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang多線程初識-day27-goroutine通信-管道(channel)">
+<meta name="twitter:description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
+<meta name="twitter:image" content="https://i.imgur.com/7rD7VuU.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_channel" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/7rD7VuU.jpg" rel="gallery_ck4x0bhqf0048gdq74b095fat">
+        <img src="https://i.imgur.com/7rD7VuU.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang多線程初識-day27-goroutine通信-管道(channel)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/17/Go_channel/" class="article-date">
+	  <time datetime="2018-05-16T16:00:00.000Z" itemprop="datePublished">五月 17, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ul>
+<li>類似unix中的管道(pipe)，或是隊列(queue)</li>
+<li>channel為引用類型的數據結構</li>
+<li>先進先出</li>
+<li>線程安全，多個goroutine同時訪問，<strong>不需要加鎖</strong></li>
+<li>channel是有類型的，整數的channel只能存放整數，依此類推</li>
+<li>使用<code>make()</code>初始化管道</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="聲明"><a href="#聲明" class="headerlink" title="聲明"></a>聲明</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 <span class="keyword">chan</span> 類型</span><br><span class="line"><span class="keyword">var</span> test <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> test1 <span class="keyword">chan</span> <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> test2 <span class="keyword">chan</span> <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> test3 <span class="keyword">chan</span> stu <span class="comment">//自定義結構體類型</span></span><br><span class="line"><span class="keyword">var</span> test4 <span class="keyword">chan</span> *stu <span class="comment">//亦可傳入指針</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>通常變量名會希望知道其為管道，因此會將chan結合其他關鍵字作為變量名<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> IntChan <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> StrChan <span class="keyword">chan</span> <span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="操作管道"><a href="#操作管道" class="headerlink" title="操作管道"></a>操作管道</h1><h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//聲明管道</span></span><br><span class="line">    <span class="keyword">var</span> intChan <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//初始化管道</span></span><br><span class="line">    intChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">10</span>)</span><br><span class="line">    mapChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>,<span class="number">10</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//往管道內寫入數據</span></span><br><span class="line">    <span class="comment">//int</span></span><br><span class="line">    intChan &lt;- <span class="number">10</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">//map</span></span><br><span class="line">    a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>,<span class="number">0</span>)</span><br><span class="line">    a[<span class="string">"Name"</span>] = <span class="string">"Curtis"</span></span><br><span class="line">    mapChan &lt;- a</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//關閉管道</span></span><br><span class="line">    <span class="built_in">close</span>(intChan)</span><br><span class="line">    <span class="built_in">close</span>(mapChan)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//遍歷管道</span></span><br><span class="line">    <span class="comment">//int</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> intChan &#123;</span><br><span class="line">        fmt.Println(i)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//map</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> mapChan &#123;</span><br><span class="line">        fmt.Println(i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">map[Name:Curtis]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//聲明並初始化管道</span></span><br><span class="line">    UserChan := <span class="built_in">make</span>(<span class="keyword">chan</span> user,<span class="number">10</span>)</span><br><span class="line">    UserPtrChan := <span class="built_in">make</span>(<span class="keyword">chan</span> *user,<span class="number">10</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> User1 user = user&#123;</span><br><span class="line">        UserName:<span class="string">"Tom"</span>,</span><br><span class="line">        UserAge:<span class="number">18</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//往管道內寫入數據</span></span><br><span class="line">    UserChan &lt;- User1</span><br><span class="line">    UserPtrChan &lt;- &amp;User1</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//關閉管道</span></span><br><span class="line">    <span class="built_in">close</span>(UserChan)</span><br><span class="line">    <span class="built_in">close</span>(UserPtrChan)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//遍歷管道</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span>(UserChan) &#123;</span><br><span class="line">        fmt.Println(i)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> i :=  <span class="keyword">range</span>(UserPtrChan)&#123;</span><br><span class="line">        fmt.Println(*i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>若管道類型為<code>interface{}</code>則可以接受任何類型數據的寫入</li>
+</ul>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;Tom 18&#125;</span><br><span class="line">&#123;Tom 18&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><h3 id="從channel讀取數據"><a href="#從channel讀取數據" class="headerlink" title="從channel讀取數據"></a>從channel讀取數據</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = &lt;- testChan</span><br><span class="line">b := &lt;- testChan</span><br></pre></td></tr></table></figure>
+<ul>
+<li>賦值記得加上<code>=</code></li>
+<li>聲明並賦值加上<code>:=</code></li>
+</ul>
+<h3 id="從channel寫入數據"><a href="#從channel寫入數據" class="headerlink" title="從channel寫入數據"></a>從channel寫入數據</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">testChan &lt;- a</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="channel和goroutine相結合"><a href="#channel和goroutine相結合" class="headerlink" title="channel和goroutine相結合"></a>channel和goroutine相結合</h1><p>使用goroutine搭配channel實現讀寫</p>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dataChan <span class="keyword">chan</span> <span class="keyword">int</span> = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteData</span> <span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	dataChan &lt;- i</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadData</span><span class="params">()</span></span>&#123;</span><br><span class="line">	data := &lt;- dataChan</span><br><span class="line">	fmt.Println(data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> WriteData(i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> ReadData()</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Second*<span class="number">5</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">3</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">4</span><br><span class="line">0</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h2><ul>
+<li>若是存放進去管道的數據數量超過管道的容量又沒有其他協程取出數據，管道會一直阻塞等待數據被取出</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> dataChan <span class="keyword">chan</span> <span class="keyword">int</span> = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">WriteData</span> <span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	dataChan &lt;- i</span><br><span class="line">	fmt.Println(<span class="string">"input the data"</span>,i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadData</span><span class="params">()</span></span>&#123;</span><br><span class="line">	data := &lt;- dataChan</span><br><span class="line">	fmt.Println(<span class="string">"get the data:"</span>,data)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> WriteData(i)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		time.Sleep(time.Second)</span><br><span class="line">		<span class="keyword">go</span> ReadData()</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Second*<span class="number">5</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">input the data 5</span><br><span class="line">input the data 8</span><br><span class="line">input the data 0</span><br><span class="line">input the data 1</span><br><span class="line">input the data 7</span><br><span class="line">get the data: 1</span><br><span class="line">input the data 9</span><br><span class="line">get the data: 0</span><br><span class="line">input the data 6</span><br><span class="line">get the data: 5</span><br><span class="line">input the data 3</span><br><span class="line">get the data: 8</span><br><span class="line">input the data 2</span><br><span class="line">get the data: 7</span><br><span class="line">input the data 4</span><br><span class="line">get the data: 9</span><br><span class="line">get the data: 6</span><br><span class="line">get the data: 3</span><br><span class="line">get the data: 2</span><br><span class="line">get the data: 4</span><br></pre></td></tr></table></figure>
+<ul>
+<li>從上述可看到寫入的協程馬上寫入了５組數據，但要再寫入時因為管道已經滿了，必須等待<strong>讀</strong>的協程取出數據，才能在寫入數據到管道中</li>
+</ul>
+<hr>
+<h1 id="檢測channel是否被關閉"><a href="#檢測channel是否被關閉" class="headerlink" title="檢測channel是否被關閉"></a>檢測channel是否被關閉</h1><ul>
+<li>使用<code>close()</code>函數關閉channel</li>
+<li>在關閉channel後，管道只可讀(取出)不可再寫入</li>
+<li>在取數據時可判斷管道是否已關閉，將最後一個數據取出時便會停止再取出數據</li>
+<li>安全的取出數據，才不會造成死循環<blockquote>
+<ul>
+<li><code>val,ok := &lt;- channel</code></li>
+<li>當<code>ok</code>的值返回<code>false</code>時代表已從<strong>關閉</strong>的管道中取出最後一條數據</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> intChan <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">	intChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		intChan &lt;- i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">close</span>(intChan)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">var</span> b <span class="keyword">int</span></span><br><span class="line">		</span><br><span class="line">		<span class="comment">//ok返回管道中是否還有下一條數據</span></span><br><span class="line">		b,ok := &lt;- intChan</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(b)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>要是沒有使用<code>ok</code>判斷<strong>已關閉的管道</strong>是否還有下一條數據時，<code>for</code>循環會不斷的訪問管道造成<strong>死循環</strong></li>
+</ul>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="channel之間的同步"><a href="#channel之間的同步" class="headerlink" title="channel之間的同步"></a>channel之間的同步</h1><ul>
+<li>不再使用<code>time.Sleep()</code>等待線程完成任務</li>
+</ul>
+<h2 id="example-1-1"><a href="#example-1-1" class="headerlink" title="example 1"></a>example 1</h2><ul>
+<li><p>查找1-100的所有質數</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calc</span><span class="params">(i <span class="keyword">int</span>,ResultNum <span class="keyword">chan</span> <span class="keyword">int</span>,Sync_signal <span class="keyword">chan</span> <span class="keyword">bool</span>)</span></span>&#123;</span><br><span class="line">	<span class="comment">//退出時傳一個訊號到同步的channel中表示此任務已完成</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		Sync_signal &lt;- <span class="literal">true</span></span><br><span class="line">	&#125;()</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//判斷質數</span></span><br><span class="line">	<span class="keyword">for</span> j:=<span class="number">2</span>;j&lt;i;j++&#123;</span><br><span class="line">		<span class="keyword">if</span> i%j == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	ResultNum &lt;- i</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//建立接收同步訊號的channel(可以為任何類型的管道)</span></span><br><span class="line">	<span class="comment">//只要最後傳入訊號即可</span></span><br><span class="line">	Sync := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>,<span class="number">100</span>)</span><br><span class="line">	ResultNum := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">100</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> calc(i,ResultNum,Sync)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//上面共開啟100個線程，因此只要能取出100個訊號則代表子線程皆完成任務</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++&#123;</span><br><span class="line">		<span class="comment">//沒有變量接收訊號，代表將訊號取出後就直接丟棄</span></span><br><span class="line">		&lt;- Sync</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//主線程關閉管道</span></span><br><span class="line">	<span class="built_in">close</span>(ResultNum)</span><br><span class="line">	<span class="comment">//遍歷管道計算的結果</span></span><br><span class="line">	<span class="keyword">for</span> v :=  <span class="keyword">range</span>(ResultNum)&#123;</span><br><span class="line">		fmt.Println(v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>range()</code>遍歷管道時，請注意<strong>管道必須先關閉</strong>(<code>close()</code>)否則<code>panic</code>(Dead Lock)</p>
+</li>
+</ul>
+<h3 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">2</span><br><span class="line">1</span><br><span class="line">7</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">11</span><br><span class="line">13</span><br><span class="line">17</span><br><span class="line">19</span><br><span class="line">23</span><br><span class="line">29</span><br><span class="line">31</span><br><span class="line">37</span><br><span class="line">41</span><br><span class="line">43</span><br><span class="line">47</span><br><span class="line">53</span><br><span class="line">59</span><br><span class="line">61</span><br><span class="line">67</span><br><span class="line">71</span><br><span class="line">73</span><br><span class="line">79</span><br><span class="line">83</span><br><span class="line">89</span><br><span class="line">97</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="example-2-1"><a href="#example-2-1" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendData</span><span class="params">(country <span class="keyword">string</span>, DataChan <span class="keyword">chan</span> <span class="keyword">string</span>, Signal <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span></span>&#123;</span><br><span class="line">	DataChan &lt;- country</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//完成上述的任務後傳入信號</span></span><br><span class="line">	Signal &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getData</span><span class="params">(result <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		country,ok := &lt;-result</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(country)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	country := []<span class="keyword">string</span>&#123;<span class="string">"Washington"</span>,<span class="string">"Tripoli"</span>,<span class="string">"London"</span>,<span class="string">"Beijing"</span>,<span class="string">"Tokyo"</span>&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//創建一個存放data的管道</span></span><br><span class="line">	DataChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>,<span class="built_in">len</span>(country))</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//創建一個存放線程結束信號的管道,信號型態為空結構體(可自定義為任何形式)</span></span><br><span class="line">	SyncChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;,<span class="built_in">len</span>(country))</span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> country &#123;</span><br><span class="line">		<span class="keyword">go</span> sendData(v,DataChan,SyncChan)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//取到全部子線程結束的信號，關閉data管道</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(country);i++ &#123;</span><br><span class="line">			&lt;- SyncChan</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(DataChan)</span><br><span class="line">	&#125;()</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//取data</span></span><br><span class="line">	getData(DataChan)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-6"><a href="#result-6" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Tripoli</span><br><span class="line">Washington</span><br><span class="line">Beijing</span><br><span class="line">London</span><br><span class="line">Tokyo</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="補充-管道的只讀與只寫"><a href="#補充-管道的只讀與只寫" class="headerlink" title="(補充)管道的只讀與只寫"></a>(補充)管道的只讀與只寫</h1><h2 id="創建可讀可寫管道-一般"><a href="#創建可讀可寫管道-一般" class="headerlink" title="創建可讀可寫管道(一般)"></a>創建可讀可寫管道(一般)</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="創建只讀的管道"><a href="#創建只讀的管道" class="headerlink" title="創建只讀的管道"></a>創建<strong>只讀</strong>的管道</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 &lt;- <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(&lt;-<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="創建只寫的管道"><a href="#創建只寫的管道" class="headerlink" title="創建只寫的管道"></a>創建<strong>只寫</strong>的管道</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 <span class="keyword">chan</span> &lt;- <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(<span class="keyword">chan</span> &lt;- <span class="keyword">int</span> ,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="對channel進行select操作"><a href="#對channel進行select操作" class="headerlink" title="對channel進行select操作"></a>對channel進行select操作</h1><h2 id="應用１"><a href="#應用１" class="headerlink" title="應用１"></a>應用１</h2><p>管道都有固定大小，<br>實際業務開發中，有可能會有管道空間不夠使用的情況，<br>此時會一直阻塞，並等待數據被取出，才能再次寫入數據，<br>若是一直無法將數據取出，會造成之後要寫入的數據無法進入管道，而使得業務停擺</p>
+<p>解決方式：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> testChan = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">10</span>)</span><br><span class="line">	test2Chan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">10</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;<span class="number">25</span>;i++&#123;</span><br><span class="line">        <span class="keyword">select</span> &#123;</span><br><span class="line">        <span class="keyword">case</span> testChan &lt;- i:</span><br><span class="line">			</span><br><span class="line">        <span class="comment">//1.創建多個管道，當第一個管道滿時，存入第二個管道</span></span><br><span class="line">        <span class="keyword">case</span> test2Chan &lt;- i:</span><br><span class="line">		</span><br><span class="line">        <span class="comment">//2.當連多個管道都不夠用時,採用default方法，防止堵塞情況</span></span><br><span class="line">        <span class="keyword">default</span> : </span><br><span class="line">            fmt.Println(i,<span class="string">"can't send to Channel"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="result-7"><a href="#result-7" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">21 can&apos;t send to Channel</span><br><span class="line">22 can&apos;t send to Channel</span><br><span class="line">23 can&apos;t send to Channel</span><br><span class="line">24 can&apos;t send to Channel</span><br></pre></td></tr></table></figure>
+<h2 id="應用２"><a href="#應用２" class="headerlink" title="應用２"></a>應用２</h2><p>管道可能為空的情況下，<br>有可能仍要持續的取出存放在管道內的數據，<br>否則會一直阻塞，等待管道中有數據被寫入，才能再次取出數據，<br>若是一直無數據被寫入，會造成業務停擺</p>
+<p>解決方式：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		testChan &lt;- i</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">1</span>;i&lt;<span class="number">15</span>;i++&#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//盡可能的取出數據</span></span><br><span class="line">		<span class="keyword">case</span> v := &lt;-testChan:</span><br><span class="line">			fmt.Println(<span class="string">"data"</span>,v ,<span class="string">"is got"</span>)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//無數據時，執行default方法，防止堵塞情況發生</span></span><br><span class="line">		<span class="keyword">default</span> :</span><br><span class="line">			fmt.Println(<span class="string">"Channel have no item to get"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="result-8"><a href="#result-8" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">data 1 is got</span><br><span class="line">data 2 is got</span><br><span class="line">data 3 is got</span><br><span class="line">data 4 is got</span><br><span class="line">data 5 is got</span><br><span class="line">data 6 is got</span><br><span class="line">data 7 is got</span><br><span class="line">data 8 is got</span><br><span class="line">data 9 is got</span><br><span class="line">Channel have no item to get</span><br><span class="line">Channel have no item to get</span><br><span class="line">Channel have no item to get</span><br><span class="line">Channel have no item to get</span><br><span class="line">Channel have no item to get</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/goroutine/">goroutine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/管道-channel/">管道(channel)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/19/Go_Timer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang多線程初識-day28-定時器(超時處理)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/15/Go_sync/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang多線程初識-day26-goroutine通信-線程同步(sync)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聲明"><span class="nav-number">2.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#操作管道"><span class="nav-number">3.</span> <span class="nav-text">操作管道</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">3.3.</span> <span class="nav-text">tips</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#從channel讀取數據"><span class="nav-number">3.3.1.</span> <span class="nav-text">從channel讀取數據</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#從channel寫入數據"><span class="nav-number">3.3.2.</span> <span class="nav-text">從channel寫入數據</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#channel和goroutine相結合"><span class="nav-number">4.</span> <span class="nav-text">channel和goroutine相結合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">4.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">4.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞"><span class="nav-number">4.2.</span> <span class="nav-text">阻塞</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-3"><span class="nav-number">4.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#檢測channel是否被關閉"><span class="nav-number">5.</span> <span class="nav-text">檢測channel是否被關閉</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">5.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">5.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#channel之間的同步"><span class="nav-number">6.</span> <span class="nav-text">channel之間的同步</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-1"><span class="nav-number">6.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-5"><span class="nav-number">6.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-1"><span class="nav-number">6.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-6"><span class="nav-number">6.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#補充-管道的只讀與只寫"><span class="nav-number">7.</span> <span class="nav-text">(補充)管道的只讀與只寫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#創建可讀可寫管道-一般"><span class="nav-number">7.1.</span> <span class="nav-text">創建可讀可寫管道(一般)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#創建只讀的管道"><span class="nav-number">7.2.</span> <span class="nav-text">創建只讀的管道</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#創建只寫的管道"><span class="nav-number">7.3.</span> <span class="nav-text">創建只寫的管道</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#對channel進行select操作"><span class="nav-number">8.</span> <span class="nav-text">對channel進行select操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#應用１"><span class="nav-number">8.1.</span> <span class="nav-text">應用１</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-7"><span class="nav-number">8.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#應用２"><span class="nav-number">8.2.</span> <span class="nav-text">應用２</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-8"><span class="nav-number">8.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day10-陣列(Array) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang陣列">
+  
+  
+  
+  
+  <meta name="description" content="introduction定義：有固定長度且裏頭的每個元素都為同一種數據類型之序列  陣列屬於值類型 長度是陣列類型的一部分，不同長度的陣列即使內部元素類型相同，仍為不同類型例如：12var a [5]intvar b [10]int   a,b兩變量為不同類型，因此也不能比較  陣列的index皆為0開始，最後一個元素的index為len-1 如果訪問的index在陣列合法範圍之外，會觸發訪問越界">
+<meta name="keywords" content="2018,Golang,陣列">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day10-陣列(Array)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/01/Go_Array/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction定義：有固定長度且裏頭的每個元素都為同一種數據類型之序列  陣列屬於值類型 長度是陣列類型的一部分，不同長度的陣列即使內部元素類型相同，仍為不同類型例如：12var a [5]intvar b [10]int   a,b兩變量為不同類型，因此也不能比較  陣列的index皆為0開始，最後一個元素的index為len-1 如果訪問的index在陣列合法範圍之外，會觸發訪問越界">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/fYujgqw.jpg">
+<meta property="og:updated_time" content="2018-04-01T09:32:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day10-陣列(Array)">
+<meta name="twitter:description" content="introduction定義：有固定長度且裏頭的每個元素都為同一種數據類型之序列  陣列屬於值類型 長度是陣列類型的一部分，不同長度的陣列即使內部元素類型相同，仍為不同類型例如：12var a [5]intvar b [10]int   a,b兩變量為不同類型，因此也不能比較  陣列的index皆為0開始，最後一個元素的index為len-1 如果訪問的index在陣列合法範圍之外，會觸發訪問越界">
+<meta name="twitter:image" content="https://i.imgur.com/fYujgqw.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_Array" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/fYujgqw.jpg" rel="gallery_ck4x0bhpr002pgdq71jx2yztz">
+        <img src="https://i.imgur.com/fYujgqw.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day10-陣列(Array)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/01/Go_Array/" class="article-date">
+	  <time datetime="2018-03-31T16:00:00.000Z" itemprop="datePublished">四月 1, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><p>定義：有<strong>固定長度</strong>且裏頭的每個元素都為<strong>同一種數據類型</strong>之序列</p>
+<ul>
+<li>陣列屬於<strong>值類型</strong></li>
+<li><strong>長度</strong>是<strong>陣列類型的一部分</strong>，不同長度的陣列即使內部元素類型相同，仍為<strong>不同類型</strong><br>例如：<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a [<span class="number">5</span>]<span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> b [<span class="number">10</span>]<span class="keyword">int</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>a</code>,<code>b</code>兩變量為不同類型，因此也不能比較</p>
+<ul>
+<li>陣列的index皆為0開始，最後一個元素的index為len-1</li>
+<li>如果訪問的index在陣列合法範圍之外，會觸發<strong>訪問越界</strong>，丟出<code>panic</code><a id="more"></a>
+</li>
+</ul>
+<hr>
+<h1 id="聲明"><a href="#聲明" class="headerlink" title="聲明"></a>聲明</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> variable_name [<span class="built_in">len</span>]<span class="keyword">type</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>[]</code>中的數字為陣列的長度，<strong>確定後就無法修改</strong></li>
+<li><code>[]</code>後指定陣列中儲存哪種數據類型(type)</li>
+<li><strong>聲明時默認每個元素都會初始化成0、空字符串、false</strong></li>
+</ul>
+<p>比如<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a [<span class="number">5</span>]<span class="keyword">int</span></span><br><span class="line"><span class="keyword">var</span> b [<span class="number">10</span>]<span class="keyword">string</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var 變量名 [長度]類型 = [長度]類型&#123;元素...&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array [<span class="number">10</span>]<span class="keyword">int</span> = [<span class="number">10</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array [<span class="number">5</span>]<span class="keyword">int</span>  = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;                 <span class="comment">//[1]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array         = [<span class="number">4</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;                 <span class="comment">//[2] </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array         = [...]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,&#125;            <span class="comment">//[3]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array         = [<span class="number">5</span>]<span class="keyword">string</span>&#123;<span class="number">3</span>:<span class="string">"Hello"</span>,<span class="number">2</span>:<span class="string">"100"</span>&#125;  <span class="comment">//[4]</span></span><br></pre></td></tr></table></figure>
+<p>[1] 如果未填滿陣列長度對應的值，會自動將未填入位置填入0<br>[2] 聲明的部分可不寫類型，Go會自動做類型推導<br>[3] 如果陣列太長不得而知長度又懶得數，可用<code>...</code>代替長度，編譯器會自動數</p>
+<ul>
+<li>但是初始化時後面跟了多少元素，便為其長度，不得修改</li>
+</ul>
+<p>[4] 可直接<strong>指定下標</strong>初始化，元素欄裡的格式為{index:值} <strong>(重要)</strong></p>
+<ul>
+<li>其他未初始化的值會初始化為0,空字符串,或是false…等</li>
+</ul>
+<hr>
+<h1 id="元素賦值"><a href="#元素賦值" class="headerlink" title="元素賦值"></a>元素賦值</h1><h2 id="訪問index賦值"><a href="#訪問index賦值" class="headerlink" title="訪問index賦值"></a>訪問index賦值</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">變量名[index] = 值</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array [<span class="number">10</span>]<span class="keyword">int</span></span><br><span class="line">array[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">array[<span class="number">1</span>] = <span class="number">2</span></span><br><span class="line">array[<span class="number">9</span>] = <span class="number">9</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>須注意<strong>index必須小於陣列的長度</strong></li>
+</ul>
+<hr>
+<h1 id="遍歷陣列"><a href="#遍歷陣列" class="headerlink" title="遍歷陣列"></a>遍歷陣列</h1><p>使用<code>for</code>循環遍歷陣列</p>
+<h2 id="訪問index遍歷"><a href="#訪問index遍歷" class="headerlink" title="訪問index遍歷"></a>訪問index遍歷</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"><span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(array);i++ &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"array[%d]=%d\n"</span>,i,array[i])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array[0]=1</span><br><span class="line">array[1]=2</span><br><span class="line">array[2]=3</span><br></pre></td></tr></table></figure>
+<h2 id="使用range遍歷"><a href="#使用range遍歷" class="headerlink" title="使用range遍歷"></a>使用range遍歷</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line"><span class="keyword">for</span> i,v := <span class="keyword">range</span> array &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"array[%d]=%d\n"</span>,i,v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array[0]=1</span><br><span class="line">array[1]=2</span><br><span class="line">array[2]=3</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="Notice"><a href="#Notice" class="headerlink" title="Notice"></a>Notice</h1><h2 id="陣列屬值類型"><a href="#陣列屬值類型" class="headerlink" title="陣列屬值類型"></a>陣列屬值類型</h2><p>陣列屬於<strong>值類型</strong>，因此改變副本的值，並不會改變本身</p>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array_1 [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line">	array_2 := array_1</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"before array_1:"</span>,array_1)</span><br><span class="line">	array_2[<span class="number">2</span>] = <span class="number">100</span></span><br><span class="line">	fmt.Println(<span class="string">"after array_1:"</span>,array_1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">before array_1: [1 2 3]</span><br><span class="line">after array_1: [1 2 3]</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">modify_array</span><span class="params">(array [3]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	array[<span class="number">0</span>] = <span class="number">3</span></span><br><span class="line">	array[<span class="number">1</span>] = <span class="number">2</span></span><br><span class="line">	array[<span class="number">2</span>] = <span class="number">1</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array_1 [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"before array_1:"</span>,array_1)</span><br><span class="line">	modify_array(array_1)</span><br><span class="line">	fmt.Println(<span class="string">"after array_1:"</span>,array_1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">before array_1: [1 2 3]</span><br><span class="line">after array_1: [1 2 3]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="函數傳參指針類型的陣列"><a href="#函數傳參指針類型的陣列" class="headerlink" title="函數傳參指針類型的陣列"></a>函數傳參指針類型的陣列</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">modify_array</span><span class="params">(array *[3]<span class="keyword">int</span>)</span></span>&#123;     <span class="comment">//[1]</span></span><br><span class="line">	array[<span class="number">0</span>] = <span class="number">3</span></span><br><span class="line">	array[<span class="number">1</span>] = <span class="number">2</span>           <span class="comment">//[2]</span></span><br><span class="line">	(*array)[<span class="number">2</span>] = <span class="number">1</span>        <span class="comment">//[2]</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array_1 [<span class="number">3</span>]<span class="keyword">int</span> = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;</span><br><span class="line">	fmt.Println(<span class="string">"before array_1:"</span>,array_1)</span><br><span class="line">	modify_array(&amp;array_1)                  <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(<span class="string">"after array_1:"</span>,array_1)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 函數接收陣列指針類型的參數，調用函數時搭配取址符<code>&amp;</code>獲得內存地址<br>[2] 於函數內部修改陣列中的值時，<code>(*array)[index]</code> 可簡寫成 <code>array[index]</code>即可</p>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">before array_1: [1 2 3]</span><br><span class="line">after array_1: [3 2 1]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="practice"><a href="#practice" class="headerlink" title="practice"></a>practice</h1><p>使用非遞歸的方式實現費波那契數列，打印前20個數<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> fib_array [<span class="number">20</span>]<span class="keyword">uint64</span> = [<span class="number">20</span>]<span class="keyword">uint64</span>&#123;<span class="number">1</span>,<span class="number">1</span>&#125;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">2</span>;i&lt;<span class="built_in">len</span>(fib_array);i++ &#123;</span><br><span class="line">		fib_array[i] = fib_array[i<span class="number">-1</span>]+fib_array[i<span class="number">-2</span>]</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> fib_array &#123;</span><br><span class="line">		fmt.Printf(<span class="string">"%d "</span>,v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765</span><br></pre></td></tr></table></figure></p>
+<h1 id="多維陣列"><a href="#多維陣列" class="headerlink" title="多維陣列"></a>多維陣列</h1><h2 id="聲明及初始化"><a href="#聲明及初始化" class="headerlink" title="聲明及初始化"></a>聲明及初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> TwoDimensional [<span class="number">5</span>][<span class="number">3</span>]<span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> TwoDimensional  = [...][<span class="number">3</span>]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>利用<code>{}</code>分開不同維度的陣列</li>
+</ul>
+<h2 id="遍歷"><a href="#遍歷" class="headerlink" title="遍歷"></a>遍歷</h2><p>使用<code>for</code>循環<strong>巢式</strong>遍歷<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> TwoDimensional  = [...][<span class="number">3</span>]<span class="keyword">int</span>&#123;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;,&#123;<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>&#125;&#125;</span><br><span class="line">	<span class="keyword">for</span> i,v := <span class="keyword">range</span> TwoDimensional &#123;</span><br><span class="line">		<span class="keyword">for</span> j,w := <span class="keyword">range</span> v &#123;</span><br><span class="line">			fmt.Printf(<span class="string">"col-%d,row-%d value is %d\n"</span>,j,i,w)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">col-0,row-0 value is 1</span><br><span class="line">col-1,row-0 value is 2</span><br><span class="line">col-2,row-0 value is 3</span><br><span class="line">col-0,row-1 value is 7</span><br><span class="line">col-1,row-1 value is 8</span><br><span class="line">col-2,row-1 value is 9</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/陣列/">陣列</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/02/Go_slice/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day11-切片
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/01/Go_closure/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day10-閉包(closure)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聲明"><span class="nav-number">2.</span> <span class="nav-text">聲明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化"><span class="nav-number">2.1.</span> <span class="nav-text">初始化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#元素賦值"><span class="nav-number">3.</span> <span class="nav-text">元素賦值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#訪問index賦值"><span class="nav-number">3.1.</span> <span class="nav-text">訪問index賦值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#遍歷陣列"><span class="nav-number">4.</span> <span class="nav-text">遍歷陣列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#訪問index遍歷"><span class="nav-number">4.1.</span> <span class="nav-text">訪問index遍歷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">4.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用range遍歷"><span class="nav-number">4.2.</span> <span class="nav-text">使用range遍歷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">5.</span> <span class="nav-text">Notice</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#陣列屬值類型"><span class="nav-number">5.1.</span> <span class="nav-text">陣列屬值類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-2"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-2"><span class="nav-number">5.1.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">5.1.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函數傳參指針類型的陣列"><span class="nav-number">5.2.</span> <span class="nav-text">函數傳參指針類型的陣列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">5.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#practice"><span class="nav-number">6.</span> <span class="nav-text">practice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多維陣列"><span class="nav-number">7.</span> <span class="nav-text">多維陣列</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#聲明及初始化"><span class="nav-number">7.1.</span> <span class="nav-text">聲明及初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍歷"><span class="nav-number">7.2.</span> <span class="nav-text">遍歷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-5"><span class="nav-number">7.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-演算法-K Neighbors Classifier | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 透過鄰居(離自己最近的點)來推斷所屬的類別 比較樣本之間的特徵遠近；相似的樣本，特徵之間的值應該都是相近的">
+<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-演算法-K Neighbors Classifier">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/08/ML_KNeighbors_Classifier/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 透過鄰居(離自己最近的點)來推斷所屬的類別 比較樣本之間的特徵遠近；相似的樣本，特徵之間的值應該都是相近的">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/eP6e6IZ.jpg">
+<meta property="og:updated_time" content="2019-04-14T15:40:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-演算法-K Neighbors Classifier">
+<meta name="twitter:description" content="Introduction 透過鄰居(離自己最近的點)來推斷所屬的類別 比較樣本之間的特徵遠近；相似的樣本，特徵之間的值應該都是相近的">
+<meta name="twitter:image" content="https://i.imgur.com/eP6e6IZ.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_KNeighbors_Classifier" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/eP6e6IZ.jpg" rel="gallery_ck4x0bhrh007ngdq75u4dzlpc">
+        <img src="https://i.imgur.com/eP6e6IZ.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-演算法-K Neighbors Classifier
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/08/ML_KNeighbors_Classifier/" class="article-date">
+	  <time datetime="2018-07-07T20:10:00.000Z" itemprop="datePublished">七月 8, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>透過鄰居(離自己最近的點)來推斷所屬的類別</li>
+<li>比較樣本之間的特徵遠近；相似的樣本，特徵之間的值應該都是相近的</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>定義：如果一個樣本在特徵空間中 與K個最相似(即特徵空間中最鄰近)的樣本中的大多數屬於同一個類別，則該樣本也屬於這個類別</li>
+<li><p>兩個樣本的距離可以通過如下公式計算，又稱歐式距離，比如a(a1,a2,a3), b(b1,b2,b3)</p>
+<script type="math/tex; mode=display">
+distance = \sqrt{(a1-b1)^2+(a2-b2)^2+(a3-b3)^2}</script></li>
+<li><p>在計算兩個樣本的距離時，會因為某些特徵值本就屬於非常大的數值，在求其距離時會直接影響最後的結果</p>
+<ul>
+<li>使用KNN算法時需將數據集做<strong>標準化</strong>或是<strong>歸一化</strong>處理(無量綱化)</li>
+<li>使用標準化較為穩定</li>
+</ul>
+</li>
+<li><p>使用<code>sklearn.neighbors.KNeighborsClassifier()</code> 調用此演算法的API</p>
+</li>
+</ul>
+<hr>
+<h1 id="K-Neighbors-Classifier"><a href="#K-Neighbors-Classifier" class="headerlink" title="K Neighbors Classifier"></a>K Neighbors Classifier</h1><ul>
+<li>於<code>sklearn.neighbors.KNeighborsClassifier(n_neighbors=5, algorithm=&#39;auto&#39;)</code>中</li>
+<li><code>n_neighbors</code>：為int類型，可選，預設值為5，選擇查詢的鄰居數</li>
+<li><code>algorithm</code>：有<code>&#39;auto&#39;</code>,<code>&#39;ball_tree&#39;</code>,<code>&#39;kd_tree&#39;</code>,<code>&#39;brute&#39;</code>幾種選擇，可選用於計算最近鄰居的算法，<code>&#39;auto&#39;</code>將嘗試根據傳遞給<code>fit()</code>方法的值來決定最合適的算法</li>
+<li><code>metric</code>：預設為<code>&quot;minkowski&quot;</code>(明可夫斯基距離)<ul>
+<li>其為<strong>歐式距離</strong>及<strong>曼哈頓距離</strong>兩種計算距離的延伸</li>
+<li>其實例化KNN算法時參數<code>p</code>預設為2<ul>
+<li><code>p</code>為2時所使用的是曼哈頓距離：兩點絕對值距離</li>
+<li><code>p</code>為1時所使用的是歐式距離</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1)獲取數據</span></span><br><span class="line">iris_data = load_iris()</span><br><span class="line"><span class="comment"># 2)數據集劃分</span></span><br><span class="line">X_train,X_test,y_train,y_test = train_test_split(iris_data.data,iris_data.target)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3)特徵工程 --- 標準化</span></span><br><span class="line">transfer = StandardScaler()</span><br><span class="line">X_train = transfer.fit_transform(X_train)</span><br><span class="line">X_test = transfer.transform(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4)KNN estimator流程</span></span><br><span class="line">KNN = KNeighborsClassifier()</span><br><span class="line">KNN.fit(X_train,y_train)</span><br><span class="line">KNN.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5)模型評估</span></span><br><span class="line">print(<span class="string">"score = "</span>,KNN.score(X_test,y_test))</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">score = 1.0</span><br></pre></td></tr></table></figure>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ul>
+<li>須考慮k值須取多大<ul>
+<li>k值取太小容易受異常點的影響</li>
+<li>k值如果取得太大容易受到鄰近點(類別)結果比例影響<ul>
+<li>訓練集的各類別樣本不均衡時造成誤判</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>因為每個點都需計算距離造成性能低落</li>
+</ul>
+<h1 id="優缺點"><a href="#優缺點" class="headerlink" title="優缺點"></a>優缺點</h1><ul>
+<li>優點<ul>
+<li>簡單</li>
+<li>易於理解及實現</li>
+<li>無須<strong>估計參數</strong>(演算法所需參數)，<strong>無須訓練</strong>(不是迭代，而是單純的計算距離)</li>
+</ul>
+</li>
+<li>缺點<ul>
+<li>對測試樣本分類時計算量大</li>
+<li>內存開銷大</li>
+<li>必須指定k值，且k值選擇不當分類精確度不能保證</li>
+</ul>
+</li>
+<li>使用場景<ul>
+<li>小數據(幾千～幾萬樣本)</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/08/ML_Naive_Bayes_Classifier/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-演算法-Naive Bayes Classifier
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/07/ML_Transformer_Estimator/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-轉換器&amp;估計器(Transformer &amp; Estimator)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#K-Neighbors-Classifier"><span class="nav-number">2.</span> <span class="nav-text">K Neighbors Classifier</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">4.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優缺點"><span class="nav-number">5.</span> <span class="nav-text">優缺點</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

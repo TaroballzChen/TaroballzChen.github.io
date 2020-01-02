@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-演算法-決策樹回歸樹(DecisionTreeRegressor) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2019演算法機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="DecisionTreeRegressor">
+<meta name="keywords" content="Python,2019,演算法,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-演算法-決策樹回歸樹(DecisionTreeRegressor)">
+<meta property="og:url" content="http://www.taroballz.com/2019/05/19/ML_decision_tree_TreeRegressor/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="DecisionTreeRegressor">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/T1Oyped.jpg">
+<meta property="og:updated_time" content="2019-05-26T08:16:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-演算法-決策樹回歸樹(DecisionTreeRegressor)">
+<meta name="twitter:description" content="DecisionTreeRegressor">
+<meta name="twitter:image" content="https://i.imgur.com/T1Oyped.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_decision_tree_TreeRegressor" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/T1Oyped.jpg" rel="gallery_ck4x0bhrv008sgdq7x5sp0ngp">
+        <img src="https://i.imgur.com/T1Oyped.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-演算法-決策樹回歸樹(DecisionTreeRegressor)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/05/19/ML_decision_tree_TreeRegressor/" class="article-date">
+	  <time datetime="2019-05-19T06:43:00.000Z" itemprop="datePublished">五月 19, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="DecisionTreeRegressor"><a href="#DecisionTreeRegressor" class="headerlink" title="DecisionTreeRegressor"></a>DecisionTreeRegressor</h1><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.tree.DecisionTreeRegressor(criterion=’mse’, splitter=’best’, </span><br><span class="line">max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, </span><br><span class="line">max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, </span><br><span class="line">min_impurity_split=None, presort=False)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>幾乎所有參數、屬性、接口都和分類樹相同</li>
+<li>回歸樹<strong>沒有標籤分佈是否均衡的問題</strong><ul>
+<li>因此沒有<code>class_weight</code>這樣的參數</li>
+</ul>
+</li>
+</ul>
+<h1 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h1><h2 id="criterion"><a href="#criterion" class="headerlink" title="criterion"></a>criterion</h2><blockquote>
+<p>回歸樹衡量分枝質量的指標，支持的標準有三種</p>
+</blockquote>
+<ul>
+<li><code>&quot;mse&quot;</code>: 使用均方誤差(mean squared error)<ul>
+<li>父節點和葉子節點之間<strong>均方誤差之差額</strong>被用作特徵選擇的標準</li>
+<li>使用葉子節點的<strong>平均值</strong>來最小化L2損失</li>
+</ul>
+</li>
+<li><code>&quot;friedman_mse&quot;</code>：費爾德曼均方誤差<ul>
+<li>對潛在分枝問題進行改進的另一種計算均方誤差的方法</li>
+</ul>
+</li>
+<li><code>&quot;mae&quot;</code>：使用絕對平均誤差(mean absolute error)<ul>
+<li>使用葉子節點的<strong>中位數</strong>來最小化L1損失    </li>
+</ul>
+</li>
+</ul>
+<h1 id="Mean-Squared-Error-MSE"><a href="#Mean-Squared-Error-MSE" class="headerlink" title="Mean Squared Error(MSE)"></a>Mean Squared Error(MSE)</h1><script type="math/tex; mode=display">
+MSE = \frac{1}{N} \sum_{i=1}^{N} (f_i - y_i)^2</script><ul>
+<li>$f_i$：是模型回歸出的數值</li>
+<li>$y_i$：是樣本點$i$實際的數值標籤</li>
+</ul>
+<h1 id="重要接口"><a href="#重要接口" class="headerlink" title="重要接口"></a>重要接口</h1><h2 id="score"><a href="#score" class="headerlink" title="score"></a>score</h2><blockquote>
+<p>回歸樹中恆量指標，返回的是$R^2$，並不是MSE</p>
+<ul>
+<li>$R^2$範圍為1至負無窮大</li>
+</ul>
+</blockquote>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>在回歸樹中,MSE是<strong>分枝質量</strong>衡量指標</li>
+<li>在回歸樹中,MSE是最常使用<strong>回歸質量</strong>衡量指標</li>
+<li>使用交叉驗證(cross_validation)時，通常選擇<strong>均方誤差</strong>作為評估<ul>
+<li><code>cross_val_score(regressor,data,target,cv=10,scoring=&quot;neg_mean_squared_error&quot;)</code><ul>
+<li><code>scoring</code>不指定的話，預設返回的是$R^2$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在回歸模型中,MSE<strong>越小越好</strong></li>
+</ul>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>如果樹的最大深度(<code>max_depth</code>)設置得太高，決策樹會學習的太精細</p>
+<ul>
+<li>從訓練數據中學了太多細節(包括noise)</li>
+<li>使模型偏離真實欲表達得曲線，變成<strong>過擬合</strong></li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://www.peixun.net/view/1281.html" target="_blank" rel="noopener">http://www.peixun.net/view/1281.html</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/22/ML_Introduction_EnsembleLearning/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-集成學習(ensemble learning)方法概述
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/05/15/ML_decision_tree_detail/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DecisionTreeRegressor"><span class="nav-number">1.</span> <span class="nav-text">DecisionTreeRegressor</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要參數"><span class="nav-number">2.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#criterion"><span class="nav-number">2.1.</span> <span class="nav-text">criterion</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mean-Squared-Error-MSE"><span class="nav-number">3.</span> <span class="nav-text">Mean Squared Error(MSE)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要接口"><span class="nav-number">4.</span> <span class="nav-text">重要接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#score"><span class="nav-number">4.1.</span> <span class="nav-text">score</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.2.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#結論"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

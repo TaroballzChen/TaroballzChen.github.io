@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2019演算法機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
+<meta name="keywords" content="Python,2019,演算法,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)">
+<meta property="og:url" content="http://www.taroballz.com/2019/05/15/ML_decision_tree_detail/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/z2b7JA0.jpg">
+<meta property="og:updated_time" content="2019-05-19T06:39:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)">
+<meta name="twitter:description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
+<meta name="twitter:image" content="https://i.imgur.com/z2b7JA0.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_decision_tree_detail" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/z2b7JA0.jpg" rel="gallery_ck4x0bhrz0096gdq7w7a42pfl">
+        <img src="https://i.imgur.com/z2b7JA0.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/05/15/ML_decision_tree_detail/" class="article-date">
+	  <time datetime="2019-05-15T13:25:00.000Z" itemprop="datePublished">五月 15, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>一種<strong>非參數</strong>的<strong>監督學習(有目標值)</strong>的演算法<ul>
+<li>非參數：不限制數據的結構與類型<ul>
+<li>任何數據皆適用<a id="more"></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>只要是決策樹的葉子節點(有進邊，沒有出邊)，都是一個<strong>類別的標籤</strong></li>
+<li>決策樹演算法的核心是要解決<strong>兩個問題</strong><ul>
+<li>如何從數據中找出<strong>最佳節點</strong>和<strong>最佳分枝</strong></li>
+<li>如何讓決策樹停止生長，防止<strong>過擬合</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="sklearn中的決策樹"><a href="#sklearn中的決策樹" class="headerlink" title="sklearn中的決策樹"></a>sklearn中的決策樹</h1><ul>
+<li>sklearn中關於決策樹的類(不包含集成演算法)都在<code>sklearn.tree</code>這個模塊下，共包含五個類<ul>
+<li><code>tree.DecisionTreeClassifier</code>：分類樹</li>
+<li><code>tree.DecisionTreeRegressor</code>：回歸樹</li>
+<li><code>tree.export_graphviz</code>：將生成的決策樹導出為DOT格式，畫圖專用</li>
+<li><code>tree.ExtraTreeClassifier</code>：<strong>高隨機</strong>版本的分類樹</li>
+<li><code>tree.ExtraTreeRegressor</code>：<strong>高隨機</strong>版本的回歸樹</li>
+</ul>
+</li>
+</ul>
+<h1 id="DecisionTreeClassifier"><a href="#DecisionTreeClassifier" class="headerlink" title="DecisionTreeClassifier"></a>DecisionTreeClassifier</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.tree.DecisionTreeClassifier (criterion=’gini’, splitter=’best’, max_depth=None, </span><br><span class="line">min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, </span><br><span class="line">max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)</span><br></pre></td></tr></table></figure>
+<h2 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h2><h3 id="criterion"><a href="#criterion" class="headerlink" title="criterion"></a>criterion</h3><blockquote>
+<p>對分類樹來說，找出最佳節點及分枝的指標為＂不純度＂，<strong>不純度越低，決策樹對訓練集得的擬合越好</strong>。<br>決策樹就是追求不純度相關指標的最優化</p>
+<ul>
+<li>樹中的每個節點都會有一個不純度<ul>
+<li>子節點的不純度定低於父節點</li>
+<li>葉子節點的不純度是最低的</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li><code>&quot;entropy&quot;</code>: 使用信息熵<ul>
+<li>信息熵對不純度叫基尼係數強(對不純度懲罰最強)<ul>
+<li>容易過擬合</li>
+</ul>
+</li>
+<li><strong>實際使用中兩者效果基本一樣</strong></li>
+</ul>
+</li>
+<li><code>&quot;gini&quot;</code>：使用基尼係數<ul>
+<li>適用於數據維度大，噪音很大的數據</li>
+</ul>
+</li>
+</ul>
+<h2 id="隨機性參數"><a href="#隨機性參數" class="headerlink" title="隨機性參數"></a>隨機性參數</h2><h3 id="random-state"><a href="#random-state" class="headerlink" title="random_state"></a>random_state</h3><blockquote>
+<p>設置分枝中隨機模式的參數，預設為None<br>使用同一批訓練集(<code>Xtrain</code>)進行訓練，得到的準確度仍有差異，原因決策樹<strong>本身就具有隨機性</strong><br><strong>輸入任意整數</strong>，會針對特定模型選定的feature,長出同一顆樹讓模型穩定下來(固定隨機性)</p>
+<ul>
+<li>調參優化時通常會固定random_state</li>
+</ul>
+</blockquote>
+<h2 id="splitter"><a href="#splitter" class="headerlink" title="splitter"></a>splitter</h2><blockquote>
+<p>用作控制決策樹的隨機性</p>
+</blockquote>
+<ul>
+<li><code>&quot;best&quot;</code>:<ul>
+<li>決策樹雖然本身就具有隨機性，但會<strong>優先選擇更重要的特徵進行分枝</strong></li>
+</ul>
+</li>
+<li><code>&quot;random</code>:<ul>
+<li>決策樹在分枝時會更為隨機<ul>
+<li>樹深度更深</li>
+<li>對訓練集的擬合會降低(<strong>防止過擬合的一種方式</strong>)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="剪枝參數"><a href="#剪枝參數" class="headerlink" title="剪枝參數"></a>剪枝參數</h2><blockquote>
+<p>決策樹會生長到<strong>衡量不純度最優</strong>，或者沒有更多特徵可用為止</p>
+<ul>
+<li>這樣決策樹往往會過擬合</li>
+<li><strong>會在訓練集上表現很好，測試集卻很糟糕</strong></li>
+<li>為了決策樹有更好的泛化性，須對決策樹進行剪枝<ul>
+<li><strong>剪枝策略對決策樹的影響巨大，正確的剪枝策略是優化決策樹算法的核心</strong></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="max-depth"><a href="#max-depth" class="headerlink" title="max_depth"></a>max_depth</h3><blockquote>
+<p>限制樹的最大深度，超過設定深度的樹枝全部剪掉</p>
+<ul>
+<li>用的最廣泛的剪枝參數</li>
+<li>在<strong>高維度、低樣本量時</strong>非常有效</li>
+<li>在集成算法中也非常實用</li>
+</ul>
+</blockquote>
+<ul>
+<li>建議從 <code>= 3</code>開始嘗試</li>
+</ul>
+<h3 id="min-samples-leaf"><a href="#min-samples-leaf" class="headerlink" title="min_samples_leaf"></a>min_samples_leaf</h3><blockquote>
+<p>一個節點在分枝後每個子節點都必須包含至少<code>min_samples_leaf</code>個<strong>訓練樣本</strong>；<br>分枝會朝著滿足每個子節點都包含<code>min_samples_leaf</code>個樣本的方向去發展</p>
+<ul>
+<li>一般搭配<code>max_depth</code>使用</li>
+<li>一般建議從<code>= 5</code>開始使用</li>
+<li>如果葉節點中含有的樣本量變化很大，<strong>建議輸入浮點樹作為樣本量的百分比使用</strong></li>
+</ul>
+</blockquote>
+<h3 id="min-samples-split"><a href="#min-samples-split" class="headerlink" title="min_samples_split"></a>min_samples_split</h3><blockquote>
+<p>一個<strong>中間節點</strong>必須包含至少<code>min_samples_split</code>個訓練樣本，這個節點在允許被分枝，否則分枝不會發生</p>
+</blockquote>
+<h3 id="max-features"><a href="#max-features" class="headerlink" title="max_features"></a>max_features</h3><blockquote>
+<p>限制分枝時考慮的特徵個數，超過限制個數的特徵都會被捨棄<br>和<code>max_depth</code>異曲同工</p>
+<ul>
+<li>在不知道決策樹中的各個特徵的重要性情況下，設定這個參數會導致學習不足</li>
+</ul>
+</blockquote>
+<h3 id="min-impurity-decrease"><a href="#min-impurity-decrease" class="headerlink" title="min_impurity_decrease"></a>min_impurity_decrease</h3><blockquote>
+<p>限制信息增益的大小<br>信息增益小於設定數值的分枝不會發生</p>
+</blockquote>
+<h3 id="利用matplotlib畫出學習曲線來確認最優的剪枝參數"><a href="#利用matplotlib畫出學習曲線來確認最優的剪枝參數" class="headerlink" title="利用matplotlib畫出學習曲線來確認最優的剪枝參數"></a>利用matplotlib畫出學習曲線來確認最優的剪枝參數</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">y_eff = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):   <span class="comment"># 測試的條件數</span></span><br><span class="line">    tree_clf = tree.DecisionTreeClassifier(criterion=<span class="string">"entropy"</span></span><br><span class="line">                                          ,random_state = <span class="number">30</span></span><br><span class="line">                                          ,splitter = <span class="string">"random"</span></span><br><span class="line">                                          ,max_depth = i+<span class="number">1</span>   <span class="comment">#測試條件</span></span><br><span class="line">                                          )</span><br><span class="line">  tree_clf = tree_clf.fit(Xtrain,ytrain)</span><br><span class="line">  score = tree_clf.score(Xtest,ytest)</span><br><span class="line">  y_eff.append(score)</span><br><span class="line">plt.plot(range(<span class="number">1</span>,<span class="number">11</span>),y_eff,color=<span class="string">"red"</span>,label=<span class="string">"max_depth"</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h2 id="目標權重參數"><a href="#目標權重參數" class="headerlink" title="目標權重參數"></a>目標權重參數</h2><p>控制目標權重的參數</p>
+<h3 id="class-weight"><a href="#class-weight" class="headerlink" title="class_weight"></a>class_weight</h3><blockquote>
+<p>樣本不平衡是指在一組數據集中，某個標籤天生佔有很大的比例<br>完成樣本標籤平衡的參數，對樣本標籤進行一定的均衡</p>
+<ul>
+<li>給少量的標籤更多的權重</li>
+<li>讓模型更偏向少數類，向捕獲少數類的方向建模</li>
+</ul>
+</blockquote>
+<ul>
+<li>該參數默認為<code>None</code><ul>
+<li>自動給予數據集中的所有標籤相同的權重</li>
+</ul>
+</li>
+</ul>
+<h3 id="min-weight-fraction-leaf"><a href="#min-weight-fraction-leaf" class="headerlink" title="min_weight_fraction_leaf"></a>min_weight_fraction_leaf</h3><blockquote>
+<p>有了權重之後，樣本量就不再是單純記錄樹目，而是受輸入權重影響<br>此時剪枝須搭配<code>min_weight_fraction_leaf</code>這個基於權重的剪枝參數使用</p>
+</blockquote>
+<h1 id="重要屬性和接口"><a href="#重要屬性和接口" class="headerlink" title="重要屬性和接口"></a>重要屬性和接口</h1><p>所有接口中要求輸入<code>X_train,X_test</code>的部分，輸入的特徵矩陣必須至少是一個<strong>二維</strong>的矩陣</p>
+<ul>
+<li>sklearn不接受任何一維矩陣作為特徵矩陣被輸入<ul>
+<li>如果數據確實<strong>只有一個特徵</strong>的data<ul>
+<li>必須用<code>reshape(-1,1)</code>來給矩陣增維</li>
+</ul>
+</li>
+<li>如果數據<strong>只有一個特徵和一個樣本</strong>(one-sample)<ul>
+<li>必須用<code>reshape(1,-1)</code>來給數據增維</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="estimator-apply-Xtest"><a href="#estimator-apply-Xtest" class="headerlink" title="estimator.apply(Xtest)"></a>estimator.apply(Xtest)</h2><p>返回每個<strong>測試樣本所在的葉子節點的索引</strong></p>
+<ul>
+<li>只輸入測試集，返回預測的結果</li>
+</ul>
+<h2 id="estimator-predict-Xtest"><a href="#estimator-predict-Xtest" class="headerlink" title="estimator.predict(Xtest)"></a>estimator.predict(Xtest)</h2><p>返回每個<strong>測試樣本分類/回歸的結果</strong></p>
+<ul>
+<li>只輸入測試集，返回預測的結果</li>
+</ul>
+<h1 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h1><p>分類樹(DecisionTreeClassifier)天生不擅長環形數據，每個模型都有自己決策的上限</p>
+<ul>
+<li>一個怎樣調整參數都無法提升的表現的可能性仍存在</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://www.peixun.net/view/1281.html" target="_blank" rel="noopener">http://www.peixun.net/view/1281.html</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/19/ML_decision_tree_TreeRegressor/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-演算法-決策樹回歸樹(DecisionTreeRegressor)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/30/Go_Regular_Expression/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-正則表達式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn中的決策樹"><span class="nav-number">2.</span> <span class="nav-text">sklearn中的決策樹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DecisionTreeClassifier"><span class="nav-number">3.</span> <span class="nav-text">DecisionTreeClassifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重要參數"><span class="nav-number">3.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#criterion"><span class="nav-number">3.1.1.</span> <span class="nav-text">criterion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隨機性參數"><span class="nav-number">3.2.</span> <span class="nav-text">隨機性參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.1.</span> <span class="nav-text">random_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#splitter"><span class="nav-number">3.3.</span> <span class="nav-text">splitter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剪枝參數"><span class="nav-number">3.4.</span> <span class="nav-text">剪枝參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#max-depth"><span class="nav-number">3.4.1.</span> <span class="nav-text">max_depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-leaf"><span class="nav-number">3.4.2.</span> <span class="nav-text">min_samples_leaf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-split"><span class="nav-number">3.4.3.</span> <span class="nav-text">min_samples_split</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-features"><span class="nav-number">3.4.4.</span> <span class="nav-text">max_features</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-impurity-decrease"><span class="nav-number">3.4.5.</span> <span class="nav-text">min_impurity_decrease</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用matplotlib畫出學習曲線來確認最優的剪枝參數"><span class="nav-number">3.4.6.</span> <span class="nav-text">利用matplotlib畫出學習曲線來確認最優的剪枝參數</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目標權重參數"><span class="nav-number">3.5.</span> <span class="nav-text">目標權重參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-weight"><span class="nav-number">3.5.1.</span> <span class="nav-text">class_weight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-weight-fraction-leaf"><span class="nav-number">3.5.2.</span> <span class="nav-text">min_weight_fraction_leaf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要屬性和接口"><span class="nav-number">4.</span> <span class="nav-text">重要屬性和接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-apply-Xtest"><span class="nav-number">4.1.</span> <span class="nav-text">estimator.apply(Xtest)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-predict-Xtest"><span class="nav-number">4.2.</span> <span class="nav-text">estimator.predict(Xtest)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#結論"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

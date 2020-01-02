@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-Ridge回歸 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)過擬合(overfitting)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction對線性模型進行訓練學習會變成複雜的模型數據的特徵和目標值之間的關係，若不僅僅是線性關係，為了不斷地去擬合訓練集，會導致模型複雜度提高">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning),過擬合(overfitting)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-Ridge回歸">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/16/ML_overfit/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction對線性模型進行訓練學習會變成複雜的模型數據的特徵和目標值之間的關係，若不僅僅是線性關係，為了不斷地去擬合訓練集，會導致模型複雜度提高">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/Kq9kecf.jpg">
+<meta property="og:updated_time" content="2018-07-16T10:14:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-Ridge回歸">
+<meta name="twitter:description" content="Introduction對線性模型進行訓練學習會變成複雜的模型數據的特徵和目標值之間的關係，若不僅僅是線性關係，為了不斷地去擬合訓練集，會導致模型複雜度提高">
+<meta name="twitter:image" content="https://i.imgur.com/Kq9kecf.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_overfit" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Kq9kecf.jpg" rel="gallery_ck4x0bhs7009ugdq7dhyjjcta">
+        <img src="https://i.imgur.com/Kq9kecf.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-Ridge回歸
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/16/ML_overfit/" class="article-date">
+	  <time datetime="2018-07-16T09:16:00.000Z" itemprop="datePublished">七月 16, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>對線性模型進行訓練學習會變成複雜的模型<br>數據的特徵和目標值之間的關係，若不僅僅是線性關係，為了不斷地去擬合訓練集，會導致模型複雜度提高<br><a id="more"></a><br><img src="https://3gp10c1vpy442j63me73gy3s-wpengine.netdna-ssl.com/wp-content/uploads/2018/03/Screen-Shot-2018-03-22-at-11.22.15-AM-e1526498075543.png" alt="underfitting &amp; overfitting"></p>
+<hr>
+<h1 id="過擬合與欠擬合"><a href="#過擬合與欠擬合" class="headerlink" title="過擬合與欠擬合"></a>過擬合與欠擬合</h1><p><img src="https://i.imgur.com/8x9seDp.png" alt></p>
+<p>檢驗欠擬合或是過擬合：透過結果的現象判斷並通過<strong>交叉驗證</strong>得知訓練結果</p>
+<ul>
+<li>若再訓練過後結果不好，測試也不好：欠擬合</li>
+<li>若再訓練過後結果為非常好(99%-100%)，測試卻只有80-90%：過擬合</li>
+</ul>
+<h2 id="欠擬合-underfitting"><a href="#欠擬合-underfitting" class="headerlink" title="欠擬合(underfitting)"></a>欠擬合(underfitting)</h2><p>一個假設<strong>在訓練數據上不能獲得更好的擬合</strong>，但是在<strong>訓練數據外的數據集上也不能很好的擬合數據</strong>，此時認為這個假設出現了欠擬合現象(模型過於簡單)</p>
+<ul>
+<li>學習的特徵太少(訓練集與測試集皆表現不好)</li>
+<li>解決辦法：增加特徵的數量</li>
+</ul>
+<h2 id="過擬合-overfitting"><a href="#過擬合-overfitting" class="headerlink" title="過擬合(overfitting)"></a>過擬合(overfitting)</h2><p>一個假設<strong>在訓練數據上能夠獲得比其他假設更好的擬合</strong>，但是在<strong>訓練數據外的數據集上卻不能很好的擬合數據</strong>，此時認為這個假設出現了過擬合現象(模型過於複雜)</p>
+<ul>
+<li>原始特徵過多，存在一些noise特徵，使其複雜化，因為模型會嘗試去兼顧各個測試數據點</li>
+<li>線性回歸(linearRegression)容易出現過擬合的情況，原因就是為了把訓練集的數據表現更好</li>
+<li>解決辦法<ul>
+<li>進行特徵選擇，消除關聯性大的特徵(較難做)</li>
+<li>正則化  (在機器學習-特徵工程-降維 有提過)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="正則化"><a href="#正則化" class="headerlink" title="正則化"></a>正則化</h2><p>在訓練過程中不同特徵的權重($w_1, w_2, …$)會持續更新<br>正則化便是不斷地調整，透過<strong>減少高次項特徵</strong>之權重$w$(趨近於0)，將回歸的結果不斷的smooth</p>
+<script type="math/tex; mode=display">
+w_0 + w_1x_1 + w_2x_2^2 + \fbox{$w_3$}x_3^3 + \fbox{$w_4$}x_4^4 ; \text{減少高次項特徵之權重使其趨近於0}</script><ul>
+<li>可使得$w$變小，使其與高次項特徵相乘時接近於0</li>
+<li>優點<ul>
+<li>越小的參數說明模型越簡單</li>
+<li>越簡單的模型越不容易發生過擬合的現象</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Ridge"><a href="#Ridge" class="headerlink" title="Ridge"></a>Ridge</h1><p>使用Ridge回歸 解決過擬合的問題</p>
+<ul>
+<li>一種帶有L2正則化的線性回歸</li>
+<li>使用<code>sklearn.linear_model.Ridge</code></li>
+</ul>
+<h2 id="Ridge-alpha-1-0"><a href="#Ridge-alpha-1-0" class="headerlink" title="Ridge(alpha=1.0)"></a>Ridge(alpha=1.0)</h2><ul>
+<li>具有L2正則化的線性最小二乘法</li>
+<li>alpha : 正則化力度($\lambda$, 超參數)<ul>
+<li>通常介於0～1 or 1~10 之間</li>
+<li><img src="http://scikit-learn.org/stable/_images/sphx_glr_plot_ridge_path_001.png" alt="weights vs alpha"></li>
+<li>力度越大的情況下，權重會趨向於0，model簡單化</li>
+</ul>
+</li>
+<li>調用<code>coef_</code>屬性，查看最後回歸的權重 </li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Ridge</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_boston</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line">boston = load_boston()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">Ridge_test</span><span class="params">()</span>:</span></span><br><span class="line">    X_train, X_test, y_train, y_test = train_test_split(boston.data,boston.target,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    StdS =  StandardScaler()</span><br><span class="line">    X_train = StdS.fit_transform(X_train)</span><br><span class="line">    X_test = StdS.transform(X_test)</span><br><span class="line"></span><br><span class="line">    Rg = Ridge(alpha = <span class="number">1.0</span>)</span><br><span class="line">    Rg.fit(X_train,y_train)</span><br><span class="line">    print(<span class="string">"權重\n"</span>,Rg.coef_)</span><br><span class="line"></span><br><span class="line">    y_predict = Rg.predict(X_test)</span><br><span class="line">    print(<span class="string">"預測結果：\n"</span>,y_predict)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"均方誤差為："</span>,mean_squared_error(y_test,y_predict))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Ridge_test()</span><br></pre></td></tr></table></figure>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">權重</span><br><span class="line"> [-0.82177747  1.20950534  0.06552334  0.60526014 -2.25725199  2.49725259</span><br><span class="line">  0.00725436 -3.40161807  2.66837018 -2.28422927 -2.12014388  0.56002103</span><br><span class="line"> -3.65238349]</span><br><span class="line">預測結果：</span><br><span class="line"> [16.96844917 20.71311538 15.5034732  23.45319042 21.04674699 24.9338077</span><br><span class="line"> 20.91414999 29.09249464 11.53948481 30.18469936 14.37130082 44.67833472</span><br><span class="line"> ...</span><br><span class="line"> ...</span><br><span class="line"> 22.40497723]</span><br><span class="line">均方誤差為： 19.432609045304503</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>藉由Ridge得到的回歸係數更符合實際，且更可靠</li>
+<li>能讓估計參數的波動範圍變小，變得更穩定</li>
+<li>在存在異常數據偏多的研究中，有較大的實用價值</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/過擬合-overfitting/">過擬合(overfitting)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/18/ML_LogisticRegression/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-邏輯回歸(Logistic Regression)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/16/ML_LinearRegression/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-線性回歸分析(linear regression)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#過擬合與欠擬合"><span class="nav-number">2.</span> <span class="nav-text">過擬合與欠擬合</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#欠擬合-underfitting"><span class="nav-number">2.1.</span> <span class="nav-text">欠擬合(underfitting)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#過擬合-overfitting"><span class="nav-number">2.2.</span> <span class="nav-text">過擬合(overfitting)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#正則化"><span class="nav-number">2.3.</span> <span class="nav-text">正則化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ridge"><span class="nav-number">3.</span> <span class="nav-text">Ridge</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ridge-alpha-1-0"><span class="nav-number">3.1.</span> <span class="nav-text">Ridge(alpha=1.0)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">3.3.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

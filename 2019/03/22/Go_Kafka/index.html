@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang項目-Kafka,tailf,config,log | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2019GolangKafkatailfconfiglog">
+  
+  
+  
+  
+  <meta name="description" content="introduction Kafka為一分布式的系統  一個kafka的集群可能有三台以上   使用第三方基礎庫來操作Kafka  import &amp;quot;github.com/Shopify/sarama&amp;quot; 往kafka放東西的，稱為生產者(Producer) 客戶端連上Kafka，從Kafka取(消費)數據，稱為消費者   tailf庫 其為golang內部的基礎庫 其可以從一個不">
+<meta name="keywords" content="2019,Golang,Kafka,tailf,config,log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang項目-Kafka,tailf,config,log">
+<meta property="og:url" content="http://www.taroballz.com/2019/03/22/Go_Kafka/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction Kafka為一分布式的系統  一個kafka的集群可能有三台以上   使用第三方基礎庫來操作Kafka  import &amp;quot;github.com/Shopify/sarama&amp;quot; 往kafka放東西的，稱為生產者(Producer) 客戶端連上Kafka，從Kafka取(消費)數據，稱為消費者   tailf庫 其為golang內部的基礎庫 其可以從一個不">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/yyReHBZ.jpg">
+<meta property="og:updated_time" content="2019-03-26T13:17:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang項目-Kafka,tailf,config,log">
+<meta name="twitter:description" content="introduction Kafka為一分布式的系統  一個kafka的集群可能有三台以上   使用第三方基礎庫來操作Kafka  import &amp;quot;github.com/Shopify/sarama&amp;quot; 往kafka放東西的，稱為生產者(Producer) 客戶端連上Kafka，從Kafka取(消費)數據，稱為消費者   tailf庫 其為golang內部的基礎庫 其可以從一個不">
+<meta name="twitter:image" content="https://i.imgur.com/yyReHBZ.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_Kafka" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/yyReHBZ.jpg" rel="gallery_ck4x0bhpv002wgdq76dnkdlje">
+        <img src="https://i.imgur.com/yyReHBZ.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang項目-Kafka,tailf,config,log
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/03/22/Go_Kafka/" class="article-date">
+	  <time datetime="2019-03-21T16:00:00.000Z" itemprop="datePublished">三月 22, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ul>
+<li><p>Kafka為一分布式的系統</p>
+<ul>
+<li>一個kafka的集群可能有三台以上</li>
+</ul>
+</li>
+<li><p>使用第三方基礎庫來操作Kafka</p>
+<ul>
+<li><code>import &quot;github.com/Shopify/sarama&quot;</code></li>
+<li>往kafka放東西的，稱為生產者(Producer)</li>
+<li>客戶端連上Kafka，從Kafka取(消費)數據，稱為消費者</li>
+</ul>
+</li>
+<li>tailf庫<ul>
+<li>其為golang內部的基礎庫</li>
+<li>其可以從一個不斷寫入的文件，持續的拿出數據</li>
+<li><code>import &quot;github.com/hpcloud/tail&quot;</code><a id="more"></a>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Sarama-往kafka發送數據實例"><a href="#Sarama-往kafka發送數據實例" class="headerlink" title="Sarama 往kafka發送數據實例"></a>Sarama 往kafka發送數據實例</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="comment">//導入操作Kafka的第三方庫</span></span><br><span class="line">	<span class="string">"github.com/Shopify/sarama"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//實例化一個新的配置</span></span><br><span class="line">	config := sarama.NewConfig()</span><br><span class="line">	<span class="comment">//config.Producer為一個結構體</span></span><br><span class="line">	config.Producer.RequiredAcks = sarama.WaitForAll <span class="comment">//[1]</span></span><br><span class="line">	<span class="comment">//Partitioner為進行分區(負載均衡)配置</span></span><br><span class="line">	<span class="comment">//NewRandomPartitioner其為隨機分區，其會分區到最大的配置主機數目上</span></span><br><span class="line">	config.Producer.Partitioner = sarama.NewRandomPartitioner</span><br><span class="line">	config.Producer.Return.Successes = <span class="literal">true</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//因此須建立與kafka連接的實例(NewSyncProducer為同步的客戶端)</span></span><br><span class="line">	<span class="comment">//若為異步客戶端 則內部會創建一個channel</span></span><br><span class="line">	client,err := sarama.NewSyncProducer([]<span class="keyword">string</span>&#123;<span class="string">"127.0.0.1:9092"</span>&#125;,config)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"producer.close, err:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> client.Close()	</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//構造欲寫入Kafka的消息(為一struct)</span></span><br><span class="line">	msg := &amp;sarama.ProducerMessage&#123;&#125;</span><br><span class="line">	msg.Topic = <span class="string">"nginx_log"</span></span><br><span class="line">	msg.Value = sarama.StringEncoder(<span class="string">"this is a test message"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//向kafka發送消息</span></span><br><span class="line">	<span class="comment">//異步客戶端發送消息時，會往內部channel發送消息，由後台發送給kafka</span></span><br><span class="line">	<span class="comment">//同步客戶端則直接向kafka發送消息</span></span><br><span class="line">	<span class="comment">//會返回寫到哪個分區的id號(pid)，及訊息在kafka分區的偏移量(offset)</span></span><br><span class="line">	pid,offset,err := client.SendMessage(msg)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"send message failed:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">"pid %v offset %v\n"</span>,pid,offset)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>透過第三方庫發消息給kafka時，sarma會等待接收ack包，當kafka收到消息並寫入文件時，會回發ack包給sarma，藉以<strong>確認消息未丟失</strong>且已經存入kafka中<ul>
+<li>可評估自己所需的業務邏輯是否允許消息丟失</li>
+</ul>
+</li>
+</ol>
+<h2 id="使用kafka-cli測試消費數據"><a href="#使用kafka-cli測試消費數據" class="headerlink" title="使用kafka-cli測試消費數據"></a>使用kafka-cli測試消費數據</h2><ul>
+<li>使用kafka-console-consumer測試從終端消費數據<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kafka-console-consumer --bootstrap-server localhost:9092 --topic nginx_log --from-beginning</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><p>成功消費數據<br><img src="https://i.imgur.com/DTOmcDP.png" alt="Imgur"></p>
+<hr>
+<h1 id="tailf"><a href="#tailf" class="headerlink" title="tailf"></a>tailf</h1><ul>
+<li>其可在程序中去調用tailf，而非傳統Linux的開啟一個tail命令的進程</li>
+<li>使用<code>tail.TailFile(filename,config)</code><ul>
+<li><code>filename</code>: 欲被tail的文件</li>
+<li><code>config</code>:其為<code>tail.Config</code>的實例，為一個struct<ul>
+<li><code>Location</code>:記下文件最後的位置</li>
+<li><code>Poll</code>:是否不斷地進行查詢</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"github.com/hpcloud/tail"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fileName := <span class="string">"./my.log"</span></span><br><span class="line">	<span class="comment">// 生成一個tail的實例</span></span><br><span class="line">	tails,err := tail.TailFile(fileName,tail.Config&#123;</span><br><span class="line">		ReOpen:<span class="literal">true</span>,    <span class="comment">//類似Linux下的tail -F</span></span><br><span class="line">		Follow:<span class="literal">true</span>,</span><br><span class="line">		Location: &amp;tail.SeekInfo&#123;Offset:<span class="number">0</span>, Whence:<span class="number">2</span>&#125;,</span><br><span class="line">		MustExist:<span class="literal">false</span>,</span><br><span class="line">		Poll:<span class="literal">true</span>,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"tail file err"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//一行日誌數據</span></span><br><span class="line">	<span class="keyword">var</span> msg *tail.Line</span><br><span class="line">	<span class="keyword">var</span> ok <span class="keyword">bool</span></span><br><span class="line">	<span class="comment">// 無間斷的從配置的tail.Lines中拿取數據  //[1]</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		msg,ok = &lt;- tails.Lines  <span class="comment">//tails.Lines為一個管道</span></span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			fmt.Println(<span class="string">"tail file close reopen,filename:%s\n"</span>,tails.Filename)</span><br><span class="line">			time.Sleep(<span class="number">100</span>* time.Millisecond)</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(<span class="string">"msg:"</span>,msg)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="string">``</span><span class="string">`        </span></span><br><span class="line"><span class="string">1. 真實情況下須處理信號問題</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">************************</span></span><br><span class="line"><span class="string"># 配置文件(config)庫</span></span><br><span class="line"><span class="string">* 其可支持多種格式的配置文件，例如yaml,ini等</span></span><br><span class="line"><span class="string">* `</span><span class="keyword">go</span> get github.com/astaxie/beego/config<span class="string">`</span></span><br><span class="line"><span class="string">    * 其為beego web框架其中一個基礎庫，可單獨使用</span></span><br><span class="line"><span class="string">* `</span><span class="keyword">import</span> <span class="string">"github.com/astaxie/beego/config"</span><span class="string">`</span></span><br><span class="line"><span class="string">* 暫時使用config庫來將配置寫到文件中，之後可以使用**etcd**在線web介面管理配，並實時生效</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## ini格式初識</span></span><br><span class="line"><span class="string">* ini格式的配置文件分為**節、配置項**`</span>(配置項名 = 配置項內容)<span class="string">`</span></span><br></pre></td></tr></table></figure>
+<p>[server]<br>listen_ip = “0.0.0.0”<br>listen_port = 8080</p>
+<p>[logs]<br>log_level= debug<br>log_path = ./logs/logagent.log</p>
+<p>[collect]<br>log_path = /home/work/logs/nginx/access.log<br>topic = nginx_log<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 讀取配置文件</span><br><span class="line"></span><br><span class="line">```go</span><br><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	&quot;fmt&quot;</span><br><span class="line">	&quot;github.com/astaxie/beego/config&quot;</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">func main()&#123;</span><br><span class="line">	//新增一個讀取配置文件實例</span><br><span class="line">	conf, err := config.NewConfig(&quot;ini&quot;,&quot;./logagent.conf&quot;) //[1]</span><br><span class="line">	if err != nil&#123;</span><br><span class="line">		fmt.Println(&quot;new config failed:&quot;,err)</span><br><span class="line">		return</span><br><span class="line">	&#125;</span><br><span class="line">	port,err := conf.Int(&quot;server::listen_port&quot;)</span><br><span class="line">	fmt.Println(&quot;port :&quot;,port)</span><br><span class="line"></span><br><span class="line">	log_level := conf.String(&quot;logs::log_level&quot;)</span><br><span class="line">	fmt.Println(&quot;log_Level :&quot;,log_level)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><code>NewConfig(adapterName,fileName)</code><ul>
+<li><code>adapterName</code>:欲讀取配置文件的格式</li>
+<li><code>fileName</code>:欲讀取配置文件名</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="日誌-log-庫"><a href="#日誌-log-庫" class="headerlink" title="日誌(log)庫"></a>日誌(log)庫</h1><ul>
+<li>配置日誌庫<code>logs.SetLogger(AdapterFile,config)</code>的config參數為一json串<ul>
+<li>通常會使用json Marshal函數進行配置(較安全)，而非自己構造json字串</li>
+</ul>
+</li>
+<li><code>go get github.com/astaxie/beego/logs</code></li>
+<li><code>import &quot;github.com/astaxie/beego/logs&quot;</code></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"encoding/json"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="comment">//導入日誌庫</span></span><br><span class="line">	<span class="string">"github.com/astaxie/beego/logs"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//Log的配置(config)放入map中</span></span><br><span class="line">	config := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line">	config[<span class="string">"filename"</span>] = <span class="string">"./my.log"</span>   <span class="comment">//寫日誌的路徑及文件名</span></span><br><span class="line">	config[<span class="string">"level"</span>] = logs.LevelDebug			   <span class="comment">//日誌級別</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//將log配置Marshal成json字串</span></span><br><span class="line">	configStr,err := json.Marshal(config)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"Config Marshal Failed:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//實例化一個logger對象</span></span><br><span class="line">	err = logs.SetLogger(logs.AdapterFile,<span class="keyword">string</span>(configStr))  <span class="comment">//log.AdapterFile為一常量 ---&gt; "file"</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"SetLogger Failed:"</span>,err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//格式化日誌並記錄到日誌文件中</span></span><br><span class="line">	logs.Debug(<span class="string">"this is a test my name is %s"</span>,<span class="string">"stu01"</span>)</span><br><span class="line">	logs.Trace(<span class="string">"this is a trace my name is %s"</span>,<span class="string">"stu02"</span>)</span><br><span class="line">	logs.Warn(<span class="string">"this is a warn, my name is %s"</span>,<span class="string">"stu03"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Kafka/">Kafka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/config/">config</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/log/">log</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tailf/">tailf</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/30/Go_crypto_md5/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-MD5加密
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/18/Go_http_program/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang網路編程-http編程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Sarama-往kafka發送數據實例"><span class="nav-number">2.</span> <span class="nav-text">Sarama 往kafka發送數據實例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用kafka-cli測試消費數據"><span class="nav-number">2.1.</span> <span class="nav-text">使用kafka-cli測試消費數據</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tailf"><span class="nav-number">3.</span> <span class="nav-text">tailf</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#日誌-log-庫"><span class="nav-number">4.</span> <span class="nav-text">日誌(log)庫</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

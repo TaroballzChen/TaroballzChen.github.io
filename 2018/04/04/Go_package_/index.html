@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day13-包(package)、線程同步(sync)與atomic操作 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang多線程包(package)線程同步(sync)atomic">
+  
+  
+  
+  
+  <meta name="description" content="包 (package) Golang目前約有150個標準包 官網有所有package的文檔 https://golang.org/pkg/ 第三方package的資源多位於github">
+<meta name="keywords" content="2018,Golang,多線程,包(package),線程同步(sync),atomic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day13-包(package)、線程同步(sync)與atomic操作">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/04/Go_package_/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="包 (package) Golang目前約有150個標準包 官網有所有package的文檔 https://golang.org/pkg/ 第三方package的資源多位於github">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/4kBBhVy.jpg">
+<meta property="og:updated_time" content="2018-04-03T18:30:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day13-包(package)、線程同步(sync)與atomic操作">
+<meta name="twitter:description" content="包 (package) Golang目前約有150個標準包 官網有所有package的文檔 https://golang.org/pkg/ 第三方package的資源多位於github">
+<meta name="twitter:image" content="https://i.imgur.com/4kBBhVy.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_package_" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/4kBBhVy.jpg" rel="gallery_ck4x0bhqt005dgdq7iuhbrg80">
+        <img src="https://i.imgur.com/4kBBhVy.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day13-包(package)、線程同步(sync)與atomic操作
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/04/Go_package_/" class="article-date">
+	  <time datetime="2018-04-03T16:00:00.000Z" itemprop="datePublished">四月 4, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="包-package"><a href="#包-package" class="headerlink" title="包 (package)"></a>包 (package)</h1><ul>
+<li>Golang目前約有150個標準包</li>
+<li>官網有所有package的文檔 <a href="https://golang.org/pkg/" target="_blank" rel="noopener">https://golang.org/pkg/</a></li>
+<li>第三方package的資源多位於github <a id="more"></a>
+</li>
+</ul>
+<h2 id="安裝第三方包"><a href="#安裝第三方包" class="headerlink" title="安裝第三方包"></a>安裝第三方包</h2><p>再命令行輸入<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">go</span> get github網址</span><br></pre></td></tr></table></figure></p>
+<p>會安裝第三方包，默認會安裝到%GOPATH%/src/ 中</p>
+<hr>
+<h1 id="線程同步-sync-與鎖-lock"><a href="#線程同步-sync-與鎖-lock" class="headerlink" title="線程同步 (sync) 與鎖 (lock)"></a>線程同步 (sync) 與鎖 (lock)</h1><ul>
+<li>多個線程之間可能同時使用同一個資源</li>
+<li>資源在線程之間共享，加鎖可以使資源更安全的被取用或是寫入</li>
+<li>但在進行<strong>只有讀取操作</strong>時，<strong>不加鎖</strong>可讓執行效率更高</li>
+</ul>
+<hr>
+<h2 id="情況一-資源共享讀取寫入-—-不加鎖"><a href="#情況一-資源共享讀取寫入-—-不加鎖" class="headerlink" title="情況一: 資源共享讀取寫入 — 不加鎖"></a>情況一: 資源共享讀取寫入 — 不加鎖</h2><p>在不加鎖的情況下，開啟多個線程同時去對map操作</p>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">goroutine_write</span><span class="params">(dic <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(source <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">			source[<span class="number">1</span>] = fmt.Sprintf(<span class="string">"%d%d%d"</span>,i,i,i)</span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(dic)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">string</span>)</span><br><span class="line">	a[<span class="number">1</span>] = <span class="string">"value1"</span></span><br><span class="line"></span><br><span class="line">	goroutine_write(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-1"><a href="#result-1" class="headerlink" title="result 1"></a>result 1</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[1:444]</span><br></pre></td></tr></table></figure>
+<h4 id="result-2"><a href="#result-2" class="headerlink" title="result 2"></a>result 2</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[1:555]</span><br></pre></td></tr></table></figure>
+<h4 id="result-3"><a href="#result-3" class="headerlink" title="result 3"></a>result 3</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[1:222]</span><br></pre></td></tr></table></figure>
+<h4 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h4><p>我們可以看到每次的結果都不一樣，證明了線程之間存在<strong>競爭關係</strong></p>
+<ul>
+<li>哪個線程得到最後修改的權限，值就會是該線程修改的結果</li>
+</ul>
+<p>這不是理想執行的情況，會造成資源取用不安全<br>在編譯時可透過<code>-race</code>參數來檢查是否存在<strong>線程競爭</strong>，如果存在，編譯完成後，執行時會發出<strong>警告</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go build -race  go_dev/day12/example/example_sync</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="情況二-資源共享讀取寫入-—-互斥鎖"><a href="#情況二-資源共享讀取寫入-—-互斥鎖" class="headerlink" title="情況二: 資源共享讀取寫入 — 互斥鎖"></a>情況二: 資源共享讀取寫入 — 互斥鎖</h2><ul>
+<li>互斥鎖：不管讀的線程 或是 寫的線程 每次都只能有一個線程進入到加鎖的代碼中去執行代碼</li>
+<li>線程鎖相關的package於”sync”包中<blockquote>
+<ul>
+<li><code>var 變量 sync.Mutex</code>: 定義一個”互斥鎖”類型</li>
+<li><code>變量.Lock()</code>：加鎖</li>
+<li><code>變量.Unlock()</code> :釋放鎖</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sync"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> lock sync.Mutex  <span class="comment">//[1]</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">goroutine_write</span><span class="params">(dic <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(source <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">			<span class="comment">// 賦值寫入線程需加鎖</span></span><br><span class="line">			lock.Lock()                    </span><br><span class="line">			source[<span class="number">1</span>] = rand.Intn(<span class="number">100</span>)</span><br><span class="line">			lock.Unlock()    <span class="comment">//釋放鎖</span></span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//讀取線程也須加鎖</span></span><br><span class="line">	lock.Lock()</span><br><span class="line">	fmt.Println(dic)</span><br><span class="line">	lock.Unlock()</span><br><span class="line">	</span><br><span class="line">	time.Sleep(time.Second)          <span class="comment">//[2]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">	a[<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">	goroutine_write(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 定義一個變量<code>lock</code>為互斥鎖類型(<code>sync.Mutex</code>)<br>[2] 不要讓主線程直接結束，故sleep一段時間之後等待子線程都執行完畢再結束</p>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">map[1:59]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="情況三-資源共享讀取寫入-—-讀寫鎖"><a href="#情況三-資源共享讀取寫入-—-讀寫鎖" class="headerlink" title="情況三: 資源共享讀取寫入 — 讀寫鎖"></a>情況三: 資源共享讀取寫入 — 讀寫鎖</h2><ul>
+<li><p>讀寫鎖：一種特殊鎖，對共享資源訪問者劃分<strong>讀者</strong>和<strong>寫者</strong>，<strong>讀操作可並發重入</strong>，<strong>寫操作是互斥的</strong>。<br>讀線程進到讀寫鎖中，其他 讀線程 仍能進入，但 寫線程 不能進入<br>寫線程進到讀寫鎖中，其他 讀線程 不能進入，且 寫線程 亦不能進入</p>
+</li>
+<li><p>讀多寫少的情況下，讀寫鎖性能最高</p>
+</li>
+</ul>
+<blockquote>
+<ul>
+<li><code>var 變量 sync.RWMutex</code>: 定義一個”讀寫鎖”類型</li>
+</ul>
+</blockquote>
+<p>讀者鎖：</p>
+<blockquote>
+<ul>
+<li><code>變量.RLock()</code>：只有<strong>讀線程</strong>可以進入RLock鎖，且讀線程在執行時<strong>其他讀線程仍能進入鎖中</strong>，與RUnlock之間通常為<strong>讀取</strong>相關的操作</li>
+<li><code>變量.RUnlock()</code>: 釋放鎖</li>
+</ul>
+</blockquote>
+<p>互斥鎖：</p>
+<blockquote>
+<ul>
+<li><code>變量.Lock()</code>：只有<strong>寫線程</strong>可以進入Lock鎖，且寫線程在執行時<strong>其他不管是讀或是寫線程皆無法進入鎖中</strong>，與Unlock之間通常為<strong>寫入</strong>相關的操作</li>
+<li><code>變量.Unlock()</code>: 釋放鎖</li>
+</ul>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sync"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> RWlock sync.RWMutex</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RWLock_test</span><span class="params">(dic <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//寫操作</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(source <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">			RWlock.Lock()               <span class="comment">//只有寫線程可以進入.Lock()鎖，其他讀寫線程皆無法進入</span></span><br><span class="line">			source[<span class="number">1</span>] = rand.Intn(<span class="number">100</span>)</span><br><span class="line">			RWlock.Unlock()</span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//讀操作</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">100</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">(read <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">			RWlock.RLock()           <span class="comment">//只有讀線程可以進入.RLock()鎖，且讀線程在執行時其他讀線程仍能繼續執行</span></span><br><span class="line">			fmt.Println(read)</span><br><span class="line">			RWlock.RUnlock()</span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	time.Sleep(time.Second*<span class="number">10</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">	a[<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">	a[<span class="number">2</span>] = <span class="number">2</span></span><br><span class="line">	a[<span class="number">3</span>] = <span class="number">3</span></span><br><span class="line">	a[<span class="number">4</span>] = <span class="number">4</span></span><br><span class="line">	RWLock_test(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[4:4 1:81 2:2 3:3]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">map[3:3 4:4 1:81 2:2]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="atomic-package"><a href="#atomic-package" class="headerlink" title="atomic package"></a>atomic package</h1><p>位於<code>sync/atomic</code>包中<br>*<code>atomic.AddInt</code>相關函數，可讓整數同一時間只會有一個線程能修改此數，絕對不存在兩個或多個線程同時操作<code>atomic.AddInt</code>中的整數</p>
+<blockquote>
+<ul>
+<li>使用<code>atomic.AddInt</code>可對同一時間併發多少線程記數</li>
+</ul>
+</blockquote>
+<ul>
+<li>但是記數完時需要打印該值，仍會牽扯到線程互相競爭打印該值的問題</li>
+<li>透過<code>atomic.LoadInt</code>相關函數，可直接讀取該值</li>
+</ul>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><p>拿<code>int32</code>類型作為示範<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">atomic.Addint32(<span class="keyword">int32</span>類型整數的指針,每次增加的差值)</span><br><span class="line"></span><br><span class="line">atomic.LoadInt32(<span class="keyword">int32</span>類型整數的指針)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>其他方法可參考官方文檔</li>
+</ul>
+<h2 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sync"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"sync/atomic"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> RWlock sync.RWMutex</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RWLock_test</span><span class="params">(dic <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> count <span class="keyword">int32</span>   <span class="comment">//聲明int32類型的count變量</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//寫操作</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(source <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">			RWlock.Lock()</span><br><span class="line">			source[<span class="number">1</span>] = rand.Intn(<span class="number">100</span>)</span><br><span class="line">			RWlock.Unlock()</span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//讀操作</span></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">1000</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">(read <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">			RWlock.RLock()</span><br><span class="line">			fmt.Println(read)</span><br><span class="line">			RWlock.RUnlock()</span><br><span class="line">			atomic.AddInt32(&amp;count,<span class="number">1</span>)      <span class="comment">//於線程通過鎖時記數</span></span><br><span class="line">		&#125;(dic)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	time.Sleep(time.Second*<span class="number">5</span>)</span><br><span class="line">	fmt.Println(atomic.LoadInt32(&amp;count))   <span class="comment">//讀取最新的記數值</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>)</span><br><span class="line">	a[<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">	a[<span class="number">2</span>] = <span class="number">2</span></span><br><span class="line">	a[<span class="number">3</span>] = <span class="number">3</span></span><br><span class="line">	a[<span class="number">4</span>] = <span class="number">4</span></span><br><span class="line">	RWLock_test(a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[2:2 3:3 4:4 1:81]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">map[1:81 2:2 3:3 4:4]</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">map[2:2 3:3 4:4 1:81]</span><br><span class="line">1000</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/atomic/">atomic</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/包-package/">包(package)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/線程同步-sync/">線程同步(sync)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/05/Go_linklist/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang資料結構-day14-鏈表(Linked list)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/04/Go_struct/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang物件導向初識-day13-結構體(struct)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#包-package"><span class="nav-number">1.</span> <span class="nav-text">包 (package)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#安裝第三方包"><span class="nav-number">1.1.</span> <span class="nav-text">安裝第三方包</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#線程同步-sync-與鎖-lock"><span class="nav-number">2.</span> <span class="nav-text">線程同步 (sync) 與鎖 (lock)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#情況一-資源共享讀取寫入-—-不加鎖"><span class="nav-number">2.1.</span> <span class="nav-text">情況一: 資源共享讀取寫入 — 不加鎖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.1.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-1"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">result 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-2"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">result 2</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">2.1.1.3.</span> <span class="nav-text">result 3</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#conclusion"><span class="nav-number">2.1.1.4.</span> <span class="nav-text">conclusion</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#情況二-資源共享讀取寫入-—-互斥鎖"><span class="nav-number">2.2.</span> <span class="nav-text">情況二: 資源共享讀取寫入 — 互斥鎖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">2.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#情況三-資源共享讀取寫入-—-讀寫鎖"><span class="nav-number">2.3.</span> <span class="nav-text">情況三: 資源共享讀取寫入 — 讀寫鎖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#atomic-package"><span class="nav-number">3.</span> <span class="nav-text">atomic package</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#用法"><span class="nav-number">3.1.</span> <span class="nav-text">用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#範例"><span class="nav-number">3.2.</span> <span class="nav-text">範例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

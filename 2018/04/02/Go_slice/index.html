@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day11-切片 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang切片">
+  
+  
+  
+  
+  <meta name="description" content="introduction定義：切片為陣列的引用，因此切片為引用類型  切片本身並不會單獨存在，切片的底層就是陣列 切片的長度可以改變，可將切片視為可變陣列 切片的遍歷方式與陣列一樣 切片長度與陣列一樣可用len函數取得 cap函數可以求出切片的容量，0　≦　len(array)　≦　cap(slice)  array是指被引用的陣列">
+<meta name="keywords" content="2018,Golang,切片">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day11-切片">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/02/Go_slice/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction定義：切片為陣列的引用，因此切片為引用類型  切片本身並不會單獨存在，切片的底層就是陣列 切片的長度可以改變，可將切片視為可變陣列 切片的遍歷方式與陣列一樣 切片長度與陣列一樣可用len函數取得 cap函數可以求出切片的容量，0　≦　len(array)　≦　cap(slice)  array是指被引用的陣列">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://golang.org/doc/gopher/biplane.jpg">
+<meta property="og:updated_time" content="2018-04-02T06:45:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day11-切片">
+<meta name="twitter:description" content="introduction定義：切片為陣列的引用，因此切片為引用類型  切片本身並不會單獨存在，切片的底層就是陣列 切片的長度可以改變，可將切片視為可變陣列 切片的遍歷方式與陣列一樣 切片長度與陣列一樣可用len函數取得 cap函數可以求出切片的容量，0　≦　len(array)　≦　cap(slice)  array是指被引用的陣列">
+<meta name="twitter:image" content="https://golang.org/doc/gopher/biplane.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_slice" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://golang.org/doc/gopher/biplane.jpg" rel="gallery_ck4x0bhr1005ygdq73mq0l5bd">
+        <img src="https://golang.org/doc/gopher/biplane.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day11-切片
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/02/Go_slice/" class="article-date">
+	  <time datetime="2018-04-01T16:00:00.000Z" itemprop="datePublished">四月 2, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><p>定義：切片為<strong>陣列的引用</strong>，因此切片為<strong>引用類型</strong></p>
+<ul>
+<li>切片本身並<strong>不會單獨存在</strong>，切片的底層就是陣列</li>
+<li>切片的<strong>長度可以改變</strong>，可將切片視為可變陣列</li>
+<li>切片的遍歷方式與陣列一樣</li>
+<li>切片長度與陣列一樣可用<code>len</code>函數取得</li>
+<li><code>cap</code>函數可以求出切片的<strong>容量</strong>，0　≦　len(array)　≦　cap(slice)<blockquote>
+<ul>
+<li>array是指被引用的陣列</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="聲明"><a href="#聲明" class="headerlink" title="聲明"></a>聲明</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var 變量名 []類型</span><br></pre></td></tr></table></figure>
+<ul>
+<li>與陣列不一樣的地方是<code>[]</code>中並無數字來表示長度，切片本身長度可以改變</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int []<span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> slice_string []<span class="keyword">string</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><p>聲明切片變量後，請注意要初始化，否則操作時會造成越界，而拋出<code>panic</code></p>
+<h2 id="make創建空切片"><a href="#make創建空切片" class="headerlink" title="make創建空切片"></a>make創建空切片</h2><h3 id="語法"><a href="#語法" class="headerlink" title="語法"></a>語法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. var 變量 []類型 = make([]類型,長度,容量)</span><br><span class="line">2. 變量 := make([]類型,長度,容量)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>容量值可以省略不寫</li>
+</ul>
+<hr>
+<h4 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int []<span class="keyword">int</span> = <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">10</span>,<span class="number">20</span>)</span><br></pre></td></tr></table></figure>
+<h4 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int []<span class="keyword">int</span></span><br><span class="line">slice_int = <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<p>可簡寫成<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slice_int := <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="聲明並初始化"><a href="#聲明並初始化" class="headerlink" title="聲明並初始化"></a>聲明並初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int []<span class="keyword">int</span> = []<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>可讓Go自動做類型推導<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int = []<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或是<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slice_int := []<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>實際上其為兩條語句的縮寫,因此應為聲明後才初始化<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> slice_int []<span class="keyword">int</span></span><br><span class="line">slice_int =[]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h2 id="已知陣列切片後初始化"><a href="#已知陣列切片後初始化" class="headerlink" title="已知陣列切片後初始化"></a>已知陣列切片後初始化</h2><ol>
+<li>切片的語法為<code>[start:end]</code>，從<code>start</code>開始到<code>end</code>結束，但不包含<code>end</code></li>
+<li>如<code>start</code>為0開始，可省略不寫</li>
+<li>如<code>end</code>為<code>len(array)</code>，可省略不寫</li>
+<li>如要包含整個陣列，兩個皆可省略不寫</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[:]</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> array_int = [...]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>,<span class="number">10</span>&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[:<span class="number">9</span>]</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="切片去掉最後一個元素"><a href="#切片去掉最後一個元素" class="headerlink" title="切片去掉最後一個元素"></a>切片去掉最後一個元素</h3><p>切片的<code>end</code>值為陣列的長度減1</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[:<span class="built_in">len</span>(array_int)<span class="number">-1</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="切片去掉第一個元素"><a href="#切片去掉第一個元素" class="headerlink" title="切片去掉第一個元素"></a>切片去掉第一個元素</h3><p>切片的<code>end</code>值為1</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[<span class="number">1</span>:]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="容量-cap-與長度-len"><a href="#容量-cap-與長度-len" class="headerlink" title="容量(cap)與長度(len)"></a>容量(cap)與長度(len)</h1><p>切片的容量與指向的數組的長度有關係<br>且0≦len(array)≦cap(slice)</p>
+<h2 id="example-1-1"><a href="#example-1-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[:<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">len(slice) = 3</span><br><span class="line">cap(slice) = 8</span><br></pre></td></tr></table></figure>
+<p>因切片只取了陣列前面三位元素，後面還有五位元素未拿取，所以實際上切片的容量為8</p>
+<ul>
+<li>只要切片的<code>start</code>值為0，容量(cap)一定是被指向的陣列之長度</li>
+</ul>
+<h2 id="example-2-1"><a href="#example-2-1" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int = array_int[<span class="number">3</span>:<span class="number">7</span>]</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">len(slice) = 4</span><br><span class="line">cap(slice) = 5</span><br></pre></td></tr></table></figure>
+<p>因切片<code>start</code>從3開始，前面被切斷了，後面都是切片本身可以拿取的元素，所以容量為5</p>
+<ul>
+<li>切片<code>start</code>數不為0的情況，容量為陣列的長度減掉<code>start</code>值</li>
+</ul>
+<h2 id="example-3"><a href="#example-3" class="headerlink" title="example 3"></a>example 3</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array_int         = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line"><span class="keyword">var</span> slice_int         = array_int[<span class="number">3</span>:<span class="number">5</span>]</span><br><span class="line"><span class="keyword">var</span> slice_twice_int   = slice_int[<span class="number">2</span>:]</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">len(slice_twice) = 0</span><br><span class="line">cap(slice_twice) = 3</span><br></pre></td></tr></table></figure>
+<p>對陣列的切片再進行切片，其容量仍與陣列相關<br><strong>仍取決於指向的陣列後面有多少元素可以拿取</strong></p>
+<hr>
+<h1 id="切片的內存佈局"><a href="#切片的內存佈局" class="headerlink" title="切片的內存佈局"></a>切片的內存佈局</h1><p><img src="https://i.imgur.com/ZQjotCK.png" alt="slice"></p>
+<p>切片的指針是指向陣列的(只是外部看不到，底層還是操作陣列)<br>因此將切片傳參進函數，在函數內操作切片中的元素(賦值、改值等)，被指向陣列中的元素也會改變<br>更證明了切片本身為<strong>引用類型</strong></p>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">modify_slice</span><span class="params">(s []<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	s[<span class="number">0</span>] = <span class="number">1000</span></span><br><span class="line">	s[<span class="number">1</span>] = <span class="number">2000</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array_int = [<span class="number">8</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,&#125;</span><br><span class="line">	<span class="keyword">var</span> slice_int = array_int[:]</span><br><span class="line"></span><br><span class="line">	modify_slice(slice_int)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"slice_int ="</span>,slice_int)</span><br><span class="line">	fmt.Println(<span class="string">"array_int ="</span>,array_int)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slice_int = [1000 2000 3 4 5 6 7 8]</span><br><span class="line">array_int = [1000 2000 3 4 5 6 7 8]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="切片內存地址指向第一個元素"><a href="#切片內存地址指向第一個元素" class="headerlink" title="切片內存地址指向第一個元素"></a>切片內存地址指向第一個元素</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> slice1 = []<span class="keyword">int</span>&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line">	<span class="keyword">var</span> slice2 = slice1[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">"slice1_address =%p\n"</span>,slice1)    <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(<span class="string">"slice1[0] address ="</span>,&amp;slice1[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">"slice1[1] address = %p\n"</span>,&amp;slice1[<span class="number">1</span>])</span><br><span class="line">	fmt.Printf(<span class="string">"slice2 address = %p\n"</span>,slice2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 切片本身已經為引用類型，不須再使用<code>&amp;</code>得到內存地址，因為它<strong>本身就是指針</strong></p>
+<blockquote>
+<ul>
+<li>若是使用<code>&amp;</code>則會得到指向指針的指針類型，也就是存放這個指針類型(0xc04207e030)的地址  (重要)</li>
+</ul>
+</blockquote>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">slice1_address =0xc04207e030</span><br><span class="line">slice1[0] address = 0xc04207e030</span><br><span class="line">slice1[1] address = 0xc04207e038</span><br><span class="line">slice2 address = 0xc04207e038</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="細談-append"><a href="#細談-append" class="headerlink" title="細談 append"></a>細談 append</h1><ul>
+<li>append使用方法可參考day9-內置函數</li>
+<li>使用<code>append</code>函數，將數個元素追加到一切片中，當<strong>超出切片初始化的容量(cap)時</strong><br><strong>原切片會自動擴容</strong>，<strong>幅度為原容量的一倍</strong> (5 —&gt; 10)<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line">	<span class="keyword">var</span> slice = array[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"before append cap(slice) ="</span>,<span class="built_in">cap</span>(slice))</span><br><span class="line">	slice = <span class="built_in">append</span>(slice,<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>)</span><br><span class="line">	fmt.Println(<span class="string">"after append cap(slice) ="</span>,<span class="built_in">cap</span>(slice))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">before append cap(slice) = 4</span><br><span class="line">after append cap(slice) = 8</span><br></pre></td></tr></table></figure></p>
+<hr>
+<ul>
+<li>但是切片內部的指針便不是在指向原本的陣列，而是新的陣列</li>
+<li>開闢新的內存空間創建新陣列，將原切片內的元素及拷貝到新陣列中，在追加新元素</li>
+<li><strong>這時再修改切片中的元素，跟原陣列無關</strong><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> array = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line">	<span class="keyword">var</span> slice = array[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"Before append:"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"array[1] address ="</span>,&amp;array[<span class="number">1</span>])</span><br><span class="line">	fmt.Printf(<span class="string">"slice address =%p\n"</span>,slice)</span><br><span class="line"></span><br><span class="line">	slice = <span class="built_in">append</span>(slice,<span class="number">1</span>,<span class="number">3</span>,<span class="number">5</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(<span class="string">"After append:"</span>)</span><br><span class="line">	fmt.Println(<span class="string">"array[1] address ="</span>,&amp;array[<span class="number">1</span>])</span><br><span class="line">	fmt.Printf(<span class="string">"slice address =%p\n"</span>,slice)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Before append:</span><br><span class="line">array[1] address = 0xc04207e038</span><br><span class="line">slice address =0xc04207e038</span><br><span class="line">After append:</span><br><span class="line">array[1] address = 0xc04207e038</span><br><span class="line">slice address =0xc042086080</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>如又使用<code>append</code>方法，再次追加元素超出擴容後的切片時，會再擴容(10 —&gt; 20)，且會再次指向新陣列</li>
+</ul>
+<hr>
+<h1 id="切片拷貝-copy"><a href="#切片拷貝-copy" class="headerlink" title="切片拷貝 (copy)"></a>切片拷貝 (copy)</h1><p>可將切片拷貝至其他切片中</p>
+<h2 id="語法-1"><a href="#語法-1" class="headerlink" title="語法"></a>語法</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">copy</span>(slice_target,slice_source)</span><br></pre></td></tr></table></figure>
+<p>將<code>slice_source</code>拷貝至<code>slice_target</code>中</p>
+<ul>
+<li>拷貝的長度取決於<code>slice_target</code>容量的大小</li>
+<li>即使<code>slice_source</code>的長度大於<code>slice_target</code>的容量，拷貝過程<strong>不會擴容</strong></li>
+</ul>
+<h2 id="target容量小於source"><a href="#target容量小於source" class="headerlink" title="target容量小於source"></a>target容量小於source</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line"><span class="keyword">var</span> slice = array[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">slice2 := <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">1</span>) <span class="comment">//*</span></span><br><span class="line"><span class="built_in">copy</span>(slice2,slice)</span><br><span class="line"></span><br><span class="line">fmt.Println(slice2)</span><br></pre></td></tr></table></figure>
+<h3 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[4]</span><br></pre></td></tr></table></figure>
+<h2 id="target容量大於source"><a href="#target容量大於source" class="headerlink" title="target容量大於source"></a>target容量大於source</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = [<span class="number">5</span>]<span class="keyword">int</span>&#123;<span class="number">2</span>,<span class="number">4</span>,<span class="number">6</span>,<span class="number">8</span>,<span class="number">10</span>&#125;</span><br><span class="line"><span class="keyword">var</span> slice = array[<span class="number">1</span>:<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line">slice2 := <span class="built_in">make</span>([]<span class="keyword">int</span>,<span class="number">3</span>) <span class="comment">//*</span></span><br><span class="line"><span class="built_in">copy</span>(slice2,slice)</span><br><span class="line"></span><br><span class="line">fmt.Println(slice2)</span><br></pre></td></tr></table></figure>
+<h3 id="result-6"><a href="#result-6" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[4 6 0]</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="字符串-string"><a href="#字符串-string" class="headerlink" title="字符串 (string)"></a>字符串 (string)</h1><p><code>string</code>的底層就是一個<code>byte</code>類型的陣列(<code>[n]byte</code>)，因此也可進行切片操作</p>
+<ul>
+<li><code>string</code>為<strong>不可變類型</strong>，<strong>不能透過元素操作修改</strong>已定義的<code>string</code></li>
+<li>因此也沒有容量(cap)的概念</li>
+</ul>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 <span class="keyword">var</span> str <span class="keyword">string</span> = <span class="string">"Hello My World"</span></span><br><span class="line">	 fmt.Println(str[:<span class="number">5</span>])</span><br><span class="line">	 fmt.Println(str[<span class="number">6</span>:<span class="number">8</span>])</span><br><span class="line">	 fmt.Println(str[<span class="number">9</span>:])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-7"><a href="#result-7" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Hello</span><br><span class="line">My</span><br><span class="line">World</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="string底層的內存布局"><a href="#string底層的內存布局" class="headerlink" title="string底層的內存布局"></a>string底層的內存布局</h2><p><img src="https://i.imgur.com/bSf7LPf.png" alt="string"></p>
+<h2 id="改變string中的字符"><a href="#改變string中的字符" class="headerlink" title="改變string中的字符"></a>改變string中的字符</h2><ol>
+<li>如真的欲改變字符串之值，可將<strong>不可變的<code>string</code></strong>轉換<strong>為可變的<code>[]byte</code>切片</strong>，再進行元素操作</li>
+<li>再將操作完的<code>[]byte</code>切片轉換為<code>string</code></li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 <span class="keyword">var</span> str <span class="keyword">string</span> = <span class="string">"Hello My World"</span></span><br><span class="line">	 str_conv := []<span class="keyword">byte</span>(str)   <span class="comment">//[1]</span></span><br><span class="line"></span><br><span class="line">	 str_conv[<span class="number">0</span>] = <span class="string">'h'</span>         <span class="comment">//[2]</span></span><br><span class="line">	 str_conv[<span class="number">6</span>] = <span class="string">'m'</span></span><br><span class="line">	 str_conv[<span class="number">9</span>] = <span class="string">'w'</span></span><br><span class="line"></span><br><span class="line">	 str = <span class="keyword">string</span>(str_conv)    <span class="comment">//[3]</span></span><br><span class="line">	 fmt.Println(str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 利用強制轉換<code>[]byte()</code>將<code>string</code>轉為<code>[]byte</code><br>[2] 改變<strong>單個字符</strong>記得用單引號<code>&#39;&#39;</code><br>[3] 修改完成後強轉為<code>string</code>類型</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hello my world</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h3 id="改變string中非ASCII字符"><a href="#改變string中非ASCII字符" class="headerlink" title="改變string中非ASCII字符"></a>改變string中非ASCII字符</h3><p>如果轉換非ASCII的字符，如中文字(三個byte)等，不能強轉為<code>[]byte</code>操作元素<br>需轉換成<code>[]rune</code>類型，在進行元素操作</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 <span class="keyword">var</span> str <span class="keyword">string</span> = <span class="string">"哈囉 世界"</span></span><br><span class="line">	 str_conv := []<span class="keyword">rune</span>(str)    <span class="comment">//[1]</span></span><br><span class="line"></span><br><span class="line">	 str_conv[<span class="number">0</span>] = <span class="string">'你'</span>         <span class="comment">//[2]</span></span><br><span class="line">	str_conv[<span class="number">1</span>] = <span class="string">'好'</span></span><br><span class="line"></span><br><span class="line">	 str = <span class="keyword">string</span>(str_conv)     <span class="comment">//[3]</span></span><br><span class="line">	 fmt.Println(str)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 利用強制轉換<code>[]rune()</code>將<code>string</code>轉為<code>[]rune</code><br>[2] 改變<strong>單個字符</strong>記得用單引號<code>&#39;&#39;</code><br>[3] 修改完成後強轉為<code>string</code>類型</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你好 世界</span><br></pre></td></tr></table></figure></p>
+<hr>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/切片/">切片</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/02/Go_sort/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day11-排序與查找
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/01/Go_Array/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day10-陣列(Array)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#聲明"><span class="nav-number">2.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#make創建空切片"><span class="nav-number">3.1.</span> <span class="nav-text">make創建空切片</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#語法"><span class="nav-number">3.1.1.</span> <span class="nav-text">語法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#example-2"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">example 2</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聲明並初始化"><span class="nav-number">3.2.</span> <span class="nav-text">聲明並初始化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#已知陣列切片後初始化"><span class="nav-number">3.3.</span> <span class="nav-text">已知陣列切片後初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#切片去掉最後一個元素"><span class="nav-number">3.3.1.</span> <span class="nav-text">切片去掉最後一個元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切片去掉第一個元素"><span class="nav-number">3.3.2.</span> <span class="nav-text">切片去掉第一個元素</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#容量-cap-與長度-len"><span class="nav-number">4.</span> <span class="nav-text">容量(cap)與長度(len)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-1"><span class="nav-number">4.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">4.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-1"><span class="nav-number">4.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">4.3.</span> <span class="nav-text">example 3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">4.3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#切片的內存佈局"><span class="nav-number">5.</span> <span class="nav-text">切片的內存佈局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">5.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-3"><span class="nav-number">5.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切片內存地址指向第一個元素"><span class="nav-number">5.2.</span> <span class="nav-text">切片內存地址指向第一個元素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">5.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#細談-append"><span class="nav-number">6.</span> <span class="nav-text">細談 append</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#切片拷貝-copy"><span class="nav-number">7.</span> <span class="nav-text">切片拷貝 (copy)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#語法-1"><span class="nav-number">7.1.</span> <span class="nav-text">語法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#target容量小於source"><span class="nav-number">7.2.</span> <span class="nav-text">target容量小於source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-5"><span class="nav-number">7.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#target容量大於source"><span class="nav-number">7.3.</span> <span class="nav-text">target容量大於source</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-6"><span class="nav-number">7.3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符串-string"><span class="nav-number">8.</span> <span class="nav-text">字符串 (string)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">8.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-7"><span class="nav-number">8.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string底層的內存布局"><span class="nav-number">8.2.</span> <span class="nav-text">string底層的內存布局</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改變string中的字符"><span class="nav-number">8.3.</span> <span class="nav-text">改變string中的字符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#改變string中非ASCII字符"><span class="nav-number">8.3.1.</span> <span class="nav-text">改變string中非ASCII字符</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

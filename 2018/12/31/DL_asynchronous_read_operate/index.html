@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-讀取數據-異步讀取 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introduction當數據量很大時，入隊列操作從硬盤讀取數據，放入內存中，主線程須等待入隊列操作完成，才能進行訓練，此時會話裡可以運行多個線程，實現異步讀取">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-讀取數據-異步讀取">
+<meta property="og:url" content="http://www.taroballz.com/2018/12/31/DL_asynchronous_read_operate/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction當數據量很大時，入隊列操作從硬盤讀取數據，放入內存中，主線程須等待入隊列操作完成，才能進行訓練，此時會話裡可以運行多個線程，實現異步讀取">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/DpVJjLe.jpg">
+<meta property="og:updated_time" content="2019-07-29T17:59:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-讀取數據-異步讀取">
+<meta name="twitter:description" content="Introduction當數據量很大時，入隊列操作從硬盤讀取數據，放入內存中，主線程須等待入隊列操作完成，才能進行訓練，此時會話裡可以運行多個線程，實現異步讀取">
+<meta name="twitter:image" content="https://i.imgur.com/DpVJjLe.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_asynchronous_read_operate" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/DpVJjLe.jpg" rel="gallery_ck4x0bhp50018gdq7g2zs81l1">
+        <img src="https://i.imgur.com/DpVJjLe.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-讀取數據-異步讀取
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/12/31/DL_asynchronous_read_operate/" class="article-date">
+	  <time datetime="2018-12-30T17:50:00.000Z" itemprop="datePublished">十二月 31, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>當數據量很大時，入隊列操作從硬盤讀取數據，放入內存中，主線程須等待入隊列操作完成，才能進行訓練，此時會話裡可以運行多個線程，實現<strong>異步讀取</strong><br><a id="more"></a></p>
+<h1 id="隊列管理器-QueueRunner"><a href="#隊列管理器-QueueRunner" class="headerlink" title="隊列管理器(QueueRunner)"></a>隊列管理器(QueueRunner)</h1><ul>
+<li>其較為高效</li>
+<li>雖然叫做<strong>管理器</strong>，但其是用來<strong>創建線程</strong></li>
+<li>不能與<code>threading</code>(偽多線程)庫混用</li>
+<li><p><code>tf.train.QueueRunner(queue,enqueue_ops=None)</code>創建一個QueueRunner</p>
+<ul>
+<li><code>queue</code>：先前定義的隊列</li>
+<li><code>enqueue_ops</code>：添加線程的隊列操作列表(指定開啟幾個線程，並指定這些線程去做什麼操作)<ul>
+<li>列表<code>[]</code>中輸入線程將執行的操作</li>
+<li>例如<code>[]*2</code>：指定兩個線程進行此操作<ul>
+<li>開啟的線程會有上限數</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>create_threads(sess,coord=None,start=False)</code>：創建線程來運行給定會話的入隊操作<ul>
+<li><code>start</code>：bool值<ul>
+<li>True：啟動線程</li>
+<li>False：調用者必須調用<code>start()</code>啟動線程</li>
+</ul>
+</li>
+<li><code>coord</code>：線程協調器(後面線程管理需要用到)</li>
+<li>返回一個隊列管理器op</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>tf.train.start_queue_runners(sess=None, coord=None)</code>函數會要求圖中的每個QueueRunner啟動它的運行隊列操作的線程</p>
+<ul>
+<li>須在會話中開啟</li>
+<li><strong>收集圖中所有隊列線程，預設同時開啟線程</strong></li>
+<li><code>sess</code>:所在的會話</li>
+<li><code>coord</code>：線程協調器</li>
+<li><strong>返回所有的線程</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="實現異步操作"><a href="#實現異步操作" class="headerlink" title="實現異步操作"></a>實現異步操作</h1><p>通過<strong>隊列管理器</strong>來實現變量+1、入隊、主線程出隊列的操作</p>
+<ul>
+<li>子線程不斷的往隊列放數據，主線程不斷的往裡頭取數據</li>
+<li>兩者操作彼此互不干擾<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 模擬異步的過程</span></span><br><span class="line"><span class="comment"># 子線程存入樣本，主線程讀取樣本</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 定義一個隊列</span></span><br><span class="line">Q = tf.FIFOQueue(<span class="number">1000</span>,dtypes=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定義子線程要執行的任務(值+1，放入隊列當中)</span></span><br><span class="line">var = tf.Variable(<span class="number">0.0</span>,dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 實現一個自增加法(assign_add)，把本身做加法並返回給自身</span></span><br><span class="line">data = tf.assign_add(var,tf.constant(<span class="number">1.0</span>))</span><br><span class="line">en_q = Q.enqueue(data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定義隊列管理器op，指定多少個子線程，子線程該做什麼</span></span><br><span class="line">qr = tf.train.QueueRunner(Q,enqueue_ops=[en_q]*<span class="number">2</span>) <span class="comment"># 使用兩個線程完成en_q這個任務</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化變量op</span></span><br><span class="line">init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    <span class="comment"># 初始化變量</span></span><br><span class="line">    sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 真正的開啟子線程(必須在會話中開啟)</span></span><br><span class="line">    threads = qr.create_threads(sess,start=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 主線程不斷的去讀取數據</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">300</span>):</span><br><span class="line">        print(sess.run(Q.dequeue()))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">2.0</span><br><span class="line">19.0</span><br><span class="line">43.0</span><br><span class="line">68.0</span><br><span class="line">88.0</span><br><span class="line">108.0</span><br><span class="line">135.0</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">1298.0</span><br><span class="line">1299.0</span><br><span class="line">1300.0</span><br><span class="line">tensorflow.python.framework.errors_impl.CancelledError: Enqueue operation was cancelled</span><br><span class="line">	 [[Node: fifo_queue_enqueue = QueueEnqueueV2[Tcomponents=[DT_FLOAT], timeout_ms=-1, _device=&quot;/job:localhost/replica:0/task:0/device:CPU:0&quot;](fifo_queue, AssignAdd)]]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>最後會報錯的原因是因為，主線程結束的情況下，Session被關閉，且資源被釋放，但子線程並未回收還在執行，因此報錯</li>
+<li>因此須管理子線程，並確實的回收子線程(<strong>線程協調器</strong>)</li>
+</ul>
+<h1 id="線程協調器"><a href="#線程協調器" class="headerlink" title="線程協調器"></a>線程協調器</h1><p>用作管理線程</p>
+<ul>
+<li><code>tf.train.Coordinator()</code>:線程協調員，實現一個簡單的機制來協調一組線程的終止<ul>
+<li>返回一個線程協調器的實例</li>
+</ul>
+</li>
+</ul>
+<h2 id="method"><a href="#method" class="headerlink" title="method"></a>method</h2><ul>
+<li><code>request_stop()</code>：要求線程終止</li>
+<li><code>should_stop()</code>：檢查是否要求停止</li>
+<li><code>join(threads=None,stop_grace_period_secs=120)</code>：等待線程終止</li>
+</ul>
+<h2 id="改善後"><a href="#改善後" class="headerlink" title="改善後"></a>改善後</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">Q = tf.FIFOQueue(<span class="number">1000</span>,dtypes=tf.float32)</span><br><span class="line"></span><br><span class="line">var = tf.Variable(<span class="number">0.0</span>,dtype=tf.float32)</span><br><span class="line"></span><br><span class="line">data = tf.assign_add(var,tf.constant(<span class="number">1.0</span>))</span><br><span class="line">en_q = Q.enqueue(data)</span><br><span class="line"></span><br><span class="line">qr = tf.train.QueueRunner(Q,enqueue_ops=[en_q]*<span class="number">2</span>) </span><br><span class="line"></span><br><span class="line">init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line"></span><br><span class="line">    sess.run(init_var_op)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 開啟線程管理器</span></span><br><span class="line">    coord = tf.train.Coordinator()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># coord須指定線程管理器的對象</span></span><br><span class="line">    threads = qr.create_threads(sess,coord=coord,start=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">300</span>):</span><br><span class="line">        print(sess.run(Q.dequeue()))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 回收子線程</span></span><br><span class="line">    coord.request_stop()</span><br><span class="line">    coord.join(threads)</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/01/DL_ReadProcess/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-讀取數據-文件讀取流程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/30/DL_Queue/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-讀取數據-隊列與線程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#隊列管理器-QueueRunner"><span class="nav-number">2.</span> <span class="nav-text">隊列管理器(QueueRunner)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實現異步操作"><span class="nav-number">3.</span> <span class="nav-text">實現異步操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">3.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#線程協調器"><span class="nav-number">4.</span> <span class="nav-text">線程協調器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">4.1.</span> <span class="nav-text">method</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改善後"><span class="nav-number">4.2.</span> <span class="nav-text">改善後</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

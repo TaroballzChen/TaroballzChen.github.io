@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang資料結構-稀疏矩陣(sparse matrix) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2019Golang稀疏矩陣(sparse matrix)">
+  
+  
+  
+  
+  <meta name="description" content="introduction 在數值分析中，大部分元素為零或是同一個值的矩陣。反之，如果大部分元素都非零或為不同值，則這個矩陣是稠密的。 處理方式： 記錄矩陣中共有多少行列(row,col,default(預設值)) 記錄有多少個不同的值 把具不同值的元素之行列與值 記錄在一小規模的陣列中，從而縮小程序的規模">
+<meta name="keywords" content="2019,Golang,稀疏矩陣(sparse matrix)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang資料結構-稀疏矩陣(sparse matrix)">
+<meta property="og:url" content="http://www.taroballz.com/2019/03/17/Go_sparse_matrix/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction 在數值分析中，大部分元素為零或是同一個值的矩陣。反之，如果大部分元素都非零或為不同值，則這個矩陣是稠密的。 處理方式： 記錄矩陣中共有多少行列(row,col,default(預設值)) 記錄有多少個不同的值 把具不同值的元素之行列與值 記錄在一小規模的陣列中，從而縮小程序的規模">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/SI9kONV.png">
+<meta property="og:updated_time" content="2019-03-17T15:13:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang資料結構-稀疏矩陣(sparse matrix)">
+<meta name="twitter:description" content="introduction 在數值分析中，大部分元素為零或是同一個值的矩陣。反之，如果大部分元素都非零或為不同值，則這個矩陣是稠密的。 處理方式： 記錄矩陣中共有多少行列(row,col,default(預設值)) 記錄有多少個不同的值 把具不同值的元素之行列與值 記錄在一小規模的陣列中，從而縮小程序的規模">
+<meta name="twitter:image" content="https://i.imgur.com/SI9kONV.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_sparse_matrix" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/SI9kONV.png" rel="gallery_ck4x0bhr20061gdq7euhsnzsf">
+        <img src="https://i.imgur.com/SI9kONV.png" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang資料結構-稀疏矩陣(sparse matrix)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/03/17/Go_sparse_matrix/" class="article-date">
+	  <time datetime="2019-03-16T16:00:00.000Z" itemprop="datePublished">三月 17, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ul>
+<li>在<strong>數值分析</strong>中，大部分元素為<strong>零</strong>或是<strong>同一個值</strong>的矩陣。反之，如果大部分元素都非零或為不同值，則這個矩陣是稠密的。</li>
+<li>處理方式：<ul>
+<li>記錄矩陣中共有多少行列(row,col,default(預設值))</li>
+<li>記錄有多少個不同的值</li>
+<li>把具不同值的元素之行列與值 記錄在一小規模的陣列中，從而縮小程序的規模</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="稀疏矩陣保存"><a href="#稀疏矩陣保存" class="headerlink" title="稀疏矩陣保存"></a>稀疏矩陣保存</h1><p><img src="https://i.imgur.com/ycOLwrw.png" alt="matrix_storage"></p>
+<ul>
+<li>其相當於將原稀疏矩陣進行壓縮</li>
+</ul>
+<hr>
+<h2 id="原始矩陣轉成稀疏矩陣"><a href="#原始矩陣轉成稀疏矩陣" class="headerlink" title="原始矩陣轉成稀疏矩陣"></a>原始矩陣轉成稀疏矩陣</h2><ol>
+<li>遍歷矩陣，如果發現有元素之值不為默認值，創建一個有值節點(Node)</li>
+<li>將其放入對應切片中<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"bufio"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Matrix_node <span class="keyword">struct</span> &#123;</span><br><span class="line">	row <span class="keyword">int</span></span><br><span class="line">	col <span class="keyword">int</span></span><br><span class="line">	val <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">rand_val</span><span class="params">(matrix *[10][10]<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">20</span>;i++&#123;</span><br><span class="line">		c := rand.Intn(<span class="number">10</span>)</span><br><span class="line">		r := rand.Intn(<span class="number">10</span>)</span><br><span class="line">		v := rand.Intn(<span class="number">100</span>)</span><br><span class="line">		matrix[c][r] = v</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">tranverse_matrix</span><span class="params">(matrix *[10][10]<span class="keyword">int</span>,node_array *[]*Matrix_node)</span></span>&#123;</span><br><span class="line">	<span class="comment">//標準的稀疏矩陣一開始的節點會記錄元素矩陣的規模（最大行，最大列及預設值）</span></span><br><span class="line">	init_node := &amp;Matrix_node&#123;</span><br><span class="line">		row:<span class="number">10</span>,</span><br><span class="line">		col:<span class="number">10</span>,</span><br><span class="line">		val:<span class="number">0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	*node_array = <span class="built_in">append</span>(*node_array,init_node)</span><br><span class="line">	<span class="comment">//遍歷矩陣</span></span><br><span class="line">	<span class="keyword">for</span> i, row := <span class="keyword">range</span> *matrix &#123;</span><br><span class="line">		<span class="keyword">for</span> j,v := <span class="keyword">range</span> row &#123;</span><br><span class="line">			<span class="comment">//發現有元素之值不為默認值</span></span><br><span class="line">			<span class="keyword">if</span> v != <span class="number">0</span> &#123;</span><br><span class="line">				<span class="comment">//創建節點</span></span><br><span class="line">				Node := &amp;Matrix_node&#123;</span><br><span class="line">					row:i,</span><br><span class="line">					col:j,</span><br><span class="line">					val:v,</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//於切片中加入節點</span></span><br><span class="line">				*node_array = <span class="built_in">append</span>(*node_array,Node)</span><br><span class="line"></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SaveData</span><span class="params">(filepath <span class="keyword">string</span>, data []*Matrix_node)</span></span>&#123;</span><br><span class="line">	file,err := os.OpenFile(filepath,os.O_CREATE|os.O_WRONLY|os.O_TRUNC,<span class="number">0666</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"OpenFile Error:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> file.Close()</span><br><span class="line">	Writer := bufio.NewWriter(file)</span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> data &#123;</span><br><span class="line">		line := fmt.Sprintf(<span class="string">"%d\t%d\t%d\n"</span>,v.col,v.row,v.val)</span><br><span class="line">		_,err := Writer.WriteString(line)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">			fmt.Println(<span class="string">"Write string error:"</span>,err)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		_ = Writer.Flush()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//創建一個原始的數組</span></span><br><span class="line">	<span class="keyword">var</span> origin_matrix [<span class="number">10</span>][<span class="number">10</span>]<span class="keyword">int</span> = [<span class="number">10</span>][<span class="number">10</span>]<span class="keyword">int</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//於matrix中塞入隨機數據</span></span><br><span class="line">	rand_val(&amp;origin_matrix)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> _,v :=  <span class="keyword">range</span> origin_matrix &#123;</span><br><span class="line">		fmt.Println(v)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//轉成一個稀疏數組</span></span><br><span class="line">	Node_array := <span class="built_in">make</span>([]*Matrix_node,<span class="number">0</span>)</span><br><span class="line">	tranverse_matrix(&amp;origin_matrix,&amp;Node_array)</span><br><span class="line">	<span class="comment">//儲存數據</span></span><br><span class="line">	SaveData(<span class="string">"learning_note/data_structure/sparse_matrix/main/matrix.data"</span>,Node_array)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h1 id="稀疏矩陣轉成原始矩陣"><a href="#稀疏矩陣轉成原始矩陣" class="headerlink" title="稀疏矩陣轉成原始矩陣"></a>稀疏矩陣轉成原始矩陣</h1><ol>
+<li>創建一個原始矩陣<ul>
+<li>可根據稀疏矩陣的第一個節點知道其規模大小<ul>
+<li>必須跳過第一個節點進行恢復，否則會out of range</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>遍歷稀疏矩陣<ul>
+<li>讀取行、列、值在原數組上進行修改</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"io/ioutil"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> intslice []<span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadData</span><span class="params">(fileName <span class="keyword">string</span>)</span><span class="params">(data <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	d,err := ioutil.ReadFile(fileName)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Read Data Failed"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	data = <span class="keyword">string</span>(d)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	filepath := <span class="string">"learning_note/data_structure/sparse_matrix/main/matrix.data"</span></span><br><span class="line">	data := ReadData(filepath)</span><br><span class="line">	data_array := strings.Split(data,<span class="string">"\n"</span>)</span><br><span class="line">	result := <span class="built_in">make</span>([]intslice,<span class="number">0</span>)</span><br><span class="line">	<span class="keyword">for</span> i,v := <span class="keyword">range</span> data_array[:<span class="built_in">len</span>(data_array)<span class="number">-1</span>]&#123;</span><br><span class="line">		<span class="keyword">var</span> row,col,data = <span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span></span><br><span class="line">		_,err := fmt.Sscanf(v,<span class="string">"%d\t%d\t%d"</span>,&amp;row,&amp;col,&amp;data)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">			fmt.Println(<span class="string">"strconvert Failed:"</span>,err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> i == <span class="number">0</span> &#123;</span><br><span class="line">			<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;col;i++&#123;</span><br><span class="line">				data := <span class="built_in">make</span>(intslice,row)</span><br><span class="line">				result = <span class="built_in">append</span>(result,data)</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">			result[row][col] = data</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> result&#123;</span><br><span class="line">		fmt.Println(v)</span><br><span class="line">	&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/稀疏矩陣-sparse-matrix/">稀疏矩陣(sparse matrix)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/03/18/Go_http_program/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang網路編程-http編程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/16/Go_manage/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang基礎-補充知識-工程管理與go install</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#稀疏矩陣保存"><span class="nav-number">2.</span> <span class="nav-text">稀疏矩陣保存</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#原始矩陣轉成稀疏矩陣"><span class="nav-number">2.1.</span> <span class="nav-text">原始矩陣轉成稀疏矩陣</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#稀疏矩陣轉成原始矩陣"><span class="nav-number">3.</span> <span class="nav-text">稀疏矩陣轉成原始矩陣</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

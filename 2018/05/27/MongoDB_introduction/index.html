@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>MongoDB學習筆記-初識MongoDB | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018MongoDB">
+  
+  
+  
+  
+  <meta name="description" content="Introduction MongoDB是一個面向文檔的免費數據庫 多用於數據採集和分布式處理(Map/Reduce)，特別是在大數據處理方面比較擅長 數據庫排名：  https://db-engines.com/en/ranking MongoDB為唯一一個排名前五的文檔存取型的數據庫">
+<meta name="keywords" content="2018,MongoDB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MongoDB學習筆記-初識MongoDB">
+<meta property="og:url" content="http://www.taroballz.com/2018/05/27/MongoDB_introduction/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction MongoDB是一個面向文檔的免費數據庫 多用於數據採集和分布式處理(Map/Reduce)，特別是在大數據處理方面比較擅長 數據庫排名：  https://db-engines.com/en/ranking MongoDB為唯一一個排名前五的文檔存取型的數據庫">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/VvUIKDr.jpg">
+<meta property="og:updated_time" content="2018-05-28T16:50:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MongoDB學習筆記-初識MongoDB">
+<meta name="twitter:description" content="Introduction MongoDB是一個面向文檔的免費數據庫 多用於數據採集和分布式處理(Map/Reduce)，特別是在大數據處理方面比較擅長 數據庫排名：  https://db-engines.com/en/ranking MongoDB為唯一一個排名前五的文檔存取型的數據庫">
+<meta name="twitter:image" content="https://i.imgur.com/VvUIKDr.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-MongoDB_introduction" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/VvUIKDr.jpg" rel="gallery_ck4x0bhsc00a6gdq7cd4vrcaz">
+        <img src="https://i.imgur.com/VvUIKDr.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      MongoDB學習筆記-初識MongoDB
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/27/MongoDB_introduction/" class="article-date">
+	  <time datetime="2018-05-27T02:00:00.000Z" itemprop="datePublished">五月 27, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/MongoDB/">MongoDB</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>MongoDB是一個<strong>面向文檔</strong>的<strong>免費</strong>數據庫</li>
+<li>多用於<strong>數據採集</strong>和<strong>分布式處理</strong>(Map/Reduce)，特別是在大數據處理方面比較擅長</li>
+<li>數據庫排名：<blockquote>
+<ul>
+<li><a href="https://db-engines.com/en/ranking" target="_blank" rel="noopener">https://db-engines.com/en/ranking</a></li>
+<li>MongoDB為唯一一個排名前五的<strong>文檔存取型</strong>的數據庫</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<a id="more"></a>
+<h1 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h1><h2 id="關係型數據庫-Relational-DBMS"><a href="#關係型數據庫-Relational-DBMS" class="headerlink" title="關係型數據庫(Relational DBMS)"></a>關係型數據庫(Relational DBMS)</h2><p>如 Oracle,MySQL,SQL Server,PostgreSQL…等</p>
+<ul>
+<li>數據庫 (Database)</li>
+<li>數據表 (Table)</li>
+<li>紀錄 (Record)</li>
+</ul>
+<h2 id="文檔存取型數據庫-Document-Store"><a href="#文檔存取型數據庫-Document-Store" class="headerlink" title="文檔存取型數據庫(Document Store)"></a>文檔存取型數據庫(Document Store)</h2><p>如 MongoDB</p>
+<ul>
+<li>數據庫 (Database)</li>
+<li>集合 (Collection)</li>
+<li>文檔 (Document)</li>
+</ul>
+<h2 id="NoSQL"><a href="#NoSQL" class="headerlink" title="NoSQL"></a>NoSQL</h2><ul>
+<li>在NoSQL的數據庫中，操作數據都是通過指令或程序語言完成的</li>
+<li>MongoDB中使用<strong>Javascript</strong>和<strong>JSON</strong>數據結構，來操作及管理數據</li>
+</ul>
+<h1 id="數據庫的使用步驟"><a href="#數據庫的使用步驟" class="headerlink" title="數據庫的使用步驟"></a>數據庫的使用步驟</h1><ol>
+<li>建立數據庫 —&gt; Blog</li>
+<li>建立數據集合 —&gt; Article, Categories, Tags</li>
+<li>建立數據 </li>
+</ol>
+<p>架構：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">* Blog</span><br><span class="line">    * Article</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;001&quot;,&quot;title&quot;:&quot;My First Article&quot;&#125;</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;002&quot;,&quot;title&quot;:&quot;My Second Article&quot;&#125;</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;003&quot;,&quot;title&quot;:&quot;My Third Article&quot;,&quot;delflag&quot;:1&#125;</span><br><span class="line">    * Categories</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;001&quot;,&quot;type&quot;:&quot;diary&quot;&#125;</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;002&quot;,&quot;type&quot;:&quot;note&quot;&#125;</span><br><span class="line">    * Tags</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;001&quot;,&quot;year&quot;:&quot;2018&quot;&#125;</span><br><span class="line">        * &#123;&quot;_id&quot;:&quot;002&quot;,&quot;year&quot;:&quot;2017&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>可以發現在<code>Blog-Article-_id</code>為<code>003</code>的表字段名可與其他數據不一樣<br>(與關係型數據庫最大的不同之處)</li>
+<li>使其靈活度比關係型數據庫更高</li>
+</ul>
+<h1 id="簡單命令"><a href="#簡單命令" class="headerlink" title="簡單命令"></a>簡單命令</h1><p>請先於於終端上鍵入<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mongo</span><br></pre></td></tr></table></figure></p>
+<p>進入mongodb命令行工具，或稱mongodb客戶端</p>
+<h2 id="查看幫助文檔"><a href="#查看幫助文檔" class="headerlink" title="查看幫助文檔"></a>查看幫助文檔</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; help</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看可輸入哪些指令</li>
+</ul>
+<h2 id="查看所有數據庫"><a href="#查看所有數據庫" class="headerlink" title="查看所有數據庫"></a>查看所有數據庫</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; show dbs;</span><br></pre></td></tr></table></figure>
+<h2 id="切換-創建-數據庫"><a href="#切換-創建-數據庫" class="headerlink" title="切換(創建)數據庫"></a>切換(創建)數據庫</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; use 庫名;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>切換到 <code>庫名</code> 數據庫;</li>
+<li>若是當前無此數據，則會建立此數據庫</li>
+</ul>
+<h2 id="當前數據庫"><a href="#當前數據庫" class="headerlink" title="當前數據庫"></a>當前數據庫</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看當前位於何者數據庫</li>
+</ul>
+<h2 id="建立數據集合-表"><a href="#建立數據集合-表" class="headerlink" title="建立數據集合(表)"></a>建立數據集合(表)</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.createCollection(&quot;集合名稱&quot;);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用<code>.</code>(點)調用當前數據庫的方法<code>createCollection()</code></li>
+<li>參數為 欲建立數據集合名稱 相當於表名</li>
+</ul>
+<h2 id="查看集合"><a href="#查看集合" class="headerlink" title="查看集合"></a>查看集合</h2><p>於當前數據庫查看有哪些集合<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; show collections;</span><br></pre></td></tr></table></figure></p>
+<h2 id="當前數據庫狀態"><a href="#當前數據庫狀態" class="headerlink" title="當前數據庫狀態"></a>當前數據庫狀態</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; db.stats();</span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回當前數據庫各種信息</li>
+</ul>
+<h2 id="刪除當前數據庫"><a href="#刪除當前數據庫" class="headerlink" title="刪除當前數據庫"></a>刪除當前數據庫</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">db.dropDatabase();</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a href="http://komavideo.com/mongodb/index.html" target="_blank" rel="noopener">http://komavideo.com/mongodb/index.html</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/MongoDB/">MongoDB</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MongoDB/">MongoDB</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/27/MongoDB_operation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          MongoDB學習筆記-集合及文檔的簡易操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/25/Go_Tcp/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang網路編程-day29-socket-TCP編程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基本概念"><span class="nav-number">2.</span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#關係型數據庫-Relational-DBMS"><span class="nav-number">2.1.</span> <span class="nav-text">關係型數據庫(Relational DBMS)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文檔存取型數據庫-Document-Store"><span class="nav-number">2.2.</span> <span class="nav-text">文檔存取型數據庫(Document Store)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NoSQL"><span class="nav-number">2.3.</span> <span class="nav-text">NoSQL</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據庫的使用步驟"><span class="nav-number">3.</span> <span class="nav-text">數據庫的使用步驟</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#簡單命令"><span class="nav-number">4.</span> <span class="nav-text">簡單命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看幫助文檔"><span class="nav-number">4.1.</span> <span class="nav-text">查看幫助文檔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看所有數據庫"><span class="nav-number">4.2.</span> <span class="nav-text">查看所有數據庫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切換-創建-數據庫"><span class="nav-number">4.3.</span> <span class="nav-text">切換(創建)數據庫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#當前數據庫"><span class="nav-number">4.4.</span> <span class="nav-text">當前數據庫</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立數據集合-表"><span class="nav-number">4.5.</span> <span class="nav-text">建立數據集合(表)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看集合"><span class="nav-number">4.6.</span> <span class="nav-text">查看集合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#當前數據庫狀態"><span class="nav-number">4.7.</span> <span class="nav-text">當前數據庫狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刪除當前數據庫"><span class="nav-number">4.8.</span> <span class="nav-text">刪除當前數據庫</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference:</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

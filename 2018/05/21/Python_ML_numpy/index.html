@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Python機器學習-numpy | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)numpy">
+  
+  
+  
+  
+  <meta name="description" content="introduction 對一份大型的數據來說，是由多筆樣本所構成的   列(column)通常為樣本的指標或是特徵(feature) 行(row)則代表一筆含有多項特徵的資料集合    綜合以上，以矩陣形式表示資料會更為直觀   計算方便 計算效率高    numpy庫可用於矩陣計算">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning),numpy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python機器學習-numpy">
+<meta property="og:url" content="http://www.taroballz.com/2018/05/21/Python_ML_numpy/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction 對一份大型的數據來說，是由多筆樣本所構成的   列(column)通常為樣本的指標或是特徵(feature) 行(row)則代表一筆含有多項特徵的資料集合    綜合以上，以矩陣形式表示資料會更為直觀   計算方便 計算效率高    numpy庫可用於矩陣計算">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/pgp1ZcQ.jpg">
+<meta property="og:updated_time" content="2018-05-21T13:23:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python機器學習-numpy">
+<meta name="twitter:description" content="introduction 對一份大型的數據來說，是由多筆樣本所構成的   列(column)通常為樣本的指標或是特徵(feature) 行(row)則代表一筆含有多項特徵的資料集合    綜合以上，以矩陣形式表示資料會更為直觀   計算方便 計算效率高    numpy庫可用於矩陣計算">
+<meta name="twitter:image" content="https://i.imgur.com/pgp1ZcQ.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Python_ML_numpy" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/pgp1ZcQ.jpg" rel="gallery_ck4x0bhsk00asgdq77o4dqlxl">
+        <img src="https://i.imgur.com/pgp1ZcQ.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python機器學習-numpy
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/21/Python_ML_numpy/" class="article-date">
+	  <time datetime="2018-05-20T16:00:00.000Z" itemprop="datePublished">五月 21, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ul>
+<li><p>對一份大型的數據來說，是由多筆樣本所構成的</p>
+<blockquote>
+<ul>
+<li><strong>列(column)</strong>通常為樣本的指標或是特徵(feature)</li>
+<li><strong>行(row)</strong>則代表一筆含有多項特徵的資料集合</li>
+</ul>
+</blockquote>
+</li>
+<li><p>綜合以上，以<strong>矩陣形式</strong>表示資料會更為直觀</p>
+<blockquote>
+<ul>
+<li>計算方便</li>
+<li>計算效率高</li>
+</ul>
+</blockquote>
+</li>
+<li><p>numpy庫可用於矩陣計算</p>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="導入numpy-Library"><a href="#導入numpy-Library" class="headerlink" title="導入numpy Library"></a>導入numpy Library</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="產生陣列-array"><a href="#產生陣列-array" class="headerlink" title="產生陣列(array)"></a>產生陣列(array)</h1><h2 id="從列表-list-產生陣列"><a href="#從列表-list-產生陣列" class="headerlink" title="從列表(list)產生陣列"></a>從列表(list)產生陣列</h2><p>將列表類型轉換為<code>numpy.ndarray</code>以創建陣列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</span><br><span class="line">arr = np.array(data)</span><br><span class="line">arr</span><br></pre></td></tr></table></figure></p>
+<p>亦可直接填入list<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">arr</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1, 2, 3, 4, 5])</span><br></pre></td></tr></table></figure></p>
+<p>查看類型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">type(arr)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.ndarray</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>類型為<code>numpy.ndarray</code></li>
+</ul>
+<hr>
+<h2 id="arrange產生陣列"><a href="#arrange產生陣列" class="headerlink" title="arrange產生陣列"></a>arrange產生陣列</h2><p>產生int陣列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.arange(<span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])</span><br></pre></td></tr></table></figure></p>
+<p>產生float陣列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.arange(<span class="number">10.0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])</span><br></pre></td></tr></table></figure></p>
+<p>步進產生陣列<br>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.arange(<span class="number">10</span>,<span class="number">30</span>,<span class="number">5</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>從10開始，每＋５產生值到３０停止，但不包含３０</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([10, 15, 20, 25])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.aarange(<span class="number">0</span>,<span class="number">2</span>,<span class="number">0.3</span>)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([0. , 0.3, 0.6, 0.9, 1.2, 1.5, 1.8])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="linspace產生1D陣列"><a href="#linspace產生1D陣列" class="headerlink" title="linspace產生1D陣列"></a>linspace產生1D陣列</h2><p>得到特定範圍內指定個數元素的陣列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> numpy <span class="keyword">import</span> pi</span><br><span class="line">np.linspace(<span class="number">0</span>,<span class="number">2</span>*pi,<span class="number">6</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>產生從０開始到2pi(<strong>包含2pi</strong>)，分成６等份的一維陣列</li>
+<li>若未指定分成多少等份，預設為５０等份，即(start,inclusive stop,50)</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([0.        , 1.25663706, 2.51327412, 3.76991118, 5.02654825,</span><br><span class="line">       6.28318531])</span><br></pre></td></tr></table></figure></p>
+<h2 id="logspace產生1D陣列"><a href="#logspace產生1D陣列" class="headerlink" title="logspace產生1D陣列"></a>logspace產生1D陣列</h2><p>得到10的start次方到10的inclusive stop次方的陣列<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.logspace(<span class="number">0</span>, <span class="number">3</span>, <span class="number">8</span>)         <span class="comment"># 10^0 to 10^3 (inclusive) with 8 points</span></span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([   1.        ,    2.6826958 ,    7.19685673,   19.30697729,</span><br><span class="line">         51.79474679,  138.94954944,  372.75937203, 1000.        ])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="創建二維-2D-矩陣"><a href="#創建二維-2D-矩陣" class="headerlink" title="創建二維(2D)矩陣"></a>創建二維(2D)矩陣</h2><p>搭配<code>range()</code>創建2D array<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">data2 = [range(<span class="number">1</span>, <span class="number">5</span>), range(<span class="number">5</span>, <span class="number">9</span>)]        <span class="comment"># list of lists</span></span><br><span class="line">arr2 = np.array(data2)                    <span class="comment"># 2d array</span></span><br><span class="line">arr2</span><br></pre></td></tr></table></figure></p>
+<p>直接填入嵌套的list創建<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr2 = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>],[<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>]])</span><br><span class="line">arr2</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[1, 2, 3, 4],</span><br><span class="line">       [5, 6, 7, 8]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="將矩陣轉為列表類型"><a href="#將矩陣轉為列表類型" class="headerlink" title="將矩陣轉為列表類型"></a>將矩陣轉為列表類型</h1><ul>
+<li>將<code>numpy.ndrray</code>轉為<code>list</code><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = arr2.tolist()       <span class="comment"># convert array back to list</span></span><br><span class="line">type(a)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="陣列檢查"><a href="#陣列檢查" class="headerlink" title="陣列檢查"></a>陣列檢查</h1><h2 id="查看矩陣存放的類型-dtype"><a href="#查看矩陣存放的類型-dtype" class="headerlink" title="查看矩陣存放的類型(dtype)"></a>查看矩陣存放的類型(dtype)</h2><p>在創建矩陣時不像list，各元素之間可為不同類型，<br><strong>矩陣中的元素必須為同一類型</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_test = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">arr_test.dtype</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtype(&apos;int64&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>只要其中一個元素類型不一樣，<br>為了滿足其中一個元素的類型，會將<strong>其他元素轉換為更泛用的類型</strong></p>
+<p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_test = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5.0</span>])</span><br><span class="line">arr_test.dtype</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtype(&apos;float64&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr_test = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="string">'4'</span>,<span class="number">5.0</span>])</span><br><span class="line">arr_test.dtype</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dtype(&apos;&lt;\U21&apos;)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="查看矩陣的結構-shape"><a href="#查看矩陣的結構-shape" class="headerlink" title="查看矩陣的結構(shape)"></a>查看矩陣的結構(shape)</h2><p>常用於debug</p>
+<h3 id="2D-array"><a href="#2D-array" class="headerlink" title="2D array"></a>2D array</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr2.shape</span><br></pre></td></tr></table></figure>
+<ul>
+<li>shape返回一個tuple，為(row, column)形式</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(2, 4)</span><br></pre></td></tr></table></figure></p>
+<h3 id="1D-array"><a href="#1D-array" class="headerlink" title="1D array"></a>1D array</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr.shape</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(5,)</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="查看矩陣維度-ndim"><a href="#查看矩陣維度-ndim" class="headerlink" title="查看矩陣維度(ndim)"></a>查看矩陣維度(ndim)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(arr.ndim)</span><br><span class="line">print(arr2.ndim)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="查看矩陣的元素總數-size"><a href="#查看矩陣的元素總數-size" class="headerlink" title="查看矩陣的元素總數(size)"></a>查看矩陣的元素總數(size)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(arr.size)</span><br><span class="line">print(arr2.size)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">8</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩陣的選取-切片slicing"><a href="#矩陣的選取-切片slicing" class="headerlink" title="矩陣的選取(切片slicing)"></a>矩陣的選取(切片slicing)</h1><p>透過索引(index)選取特定範圍內的陣列</p>
+<h2 id="語法"><a href="#語法" class="headerlink" title="語法"></a>語法</h2><p>與list切片的方法一樣，只是不同維度需用逗號(<code>,</code>)隔開<br><code>start (= 0) : stop (= last) :step (= 1)</code></p>
+<h2 id="取特定行"><a href="#取特定行" class="headerlink" title="取特定行"></a>取特定行</h2><p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr = np.array([range(<span class="number">1</span>,<span class="number">4</span>),range(<span class="number">4</span>,<span class="number">7</span>),range(<span class="number">7</span>,<span class="number">10</span>)])</span><br><span class="line">arr[<span class="number">0</span>, :]</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1, 2, 3])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr[<span class="number">0</span>:<span class="number">2</span>, :]</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[1, 2, 3],</span><br><span class="line">       [4, 5, 6]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="取特定列"><a href="#取特定列" class="headerlink" title="取特定列"></a>取特定列</h2><p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr[:, <span class="number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1, 4, 7])</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>單取一列值時，返回為1d-array</li>
+</ul>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr[:, <span class="number">1</span>:]</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[2, 3],</span><br><span class="line">       [5, 6],</span><br><span class="line">       [8, 9]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="取特定範圍"><a href="#取特定範圍" class="headerlink" title="取特定範圍"></a>取特定範圍</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arr[<span class="number">0</span>:<span class="number">2</span>, <span class="number">0</span>:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[1, 2],</span><br><span class="line">       [4, 5]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="取特定值"><a href="#取特定值" class="headerlink" title="取特定值"></a>取特定值</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">val = arr[<span class="number">2</span>:<span class="number">2</span>]</span><br><span class="line">val</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其等同於<code>arr[2][2]</code>，先取行在取列<br>result<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="修改特定值"><a href="#修改特定值" class="headerlink" title="修改特定值"></a>修改特定值</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr[<span class="number">1</span>:<span class="number">1</span>] = <span class="number">100</span></span><br><span class="line">arr</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其等同於<code>arr[1][1] = 100</code>，先取行在取列<br>result<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[  1,   2,   3],</span><br><span class="line">       [  4, 100,   6],</span><br><span class="line">       [  7,   8,   9]])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="矩陣的邏輯運算"><a href="#矩陣的邏輯運算" class="headerlink" title="矩陣的邏輯運算"></a>矩陣的邏輯運算</h1><h2 id="普通邏輯運算"><a href="#普通邏輯運算" class="headerlink" title="普通邏輯運算"></a>普通邏輯運算</h2><p>進行普通邏輯運算時會對陣列中的每一個元素都進行計算，並返回一個bool類型的陣列(不需使用for循環進行運算)<br>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">matrix = np.array([range(<span class="number">1</span>,<span class="number">4</span>),range(<span class="number">4</span>,<span class="number">7</span>),range(<span class="number">7</span>,<span class="number">10</span>)])</span><br><span class="line">matrix &gt; <span class="number">5</span></span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[False, False, False],</span><br><span class="line">       [False, False,  True],</span><br><span class="line">       [ True,  True,  True]])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">matrix == <span class="number">9</span></span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[False, False, False],</span><br><span class="line">       [False, False, False],</span><br><span class="line">       [False, False,  True]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="返回為True的值"><a href="#返回為True的值" class="headerlink" title="返回為True的值"></a>返回為True的值</h2><p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr_bool = np.array([<span class="literal">False</span>,<span class="literal">True</span>,<span class="literal">False</span>])</span><br><span class="line">arr_int = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])  </span><br><span class="line">arr_int[arr_bool]   <span class="comment"># 將arr_bool當作index，傳入arr_int中計算</span></span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([2])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix = np.array([[<span class="number">5</span>,<span class="number">15</span>,<span class="number">20</span>],[<span class="number">20</span>,<span class="number">25</span>,<span class="number">30</span>],[<span class="number">35</span>,<span class="number">40</span>,<span class="number">45</span>]])</span><br><span class="line">second_col_25 = matrix[<span class="number">1</span>, :] == <span class="number">25</span></span><br><span class="line">print(second_col_25)</span><br><span class="line">matrix[second_col_25]  <span class="comment"># 從matrix中查找符合此bool矩陣的row之值</span></span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[False  True False]</span><br><span class="line"></span><br><span class="line">array([[20, 25, 30]])</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>結果為<code>matrix[1,:]</code></li>
+</ul>
+<h2 id="與或運算"><a href="#與或運算" class="headerlink" title="與或運算"></a>與或運算</h2><p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">matrix = np.array([[<span class="number">5</span>,<span class="number">15</span>,<span class="number">20</span>],[<span class="number">20</span>,<span class="number">25</span>,<span class="number">30</span>],[<span class="number">35</span>,<span class="number">40</span>,<span class="number">45</span>]])</span><br><span class="line">(matrix &gt; <span class="number">25</span>) &amp; (matrix &lt; <span class="number">50</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>務必加上括號<code>()</code></li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[False, False, False],</span><br><span class="line">       [False, False,  True],</span><br><span class="line">       [ True,  True,  True]])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(matrix &gt; <span class="number">25</span>) | (matrix &lt; <span class="number">10</span>)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[ True, False, False],</span><br><span class="line">       [False, False,  True],</span><br><span class="line">       [ True,  True,  True]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="判斷有無非數字值-isnan"><a href="#判斷有無非數字值-isnan" class="headerlink" title="判斷有無非數字值(isnan)"></a>判斷有無非數字值(isnan)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,np.nan])</span><br><span class="line">np.isnan(a)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([False, False, False, False, False,  True])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩陣的運算"><a href="#矩陣的運算" class="headerlink" title="矩陣的運算"></a>矩陣的運算</h1><h2 id="減法"><a href="#減法" class="headerlink" title="減法"></a>減法</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>,<span class="number">50</span>])</span><br><span class="line">b = np.arange(<span class="number">5</span>)</span><br><span class="line">print(a-b)</span><br><span class="line">print(b<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[10 19 28 37 46]</span><br><span class="line">[-1  0  1  2  3]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>對應位置相減</li>
+</ul>
+<h2 id="求次方"><a href="#求次方" class="headerlink" title="求次方"></a>求次方</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b = np.arrane(<span class="number">5</span>)</span><br><span class="line">b**<span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([ 0,  1,  4,  9, 16])</span><br></pre></td></tr></table></figure></p>
+<h2 id="矩陣乘法"><a href="#矩陣乘法" class="headerlink" title="矩陣乘法"></a>矩陣乘法</h2><p>使用＊則對應位置元素相乘<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">A = np.array([[<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">              [<span class="number">0</span>,<span class="number">1</span>]])</span><br><span class="line">B = np.array([[<span class="number">2</span>,<span class="number">0</span>],</span><br><span class="line">              [<span class="number">3</span>,<span class="number">4</span>]])</span><br><span class="line">A*B</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[2, 0],</span><br><span class="line">       [0, 4]])</span><br></pre></td></tr></table></figure></p>
+<p>使用dot求積<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(A.dot(B))</span><br><span class="line">print(np.dot(A,B))</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>兩個效果是一樣的<br>result<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[[5 4]</span><br><span class="line"> [3 4]]</span><br><span class="line"> </span><br><span class="line">[[5 4]</span><br><span class="line"> [3 4]]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<h1 id="變換矩陣存儲的類型-astype"><a href="#變換矩陣存儲的類型-astype" class="headerlink" title="變換矩陣存儲的類型(astype)"></a>變換矩陣存儲的類型(astype)</h1><p>透過astype()將矩陣原類型，轉換為其他類型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">str_matrix = np.array([[<span class="string">'1'</span>,<span class="string">'2'</span>,<span class="string">'3'</span>]]) </span><br><span class="line">print(str_matrix.dtype)</span><br><span class="line">int_matrix = str_matrix.astype(int)</span><br><span class="line">print(int_matrix.dtype)</span><br><span class="line">int_matrix</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;\U1</span><br><span class="line">int64</span><br><span class="line"></span><br><span class="line">array([[1, 2, 3]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩陣的內置屬性"><a href="#矩陣的內置屬性" class="headerlink" title="矩陣的內置屬性"></a>矩陣的內置屬性</h1><h2 id="求最小值-min"><a href="#求最小值-min" class="headerlink" title="求最小值(min)"></a>求最小值(<code>min</code>)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IntVector = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>])</span><br><span class="line">IntVector.min()</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure></p>
+<h2 id="求最大值-max"><a href="#求最大值-max" class="headerlink" title="求最大值(max)"></a>求最大值(<code>max</code>)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IntVector = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span>])</span><br><span class="line">IntVector.max()</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9</span><br></pre></td></tr></table></figure></p>
+<h2 id="比較同座標值之大小-maximum-minimum"><a href="#比較同座標值之大小-maximum-minimum" class="headerlink" title="比較同座標值之大小(maximum,minimum)"></a>比較同座標值之大小(maximum,minimum)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nums = np.arange(<span class="number">5</span>)</span><br><span class="line">np.maximum(nums, np.array([<span class="number">1</span>, <span class="number">-2</span>, <span class="number">3</span>, <span class="number">-4</span>, <span class="number">5</span>])) <span class="comment"># compare element-wise</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>maximum返回較大的值之矩陣，minimum返回較小值之矩陣</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1, 1, 3, 3, 5])</span><br></pre></td></tr></table></figure></p>
+<h2 id="求極值-最大值，最小值-的索引-argmax-argmin"><a href="#求極值-最大值，最小值-的索引-argmax-argmin" class="headerlink" title="求極值(最大值，最小值)的索引(argmax,argmin)"></a>求極值(最大值，最小值)的索引(<code>argmax</code>,<code>argmin</code>)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">3</span>,<span class="number">4</span>)))</span><br><span class="line">print(a)</span><br><span class="line">a.argmax(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>axis=1為求每一行(row)最大值的索引，axis=0為求每一列(column)，不加則是全部運算取一返回值</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[[8. 8. 8. 4.]</span><br><span class="line"> [5. 2. 7. 3.]</span><br><span class="line"> [8. 9. 5. 6.]]</span><br><span class="line"></span><br><span class="line">array([0, 2, 1])</span><br></pre></td></tr></table></figure></p>
+<h2 id="求和-sum"><a href="#求和-sum" class="headerlink" title="求和(sum)"></a>求和(sum)</h2><p>example 1:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IntMatrix = np.array([range(<span class="number">1</span>,<span class="number">4</span>),range(<span class="number">4</span>,<span class="number">7</span>),range(<span class="number">7</span>,<span class="number">10</span>)])</span><br><span class="line">IntMatrix.sum(axis = <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>axis = 0 代表 求每一列(column)之總和，<strong>不加怎是全部元素求和</strong></li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([12, 15, 18])</span><br></pre></td></tr></table></figure></p>
+<p>example 2:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IntMatrix = np.array([range(<span class="number">1</span>,<span class="number">4</span>),range(<span class="number">4</span>,<span class="number">7</span>),range(<span class="number">7</span>,<span class="number">10</span>)])</span><br><span class="line">IntMatrix.sum(axis = <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>axis = 1 代表 求每一行(row)之總和</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([ 6, 15, 24])</span><br></pre></td></tr></table></figure></p>
+<h2 id="求集合-unique"><a href="#求集合-unique" class="headerlink" title="求集合(unique)"></a>求集合(unique)</h2><p>陣列中不會有重複的元素，相當於set()<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Intmatrix = np.array([<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">6</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">8</span>])</span><br><span class="line">np.unique(Intmatrix)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1, 2, 3, 4, 5, 6, 7, 8])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="向量-vector-與矩陣-matrix-的轉換"><a href="#向量-vector-與矩陣-matrix-的轉換" class="headerlink" title="向量(vector)與矩陣(matrix)的轉換"></a>向量(vector)與矩陣(matrix)的轉換</h1><h2 id="使用reshape將向量轉為矩陣"><a href="#使用reshape將向量轉為矩陣" class="headerlink" title="使用reshape將向量轉為矩陣"></a>使用reshape將向量轉為矩陣</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix = np.arange(<span class="number">15</span>)</span><br><span class="line">matrix.reshape(<span class="number">3</span>,<span class="number">5</span>)</span><br><span class="line">matrix</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在reshape過程中，元素數量為一固定值，因此確定了３行必定為５列，<br>亦可寫成reshape(3,-1)</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[ 0,  1,  2,  3,  4],</span><br><span class="line">       [ 5,  6,  7,  8,  9],</span><br><span class="line">       [10, 11, 12, 13, 14]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="shape賦值將向量轉為矩陣"><a href="#shape賦值將向量轉為矩陣" class="headerlink" title="shape賦值將向量轉為矩陣"></a>shape賦值將向量轉為矩陣</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix = np.arange(<span class="number">15</span>)</span><br><span class="line">matrix.shape = (<span class="number">3</span>,<span class="number">-1</span>)</span><br><span class="line">matrix</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[ 0,  1,  2,  3,  4],</span><br><span class="line">       [ 5,  6,  7,  8,  9],</span><br><span class="line">       [10, 11, 12, 13, 14]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="將矩陣拉成一向量"><a href="#將矩陣拉成一向量" class="headerlink" title="將矩陣拉成一向量"></a>將矩陣拉成一向量</h2><h3 id="ravel"><a href="#ravel" class="headerlink" title="ravel"></a>ravel</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">5</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">3</span>],</span><br><span class="line">                  [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">4</span>],</span><br><span class="line">                  [<span class="number">8</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">0</span>]])</span><br><span class="line">matrix.ravel()</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([5, 7, 1, 3, 7, 8, 9, 4, 8, 8, 7, 0])</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>ravel產生的陣列仍指向原矩陣，操作其值，原矩陣亦會發生改變</li>
+</ul>
+<h3 id="flatten"><a href="#flatten" class="headerlink" title="flatten"></a>flatten</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">5</span>, <span class="number">7</span>, <span class="number">1</span>, <span class="number">3</span>],</span><br><span class="line">                  [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>, <span class="number">4</span>],</span><br><span class="line">                  [<span class="number">8</span>, <span class="number">8</span>, <span class="number">7</span>, <span class="number">0</span>]])</span><br><span class="line">a = matrix.flatten() <span class="comment"># flatten 回傳一個原始的陣列複本 (a flat copy)</span></span><br><span class="line">a</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([5, 7, 1, 3, 7, 8, 9, 4, 8, 8, 7, 0])</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>flatten產生的陣列為一復本，操作其值，原矩陣不會發生改變</li>
+</ul>
+<hr>
+<h2 id="使用np-newaxis"><a href="#使用np-newaxis" class="headerlink" title="使用np.newaxis"></a>使用np.newaxis</h2><p>將平行向量轉換為垂直向量<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.array([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])  </span><br><span class="line">a_col = a[:, np.newaxis]    <span class="comment">#  same as a_col = a[:, None]</span></span><br><span class="line">a_col</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">array([[0],</span><br><span class="line">       [1],</span><br><span class="line">       [2],</span><br><span class="line">       [3]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="初始化矩陣"><a href="#初始化矩陣" class="headerlink" title="初始化矩陣"></a>初始化矩陣</h1><h2 id="zeros"><a href="#zeros" class="headerlink" title="zeros"></a>zeros</h2><p>初始化一個元素皆為０的矩陣(參數為一tuple)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.zeros((<span class="number">3</span>, <span class="number">4</span>),dtype=np.int32)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>dtype可決定存放的類型(亦可不設置，默認為float64)</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">array([[0, 0, 0, 0],</span><br><span class="line">       [0, 0, 0, 0],</span><br><span class="line">       [0, 0, 0, 0]], dtype=int32)</span><br></pre></td></tr></table></figure></p>
+<h2 id="ones"><a href="#ones" class="headerlink" title="ones"></a>ones</h2><p>初始化一個元素皆為１的矩陣(參數為一tuple)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.ones((<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>),dtype=np.int8)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">array([[[1, 1, 1, 1],</span><br><span class="line">        [1, 1, 1, 1],</span><br><span class="line">        [1, 1, 1, 1]],</span><br><span class="line"></span><br><span class="line">       [[1, 1, 1, 1],</span><br><span class="line">        [1, 1, 1, 1],</span><br><span class="line">        [1, 1, 1, 1]]], dtype=int8)</span><br></pre></td></tr></table></figure></p>
+<h2 id="random"><a href="#random" class="headerlink" title="random"></a>random</h2><p>初始化一個元素為0至１之間隨機浮點數的矩陣(參數為一tuple)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.random.random((<span class="number">2</span>,<span class="number">3</span>))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[0.78248299, 0.52270045, 0.0945345 ],</span><br><span class="line">       [0.30580916, 0.31472853, 0.34269623]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="numpy開啟格式化文件-genfromtxt"><a href="#numpy開啟格式化文件-genfromtxt" class="headerlink" title="numpy開啟格式化文件(genfromtxt)"></a>numpy開啟格式化文件(genfromtxt)</h1><ul>
+<li><p>使用<code>numpy.genfromtxt()</code>讀取格式化的數據</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.genfromtxt(<span class="string">"student_score.txt"</span>,delimiter=<span class="string">','</span>,dtype=str)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>參數１：指定文件路徑</p>
+</li>
+<li>delimiter : 指定分隔符(文件中元素之間的分隔符)</li>
+<li>dtype : 以何種類型將文件讀入(大部分用<code>str</code>方式讀入再去轉換成其他類型)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">array([[&apos;Amy&apos;, &apos;1001&apos;, &apos;18&apos;, &apos;95.0&apos;],</span><br><span class="line">       [&apos;Tom&apos;, &apos;1002&apos;, &apos;20&apos;, &apos;89.5&apos;],</span><br><span class="line">       [&apos;John&apos;, &apos;1003&apos;, &apos;21&apos;, &apos;77.8&apos;],</span><br><span class="line">       [&apos;Tony&apos;, &apos;1004&apos;, &apos;23&apos;, &apos;99.0&apos;],</span><br><span class="line">       [&apos;Lucy&apos;, &apos;1005&apos;, &apos;19&apos;, &apos;88.6&apos;]], dtype=&apos;&lt;U4&apos;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>讀入為一矩陣</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stu_info = np.genfromtxt(<span class="string">"student_score.txt"</span>,delimiter=<span class="string">','</span>,dtype=str)</span><br><span class="line">type(stu_info)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">numpy.ndarray</span><br></pre></td></tr></table></figure>
+<ul>
+<li>為numpy.ndarray類型</li>
+</ul>
+<hr>
+<h1 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h1><h2 id="指數函數-exp"><a href="#指數函數-exp" class="headerlink" title="指數函數(exp)"></a>指數函數(exp)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">B = np.arange(<span class="number">3</span>)</span><br><span class="line">np.exp(B)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([1.        , 2.71828183, 7.3890561 ])</span><br></pre></td></tr></table></figure></p>
+<h2 id="開根號-sqrt"><a href="#開根號-sqrt" class="headerlink" title="開根號(sqrt)"></a>開根號(sqrt)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.sqrt(B)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array([0.        , 1.        , 1.41421356])</span><br></pre></td></tr></table></figure></p>
+<h2 id="無條件捨去取整-floor"><a href="#無條件捨去取整-floor" class="headerlink" title="無條件捨去取整(floor)"></a>無條件捨去取整(floor)</h2><p>將矩陣內元素的小數位皆丟棄，只留下整數位的數<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A = np.random.random((<span class="number">3</span>,<span class="number">4</span>))*<span class="number">10</span></span><br><span class="line">print(A)</span><br><span class="line">print(np.floor(A))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[[4.79808472 2.44399243 5.548923   6.92783862]</span><br><span class="line"> [2.83681077 4.38694273 8.19855738 4.97988545]</span><br><span class="line"> [1.04608979 1.0399803  2.22577406 7.76268637]]</span><br><span class="line"> </span><br><span class="line">[[4. 2. 5. 6.]</span><br><span class="line"> [2. 4. 8. 4.]</span><br><span class="line"> [1. 1. 2. 7.]]</span><br></pre></td></tr></table></figure></p>
+<h2 id="無條件進位取整-ceil"><a href="#無條件進位取整-ceil" class="headerlink" title="無條件進位取整(ceil)"></a>無條件進位取整(ceil)</h2><p>將矩陣內元素的小數位皆進位，只留下整數位的數<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">A = np.random.random((<span class="number">3</span>,<span class="number">4</span>))*<span class="number">10</span></span><br><span class="line">print(A)</span><br><span class="line">print(np.ceil(A))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[[1.9360702  1.05170707 5.41654963 7.97196499]</span><br><span class="line"> [8.12826589 7.20266718 8.15762529 5.84988628]</span><br><span class="line"> [4.32137618 9.08694857 1.05489433 6.37825292]]</span><br><span class="line"> </span><br><span class="line">[[ 2.  2.  6.  8.]</span><br><span class="line"> [ 9.  8.  9.  6.]</span><br><span class="line"> [ 5. 10.  2.  7.]]</span><br></pre></td></tr></table></figure></p>
+<h2 id="轉置矩陣-T"><a href="#轉置矩陣-T" class="headerlink" title="轉置矩陣(T)"></a>轉置矩陣(T)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">9.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">0.</span>, <span class="number">6.</span>, <span class="number">9.</span>],</span><br><span class="line">                  [<span class="number">4.</span>, <span class="number">1.</span>, <span class="number">4.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">3.</span>]])</span><br><span class="line">matrix.T</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">array([[9., 4.],</span><br><span class="line">       [3., 1.],</span><br><span class="line">       [8., 4.],</span><br><span class="line">       [0., 3.],</span><br><span class="line">       [6., 8.],</span><br><span class="line">       [9., 3.]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="擴展矩陣-tile"><a href="#擴展矩陣-tile" class="headerlink" title="擴展矩陣(tile)"></a>擴展矩陣(tile)</h2><p>定義一個矩陣，以此矩陣為單元擴展成自己需要的維度<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.arange(<span class="number">1</span>,<span class="number">3</span>)</span><br><span class="line">b = np.tile(a,(<span class="number">2</span>,<span class="number">2</span>))</span><br><span class="line">b</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[1, 2, 1, 2],</span><br><span class="line">       [1, 2, 1, 2]])</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩陣疊加"><a href="#矩陣疊加" class="headerlink" title="矩陣疊加"></a>矩陣疊加</h1><h2 id="平行疊加-hstack"><a href="#平行疊加-hstack" class="headerlink" title="平行疊加(hstack)"></a>平行疊加(hstack)</h2><p>增加特徵數<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">b = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(np.hstack((a,b)))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[[1. 3.]</span><br><span class="line"> [8. 6.]]</span><br><span class="line"> </span><br><span class="line">[[1. 4.]</span><br><span class="line"> [3. 7.]]</span><br><span class="line"> </span><br><span class="line">[[1. 3. 1. 4.]</span><br><span class="line"> [8. 6. 3. 7.]]</span><br></pre></td></tr></table></figure></p>
+<h2 id="垂直疊加-vstack"><a href="#垂直疊加-vstack" class="headerlink" title="垂直疊加(vstack)"></a>垂直疊加(vstack)</h2><p>增加樣本數<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">b = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">print(np.vstack((a,b)))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[[2. 1.]</span><br><span class="line"> [8. 0.]]</span><br><span class="line"> </span><br><span class="line">[[5. 5.]</span><br><span class="line"> [3. 7.]]</span><br><span class="line"> </span><br><span class="line">[[2. 1.]</span><br><span class="line"> [8. 0.]</span><br><span class="line"> [5. 5.]</span><br><span class="line"> [3. 7.]]</span><br></pre></td></tr></table></figure></p>
+<h2 id="多維疊加-stack"><a href="#多維疊加-stack" class="headerlink" title="多維疊加(stack)"></a>多維疊加(stack)</h2><ul>
+<li>兩個一維的矩陣疊加為二維矩陣</li>
+<li>兩個二維的矩陣疊加為三維矩陣<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">b = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br><span class="line">np.stack((a,b))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[7. 7.]</span><br><span class="line"> [3. 3.]]</span><br><span class="line"> </span><br><span class="line">[[4. 4.]</span><br><span class="line"> [4. 9.]]</span><br><span class="line"> </span><br><span class="line">[[[7. 7.]</span><br><span class="line">  [3. 3.]]</span><br><span class="line"></span><br><span class="line"> [[4. 4.]</span><br><span class="line">  [4. 9.]]]</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="矩陣切分-split"><a href="#矩陣切分-split" class="headerlink" title="矩陣切分(split)"></a>矩陣切分(split)</h1><h2 id="平行切分-np-hsplit"><a href="#平行切分-np-hsplit" class="headerlink" title="平行切分(np.hsplit)"></a>平行切分(np.hsplit)</h2><p>第二參數為一整數<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">12</span>)))</span><br><span class="line">print(a)</span><br><span class="line">print(np.hsplit(a,<span class="number">3</span>))</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>將a平行切分成３等份</li>
+</ul>
+<p>result<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">1.</span> <span class="number">5.</span> <span class="number">8.</span> <span class="number">1.</span> <span class="number">3.</span> <span class="number">1.</span> <span class="number">9.</span> <span class="number">4.</span> <span class="number">3.</span> <span class="number">8.</span> <span class="number">8.</span> <span class="number">9.</span>]</span><br><span class="line"> [<span class="number">2.</span> <span class="number">8.</span> <span class="number">9.</span> <span class="number">7.</span> <span class="number">1.</span> <span class="number">9.</span> <span class="number">6.</span> <span class="number">6.</span> <span class="number">9.</span> <span class="number">1.</span> <span class="number">1.</span> <span class="number">7.</span>]]</span><br><span class="line"> </span><br><span class="line">[array([[<span class="number">1.</span>, <span class="number">5.</span>, <span class="number">8.</span>, <span class="number">1.</span>],</span><br><span class="line">       [<span class="number">2.</span>, <span class="number">8.</span>, <span class="number">9.</span>, <span class="number">7.</span>]]), </span><br><span class="line"> array([[<span class="number">3.</span>, <span class="number">1.</span>, <span class="number">9.</span>, <span class="number">4.</span>],</span><br><span class="line">        [<span class="number">1.</span>, <span class="number">9.</span>, <span class="number">6.</span>, <span class="number">6.</span>]]), </span><br><span class="line"> array([[<span class="number">3.</span>, <span class="number">8.</span>, <span class="number">8.</span>, <span class="number">9.</span>],</span><br><span class="line">        [<span class="number">9.</span>, <span class="number">1.</span>, <span class="number">1.</span>, <span class="number">7.</span>]])]</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定平行切分"><a href="#指定平行切分" class="headerlink" title="指定平行切分"></a>指定平行切分</h2><p>第二參數為一tuple<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">12</span>)))</span><br><span class="line">print(a)</span><br><span class="line">print(np.hsplit(a,(<span class="number">3</span>,<span class="number">4</span>,<span class="number">6</span>)))</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>將陣列於index第３ ４ ６的位置進行拆分</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[[3. 4. 8. 7. 1. 7. 3. 8. 5. 7. 1. 3.]</span><br><span class="line"> [1. 2. 4. 8. 2. 5. 4. 6. 1. 8. 0. 8.]]</span><br><span class="line"> </span><br><span class="line">[array([[3., 4., 8.],</span><br><span class="line">        [1., 2., 4.]]), </span><br><span class="line">array([[7.],</span><br><span class="line">       [8.]]), </span><br><span class="line">array([[1.],</span><br><span class="line">       [2.]]), </span><br><span class="line">array([[7., 3., 8., 5., 7., 1., 3.],</span><br><span class="line">       [5., 4., 6., 1., 8., 0., 8.]])]</span><br></pre></td></tr></table></figure>
+<h2 id="垂直切分-np-vsplit"><a href="#垂直切分-np-vsplit" class="headerlink" title="垂直切分(np.vsplit)"></a>垂直切分(np.vsplit)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b = np.floor(<span class="number">10</span>*np.random.random((<span class="number">2</span>,<span class="number">2</span>)))</span><br><span class="line">print(b)</span><br><span class="line">print(np.vsplit(b,<span class="number">2</span>))</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[[1. 6.]</span><br><span class="line"> [5. 9.]]</span><br><span class="line"> </span><br><span class="line">[array([[1., 6.]]), </span><br><span class="line"> array([[5., 9.]])]</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定垂直切分"><a href="#指定垂直切分" class="headerlink" title="指定垂直切分"></a>指定垂直切分</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b = np.floor(<span class="number">10</span>*np.random.random((<span class="number">3</span>,<span class="number">2</span>)))</span><br><span class="line">print(b)</span><br><span class="line">print(np.vsplit(b,(<span class="number">1</span>,)))</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[[5. 8.]</span><br><span class="line"> [9. 9.]</span><br><span class="line"> [5. 1.]]</span><br><span class="line"> </span><br><span class="line">[array([[5., 8.]]), </span><br><span class="line"> array([[9., 9.],</span><br><span class="line">        [5., 1.]])]</span><br></pre></td></tr></table></figure></p>
+<h1 id="矩陣間的拷貝"><a href="#矩陣間的拷貝" class="headerlink" title="矩陣間的拷貝"></a>矩陣間的拷貝</h1><h2 id="Situation-1-非拷貝"><a href="#Situation-1-非拷貝" class="headerlink" title="Situation 1 - 非拷貝"></a>Situation 1 - 非拷貝</h2><p>Ａ與Ｂ指向同一矩陣(非拷貝)<br>只是變量名不同，但指向的為同一個矩陣<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a = np.arange(<span class="number">12</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line"></span><br><span class="line">b = a</span><br><span class="line"></span><br><span class="line">print(b <span class="keyword">is</span> a)</span><br><span class="line">b.shape = (<span class="number">3</span>,<span class="number">-1</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line">print(id(a))</span><br><span class="line">print(id(b))</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(12,)</span><br><span class="line">True</span><br><span class="line">(3, 4)</span><br><span class="line">4395559392</span><br><span class="line">4395559392</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>對Ａ操作等同於對Ｂ操作</li>
+</ul>
+<h2 id="Situation-2-淺拷貝-view"><a href="#Situation-2-淺拷貝-view" class="headerlink" title="Situation 2 - 淺拷貝(view)"></a>Situation 2 - 淺拷貝(view)</h2><p>Ａ與Ｂ指向不同矩陣，<br>但矩陣中存放的值為共用的<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">a =np.arange(<span class="number">12</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line"></span><br><span class="line">b = a.view()</span><br><span class="line"></span><br><span class="line">print(b <span class="keyword">is</span> a)</span><br><span class="line">b.shape = (<span class="number">3</span>,<span class="number">-1</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line">print(id(a))</span><br><span class="line">print(id(b))</span><br><span class="line">a[<span class="number">0</span>] = <span class="number">10000</span></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(12,)</span><br><span class="line">False</span><br><span class="line">(12,)</span><br><span class="line">4395385280</span><br><span class="line">4395385120</span><br><span class="line">[10000     1     2     3     4     5     6     7     8     9    10    11]</span><br><span class="line">[[10000     1     2     3]</span><br><span class="line"> [    4     5     6     7]</span><br><span class="line"> [    8     9    10    11]]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>a.view()創建一個a矩陣的<strong>淺拷貝</strong></li>
+<li><p>a 與 b 為不同矩陣</p>
+<blockquote>
+<ul>
+<li>改變b矩陣的shape,a並無變化</li>
+<li>a 與 b 指向不同的內存地址</li>
+</ul>
+</blockquote>
+</li>
+<li><p>a 與 b 矩陣中的值是共用的</p>
+<blockquote>
+<ul>
+<li>操作 a 矩陣的值 b 矩陣仍會改變</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h2 id="Situation-3-深拷貝"><a href="#Situation-3-深拷貝" class="headerlink" title="Situation 3 - 深拷貝"></a>Situation 3 - 深拷貝</h2><p>Ａ與Ｂ指向不同矩陣，<br>矩陣中存放的值也互不相干<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">a =np.arange(<span class="number">12</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line"></span><br><span class="line">b = a.copy()</span><br><span class="line"></span><br><span class="line">print(b <span class="keyword">is</span> a)</span><br><span class="line">b.shape = (<span class="number">3</span>,<span class="number">-1</span>)</span><br><span class="line">print(a.shape)</span><br><span class="line">print(id(a))</span><br><span class="line">print(id(b))</span><br><span class="line">a[<span class="number">0</span>] = <span class="number">10000</span></span><br><span class="line">print(a)</span><br><span class="line">print(b)</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">(12,)</span><br><span class="line">False</span><br><span class="line">(12,)</span><br><span class="line">4395558752</span><br><span class="line">4395560832</span><br><span class="line">[10000     1     2     3     4     5     6     7     8     9    10    11]</span><br><span class="line">[[ 0  1  2  3]</span><br><span class="line"> [ 4  5  6  7]</span><br><span class="line"> [ 8  9 10 11]]</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>a.copy()創建一個a矩陣的<strong>深拷貝</strong></li>
+<li>a 與 b 矩陣中的值互不相干</li>
+</ul>
+<h1 id="矩陣排序"><a href="#矩陣排序" class="headerlink" title="矩陣排序"></a>矩陣排序</h1><h2 id="np-sort排序"><a href="#np-sort排序" class="headerlink" title="np.sort排序"></a>np.sort排序</h2><p>返回一個排序好的矩陣<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">9.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">0.</span>, <span class="number">6.</span>, <span class="number">9.</span>],</span><br><span class="line">                  [<span class="number">4.</span>, <span class="number">1.</span>, <span class="number">4.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">3.</span>]])</span><br><span class="line">a = np.sort(matrix,axis=<span class="number">1</span>)</span><br><span class="line">a</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>axis=1代表按行排序，axis=0則為按列排序<br>result<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[0., 3., 6., 8., 9., 9.],</span><br><span class="line">       [1., 3., 3., 4., 4., 8.]])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="矩陣內置-sort-排序"><a href="#矩陣內置-sort-排序" class="headerlink" title="矩陣內置.sort()排序"></a>矩陣內置.sort()排序</h2><p>對當前調用方法的矩陣排序<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">9.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">0.</span>, <span class="number">6.</span>, <span class="number">9.</span>],</span><br><span class="line">                  [<span class="number">4.</span>, <span class="number">1.</span>, <span class="number">4.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">3.</span>]])</span><br><span class="line">matrix.sort(axis =<span class="number">1</span>)</span><br><span class="line">matrix</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[0., 3., 6., 8., 9., 9.],</span><br><span class="line">       [1., 3., 3., 4., 4., 8.]])</span><br></pre></td></tr></table></figure></p>
+<h2 id="argsort返回由小到大排序的索引值"><a href="#argsort返回由小到大排序的索引值" class="headerlink" title="argsort返回由小到大排序的索引值"></a>argsort返回由小到大排序的索引值</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">matrix =np.array([[<span class="number">9.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">0.</span>, <span class="number">6.</span>, <span class="number">9.</span>],</span><br><span class="line">                  [<span class="number">4.</span>, <span class="number">1.</span>, <span class="number">4.</span>, <span class="number">3.</span>, <span class="number">8.</span>, <span class="number">3.</span>]])</span><br><span class="line">SortIndex = matrix.argsort(axis=<span class="number">1</span>)</span><br><span class="line">SortIndex</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">array([[3, 1, 4, 2, 0, 5],</span><br><span class="line">       [1, 3, 5, 0, 2, 4]])</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>返回原矩陣由小到大原索引值的矩陣</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/numpy/">numpy</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/25/Go_Tcp/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang網路編程-day29-socket-TCP編程
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/05/19/Go_ThreadPanic/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang多線程初識-day28-線程異常(panic)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#導入numpy-Library"><span class="nav-number">2.</span> <span class="nav-text">導入numpy Library</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#產生陣列-array"><span class="nav-number">3.</span> <span class="nav-text">產生陣列(array)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#從列表-list-產生陣列"><span class="nav-number">3.1.</span> <span class="nav-text">從列表(list)產生陣列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#arrange產生陣列"><span class="nav-number">3.2.</span> <span class="nav-text">arrange產生陣列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#linspace產生1D陣列"><span class="nav-number">3.3.</span> <span class="nav-text">linspace產生1D陣列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logspace產生1D陣列"><span class="nav-number">3.4.</span> <span class="nav-text">logspace產生1D陣列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#創建二維-2D-矩陣"><span class="nav-number">3.5.</span> <span class="nav-text">創建二維(2D)矩陣</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#將矩陣轉為列表類型"><span class="nav-number">4.</span> <span class="nav-text">將矩陣轉為列表類型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#陣列檢查"><span class="nav-number">5.</span> <span class="nav-text">陣列檢查</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看矩陣存放的類型-dtype"><span class="nav-number">5.1.</span> <span class="nav-text">查看矩陣存放的類型(dtype)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看矩陣的結構-shape"><span class="nav-number">5.2.</span> <span class="nav-text">查看矩陣的結構(shape)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2D-array"><span class="nav-number">5.2.1.</span> <span class="nav-text">2D array</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1D-array"><span class="nav-number">5.2.2.</span> <span class="nav-text">1D array</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看矩陣維度-ndim"><span class="nav-number">5.3.</span> <span class="nav-text">查看矩陣維度(ndim)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看矩陣的元素總數-size"><span class="nav-number">5.4.</span> <span class="nav-text">查看矩陣的元素總數(size)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣的選取-切片slicing"><span class="nav-number">6.</span> <span class="nav-text">矩陣的選取(切片slicing)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#語法"><span class="nav-number">6.1.</span> <span class="nav-text">語法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取特定行"><span class="nav-number">6.2.</span> <span class="nav-text">取特定行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取特定列"><span class="nav-number">6.3.</span> <span class="nav-text">取特定列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取特定範圍"><span class="nav-number">6.4.</span> <span class="nav-text">取特定範圍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取特定值"><span class="nav-number">6.5.</span> <span class="nav-text">取特定值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改特定值"><span class="nav-number">6.6.</span> <span class="nav-text">修改特定值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣的邏輯運算"><span class="nav-number">7.</span> <span class="nav-text">矩陣的邏輯運算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#普通邏輯運算"><span class="nav-number">7.1.</span> <span class="nav-text">普通邏輯運算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回為True的值"><span class="nav-number">7.2.</span> <span class="nav-text">返回為True的值</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#與或運算"><span class="nav-number">7.3.</span> <span class="nav-text">與或運算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判斷有無非數字值-isnan"><span class="nav-number">7.4.</span> <span class="nav-text">判斷有無非數字值(isnan)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣的運算"><span class="nav-number">8.</span> <span class="nav-text">矩陣的運算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#減法"><span class="nav-number">8.1.</span> <span class="nav-text">減法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求次方"><span class="nav-number">8.2.</span> <span class="nav-text">求次方</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩陣乘法"><span class="nav-number">8.3.</span> <span class="nav-text">矩陣乘法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#變換矩陣存儲的類型-astype"><span class="nav-number">9.</span> <span class="nav-text">變換矩陣存儲的類型(astype)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣的內置屬性"><span class="nav-number">10.</span> <span class="nav-text">矩陣的內置屬性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#求最小值-min"><span class="nav-number">10.1.</span> <span class="nav-text">求最小值(min)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求最大值-max"><span class="nav-number">10.2.</span> <span class="nav-text">求最大值(max)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比較同座標值之大小-maximum-minimum"><span class="nav-number">10.3.</span> <span class="nav-text">比較同座標值之大小(maximum,minimum)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求極值-最大值，最小值-的索引-argmax-argmin"><span class="nav-number">10.4.</span> <span class="nav-text">求極值(最大值，最小值)的索引(argmax,argmin)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求和-sum"><span class="nav-number">10.5.</span> <span class="nav-text">求和(sum)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#求集合-unique"><span class="nav-number">10.6.</span> <span class="nav-text">求集合(unique)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#向量-vector-與矩陣-matrix-的轉換"><span class="nav-number">11.</span> <span class="nav-text">向量(vector)與矩陣(matrix)的轉換</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#使用reshape將向量轉為矩陣"><span class="nav-number">11.1.</span> <span class="nav-text">使用reshape將向量轉為矩陣</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shape賦值將向量轉為矩陣"><span class="nav-number">11.2.</span> <span class="nav-text">shape賦值將向量轉為矩陣</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#將矩陣拉成一向量"><span class="nav-number">11.3.</span> <span class="nav-text">將矩陣拉成一向量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ravel"><span class="nav-number">11.3.1.</span> <span class="nav-text">ravel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flatten"><span class="nav-number">11.3.2.</span> <span class="nav-text">flatten</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用np-newaxis"><span class="nav-number">11.4.</span> <span class="nav-text">使用np.newaxis</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化矩陣"><span class="nav-number">12.</span> <span class="nav-text">初始化矩陣</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zeros"><span class="nav-number">12.1.</span> <span class="nav-text">zeros</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ones"><span class="nav-number">12.2.</span> <span class="nav-text">ones</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#random"><span class="nav-number">12.3.</span> <span class="nav-text">random</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#numpy開啟格式化文件-genfromtxt"><span class="nav-number">13.</span> <span class="nav-text">numpy開啟格式化文件(genfromtxt)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他操作"><span class="nav-number">14.</span> <span class="nav-text">其他操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指數函數-exp"><span class="nav-number">14.1.</span> <span class="nav-text">指數函數(exp)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#開根號-sqrt"><span class="nav-number">14.2.</span> <span class="nav-text">開根號(sqrt)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#無條件捨去取整-floor"><span class="nav-number">14.3.</span> <span class="nav-text">無條件捨去取整(floor)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#無條件進位取整-ceil"><span class="nav-number">14.4.</span> <span class="nav-text">無條件進位取整(ceil)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#轉置矩陣-T"><span class="nav-number">14.5.</span> <span class="nav-text">轉置矩陣(T)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#擴展矩陣-tile"><span class="nav-number">14.6.</span> <span class="nav-text">擴展矩陣(tile)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣疊加"><span class="nav-number">15.</span> <span class="nav-text">矩陣疊加</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#平行疊加-hstack"><span class="nav-number">15.1.</span> <span class="nav-text">平行疊加(hstack)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垂直疊加-vstack"><span class="nav-number">15.2.</span> <span class="nav-text">垂直疊加(vstack)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多維疊加-stack"><span class="nav-number">15.3.</span> <span class="nav-text">多維疊加(stack)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣切分-split"><span class="nav-number">16.</span> <span class="nav-text">矩陣切分(split)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#平行切分-np-hsplit"><span class="nav-number">16.1.</span> <span class="nav-text">平行切分(np.hsplit)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定平行切分"><span class="nav-number">16.2.</span> <span class="nav-text">指定平行切分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#垂直切分-np-vsplit"><span class="nav-number">16.3.</span> <span class="nav-text">垂直切分(np.vsplit)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定垂直切分"><span class="nav-number">16.4.</span> <span class="nav-text">指定垂直切分</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣間的拷貝"><span class="nav-number">17.</span> <span class="nav-text">矩陣間的拷貝</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Situation-1-非拷貝"><span class="nav-number">17.1.</span> <span class="nav-text">Situation 1 - 非拷貝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Situation-2-淺拷貝-view"><span class="nav-number">17.2.</span> <span class="nav-text">Situation 2 - 淺拷貝(view)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Situation-3-深拷貝"><span class="nav-number">17.3.</span> <span class="nav-text">Situation 3 - 深拷貝</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#矩陣排序"><span class="nav-number">18.</span> <span class="nav-text">矩陣排序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#np-sort排序"><span class="nav-number">18.1.</span> <span class="nav-text">np.sort排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#矩陣內置-sort-排序"><span class="nav-number">18.2.</span> <span class="nav-text">矩陣內置.sort()排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#argsort返回由小到大排序的索引值"><span class="nav-number">18.3.</span> <span class="nav-text">argsort返回由小到大排序的索引值</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

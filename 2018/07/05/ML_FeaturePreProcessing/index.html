@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-特徵工程-特徵預處理 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵預處理特徵工程缺失值">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning),特徵預處理,特徵工程,缺失值">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-特徵工程-特徵預處理">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/05/ML_FeaturePreProcessing/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/Ec84PmD.jpg">
+<meta property="og:updated_time" content="2019-06-03T16:55:08.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-特徵工程-特徵預處理">
+<meta name="twitter:description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
+<meta name="twitter:image" content="https://i.imgur.com/Ec84PmD.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_FeaturePreProcessing" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Ec84PmD.jpg" rel="gallery_ck4x0bhrk007xgdq7mkf8wlav">
+        <img src="https://i.imgur.com/Ec84PmD.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-特徵工程-特徵預處理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/05/ML_FeaturePreProcessing/" class="article-date">
+	  <time datetime="2018-07-05T10:34:00.000Z" itemprop="datePublished">七月 5, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>特徵預處理通常是對數據進行處理<blockquote>
+<p>通過<strong>特定的統計方法(數學方法)</strong> 將<strong>數據</strong>轉換成<strong>演算法要求的數據</strong></p>
+</blockquote>
+</li>
+<li><p>特徵預處理</p>
+<blockquote>
+<p>數值型數據：採用<strong>標準縮放</strong>  分為<strong>歸一化(normalization)</strong> 及 <strong>標準化(standardization)</strong> 兩種,通常也要同時處理<strong>缺失值</strong><br>類別型的數據：one-hot編碼<br>時間類型數據：對時間進行切分</p>
+</blockquote>
+</li>
+<li><p>使用sklearn自帶的特徵預處理API進行處理</p>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="數據無量綱化"><a href="#數據無量綱化" class="headerlink" title="數據無量綱化"></a>數據無量綱化</h1><ul>
+<li>不同規格的數據轉換到同一規格的需求<ul>
+<li>例如：希望所有數據服從標準正態分佈</li>
+</ul>
+</li>
+<li>不同分佈的數據轉換到某個特定分佈的需求<ul>
+<li>例如：希望所有值位於1-0之間<br>以上兩種需求統稱為<strong>無量綱化</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="效果"><a href="#效果" class="headerlink" title="效果"></a>效果</h2><ul>
+<li>梯度和矩陣為核心模型：邏輯回歸，SVM，神經網路等，無量綱化可<strong>加快求解速度</strong></li>
+<li>距離類模型：KNN，K-means聚類等，無量綱化<strong>可提升模型經度</strong></li>
+<li>決策樹和樹的集成演算法們，<strong>不需無量綱化</strong></li>
+</ul>
+<hr>
+<h1 id="sklearn特徵預處理"><a href="#sklearn特徵預處理" class="headerlink" title="sklearn特徵預處理"></a>sklearn特徵預處理</h1><p>所有特徵預處理的方法皆收錄在<code>sklearn.preprocessing</code></p>
+<hr>
+<h1 id="歸一化-normalize"><a href="#歸一化-normalize" class="headerlink" title="歸一化(normalize)"></a>歸一化(normalize)</h1><ul>
+<li>通常對原始數據進行變換把數據映射至預設為[0,1]之間</li>
+<li>應用場景：在數萬筆數據中某些特徵都是同等重要時，就需將這幾種特徵歸一化處理，不會使單一特徵完全的影響最終結果</li>
+<li>公式：<script type="math/tex; mode=display">
+X' = \frac {x-mean}  {max-min}</script></li>
+</ul>
+<script type="math/tex; mode=display">
+X" = X'\times (mx-mi)+mi</script><blockquote>
+<ul>
+<li>$max$為一系列的最大值；$min$為一系列的最小值</li>
+<li>$X^”$為最終結果</li>
+<li>$mx$,$mi$分別為指定區間的預設值,$mx$為1,$mi$為0</li>
+</ul>
+</blockquote>
+<ul>
+<li>使用<code>sklearn.preprocessing.MinMaxScaler</code></li>
+</ul>
+<h2 id="MinMaxScalar-feature-range-0-1-…"><a href="#MinMaxScalar-feature-range-0-1-…" class="headerlink" title="MinMaxScalar(feature_range=(0,1)…)"></a>MinMaxScalar(feature_range=(0,1)…)</h2><ul>
+<li>每個特徵縮放到給定的範圍內(預設[0,1])</li>
+<li>可自己更改normalize的範圍(<code>feature_range(最小值，最大值)</code>)</li>
+</ul>
+<h3 id="fit-transform-X"><a href="#fit-transform-X" class="headerlink" title="fit_transform(X)"></a>fit_transform(X)</h3><ul>
+<li>X: numpy array格式的數據[n_samples, n_features]</li>
+<li>返回值：轉換後的同shape的array</li>
+</ul>
+<h3 id="inverse-transform-X"><a href="#inverse-transform-X" class="headerlink" title="inverse_transform(X)"></a>inverse_transform(X)</h3><ul>
+<li>X: numpy array格式的數據（歸一化後的數據）</li>
+<li>返回值： 歸一化前的數據</li>
+</ul>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>實例化MinMaxScalar</li>
+<li>通過fit_transform轉換</li>
+</ol>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Normalize</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MMScale</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    MM = MinMaxScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = MM.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(scale_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    MMScale()</span><br></pre></td></tr></table></figure>
+<h3 id="返回normalize的結果"><a href="#返回normalize的結果" class="headerlink" title="返回normalize的結果"></a>返回normalize的結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[0.6        0.         0.         1.        ]</span><br><span class="line"> [1.         0.375      1.         0.88095238]</span><br><span class="line"> [0.         1.         0.53333333 0.        ]]</span><br></pre></td></tr></table></figure>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>Normalize方法對於異常點的處理效果不好<blockquote>
+<ul>
+<li>異常點可能會改變最大值與最小值造成結果整體大幅的改動，因此穩定性較差</li>
+<li>較適合傳統<strong>精確小數據</strong>的場景</li>
+<li>當X中特徵數量非常多時候，fit會報錯並表示數據量太大無法計算<ul>
+<li>使用<code>partial_fit(X)</code>方法作為訓練的接口</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h1 id="標準化-standardization"><a href="#標準化-standardization" class="headerlink" title="標準化(standardization)"></a>標準化(standardization)</h1><ul>
+<li>標準化相對歸一化<strong>較常見也較常使用</strong></li>
+<li><p>又稱 Z-score normalization</p>
+<blockquote>
+<p>數據x按均值($mean$)中心化後，再按標準差($\sigma$)縮放<br>平均值不容易受到異常點的影響</p>
+</blockquote>
+</li>
+<li><p>特點：通過對原始數據進行變換把數據變換到均值為0，標準差為1的範圍內</p>
+</li>
+<li>公式：<script type="math/tex; mode=display">
+var = \frac {x-mean}  {\sigma}</script><ul>
+<li>$\sigma$ 為標準差</li>
+<li>$\sigma = \sqrt{var}$</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>使用<code>sklearn.preprocessing.StandardScaler</code></li>
+</ul>
+<h2 id="方差"><a href="#方差" class="headerlink" title="方差"></a>方差</h2><script type="math/tex; mode=display">
+var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</script><ul>
+<li>方差小代表數據叫集中；反之則數據比較離散</li>
+<li>如果出現異常點，由於原本就具有一定數據量，少量的異常點對於平均值的影響並不大，使得方差改變較小</li>
+</ul>
+<h2 id="StandardScaler-…"><a href="#StandardScaler-…" class="headerlink" title="StandardScaler(…)"></a>StandardScaler(…)</h2><ul>
+<li>處理之後每列的數據都聚集在$mean$為0附近且$\sigma$標準差為1</li>
+</ul>
+<h3 id="fit-X"><a href="#fit-X" class="headerlink" title="fit(X)"></a>fit(X)</h3><p>生成<strong>均值</strong>及<strong>方差</strong></p>
+<ul>
+<li>X: numpy array格式的數據[n_samples, n_features]</li>
+</ul>
+<h3 id="fit-transform-X-1"><a href="#fit-transform-X-1" class="headerlink" title="fit_transform(X)"></a>fit_transform(X)</h3><ul>
+<li>X: numpy array格式的數據[n_samples, n_features]</li>
+<li>返回值：轉換後同shape的array</li>
+</ul>
+<h3 id="mean"><a href="#mean" class="headerlink" title="mean_"></a>mean_</h3><ul>
+<li>查看原始數據中每列特特徵的平均值</li>
+</ul>
+<h3 id="var"><a href="#var" class="headerlink" title="var_"></a>var_</h3><ul>
+<li>查看原始數據中每列特徵的方差</li>
+</ul>
+<h2 id="流程-1"><a href="#流程-1" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>實例化StandardScaler</li>
+<li>通過fit_transform轉換</li>
+</ol>
+<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">StdScale</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    SS = StandardScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = SS.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Result: \n"</span>,scale_data)</span><br><span class="line">    print(<span class="string">"Mean: \n"</span>,SS.mean_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    StdScale()</span><br></pre></td></tr></table></figure>
+<h3 id="返回標準化後的矩陣"><a href="#返回標準化後的矩陣" class="headerlink" title="返回標準化後的矩陣"></a>返回標準化後的矩陣</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Result: </span><br><span class="line"> [[ 0.16222142 -1.1111678  -1.25103507  0.83635719]</span><br><span class="line"> [ 1.13554995 -0.20203051  1.19664225  0.56943468]</span><br><span class="line"> [-1.29777137  1.31319831  0.05439283 -1.40579187]]</span><br><span class="line">Mean: </span><br><span class="line"> [8.50000000e+01 5.66666667e+00 1.76666667e+03 6.43333333e-01]</span><br></pre></td></tr></table></figure>
+<h2 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h2><p>在以有樣本足夠多的情況下比較穩定，適合現代嘈雜大數據的場景</p>
+<h1 id="缺失值"><a href="#缺失值" class="headerlink" title="缺失值"></a>缺失值</h1><p>處理缺失值只有兩種方法</p>
+<ol>
+<li>刪除<ul>
+<li>如果每列或者行數據缺失值達到一定的比例，建議放棄整行或整列</li>
+<li>如果本身數據量少，較不適合直接刪除</li>
+</ul>
+</li>
+<li>插補<ul>
+<li>可以通過每行或者每列的<strong>平均值</strong>或者<strong>中位數</strong>來填充(一般都是使用<strong>列填補</strong>)</li>
+</ul>
+</li>
+</ol>
+<ul>
+<li>使用<code>sklearn.preprocessing.Imputer</code></li>
+</ul>
+<h2 id="Imputer-missing-values-’Nan’-strategy-’mean’-axis-0"><a href="#Imputer-missing-values-’Nan’-strategy-’mean’-axis-0" class="headerlink" title="Imputer(missing_values=’Nan’,strategy=’mean’,axis=0)"></a>Imputer(missing_values=’Nan’,strategy=’mean’,axis=0)</h2><p>完成缺失值插補</p>
+<ul>
+<li>missing_values: 對什麼進行填補，預設為Nan值</li>
+<li>strategy: 填補策略，預設使用平均值</li>
+<li>axis: 針對行或列進行填補，預設使用列</li>
+</ul>
+<h3 id="fit-transform-X-2"><a href="#fit-transform-X-2" class="headerlink" title="fit_transform(X)"></a>fit_transform(X)</h3><ul>
+<li>X: numpy array格式的數據[n_samples, n_features]</li>
+<li>返回值：轉換後同shape的array</li>
+<li>缺失值類型應為<strong>np.nan類型</strong>，才能填補</li>
+</ul>
+<h2 id="流程-2"><a href="#流程-2" class="headerlink" title="流程"></a>流程</h2><ol>
+<li>初始化Imputer<ul>
+<li>指定missing_values</li>
+<li>指定填補策略(strategy)</li>
+<li>指定針對行或列填補</li>
+<li>注意：缺失值也可以是別的指定要替換的值，不一定為Nan</li>
+</ul>
+</li>
+<li>調用fit_transform</li>
+</ol>
+<h2 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> Imputer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">HasNanData = [[np.nan,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,np.nan,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缺失值處理</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_nan</span><span class="params">()</span>:</span></span><br><span class="line">    fill = Imputer()</span><br><span class="line">    Data = fill.fit_transform(HasNanData)</span><br><span class="line">    print(Data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    fill_nan()</span><br></pre></td></tr></table></figure>
+<h3 id="填補結果"><a href="#填補結果" class="headerlink" title="填補結果"></a>填補結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[8.25e+01 2.00e+00 1.00e+03 8.00e-01]</span><br><span class="line"> [1.20e+02 5.00e+00 1.40e+03 7.50e-01]</span><br><span class="line"> [4.50e+01 1.00e+01 1.80e+03 3.80e-01]]</span><br></pre></td></tr></table></figure>
+<h2 id="tips-2"><a href="#tips-2" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>np.nan<ul>
+<li>numpy的陣列中可以使用np.nan/np.Nan來代替缺失值</li>
+<li>np.nan屬於<strong>float</strong>類型</li>
+<li>如果是文件中的缺失值，可以替換成nan，通過np.nan轉化為float型的陣列即可</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵預處理/">特徵預處理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/缺失值/">缺失值</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/06/ML_DecreaseFeature/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-特徵工程-降維
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/05/ML_DictFeatureExtraction/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-特徵工程-字典特徵抽取(feature extraction)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據無量綱化"><span class="nav-number">2.</span> <span class="nav-text">數據無量綱化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#效果"><span class="nav-number">2.1.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn特徵預處理"><span class="nav-number">3.</span> <span class="nav-text">sklearn特徵預處理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#歸一化-normalize"><span class="nav-number">4.</span> <span class="nav-text">歸一化(normalize)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MinMaxScalar-feature-range-0-1-…"><span class="nav-number">4.1.</span> <span class="nav-text">MinMaxScalar(feature_range=(0,1)…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">4.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">4.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">4.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回normalize的結果"><span class="nav-number">4.3.1.</span> <span class="nav-text">返回normalize的結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.4.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#標準化-standardization"><span class="nav-number">5.</span> <span class="nav-text">標準化(standardization)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方差"><span class="nav-number">5.1.</span> <span class="nav-text">方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StandardScaler-…"><span class="nav-number">5.2.</span> <span class="nav-text">StandardScaler(…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-X"><span class="nav-number">5.2.1.</span> <span class="nav-text">fit(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mean"><span class="nav-number">5.2.3.</span> <span class="nav-text">mean_</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var"><span class="nav-number">5.2.4.</span> <span class="nav-text">var_</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程-1"><span class="nav-number">5.3.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">5.4.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回標準化後的矩陣"><span class="nav-number">5.4.1.</span> <span class="nav-text">返回標準化後的矩陣</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">5.5.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缺失值"><span class="nav-number">6.</span> <span class="nav-text">缺失值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Imputer-missing-values-’Nan’-strategy-’mean’-axis-0"><span class="nav-number">6.1.</span> <span class="nav-text">Imputer(missing_values=’Nan’,strategy=’mean’,axis=0)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-2"><span class="nav-number">6.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程-2"><span class="nav-number">6.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-2"><span class="nav-number">6.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#填補結果"><span class="nav-number">6.3.1.</span> <span class="nav-text">填補結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-2"><span class="nav-number">6.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

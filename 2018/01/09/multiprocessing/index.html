@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Python模塊-multiprocessing多進程 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python多進程">
+  
+  
+  
+  
+  <meta name="description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
+<meta name="keywords" content="Python,多進程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python模塊-multiprocessing多進程">
+<meta property="og:url" content="http://www.taroballz.com/2018/01/09/multiprocessing/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-12-02T10:59:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python模塊-multiprocessing多進程">
+<meta name="twitter:description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-multiprocessing" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python模塊-multiprocessing多進程
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/01/09/multiprocessing/" class="article-date">
+	  <time datetime="2018-01-08T16:00:00.000Z" itemprop="datePublished">一月 9, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Preface"><a href="#Preface" class="headerlink" title="Preface:"></a>Preface:</h1><ul>
+<li>Python中同時間<strong>一個進程</strong>只能有<strong>一個線程</strong>通過GIL交給其中<strong>一個CPU</strong>執行</li>
+<li>同時間要完成多任務能透過創建<strong>多進程(multiprocessing)</strong>交給<strong>不同CPU</strong>執行</li>
+<li>進程：<ul>
+<li><strong>程序</strong>是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等)</li>
+<li><strong>進程</strong>是運行起來的程序檔案：其能調度系統資源，稱為進程<ul>
+<li>操作系統<strong>分配資源的基本單位</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h1><ul>
+<li>multiprocessing是Python中多進程的管理模塊</li>
+<li>其使用方法與多線程(threading)模塊類似,只是環境不同而已</li>
+<li><strong>創建進程所耗費的資源較創建線程大</strong><a id="more"></a>
+</li>
+</ul>
+<h1 id="Notice"><a href="#Notice" class="headerlink" title="Notice:"></a>Notice:</h1><ul>
+<li>進程結束時,必須對每個進程物件調用join()方法，相當於wait,否則進程將成為僵屍進程</li>
+<li>進程之間<strong>完全獨立</strong>且<strong>不能共享數據</strong>,除非透過第三方進行交流,例如Queue,Pipe (優先考慮)</li>
+<li>進程之間應避免共享的資源,只要透過第三方進行交流，必定會降低執行程序的效率</li>
+<li>windows系統下，如想啟動一個子進程,與進程相關的語句要寫在<code>if __name__ == &quot;__main__&quot;</code>之下</li>
+</ul>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Example-I-直接調用"><a href="#Example-I-直接調用" class="headerlink" title="Example I: (直接調用)"></a>Example I: (直接調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(name)</span>:</span></span><br><span class="line">    print(<span class="string">'My name is %s'</span>%name)</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    process_list = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        pro = Process(target=func, args=(<span class="string">'taroballz'</span>,))  <span class="comment"># 創建一個進程物件</span></span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()  <span class="comment"># 進程開始工作</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()  <span class="comment">#等待子進程們回到主進程</span></span><br><span class="line">        </span><br><span class="line">    print(<span class="string">'The end of mulitprocessing performance'</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>根據以上的code可表示創建了三個子進程，加上主進程共有四個進程於四個CPU上執行不同工作</li>
+<li>要是執行的進程數大於CPU本身的執行緒數，CPU會使用<strong>切換</strong>的方式來完成多進程運作</li>
+</ul>
+<h2 id="Example-II-繼承類調用"><a href="#Example-II-繼承類調用" class="headerlink" title="Example II: (繼承類調用)"></a>Example II: (繼承類調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">New_Process</span><span class="params">(Process)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(New_Process,self).__init__()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span>  <span class="comment">#將進程要執行的任務寫在run方法中</span></span><br><span class="line">        print(<span class="string">"My Process_name is %s"</span>%self.name)   </span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    process_list=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        pro = New_Process()     </span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()</span><br><span class="line">        </span><br><span class="line">    print(<span class="string">'The end of mulitprocessing performance'</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Relation-between-Processes"><a href="#Relation-between-Processes" class="headerlink" title="Relation between Processes:"></a>Relation between Processes:</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_process_info</span><span class="params">(processname)</span>:</span></span><br><span class="line">    print(processname)</span><br><span class="line">    print(<span class="string">"process __name__ is"</span>,__name__)</span><br><span class="line">    print(<span class="string">"parents process ID(PPID): "</span>,os.getppid())</span><br><span class="line">    print(<span class="string">"self process ID(PID): "</span>,os.getpid(),<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    show_process_info(<span class="string">'main_process'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=show_process_info,args=(<span class="string">"Process-%d"</span>%i, ))</span><br><span class="line">        proc.start()</span><br><span class="line">        proc.join()</span><br><span class="line">    print(<span class="string">"The End ! !"</span>)</span><br></pre></td></tr></table></figure>
+<p>執行結果如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">main_process</span><br><span class="line">process __name__ is __main__</span><br><span class="line">parents process ID(PPID):  3460</span><br><span class="line">self process ID(PID):  13512 </span><br><span class="line"></span><br><span class="line">Process-0</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  13636 </span><br><span class="line"></span><br><span class="line">Process-1</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  11412 </span><br><span class="line"></span><br><span class="line">The End ! !</span><br></pre></td></tr></table></figure></p>
+<p>從結果我們可以知道新創建的子進程都為主進程所創造 且 隸屬於原本的主進程<br>(兩個子進程的PPID皆屬於主進程自身的PID)</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html" target="_blank" rel="noopener">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多進程/">多進程</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/11/processing_communcation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/08/Exception/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python基礎-異常處理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">3.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">4.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-直接調用"><span class="nav-number">4.1.</span> <span class="nav-text">Example I: (直接調用)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-繼承類調用"><span class="nav-number">4.2.</span> <span class="nav-text">Example II: (繼承類調用)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relation-between-Processes"><span class="nav-number">5.</span> <span class="nav-text">Relation between Processes:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference:</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

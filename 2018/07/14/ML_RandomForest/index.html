@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-演算法-隨機森林(random forest) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)集成學習方法">
+  
+  
+  
+  
+  <meta name="description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
+<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning),集成學習方法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-演算法-隨機森林(random forest)">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/14/ML_RandomForest/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/bRLZMDF.jpg">
+<meta property="og:updated_time" content="2019-05-22T02:25:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-演算法-隨機森林(random forest)">
+<meta name="twitter:description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
+<meta name="twitter:image" content="https://i.imgur.com/bRLZMDF.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_RandomForest" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/bRLZMDF.jpg" rel="gallery_ck4x0bhro0087gdq7f7owwvb4">
+        <img src="https://i.imgur.com/bRLZMDF.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-演算法-隨機森林(random forest)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/14/ML_RandomForest/" class="article-date">
+	  <time datetime="2018-07-14T10:15:00.000Z" itemprop="datePublished">七月 14, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="隨機森林-random-forest"><a href="#隨機森林-random-forest" class="headerlink" title="隨機森林(random forest)"></a>隨機森林(random forest)</h1><p>在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定</p>
+<ul>
+<li>如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)</li>
+</ul>
+<a id="more"></a>
+<h2 id="建立多個決策樹的過程"><a href="#建立多個決策樹的過程" class="headerlink" title="建立多個決策樹的過程"></a>建立多個決策樹的過程</h2><p>假設有一匹N個樣本，M個特徵的數據集</p>
+<ol>
+<li>隨機在N個樣本當中抽取一個樣本(會放回)，重複N次<ul>
+<li>有可能會抽到重複的樣本</li>
+<li>bootstrap抽樣</li>
+</ul>
+</li>
+<li>隨機在M個特徵當中選取m個特徵<ul>
+<li>m &lt; M</li>
+</ul>
+</li>
+<li>重複N次建立每顆決策樹<ul>
+<li>每個決策樹基於的樣本特徵大多不是一樣的</li>
+</ul>
+</li>
+</ol>
+<h2 id="為何要隨機抽樣訓練集"><a href="#為何要隨機抽樣訓練集" class="headerlink" title="為何要隨機抽樣訓練集"></a>為何要隨機抽樣訓練集</h2><p>如果不進行隨機抽樣，每棵樹的訓練集都一樣，那最終訓練出的樹的分類結果也是完全一樣的</p>
+<h2 id="為什麼要有放回的抽樣"><a href="#為什麼要有放回的抽樣" class="headerlink" title="為什麼要有放回的抽樣"></a>為什麼要有放回的抽樣</h2><p>如果不是有放回的抽樣，那麼每棵樹的訓練樣本都是不同的，都是沒有交集的，也就是說每：棵樹訓練出來都是有很大差異的；而隨機森林最後分類取決於多棵樹(弱分類器)的<strong>投票表決</strong></p>
+<h1 id="調用隨機森林API"><a href="#調用隨機森林API" class="headerlink" title="調用隨機森林API"></a>調用隨機森林API</h1><p>使用<code>sklearn.ensemble.RandomForestClassifier(n_estimators=10, criterion=&quot;gini&quot;, max_depth=None, bootstrap=True, random_state=None)</code> 調用隨機森林分類器</p>
+<ul>
+<li>n_estimators: int，森林裡樹木的數量，預設為10，為超參數</li>
+<li>criterion: string，分類依據(分割特徵的測量方法)，預設為根據gini係數分類</li>
+<li>max_depth: int或None，樹的最大深度，預設為None，為超參數</li>
+<li>bootstrap:是否隨機抽樣，默認為True</li>
+<li>max_features: 每個決策樹最大的特徵數量，預設為”auto”<ul>
+<li>“auto”: max_features = sqrt(n_features)</li>
+<li>“sqrt”: max_features = sqrt(n_features) 與”auto”一樣</li>
+<li>“log2”: max_features = log2(n_features)</li>
+<li>None : max_features = n_features</li>
+</ul>
+</li>
+<li>min_samples_split :</li>
+<li>min_samples_leaf :</li>
+<li>bootstrap : boolean，預設為True，是否在構建樹時使用放回抽樣</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>隨機森林搭配超參數優化(GridSearchCV)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split,GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">datapath = <span class="string">"/Volumes/MacData/MEGA/pythonwork/jupyter_project/Kaggle Dataset/Titanic/train.csv"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RandomForestTest</span><span class="params">()</span>:</span></span><br><span class="line">    data = pd.read_csv(datapath)</span><br><span class="line">    X = data[[<span class="string">"Pclass"</span>,<span class="string">"Sex"</span>,<span class="string">"Age"</span>]]</span><br><span class="line">    Y = data[<span class="string">"Survived"</span>]</span><br><span class="line"></span><br><span class="line">    X[<span class="string">"Age"</span>].fillna(X[<span class="string">"Age"</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    DV = DictVectorizer(sparse=<span class="literal">False</span>)</span><br><span class="line">    X_train = DV.fit_transform(X_train.to_dict(orient=<span class="string">"records"</span>))</span><br><span class="line">    X_test = DV.transform(X_test.to_dict(orient=<span class="string">"records"</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 實例化隨機森林分類器</span></span><br><span class="line">    RF = RandomForestClassifier()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 測試超參數優化</span></span><br><span class="line">    RF_param = &#123;<span class="string">"n_estimators"</span>:[<span class="number">10</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">150</span>,<span class="number">200</span>],<span class="string">"max_depth"</span>:[<span class="number">5</span>,<span class="number">10</span>,<span class="number">15</span>,<span class="number">20</span>]&#125;</span><br><span class="line">    </span><br><span class="line">    GSCV = GridSearchCV(RF,param_grid=RF_param,cv=<span class="number">5</span>)</span><br><span class="line">    GSCV.fit(X_train,y_train)</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">"accuracy score"</span>,GSCV.score(X_test,y_test))</span><br><span class="line">    print(<span class="string">"The best model param :"</span>,GSCV.best_params_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    RandomForestTest()</span><br></pre></td></tr></table></figure></p>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">accuracy score 0.8071748878923767</span><br><span class="line">The best model param : &#123;&apos;max_depth&apos;: 5, &apos;n_estimators&apos;: 150&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="優缺點"><a href="#優缺點" class="headerlink" title="優缺點"></a>優缺點</h1><ul>
+<li>優點<ul>
+<li>在當前所有演算法中，具有極好的準確率，也是使用最多的</li>
+<li>數據量越大或越複雜相對於其他演算法優勢越明顯，能夠有效的運行在大數據集上</li>
+<li>能夠處理具有高維特徵的輸入樣本，而且<strong>不需要降維</strong></li>
+<li>能夠評估各個特徵在分類問題上的重要性</li>
+</ul>
+</li>
+<li>缺點<ul>
+<li>在選到合適的參數時須不斷地進行測試</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集成學習方法/">集成學習方法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/16/ML_LinearRegression/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-線性回歸分析(linear regression)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/14/ML_decision_tree/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-演算法-決策樹(decision tree)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#隨機森林-random-forest"><span class="nav-number">1.</span> <span class="nav-text">隨機森林(random forest)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#建立多個決策樹的過程"><span class="nav-number">1.1.</span> <span class="nav-text">建立多個決策樹的過程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#為何要隨機抽樣訓練集"><span class="nav-number">1.2.</span> <span class="nav-text">為何要隨機抽樣訓練集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#為什麼要有放回的抽樣"><span class="nav-number">1.3.</span> <span class="nav-text">為什麼要有放回的抽樣</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#調用隨機森林API"><span class="nav-number">2.</span> <span class="nav-text">調用隨機森林API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">2.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優缺點"><span class="nav-number">3.</span> <span class="nav-text">優缺點</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Python基礎-反射 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python反射">
+  
+  
+  
+  
+  <meta name="description" content="Introduction: 在python中執行反射的效率是非常高的 反射定義： 透過字符串的形式，獲取或操作(增、刪、改、查) 物件(object) 中的成員(函數、屬性)">
+<meta name="keywords" content="Python,反射">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python基礎-反射">
+<meta property="og:url" content="http://www.taroballz.com/2018/11/16/python_reflect/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction: 在python中執行反射的效率是非常高的 反射定義： 透過字符串的形式，獲取或操作(增、刪、改、查) 物件(object) 中的成員(函數、屬性)">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/rvHGnyq.jpg">
+<meta property="og:updated_time" content="2018-11-15T17:32:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python基礎-反射">
+<meta name="twitter:description" content="Introduction: 在python中執行反射的效率是非常高的 反射定義： 透過字符串的形式，獲取或操作(增、刪、改、查) 物件(object) 中的成員(函數、屬性)">
+<meta name="twitter:image" content="https://i.imgur.com/rvHGnyq.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-python_reflect" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/rvHGnyq.jpg" rel="gallery_ck4x0bhsp00bdgdq7ewwd1lmd">
+        <img src="https://i.imgur.com/rvHGnyq.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python基礎-反射
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/11/16/python_reflect/" class="article-date">
+	  <time datetime="2018-11-15T16:00:00.000Z" itemprop="datePublished">十一月 16, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python基礎/">Python基礎</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h1><ul>
+<li>在python中執行<strong>反射</strong>的效率是非常高的</li>
+<li>反射定義：<ul>
+<li>透過<strong>字符串</strong>的形式，獲取或操作(增、刪、改、查) <strong>物件(object)</strong> 中的成員(函數、屬性)</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h1 id="案例1-獲取屬性"><a href="#案例1-獲取屬性" class="headerlink" title="案例1(獲取屬性)"></a>案例1(獲取屬性)</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,age)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line"></span><br><span class="line">obj = foo(<span class="string">"Taroballz"</span>,<span class="number">26</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>該如何使用”name”(字符串類型)取到”Taroballz”這個name屬性的值？</p>
+</blockquote>
+<h2 id="dict-類特殊成員"><a href="#dict-類特殊成員" class="headerlink" title="__dict__(類特殊成員)"></a><code>__dict__</code>(類特殊成員)</h2><p><code>__dict__</code>方法可查詢物件中的所有屬性，結果為一字典</p>
+<h3 id="取值"><a href="#取值" class="headerlink" title="取值"></a>取值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(obj.__dict__[<span class="string">"name"</span>])</span><br></pre></td></tr></table></figure>
+<p>得到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Taroballz</span><br></pre></td></tr></table></figure></p>
+<h2 id="python內置函數"><a href="#python內置函數" class="headerlink" title="python內置函數"></a>python內置函數</h2><p>使用<code>getattr</code>內置方法獲取物件的屬性</p>
+<ul>
+<li>參數1：欲獲取屬性的物件</li>
+<li>參數2：獲取何種屬性(字符串)</li>
+</ul>
+<h3 id="取值-1"><a href="#取值-1" class="headerlink" title="取值"></a>取值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(getattr(obj,<span class="string">"name"</span>))</span><br></pre></td></tr></table></figure>
+<p>得到<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Taroballz</span><br></pre></td></tr></table></figure></p>
+<h2 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced"></a>Advanced</h2><p>可藉由用戶輸入獲取相對應屬性的值  ——&gt; 藉由輸入字符串形式拿取相對應屬性之值<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">choice = input(<span class="string">'&gt;&gt;&gt;'</span>)</span><br><span class="line">value = getattr(obj,choice)</span><br><span class="line">print(value)</span><br></pre></td></tr></table></figure></p>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;name</span><br><span class="line">Taroballz</span><br><span class="line">&gt;&gt;&gt;age</span><br><span class="line">26</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="案例2-獲取方法並執行"><a href="#案例2-獲取方法並執行" class="headerlink" title="案例2(獲取方法並執行)"></a>案例2(獲取方法並執行)</h1><p><code>getattr</code>方法除了可以拿取物件的屬性外，也可<strong>拿取函數的返回值</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self,name,age)</span>:</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.age = age</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">show</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">"%s-%s"</span> %(self.name,self.age)</span><br><span class="line"></span><br><span class="line">obj = foo(<span class="string">"Taroballz"</span>,<span class="number">26</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>欲使用字符串”show”調用class中的show方法，使用getattr辦得到嗎？</p>
+</blockquote>
+<h2 id="取值-2"><a href="#取值-2" class="headerlink" title="取值"></a>取值</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(getattr(obj,<span class="string">"show"</span>))</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bound method foo.show of &lt;__main__.foo object at 0x0074E6B0</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>返回一個<strong>函數物件</strong>(可直接加括號執行)</li>
+</ul>
+<p>執行函數物件<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">function = getattr(obj,<span class="string">"show"</span>)</span><br><span class="line">re_val = function()</span><br><span class="line">print(re_val)</span><br></pre></td></tr></table></figure></p>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Taroballz-26</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>getattr</code>方法針對類，不管是其<strong>屬性</strong>或是<strong>函數</strong> 皆可取得其對應值與返回值</li>
+</ul>
+<hr>
+<h1 id="其他針對反射的python內置方法"><a href="#其他針對反射的python內置方法" class="headerlink" title="其他針對反射的python內置方法"></a>其他針對反射的python內置方法</h1><h2 id="hasattr"><a href="#hasattr" class="headerlink" title="hasattr"></a><code>hasattr</code></h2><p>檢測物件中有無其成員(包括屬性&amp;函數)</p>
+<h3 id="判斷屬性有無"><a href="#判斷屬性有無" class="headerlink" title="判斷屬性有無"></a>判斷屬性有無</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(hasattr(obj,<span class="string">'name'</span>))</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">True</span><br></pre></td></tr></table></figure></p>
+<h3 id="判斷函數有無"><a href="#判斷函數有無" class="headerlink" title="判斷函數有無"></a>判斷函數有無</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(hasattr(obj,<span class="string">"show"</span>))</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">True</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="setattr"><a href="#setattr" class="headerlink" title="setattr"></a><code>setattr</code></h2><p>設置 ( 創建 ) 物件中的屬性並賦予值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">setattr(obj,<span class="string">"K1"</span>,<span class="string">"V1"</span>)</span><br><span class="line">print(obj.K1)</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">V1</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h2 id="delattr"><a href="#delattr" class="headerlink" title="delattr"></a><code>delattr</code></h2><p>刪除物件中的屬性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">delattr(obj,<span class="string">'name'</span>)</span><br><span class="line">print(obj.name)</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AttributeError: &apos;foo&apos; object has no attribute &apos;name&apos;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="類-class-亦為物件"><a href="#類-class-亦為物件" class="headerlink" title="類(class)亦為物件"></a>類(class)亦為物件</h1><p>同樣的，有關反射的內置方法也適用於<code>class</code>(類)，因為<strong>類也是物件</strong></p>
+<p><code>getattr</code>方法拿取<strong>靜態屬性</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>:</span></span><br><span class="line">    VERSION = <span class="number">1.0</span></span><br><span class="line">    DESCRIPTION = <span class="string">"say something"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(getattr(foo,<span class="string">"VERSION"</span>))</span><br><span class="line">    print(getattr(foo,<span class="string">"DESCRIPTION"</span>))</span><br></pre></td></tr></table></figure>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1.0</span><br><span class="line">say something</span><br></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="模塊-module-亦為物件"><a href="#模塊-module-亦為物件" class="headerlink" title="模塊(module)亦為物件"></a>模塊(module)亦為物件</h1><p>在同級目錄下創建一個s2.py 寫上以下代碼，並導入(import)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NAME = <span class="string">'Taroballz'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"I am a function"</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.test = <span class="string">'It is a test'</span></span><br></pre></td></tr></table></figure></p>
+<p>在main文件中導入s2.py 並使用<code>getattr</code>獲取屬性 (s2此時亦為物件)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> s2</span><br><span class="line">r1 = getattr(s2, <span class="string">"NAME"</span>)</span><br><span class="line">print(r1)</span><br><span class="line">r2 = getattr(s2, <span class="string">"func"</span>)</span><br><span class="line">result = r2()</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure></p>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Taroballz</span><br><span class="line">I am function</span><br></pre></td></tr></table></figure></p>
+<h2 id="獲取模塊中的類"><a href="#獲取模塊中的類" class="headerlink" title="獲取模塊中的類"></a>獲取模塊中的類</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">get_class = getattr(s2,<span class="string">'foo'</span>)</span><br><span class="line">print(get_class)</span><br></pre></td></tr></table></figure>
+<p>結果(返回一個類)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class &apos;s2.foo&apos;</span><br></pre></td></tr></table></figure></p>
+<p>使用返回類創建一個物件，並獲取類中的資訊<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj = get_class()</span><br><span class="line">print(obj.test)</span><br></pre></td></tr></table></figure></p>
+<p>結果<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">It is a test</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python基礎/">Python基礎</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/反射/">反射</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/12/02/Threading/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python-多任務執行-多線程(threading)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/29/DL_Visualization_tensorboard/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-tensorboard可視化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例1-獲取屬性"><span class="nav-number">2.</span> <span class="nav-text">案例1(獲取屬性)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dict-類特殊成員"><span class="nav-number">2.1.</span> <span class="nav-text">__dict__(類特殊成員)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#取值"><span class="nav-number">2.1.1.</span> <span class="nav-text">取值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python內置函數"><span class="nav-number">2.2.</span> <span class="nav-text">python內置函數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#取值-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">取值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Advanced"><span class="nav-number">2.3.</span> <span class="nav-text">Advanced</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#案例2-獲取方法並執行"><span class="nav-number">3.</span> <span class="nav-text">案例2(獲取方法並執行)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#取值-2"><span class="nav-number">3.1.</span> <span class="nav-text">取值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他針對反射的python內置方法"><span class="nav-number">4.</span> <span class="nav-text">其他針對反射的python內置方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#hasattr"><span class="nav-number">4.1.</span> <span class="nav-text">hasattr</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷屬性有無"><span class="nav-number">4.1.1.</span> <span class="nav-text">判斷屬性有無</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷函數有無"><span class="nav-number">4.1.2.</span> <span class="nav-text">判斷函數有無</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setattr"><span class="nav-number">4.2.</span> <span class="nav-text">setattr</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#delattr"><span class="nav-number">4.3.</span> <span class="nav-text">delattr</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#類-class-亦為物件"><span class="nav-number">5.</span> <span class="nav-text">類(class)亦為物件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模塊-module-亦為物件"><span class="nav-number">6.</span> <span class="nav-text">模塊(module)亦為物件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#獲取模塊中的類"><span class="nav-number">6.1.</span> <span class="nav-text">獲取模塊中的類</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

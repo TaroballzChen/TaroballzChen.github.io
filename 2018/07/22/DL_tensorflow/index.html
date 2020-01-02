@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-圖(graph)、operation與tensor | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 須把tensorflow當作一個全新的語言來看待，而非再是普通的python程序 整體就是tensor(張量；數據) + flow">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-圖(graph)、operation與tensor">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/22/DL_tensorflow/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 須把tensorflow當作一個全新的語言來看待，而非再是普通的python程序 整體就是tensor(張量；數據) + flow">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/JskFGWO.jpg">
+<meta property="og:updated_time" content="2019-07-23T15:00:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-圖(graph)、operation與tensor">
+<meta name="twitter:description" content="Introduction 須把tensorflow當作一個全新的語言來看待，而非再是普通的python程序 整體就是tensor(張量；數據) + flow">
+<meta name="twitter:image" content="https://i.imgur.com/JskFGWO.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_tensorflow" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/JskFGWO.jpg" rel="gallery_ck4x0bhpi0023gdq7b9mmnxy0">
+        <img src="https://i.imgur.com/JskFGWO.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-圖(graph)、operation與tensor
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/22/DL_tensorflow/" class="article-date">
+	  <time datetime="2018-07-22T02:50:00.000Z" itemprop="datePublished">七月 22, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>須把tensorflow當作一個全新的語言來看待，而非再是普通的python程序</li>
+<li>整體就是tensor(張量；數據) + flow</li>
+</ul>
+<a id="more"></a>
+<h2 id="架構"><a href="#架構" class="headerlink" title="架構"></a>架構</h2><p>tensorflow框架的設計</p>
+<p><img src="https://www.tensorflow.org/images/tensors_flowing.gif?hl=zh-cn" alt="數據流圖"></p>
+<ul>
+<li><strong>數據</strong>在tensorflow裡可以稱為張量(tensor)</li>
+<li>上圖一個個的節點為tensorflow中的operation(op)<ul>
+<li>專門進行<strong>運算</strong>的操作節點</li>
+<li><strong>所有操作</strong>都是一個op</li>
+</ul>
+</li>
+<li>上圖就為tensorflow  <strong>圖</strong>(graph)：在tensorflow中代表整個<strong>程序的結構</strong>或是欲執行的計算任務</li>
+<li>圖(graph)需要<strong>會話</strong>(session)才能運作<ul>
+<li>Session：用於運算程序定義的graph</li>
+</ul>
+</li>
+</ul>
+<h2 id="計算密集-vs-IO密集"><a href="#計算密集-vs-IO密集" class="headerlink" title="計算密集 vs. IO密集"></a>計算密集 vs. IO密集</h2><ul>
+<li>相較於python其他框架例如django(web),scrapy(爬蟲)，tensorflow屬<strong>計算密集型</strong>的框架</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">計算密集型</th>
+<th style="text-align:center">IO密集型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">tensorflow</td>
+<td style="text-align:center">django,scrapy</td>
+</tr>
+<tr>
+<td style="text-align:center">cpu計算</td>
+<td style="text-align:center">http請求, 磁盤(檔案)操作</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h1 id="實現一個加法運算"><a href="#實現一個加法運算" class="headerlink" title="實現一個加法運算"></a>實現一個加法運算</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定義圖(graph)</span></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>)</span><br><span class="line"></span><br><span class="line">result = tf.add(a, b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 於會話(session)中執行</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(result))</span><br></pre></td></tr></table></figure>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3.0</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="圖-Graph"><a href="#圖-Graph" class="headerlink" title="圖(Graph)"></a>圖(Graph)</h1><p>圖在開始撰寫tensorflow程序時預設已經註冊了，<br>一組<strong>表示<code>tf.Operation</code>計算單位的物件</strong> 和 <strong><code>tf.Tensor</code>表示操作之間流動的數據單元的物件</strong></p>
+<h2 id="獲取graph物件"><a href="#獲取graph物件" class="headerlink" title="獲取graph物件"></a>獲取graph物件</h2><p>返回的是一個graph物件的地址<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定義圖</span></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>)</span><br><span class="line">result = tf.add(a, b)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 獲取圖物件，預設的這張圖，相當於是給程序分配一段內存</span></span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line">print(<span class="string">"get_default_graphL:"</span>,graph)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(result))</span><br><span class="line">    print(<span class="string">"a.graph:"</span>,a.graph)</span><br><span class="line">    print(<span class="string">'result.graph:'</span>,result.graph)</span><br><span class="line">    print(<span class="string">'sess.graph:'</span>,sess.graph)</span><br></pre></td></tr></table></figure></p>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">get_default_graphL: &lt;\tensorflow.python.framework.ops.Graph object at 0x10f20e048&gt;</span><br><span class="line">3.0</span><br><span class="line">a.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10f20e048&gt;</span><br><span class="line">result.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10f20e048&gt;</span><br><span class="line">sess.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10f20e048&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以看見所有的operation包括session都在同一個內存地址中</li>
+</ul>
+<hr>
+<h2 id="圖的創建"><a href="#圖的創建" class="headerlink" title="圖的創建"></a>圖的創建</h2><p>單獨的分配另一塊內存地址存儲另外一個程序的結構</p>
+<ul>
+<li>使用<code>tf.Graph()</code>創建圖</li>
+<li>圖與圖之間互不干擾</li>
+<li><strong>使用圖</strong>時都是<strong>使用上下文環境</strong>(<code>with</code>)</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">g = tf.Graph()</span><br><span class="line">print(g)</span><br><span class="line"><span class="comment"># 上下文環境使用with</span></span><br><span class="line"><span class="keyword">with</span> g.as_default():        <span class="comment">#as_default:作為預設圖使用</span></span><br><span class="line">    c = tf.constant(<span class="number">10.0</span>)</span><br><span class="line">    print(c.graph)</span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>)</span><br><span class="line"></span><br><span class="line">result = tf.add(a, b)</span><br><span class="line"></span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line">print(<span class="string">"get_default_graphL:"</span>,graph)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 會話只能使用一張圖進行運算</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(result))</span><br><span class="line">    print(<span class="string">"a.graph:"</span>,a.graph)</span><br><span class="line">    print(<span class="string">'result.graph:'</span>,result.graph)</span><br><span class="line">    print(<span class="string">'sess.graph:'</span>,sess.graph)</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">g.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x1069046d8&gt;</span><br><span class="line">c.graph in g_graph &lt;\tensorflow.python.framework.ops.Graph object at 0x1069046d8&gt;</span><br><span class="line">get_default_graphL: &lt;\tensorflow.python.framework.ops.Graph object at 0x10813ffd0&gt;</span><br><span class="line">3.0</span><br><span class="line">a.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10813ffd0&gt;</span><br><span class="line">result.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10813ffd0&gt;</span><br><span class="line">sess.graph: &lt;\tensorflow.python.framework.ops.Graph object at 0x10813ffd0&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以看到兩張圖為不同的內存地址，彼此互不干擾</li>
+</ul>
+<hr>
+<h1 id="Operation-Op"><a href="#Operation-Op" class="headerlink" title="Operation(Op)"></a>Operation(Op)</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>類型</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>標量運算</td>
+<td>add, sub, mul, div, exp, log, greater, less, equal</td>
+</tr>
+<tr>
+<td>向量運算</td>
+<td>concat, slice, splot, constant, rank, shape, shuffle</td>
+</tr>
+<tr>
+<td>矩陣運算</td>
+<td>matmul, matrix_inverse, matrix_determinant</td>
+</tr>
+<tr>
+<td>帶狀態的運算</td>
+<td>variable, assign, assign_add</td>
+</tr>
+<tr>
+<td>神經網路組件</td>
+<td>soft_max, sigmoid, ReLU, convolution2D, MaxPooling</td>
+</tr>
+<tr>
+<td>存儲、恢復</td>
+<td>save, restore</td>
+</tr>
+<tr>
+<td>隊列及同步運算</td>
+<td>enqueue, dequeue, mutex_acquire, mutex_release</td>
+</tr>
+<tr>
+<td>控制流</td>
+<td>merge, switch, enter, leave, next_iteration</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>只要使用tensorflow這個API定義的物件，<strong>全部都是op</strong></li>
+<li>op為一個載體<ul>
+<li>tensor：指的就是數據，例如<code>tf.constant(10.0)</code></li>
+<li>有些op中加載的不是數據，那它就不是tensor</li>
+</ul>
+</li>
+</ul>
+<h2 id="操作函數-amp-操作對象"><a href="#操作函數-amp-操作對象" class="headerlink" title="操作函數 &amp; 操作對象"></a>操作函數 &amp; 操作對象</h2><p>調用 <strong>操作函數</strong> 過程中會產生 <strong>操作對象</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>操作函數</th>
+<th>操作對象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>調用<code>tf.constant(Tensor對象)</code>函數</td>
+<td>輸入Tensor對象 -&gt; <code>Const</code>-&gt; 輸出Tensor對象</td>
+</tr>
+<tr>
+<td>調用<code>tf.add(Tensor對象I, Tensor對象II)</code>函數</td>
+<td>輸入2個Tensor對象 -&gt; <code>Add</code> -&gt; 輸出1個Tensor對象</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>每一個OP指令(<code>Const</code>,<code>Add</code>)都對應了一個唯一的名稱<ul>
+<li><code>Const</code>、<code>Const_1</code> …</li>
+<li><strong>不同的圖(graph)命名空間是獨立的</strong></li>
+<li>創建OP時可通過<code>name</code>參數重新命名</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/22/DL_tensorflow_session/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-會話(Session)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/19/ML_unsupervise_Kmeans/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-非監督學習- K-means</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#架構"><span class="nav-number">1.1.</span> <span class="nav-text">架構</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#計算密集-vs-IO密集"><span class="nav-number">1.2.</span> <span class="nav-text">計算密集 vs. IO密集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#實現一個加法運算"><span class="nav-number">2.</span> <span class="nav-text">實現一個加法運算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">2.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圖-Graph"><span class="nav-number">3.</span> <span class="nav-text">圖(Graph)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#獲取graph物件"><span class="nav-number">3.1.</span> <span class="nav-text">獲取graph物件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#圖的創建"><span class="nav-number">3.2.</span> <span class="nav-text">圖的創建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Operation-Op"><span class="nav-number">4.</span> <span class="nav-text">Operation(Op)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#操作函數-amp-操作對象"><span class="nav-number">4.1.</span> <span class="nav-text">操作函數 &amp; 操作對象</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

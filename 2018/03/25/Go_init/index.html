@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day3-init函數、函數、常量 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang函數init函數常量(const)">
+  
+  
+  
+  
+  <meta name="description" content="init函數 每個原文件都可以包含一個init函數 在運行main函數之前會被Go的運行框架自動調用 通常用於在執行main函數之前初始化">
+<meta name="keywords" content="2018,Golang,函數,init函數,常量(const)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day3-init函數、函數、常量">
+<meta property="og:url" content="http://www.taroballz.com/2018/03/25/Go_init/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="init函數 每個原文件都可以包含一個init函數 在運行main函數之前會被Go的運行框架自動調用 通常用於在執行main函數之前初始化">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2019-02-16T13:56:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day3-init函數、函數、常量">
+<meta name="twitter:description" content="init函數 每個原文件都可以包含一個init函數 在運行main函數之前會被Go的運行框架自動調用 通常用於在執行main函數之前初始化">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_init" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day3-init函數、函數、常量
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/25/Go_init/" class="article-date">
+	  <time datetime="2018-03-24T16:00:00.000Z" itemprop="datePublished">三月 25, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="init函數"><a href="#init函數" class="headerlink" title="init函數"></a>init函數</h1><ul>
+<li>每個原文件都可以包含一個init函數</li>
+<li>在<strong>運行main函數之前</strong>會被Go的運行框架自動調用</li>
+<li>通常用於在執行main函數之前<strong>初始化</strong></li>
+</ul>
+<a id="more"></a>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Name <span class="keyword">string</span> = <span class="string">"I'm global value"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Initialize...."</span>)</span><br><span class="line">	fmt.Println(Name)</span><br><span class="line">	Name = <span class="string">"Name initialize..."</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"I'm main function!!"</span>)</span><br><span class="line">	fmt.Println(Name)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Initialize....</span><br><span class="line">I&apos;m global value</span><br><span class="line">I&apos;m main function!!</span><br><span class="line">Name initialize...</span><br></pre></td></tr></table></figure>
+<h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
+<li>執行順序：初始化全局變量 —&gt; 執行init函數 —&gt; 執行main函數</li>
+<li>要是main包中有導入其他包，會先執行其他包的init函數，最後才會執行main包中的init函數</li>
+</ul>
+<h2 id="補充"><a href="#補充" class="headerlink" title="補充"></a>補充</h2><p>有時，用戶可能需要導入一個包，但是不需要引用這個包裡面的函數或是其他標識符，會使用<strong>空白標識符(_)</strong>給予其別名，其目的就是為了執行該包的init函數而已</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	_ <span class="string">"fmt"</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="函數聲明"><a href="#函數聲明" class="headerlink" title="函數聲明"></a>函數聲明</h1><h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func 函數名 (參數列表) (返回值列表)&#123;  //[1][2]</span><br><span class="line">    函數主體</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 即使沒有參數，()小括號也要標示<br>[2] 沒有返回值，則可不寫返回值；只有一個返回值則可省略()小括號</p>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h2><h3 id="無參數且無返回值"><a href="#無參數且無返回值" class="headerlink" title="無參數且無返回值"></a>無參數且無返回值</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">function_one</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="有參數有一返回值"><a href="#有參數有一返回值" class="headerlink" title="有參數有一返回值"></a>有參數有一返回值</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">function_two</span><span class="params">(a <span class="keyword">int</span>, b <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="有參數及多個返回值"><a href="#有參數及多個返回值" class="headerlink" title="有參數及多個返回值"></a>有參數及多個返回值</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">function_three</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="註釋"><a href="#註釋" class="headerlink" title="註釋"></a>註釋</h1><p>Go中共使用兩種註釋</p>
+<h2 id="單行註釋"><a href="#單行註釋" class="headerlink" title="單行註釋 ( // )"></a>單行註釋 ( // )</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	                    <span class="comment">//add 計算兩整數和，並返回結果</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="多行註釋"><a href="#多行註釋" class="headerlink" title="多行註釋 ( /* */ )"></a>多行註釋 ( /* */ )</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	                    <span class="comment">/*add </span></span><br><span class="line"><span class="comment">	                        計算兩整數和</span></span><br><span class="line"><span class="comment">	                        ，並返回結果*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h1><ol>
+<li>常量為<code>const</code>開頭修飾，代表<strong>永遠只讀，不能修改</strong><blockquote>
+<ul>
+<li>程序初始化時(編譯階段)，值就決定了</li>
+</ul>
+</blockquote>
+</li>
+<li><code>const</code>只能修飾boolean,number(int,float,complex相關類型)和string</li>
+</ol>
+<h2 id="語法"><a href="#語法" class="headerlink" title="語法"></a>語法</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const 常量名 [類型] = 值    //[1]</span><br></pre></td></tr></table></figure>
+<p>[1] 可省略類型不寫，編譯時會自動做類型推斷</p>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h2><h3 id="初學者寫法"><a href="#初學者寫法" class="headerlink" title="初學者寫法"></a>初學者寫法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> b <span class="keyword">string</span> = <span class="string">"Hello world"</span></span><br><span class="line"><span class="keyword">const</span> b = <span class="string">"Hello world"</span></span><br><span class="line"><span class="keyword">const</span> Pi = <span class="number">3.1415926</span></span><br><span class="line"><span class="keyword">const</span> a = <span class="number">9</span>/<span class="number">3</span>    <span class="comment">//[1]</span></span><br></pre></td></tr></table></figure>
+<p>[1] <code>=</code>右邊可以是表達式，編譯時會計算完成</p>
+<h3 id="優雅寫法"><a href="#優雅寫法" class="headerlink" title="優雅寫法"></a>優雅寫法</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span>(</span><br><span class="line">	b = <span class="string">"Hello world"</span></span><br><span class="line">	Pi = <span class="number">3.1415926</span></span><br><span class="line">	a = <span class="number">9</span>/<span class="number">3</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="專業寫法-枚舉類型"><a href="#專業寫法-枚舉類型" class="headerlink" title="專業寫法(枚舉類型)"></a>專業寫法(枚舉類型)</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span>(</span><br><span class="line">    a = <span class="literal">iota</span> <span class="comment">//[1]</span></span><br><span class="line">    b</span><br><span class="line">    c</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>[1] <code>iota</code>會將變量設為0，後續變量往後會+1，也就是說<code>a</code>為0，<code>b</code>為1，<code>c</code>為2</p>
+<ul>
+<li>iota為自增值</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span>(</span><br><span class="line">	b = <span class="number">1</span> &lt;&lt; (<span class="number">10</span> * <span class="literal">iota</span>)</span><br><span class="line">	kb</span><br><span class="line">	mb</span><br><span class="line">	gb</span><br><span class="line">	tb</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> c = getvalue()</span><br></pre></td></tr></table></figure>
+<p>以上寫法是錯的，<code>=</code>右邊不能是<strong>編譯時會無法確定值的物件</strong></p>
+<h2 id="practice"><a href="#practice" class="headerlink" title="practice"></a>practice</h2><p>定義兩個常量Male=1和Female=2，獲取當前時間的秒數，如果能被Female整除則在終端顯示Female否則打印Male</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">	Male = <span class="number">1</span></span><br><span class="line">	Female = <span class="number">2</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	Now_second := time.Now().Unix()  <span class="comment">//[1]</span></span><br><span class="line">	<span class="keyword">if</span> Now_second % Female == <span class="number">0</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Female"</span>)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"Male"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] <code>time.Now().Unix()</code>獲取從1970年到現在的秒數</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/init函數/">init函數</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/函數/">函數</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/常量-const/">常量(const)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/26/Go_variables_location/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day4-作用域、數據類型與操作符
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/25/Go_variables/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day3-變量、值類型與引用類型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#init函數"><span class="nav-number">1.</span> <span class="nav-text">init函數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">1.2.</span> <span class="nav-text">result</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">1.3.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#補充"><span class="nav-number">1.4.</span> <span class="nav-text">補充</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函數聲明"><span class="nav-number">2.</span> <span class="nav-text">函數聲明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#格式"><span class="nav-number">2.1.</span> <span class="nav-text">格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">2.2.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#無參數且無返回值"><span class="nav-number">2.2.1.</span> <span class="nav-text">無參數且無返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有參數有一返回值"><span class="nav-number">2.2.2.</span> <span class="nav-text">有參數有一返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#有參數及多個返回值"><span class="nav-number">2.2.3.</span> <span class="nav-text">有參數及多個返回值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#註釋"><span class="nav-number">3.</span> <span class="nav-text">註釋</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#單行註釋"><span class="nav-number">3.1.</span> <span class="nav-text">單行註釋 ( // )</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多行註釋"><span class="nav-number">3.2.</span> <span class="nav-text">多行註釋 ( /* */ )</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#常量"><span class="nav-number">4.</span> <span class="nav-text">常量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#語法"><span class="nav-number">4.1.</span> <span class="nav-text">語法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">4.2.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初學者寫法"><span class="nav-number">4.2.1.</span> <span class="nav-text">初學者寫法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#優雅寫法"><span class="nav-number">4.2.2.</span> <span class="nav-text">優雅寫法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#專業寫法-枚舉類型"><span class="nav-number">4.2.3.</span> <span class="nav-text">專業寫法(枚舉類型)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">4.3.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#practice"><span class="nav-number">4.4.</span> <span class="nav-text">practice</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

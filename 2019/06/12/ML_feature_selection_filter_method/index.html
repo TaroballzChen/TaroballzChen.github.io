@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-特徵工程-特徵選擇(feature_selection)-過濾法 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程">
+  
+  
+  
+  
+  <meta name="description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
+<meta name="keywords" content="Python,2019,機器學習(Machine Learning),特徵工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-特徵工程-特徵選擇(feature_selection)-過濾法">
+<meta property="og:url" content="http://www.taroballz.com/2019/06/12/ML_feature_selection_filter_method/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/1aFt2wh.jpg">
+<meta property="og:updated_time" content="2019-07-08T16:44:55.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-特徵工程-特徵選擇(feature_selection)-過濾法">
+<meta name="twitter:description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
+<meta name="twitter:image" content="https://i.imgur.com/1aFt2wh.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_feature_selection_filter_method" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/1aFt2wh.jpg" rel="gallery_ck4x0bhsn00b5gdq7eo19nwmn">
+        <img src="https://i.imgur.com/1aFt2wh.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-特徵工程-特徵選擇(feature_selection)-過濾法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/06/12/ML_feature_selection_filter_method/" class="article-date">
+	  <time datetime="2019-06-11T16:00:00.000Z" itemprop="datePublished">六月 12, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>從所有的特徵中，選擇出<strong>有意義的</strong>或<strong>對模型有幫助的特徵</strong></p>
+<ul>
+<li><strong>避免必須將所有特徵都導入模型進行訓練的窘境</strong></li>
+<li>重要！！：必須與數據提供者討論</li>
+<li>若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法<ul>
+<li>過濾法</li>
+<li>嵌入法</li>
+<li>包裝法</li>
+<li>降維演算法</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<h1 id="過濾法-Filter"><a href="#過濾法-Filter" class="headerlink" title="過濾法(Filter)"></a>過濾法(Filter)</h1><ul>
+<li>常被用作特徵預處理的步驟</li>
+<li>根據各種<strong>統計檢驗的分數</strong> 及 <strong>相關性的各項指標</strong>來進行特徵選擇</li>
+</ul>
+<h1 id="方差過濾法-VarianceThreshold"><a href="#方差過濾法-VarianceThreshold" class="headerlink" title="方差過濾法(VarianceThreshold)"></a>方差過濾法(VarianceThreshold)</h1><p>請參考<a href="http://www.taroballz.com/2018/07/06/ML_DecreaseFeature/">http://www.taroballz.com/2018/07/06/ML_DecreaseFeature/</a></p>
+<h1 id="相關性過濾"><a href="#相關性過濾" class="headerlink" title="相關性過濾"></a>相關性過濾</h1><p>方差過濾完畢後，我們希望挑選出與標籤(Label)相關且有意義的特徵</p>
+<ul>
+<li>若特徵與標籤無關：浪費計算資源</li>
+<li>有三種常用的方法來評判特徵與標籤之間的相關性<ul>
+<li>卡方過濾</li>
+<li>F-score檢驗</li>
+<li>互信息</li>
+</ul>
+</li>
+</ul>
+<h2 id="卡方過濾"><a href="#卡方過濾" class="headerlink" title="卡方過濾"></a>卡方過濾</h2><ul>
+<li>專門針對<strong>離散型標籤(分類問題)</strong>的相關性過濾</li>
+<li><code>sklearn.feature_selection.chi2</code><ul>
+<li>計算每個 <strong>非負數特徵</strong> 和 標籤 之間的卡方統計量<ul>
+<li>卡方檢驗法<strong>不能計算負數</strong>；可是用以下兩種預處理方法變為正數<ul>
+<li><code>MinMaxScalar</code></li>
+<li><code>StandardScalar</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>依照卡方統計量 由高到低 為 特徵排名</li>
+</ul>
+</li>
+<li>再結合<code>feature_selection.SelectKBest</code><ul>
+<li>輸入 <strong>評分標準</strong> 來選出前<code>K</code>個分數最高的特徵<ul>
+<li>除去最可能獨立於標籤，與分類目的無關的特徵</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>若卡方檢驗檢測到某個特徵所有值都相同時，會提示先進行方差過濾</li>
+</ul>
+<h3 id="SelectKBest"><a href="#SelectKBest" class="headerlink" title="SelectKBest()"></a>SelectKBest()</h3><p>為一轉換器，有兩個重要的參數<code>score_func</code> 及 <code>k</code></p>
+<ul>
+<li><code>score_func</code><ul>
+<li>指定轉換器<strong>用於評估的統計量</strong>，可以是<code>chi2</code>等標準</li>
+<li>ref：<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html</a></li>
+</ul>
+</li>
+<li><code>k</code><ul>
+<li>選出前<code>k</code>個 卡方值最高 的特徵</li>
+<li>可指定自己所需要的特徵數目</li>
+<li>為一<strong>超參數</strong>，設定過低的值有可能會刪除與模型相關且有效的特徵，須不斷進行調整<ul>
+<li>使用<strong>學習曲線驗證法</strong>得出好的<code>k</code>值<ul>
+<li>計算成本龐大</li>
+</ul>
+</li>
+<li>實例化<code>chi2</code>等評估指標 獲得<strong>卡方值很大</strong>且<strong>P值&lt;0.05</strong> 的特徵數作為<code>k</code>值<ul>
+<li>請參考 <strong>卡方檢驗</strong> 章</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="fit-transform"><a href="#fit-transform" class="headerlink" title="fit_transform"></a>fit_transform</h4><p>與其他轉換器不一樣的是<code>fit_transform</code>參數中須放入兩個參數</p>
+<ul>
+<li><code>X_fschi = SelectKBest(chi2,k=300).fit_transform(X,y)</code><ul>
+<li>第一個參數須放入欲轉換的feature矩陣<code>X</code></li>
+<li>第二個參數為Label矩陣<code>y</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="卡方檢驗"><a href="#卡方檢驗" class="headerlink" title="卡方檢驗"></a>卡方檢驗</h3><ul>
+<li>推測兩組數據(feature,Label)之間的差異<ul>
+<li>原假設：<strong>兩組數據是互相獨立</strong>的</li>
+</ul>
+</li>
+<li><p>檢驗後返回 <strong>卡方值</strong> 及 <strong>P值</strong> 兩個統計量</p>
+<ul>
+<li>卡方值：難界定有效篩選的範圍</li>
+<li>P值：一般使用 0.01 or 0.05 作為<strong>顯著性水平</strong>(p值判斷邊界)<ul>
+<li>>=0.05 or 0.01：兩組數據相關 (拒絕原假設，接受備擇假設)<ul>
+<li>該特徵對模型訓練有貢獻</li>
+</ul>
+</li>
+<li>\&lt;0.05 or 0.01：兩組數據相互獨立 (接受原假設)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>因此須選取 <strong>卡方值很大</strong>且<strong>P值>=0.05 or 0.01</strong> 的特徵(與標籤相關的特徵)</p>
+<ul>
+<li><p>可從<code>chi2</code>實例獲得 <strong>各個特徵對應的 卡方值 及 P值</strong></p>
+  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> chi2</span><br><span class="line"></span><br><span class="line">chivalue,pvalues_chi = chi2(X,y)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>X</code>為feature矩陣</li>
+<li><code>y</code>為Label矩陣</li>
+<li><code>chivalue</code>為各特徵的卡方值，為一ndarray</li>
+<li><code>pvalues</code>為各特徵相對標籤的p值，為一ndarray</li>
+</ul>
+</li>
+<li><code>K_value = chi_values.shape[0] - (p_values_chi &lt; 0.01).sum()</code> 將得到超參數<code>k</code>值該定為多少</li>
+</ul>
+</li>
+</ul>
+<h2 id="F檢驗-ANOVA"><a href="#F檢驗-ANOVA" class="headerlink" title="F檢驗(ANOVA)"></a>F檢驗(ANOVA)</h2><ul>
+<li>又稱作方差齊性檢驗(變異數分析;Analysis of variance)</li>
+<li>是用來捕捉每個<strong>特徵與標籤之間的 <em>線性</em> 關係</strong>的過濾方法<ul>
+<li>原假設：<strong>數據不存在顯著的線性關係</strong></li>
+</ul>
+</li>
+<li>F檢驗分類<ul>
+<li><code>feature_selection.f_classif</code></li>
+<li>用於Label為離散型數據</li>
+</ul>
+</li>
+<li>F檢驗回歸<ul>
+<li><code>feature_selection.f_regression</code></li>
+<li>用於Label為連續型數據</li>
+</ul>
+</li>
+<li><p>檢驗後返回 <strong>F值</strong> 及 <strong>P值</strong> 兩個統計量</p>
+<ul>
+<li>F值：難界定有效篩選的範圍</li>
+<li>P值：一般使用 0.01 or 0.05 作為<strong>顯著性水平</strong>(p值判斷邊界)<ul>
+<li>&lt;=0.05 or 0.01：兩組數據存在 顯著線性相關 (拒絕原假設，接受備擇假設)<ul>
+<li>該特徵對模型訓練有貢獻</li>
+</ul>
+</li>
+<li>>0.05 or 0.01：兩組數據 沒有顯著線性關係 (接受原假設)<ul>
+<li>應被刪除</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>選取<strong>P值&lt;0.05 or 0.01</strong> 的特徵(與標籤相關的特徵)</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> f_classif</span><br><span class="line"></span><br><span class="line">F, pvalues_f = f_classif(X,y)</span><br></pre></td></tr></table></figure>
+<p>*<code>pvalues</code>為各特徵相對標籤的p值，為一ndarray</p>
+</li>
+<li><code>K_value = F.shape[0] - (pvalues_f &gt; 0.01).sum()</code> 將得到超參數<code>k</code>值該定為多少</li>
+</ul>
+</li>
+<li><p>F檢驗在服從<strong>正態分布</strong>時效果會非常穩定</p>
+<ul>
+<li>如要使用F檢驗過濾特徵，會先將數據轉換為 服從正態分布 的形式<ul>
+<li><code>StandardScalar</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>再結合<code>feature_selection.SelectKBest</code>一起聯用</p>
+<ul>
+<li>輸入 <strong>評分標準</strong> 來選出前<code>K</code>個分數最高的特徵</li>
+</ul>
+</li>
+</ul>
+<h2 id="互信息法"><a href="#互信息法" class="headerlink" title="互信息法"></a>互信息法</h2><ul>
+<li>是用來捕捉特徵與標籤之間的<strong>任意關係</strong>(線性及非線性)的過濾方法<ul>
+<li>故比F檢驗更強大</li>
+</ul>
+</li>
+<li>互信息分類<ul>
+<li><code>feature_selection.mutual_info_classif</code></li>
+</ul>
+</li>
+<li>互信息回歸<ul>
+<li><code>feature_selection.mutual_info_regression</code></li>
+</ul>
+</li>
+<li><p>返回 <strong>每個特徵 與 標籤 之間的 互信息量的估計</strong></p>
+<ul>
+<li>介於0-1之間<ul>
+<li>0：表示兩組數據相互獨立</li>
+<li>1：表示兩組數據<strong>完全相關</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>選取 <strong>結果值大於0</strong>的特徵(與標籤相關的特徵)</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> mutual_info_classif <span class="keyword">as</span> MIC</span><br><span class="line"></span><br><span class="line">result = MIC(X,y)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>result</code>為各特徵的戶信息量估計  </li>
+</ul>
+</li>
+<li>只要不等於0就是與標籤有關<ul>
+<li><code>K_values_all_MIC = result.shape[0] -(result == 0).sum()</code> 可得到超參數<code>k</code>值該定為多少</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>先使用方差過濾，在使用各種過濾法來捕捉相關性，可直接使用互信息法更好</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/14/ML_feature_selection_embedded_method/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-特徵工程-特徵選擇-嵌入法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/09/ML_continueVar_Preprocessing/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-特徵預處理-處理連續型數據</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#過濾法-Filter"><span class="nav-number">2.</span> <span class="nav-text">過濾法(Filter)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方差過濾法-VarianceThreshold"><span class="nav-number">3.</span> <span class="nav-text">方差過濾法(VarianceThreshold)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相關性過濾"><span class="nav-number">4.</span> <span class="nav-text">相關性過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卡方過濾"><span class="nav-number">4.1.</span> <span class="nav-text">卡方過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SelectKBest"><span class="nav-number">4.1.1.</span> <span class="nav-text">SelectKBest()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卡方檢驗"><span class="nav-number">4.1.2.</span> <span class="nav-text">卡方檢驗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F檢驗-ANOVA"><span class="nav-number">4.2.</span> <span class="nav-text">F檢驗(ANOVA)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#互信息法"><span class="nav-number">4.3.</span> <span class="nav-text">互信息法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">5.</span> <span class="nav-text">總結</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

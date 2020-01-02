@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-tensorboard可視化 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introductiontensorboard是可視化的web介面tensorflow後台監控程序">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-tensorboard可視化">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/29/DL_Visualization_tensorboard/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introductiontensorboard是可視化的web介面tensorflow後台監控程序">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/KWVkT4d.jpg">
+<meta property="og:updated_time" content="2019-07-22T16:12:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-tensorboard可視化">
+<meta name="twitter:description" content="Introductiontensorboard是可視化的web介面tensorflow後台監控程序">
+<meta name="twitter:image" content="https://i.imgur.com/KWVkT4d.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_Visualization_tensorboard" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/KWVkT4d.jpg" rel="gallery_ck4x0bhp8001egdq7tfvwz3sv">
+        <img src="https://i.imgur.com/KWVkT4d.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-tensorboard可視化
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/29/DL_Visualization_tensorboard/" class="article-date">
+	  <time datetime="2018-07-29T12:08:00.000Z" itemprop="datePublished">七月 29, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>tensorboard是可視化的web介面tensorflow後台監控程序<br><a id="more"></a></p>
+<ul>
+<li>將程序的garph結構 顯示在web界面<ul>
+<li>將程序的graph結構，經過<strong>序列化文件</strong>的動作，生成<strong>events事件文件</strong></li>
+<li>tensorboard會將events讀取出來顯示到web界面</li>
+</ul>
+</li>
+</ul>
+<h1 id="將程序序列化成events文件"><a href="#將程序序列化成events文件" class="headerlink" title="將程序序列化成events文件"></a>將程序序列化成events文件</h1><p><code>tf.summary.FileWriter(logdir,graph=)</code></p>
+<ul>
+<li>summary模塊用於tensorboard後台管理使用</li>
+<li>logdir：寫入events文件到何者路徑(不包含檔名)，最好使用絕對路徑，以提供給tensorflow使用</li>
+<li>graph：把指定的graph寫入events文件</li>
+<li>返回一個filewriter</li>
+<li>注意：一般於Session中去執行此函數</li>
+</ul>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">const = tf.constant([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>])</span><br><span class="line">variable = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">1.0</span>))</span><br><span class="line"></span><br><span class="line">variable_initialize = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(variable_initialize)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 把程序的圖結構寫入事件文件</span></span><br><span class="line">    filewriter = tf.summary.FileWriter(<span class="string">"./summary"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">    print(sess.run([const,variable]))</span><br></pre></td></tr></table></figure>
+<ul>
+<li>執行完後會在參數填入的文件夾中生成events文件</li>
+<li>其名稱格式如下：<ul>
+<li><code>events.out.tfevents.{timestamp}.{hotstname}</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="使用tensorboard開啟events文件"><a href="#使用tensorboard開啟events文件" class="headerlink" title="使用tensorboard開啟events文件"></a>使用tensorboard開啟events文件</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard  --logdir=&quot;events存放的文件夾&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>路徑記得加上雙引號</li>
+<li>使用瀏覽器打開localhost:6006<br><img src="https://i.imgur.com/DCOqrxB.png" alt="tensor board"></li>
+<li>再修改程序後，在使用<code>FileWriter</code>保存一遍時會有新的事件文件，於tensorboard查看為最新的文件</li>
+</ul>
+<h1 id="選項-Inactive"><a href="#選項-Inactive" class="headerlink" title="選項(Inactive)"></a>選項(Inactive)</h1><p>在Inactive下拉可找到多個tensorboard的選單</p>
+<ul>
+<li>SCALARS：顯示0維度之值(單純數值)用，例如準確率、損失</li>
+<li>GRAPHS：顯示程序的結構</li>
+<li>HISTOGRAMS：顯示高維度之值，例如權重($w$)、偏置(bias)等</li>
+<li>我們在GRAPH中並沒有看到先前定義的名為const的張量，原因是要是我們<strong>沒有使用到該張量，則不會在GRAPH中顯示</strong></li>
+</ul>
+<h1 id="name"><a href="#name" class="headerlink" title="name"></a>name</h1><p>任何的op都可以在參數中指定<code>name</code>參數，會在tensorboard的GRAPH中顯示名字</p>
+<ul>
+<li>亦可以讓相同op名字進行區分<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>,name=<span class="string">"a_const"</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>,name=<span class="string">"b_const"</span>)</span><br><span class="line">result = tf.add(a,b,name=<span class="string">"result"</span>)</span><br><span class="line">variable = tf.Variable(tf.random_normal([<span class="number">2</span>,<span class="number">3</span>], mean=<span class="number">0.0</span>, stddev=<span class="number">1.0</span>),name=<span class="string">"my_variable"</span>)</span><br><span class="line"></span><br><span class="line">variable_initialize = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(variable_initialize)</span><br><span class="line">    </span><br><span class="line">    filewriter = tf.summary.FileWriter(<span class="string">"./summary"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">    print(sess.run([result,variable]))</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><img src="https://i.imgur.com/VBk4cXi.png" alt="name"></p>
+<h1 id="圖中符號的意義"><a href="#圖中符號的意義" class="headerlink" title="圖中符號的意義"></a>圖中符號的意義</h1><p><img src="https://i.imgur.com/m5VpaEe.png" alt="label"><br>來源<a href="https://www.tensorflow.org/programmers_guide/graph_viz?hl=zh-cn" target="_blank" rel="noopener">https://www.tensorflow.org/programmers_guide/graph_viz?hl=zh-cn</a></p>
+<h1 id="增加變量顯示-後期補充"><a href="#增加變量顯示-後期補充" class="headerlink" title="增加變量顯示(後期補充)"></a>增加變量顯示(後期補充)</h1><p>目的：觀察模型的參數，損失值等變量值的變化</p>
+<ul>
+<li>SCALARS及HISTOGRAMS的選項是觀察變量的變化</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/11/16/python_reflect/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python基礎-反射
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/28/DL_Variance/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-變量(Variable)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#將程序序列化成events文件"><span class="nav-number">2.</span> <span class="nav-text">將程序序列化成events文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用tensorboard開啟events文件"><span class="nav-number">3.</span> <span class="nav-text">使用tensorboard開啟events文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#選項-Inactive"><span class="nav-number">4.</span> <span class="nav-text">選項(Inactive)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#name"><span class="nav-number">5.</span> <span class="nav-text">name</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圖中符號的意義"><span class="nav-number">6.</span> <span class="nav-text">圖中符號的意義</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#增加變量顯示-後期補充"><span class="nav-number">7.</span> <span class="nav-text">增加變量顯示(後期補充)</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

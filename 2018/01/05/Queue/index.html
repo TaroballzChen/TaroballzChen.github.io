@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Python模塊-Queue隊列 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python多線程">
+  
+  
+  
+  
+  <meta name="description" content="Introduction: queue是python中的標準庫，俗稱隊列，可直接import使用 隊列(queue)為一種數據結構，用於存儲數據(類似列表及字典) 列表及字典不適合用於多線程中使用，在多個線程中，數據是共享的，進行數據交換的時候，不能夠保證數據的安全性和一致性，我們希望多個線程不要執行同一個任務，但使用列表或是字典就容易發生不同線程取到同一組數據或是執行同一個任務的詬病 隊列可以完">
+<meta name="keywords" content="Python,多線程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python模塊-Queue隊列">
+<meta property="og:url" content="http://www.taroballz.com/2018/01/05/Queue/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction: queue是python中的標準庫，俗稱隊列，可直接import使用 隊列(queue)為一種數據結構，用於存儲數據(類似列表及字典) 列表及字典不適合用於多線程中使用，在多個線程中，數據是共享的，進行數據交換的時候，不能夠保證數據的安全性和一致性，我們希望多個線程不要執行同一個任務，但使用列表或是字典就容易發生不同線程取到同一組數據或是執行同一個任務的詬病 隊列可以完">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-01-07T16:50:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python模塊-Queue隊列">
+<meta name="twitter:description" content="Introduction: queue是python中的標準庫，俗稱隊列，可直接import使用 隊列(queue)為一種數據結構，用於存儲數據(類似列表及字典) 列表及字典不適合用於多線程中使用，在多個線程中，數據是共享的，進行數據交換的時候，不能夠保證數據的安全性和一致性，我們希望多個線程不要執行同一個任務，但使用列表或是字典就容易發生不同線程取到同一組數據或是執行同一個任務的詬病 隊列可以完">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Queue" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python模塊-Queue隊列
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/01/05/Queue/" class="article-date">
+	  <time datetime="2018-01-04T16:00:00.000Z" itemprop="datePublished">一月 5, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h1><ul>
+<li>queue是python中的標準庫，俗稱隊列，可直接import使用</li>
+<li>隊列(queue)為一種數據結構，用於存儲數據(類似列表及字典)</li>
+<li>列表及字典不適合用於多線程中使用，在多個線程中，數據是共享的，進行數據交換的時候，不能夠保證數據的安全性和一致性，我們希望多個線程不要執行同一個任務，但使用列表或是字典就容易發生不同線程取到同一組數據或是執行同一個任務的詬病</li>
+<li>隊列可以完美解決線程間的數據交換，保證線程間數據的安全性和一致性</li>
+</ul>
+<a id="more"></a>
+<h1 id="Types"><a href="#Types" class="headerlink" title="Types:"></a>Types:</h1><ol>
+<li>先存入的數據會最先被取出(先進先出,FIFO)<code>class queue.Queue(maxsize)</code></li>
+<li>後存入的數據會最先被取出(後進先出,LIFO)<code>class queue.LifoQueue(maxsize)</code> </li>
+<li>優先級隊列，级别越低越先出来<code>class queue.PriorityQueue(maxsize)</code></li>
+</ol>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="創建隊列物件"><a href="#創建隊列物件" class="headerlink" title="創建隊列物件"></a>創建隊列物件</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> queue</span><br><span class="line">q_obj = queue.Queue(maxsize)</span><br></pre></td></tr></table></figure>
+<p>maxsize 填入可存儲數據的長度，若不填入則為無限大</p>
+<h2 id="插入數據"><a href="#插入數據" class="headerlink" title="插入數據"></a>插入數據</h2><p>將數據寫入隊列queue.put(item,block,timeout)</p>
+<ul>
+<li>block決定是否等待堵塞，預設為True</li>
+<li>timeout為等待時間</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q_obj.put(<span class="string">'data'</span>)</span><br><span class="line">q_obj.put(<span class="string">'data1'</span>)</span><br><span class="line">q_obj.put(<span class="string">'data2'</span>)</span><br></pre></td></tr></table></figure>
+<p>要是輸入的數據超過maxsize的限定值，預設會等待阻塞(block=1)，要是將block手動設為0且又超過maxsize的限定值將會<strong>報錯</strong>並提示<strong>隊列已滿</strong></p>
+<ul>
+<li><code>q_obj.put(&#39;data&#39;,False)</code>相當於<code>q_obj.put_nowait()</code></li>
+</ul>
+<h2 id="拿取數據"><a href="#拿取數據" class="headerlink" title="拿取數據"></a>拿取數據</h2><p>使用get拿取隊列中的數據queue.get(item,block,timeout)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(q_obj.get())</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(q_obj.get())</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data1</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(q_obj.get())</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data2</span><br></pre></td></tr></table></figure>
+<p>要是queue物件中已無存儲的數據仍進行拿取(get)，預設會等待阻塞(block=1)，要是將block手動設為0執意拿取空隊列中的數據將會<strong>報錯</strong>並提示<strong>隊列已空</strong></p>
+<ul>
+<li><code>q_obj.get(False)</code>相當於<code>q_obj.get_nowait()</code></li>
+</ul>
+<h2 id="返回當前隊列的大小"><a href="#返回當前隊列的大小" class="headerlink" title="返回當前隊列的大小"></a>返回當前隊列的大小</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q_obj.qsize()</span><br></pre></td></tr></table></figure>
+<h2 id="如果隊列滿了，返回True-反之False"><a href="#如果隊列滿了，返回True-反之False" class="headerlink" title="如果隊列滿了，返回True,反之False"></a>如果隊列滿了，返回True,反之False</h2><p>(queue.full 與 maxsize 大小對應)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q_obj.full()</span><br></pre></td></tr></table></figure></p>
+<h2 id="如果隊列為空，返回True-反之False"><a href="#如果隊列為空，返回True-反之False" class="headerlink" title="如果隊列為空，返回True,反之False"></a>如果隊列為空，返回True,反之False</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q_obj.empty()</span><br></pre></td></tr></table></figure>
+<h2 id="在完成工作之後，queue-task-done函數向任務已經完成的隊列發送一個信號"><a href="#在完成工作之後，queue-task-done函數向任務已經完成的隊列發送一個信號" class="headerlink" title="在完成工作之後，queue.task_done函數向任務已經完成的隊列發送一個信號"></a>在完成工作之後，queue.task_done函數向任務已經完成的隊列發送一個信號</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q_obj.task_done()</span><br></pre></td></tr></table></figure>
+<h2 id="等到隊列為空，再執行別的操作"><a href="#等到隊列為空，再執行別的操作" class="headerlink" title="等到隊列為空，再執行別的操作"></a>等到隊列為空，再執行別的操作</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">q_obj.join()</span><br></pre></td></tr></table></figure>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><blockquote>
+<p><a href="http://www.cnblogs.com/CongZhang/p/5274486.html" target="_blank" rel="noopener">http://www.cnblogs.com/CongZhang/p/5274486.html</a><br><a href="http://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p03_communicating_between_threads.html" target="_blank" rel="noopener">http://python3-cookbook.readthedocs.io/zh_CN/latest/c12/p03_communicating_between_threads.html</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/07/information_gather/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          被動信息蒐集-簡介
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types"><span class="nav-number">2.</span> <span class="nav-text">Types:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">3.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#創建隊列物件"><span class="nav-number">3.1.</span> <span class="nav-text">創建隊列物件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入數據"><span class="nav-number">3.2.</span> <span class="nav-text">插入數據</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拿取數據"><span class="nav-number">3.3.</span> <span class="nav-text">拿取數據</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回當前隊列的大小"><span class="nav-number">3.4.</span> <span class="nav-text">返回當前隊列的大小</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果隊列滿了，返回True-反之False"><span class="nav-number">3.5.</span> <span class="nav-text">如果隊列滿了，返回True,反之False</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如果隊列為空，返回True-反之False"><span class="nav-number">3.6.</span> <span class="nav-text">如果隊列為空，返回True,反之False</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在完成工作之後，queue-task-done函數向任務已經完成的隊列發送一個信號"><span class="nav-number">3.7.</span> <span class="nav-text">在完成工作之後，queue.task_done函數向任務已經完成的隊列發送一個信號</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#等到隊列為空，再執行別的操作"><span class="nav-number">3.8.</span> <span class="nav-text">等到隊列為空，再執行別的操作</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference:</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Go初識-day1-語言特性(高併發與channel的演示) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang">
+  
+  
+  
+  
+  <meta name="description" content="特性 是現今雲計算時代的C語言 可直接編譯不依賴其他的庫(library) 為靜態語言，執行效率高  垃圾回收C/C++因為給予程序員較自由的內存管理權限，但申請內存空間要是忘記釋放會造成內存洩漏導致記憶體滿載  Golang中有完整的GC機制，可以完整且快速掃描當前程序不需要使用的 對象 或 變量 並回收內存使用再也不需要開發人員主動去管理內存 開發人員可專注業務實現，降低負擔 只需使用new方">
+<meta name="keywords" content="2018,Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go初識-day1-語言特性(高併發與channel的演示)">
+<meta property="og:url" content="http://www.taroballz.com/2018/03/23/GO_channelAndthread/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="特性 是現今雲計算時代的C語言 可直接編譯不依賴其他的庫(library) 為靜態語言，執行效率高  垃圾回收C/C++因為給予程序員較自由的內存管理權限，但申請內存空間要是忘記釋放會造成內存洩漏導致記憶體滿載  Golang中有完整的GC機制，可以完整且快速掃描當前程序不需要使用的 對象 或 變量 並回收內存使用再也不需要開發人員主動去管理內存 開發人員可專注業務實現，降低負擔 只需使用new方">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/tncbhrt.png">
+<meta property="og:updated_time" content="2019-01-14T13:24:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Go初識-day1-語言特性(高併發與channel的演示)">
+<meta name="twitter:description" content="特性 是現今雲計算時代的C語言 可直接編譯不依賴其他的庫(library) 為靜態語言，執行效率高  垃圾回收C/C++因為給予程序員較自由的內存管理權限，但申請內存空間要是忘記釋放會造成內存洩漏導致記憶體滿載  Golang中有完整的GC機制，可以完整且快速掃描當前程序不需要使用的 對象 或 變量 並回收內存使用再也不需要開發人員主動去管理內存 開發人員可專注業務實現，降低負擔 只需使用new方">
+<meta name="twitter:image" content="https://i.imgur.com/tncbhrt.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-GO_channelAndthread" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Go初識-day1-語言特性(高併發與channel的演示)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/03/23/GO_channelAndthread/" class="article-date">
+	  <time datetime="2018-03-22T16:00:00.000Z" itemprop="datePublished">三月 23, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><ul>
+<li>是現今雲計算時代的C語言</li>
+<li>可直接編譯不依賴其他的庫(library)</li>
+<li>為靜態語言，執行效率高</li>
+</ul>
+<h1 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h1><p>C/C++因為給予程序員較自由的內存管理權限，但申請內存空間要是忘記釋放會造成<strong>內存洩漏</strong>導致記憶體滿載</p>
+<ul>
+<li>Golang中有完整的GC機制，可以完整且快速掃描當前程序不需要使用的 對象 或 變量 並回收內存使用再也不需要開發人員主動去管理內存</li>
+<li>開發人員可專注業務實現，降低負擔</li>
+<li>只需使用new方法 分配內存，完全不用擔心釋放問題<a id="more"></a>
+</li>
+</ul>
+<h1 id="天然併發-Golang就是多核時代下全新的併發性語言"><a href="#天然併發-Golang就是多核時代下全新的併發性語言" class="headerlink" title="天然併發 (Golang就是多核時代下全新的併發性語言)"></a>天然併發 (Golang就是多核時代下全新的併發性語言)</h1><ul>
+<li>從語言層面支持併發，非常簡單</li>
+<li>goroutine屬於輕量級線程，創建上萬個線程成為可能</li>
+<li>基於CSP (Communicating Sequential Process；通信序列進程)模型實現 —-&gt; goroutine + channel<blockquote>
+<ul>
+<li>每個goroutine之間是透過channel(管道)進行通信</li>
+<li>每個goroutine都是一個可獨立執行且可調度的執行單位</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h1 id="學習資料"><a href="#學習資料" class="headerlink" title="學習資料"></a>學習資料</h1><ul>
+<li>Go語言官網：<a href="https://golang.org" target="_blank" rel="noopener">https://golang.org</a></li>
+<li>Go中文社區: <a href="https://studygolang.com" target="_blank" rel="noopener">https://studygolang.com</a></li>
+<li>Go中文在線文檔：<a href="https://studygolang.com/pkgdoc" target="_blank" rel="noopener">https://studygolang.com/pkgdoc</a> (原版官方中文文檔翻譯)</li>
+</ul>
+<h2 id="簡單goroutine範例"><a href="#簡單goroutine範例" class="headerlink" title="簡單goroutine範例"></a>簡單goroutine範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printnum</span><span class="params">(a <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	fmt.Println(a)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++ &#123;</span><br><span class="line">		<span class="keyword">go</span> printnum(i)   <span class="comment">//[1]</span></span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Second)   <span class="comment">//[2]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 使用關鍵字<code>go</code>即可調用goroutine達到併發的效果<br>[2] sleep用意在於 main本身也是一個進程，在創建線程的過程中並不會理會其他子線程的執行狀況仍會繼續往下執行，可能會造成主進程執行完畢，但子進程仍還在執行而導致結果不符合預期，故目的是為了等待子線程也都執行完畢，主線程才繼續執行</p>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">0</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">2</span><br><span class="line">6</span><br><span class="line">5</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td></tr></table></figure>
+<p>可以看到輸出為<strong>無序</strong>的打印0-9所有數字，表示線程之間可單獨調度執行，證明為併發執行<br>如果不為併發執行應該是<strong>有序</strong>的0-9</p>
+<h1 id="管道-channel"><a href="#管道-channel" class="headerlink" title="管道(channel)"></a>管道(channel)</h1><ul>
+<li>管道，類似unix/linux中的pipe 或是 |<blockquote>
+<ul>
+<li>進程之間的資源是隔離且彼此獨立，因此想實現通訊處理，就必須透過管道來實現</li>
+<li>所有進程都能訪問管道，因此A進程可將數據放入管道中，由B進程提取實現通信</li>
+</ul>
+</blockquote>
+</li>
+<li>多個goroutine之間通過channel進行通信</li>
+<li>支持任何類型</li>
+<li>數據<strong>先進先出</strong></li>
+</ul>
+<p><img src="https://i.imgur.com/tncbhrt.png" alt="channel"></p>
+<h2 id="簡單管道範例"><a href="#簡單管道範例" class="headerlink" title="簡單管道範例"></a>簡單管道範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">pipe_test</span><span class="params">()</span></span>&#123;</span><br><span class="line">	pipe := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">3</span>)  <span class="comment">//[1]</span></span><br><span class="line">	pipe &lt;- <span class="number">1</span>                 <span class="comment">//[2]</span></span><br><span class="line">	pipe &lt;- <span class="number">2</span></span><br><span class="line">	pipe &lt;- <span class="number">3</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> t <span class="keyword">int</span></span><br><span class="line">	t =&lt;- pipe        <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(t)</span><br><span class="line">	</span><br><span class="line">	pipe &lt;- <span class="number">4</span>        <span class="comment">//[4]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 分配一個內存空間用於創建(make)管道(chan)，管道容量為3，為int類型 </p>
+<p>等同於<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pipe <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">pipe = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">3</span>)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>管道內只能放3個int類型的數據</li>
+<li>存放的數據超過容量值會阻塞，並等待消耗後存入數據</li>
+<li>如在編譯時檢測到有阻塞且無法解決，會拋出deadlock錯誤</li>
+</ul>
+</blockquote>
+<p>[2] 透過 <code>&lt;-</code> 將右邊的數據存放至管道中</p>
+<p>[3] 透過 <code>=&lt;-</code> 從右邊的管道取值賦給左邊的變量</p>
+<p>[4] 管道pipe空出一個位置，可允許數值在繼續存入</p>
+<h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+<h1 id="多返回值"><a href="#多返回值" class="headerlink" title="多返回值"></a>多返回值</h1><p>一個函數可以返回多個值</p>
+<h2 id="簡單多返回值範例"><a href="#簡單多返回值範例" class="headerlink" title="簡單多返回值範例"></a>簡單多返回值範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">calc</span> <span class="params">(a,b <span class="keyword">int</span>)</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span></span>&#123;    <span class="comment">//[1]</span></span><br><span class="line">	sum := a+b</span><br><span class="line">	avg := (a+b)/<span class="number">2</span></span><br><span class="line">	<span class="keyword">return</span> sum,avg   <span class="comment">//[1]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	sum,avg := calc(<span class="number">10</span>,<span class="number">20</span>)  <span class="comment">//[2]</span></span><br><span class="line">	fmt.Println(<span class="string">"sum of a and b ="</span>, sum)</span><br><span class="line">	fmt.Println(<span class="string">"avg of a and b ="</span>, avg)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 返回多個值可在參數後面使用(返回值1的類型,返回值2的類型)來獲取多個返回值,return多個返回值之間用<code>,</code>隔開<br>[2] 使用多個變量來接收多個返回值</p>
+<h2 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sum of a and b = 30</span><br><span class="line">avg of a and b = 15</span><br></pre></td></tr></table></figure>
+<h1 id="將用不到的返回值忽略"><a href="#將用不到的返回值忽略" class="headerlink" title="將用不到的返回值忽略"></a>將用不到的返回值忽略</h1><p>在上一章提到在Go中定義的<strong>變量名</strong>在腳本中<strong>沒有被使用</strong>，編譯時會<strong>報錯</strong>，必須刪除其變量，才能正常編譯<br>但是函數又有多個返回值該怎辦？<br>可用<code>_</code> (下劃線) 忽略掉<br>以上述代碼為例，要是用不到avg值則代碼改寫如下<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	sum,_ := calc(<span class="number">10</span>,<span class="number">20</span>)  <span class="comment">//[2]</span></span><br><span class="line">	fmt.Println(<span class="string">"sum of a and b ="</span>, sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可成功編譯不會報錯<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sum of a and b = 30</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/03/24/Go_package/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day2-保留字、基本結構、包別名
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/03/04/GO_enviroment/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day1(開發環境及簡易定義函數及變量)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#特性"><span class="nav-number">1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾回收"><span class="nav-number">2.</span> <span class="nav-text">垃圾回收</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#天然併發-Golang就是多核時代下全新的併發性語言"><span class="nav-number">3.</span> <span class="nav-text">天然併發 (Golang就是多核時代下全新的併發性語言)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#學習資料"><span class="nav-number">4.</span> <span class="nav-text">學習資料</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#簡單goroutine範例"><span class="nav-number">4.1.</span> <span class="nav-text">簡單goroutine範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">4.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#管道-channel"><span class="nav-number">5.</span> <span class="nav-text">管道(channel)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#簡單管道範例"><span class="nav-number">5.1.</span> <span class="nav-text">簡單管道範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">5.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#多返回值"><span class="nav-number">6.</span> <span class="nav-text">多返回值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#簡單多返回值範例"><span class="nav-number">6.1.</span> <span class="nav-text">簡單多返回值範例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#result-2"><span class="nav-number">6.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#將用不到的返回值忽略"><span class="nav-number">7.</span> <span class="nav-text">將用不到的返回值忽略</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

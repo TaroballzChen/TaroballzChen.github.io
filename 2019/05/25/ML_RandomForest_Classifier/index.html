@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-演算法-隨機森林分類(RandomForestClassifier) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2019演算法機器學習(Machine Learning)">
+  
+  
+  
+  
+  <meta name="description" content="Introduction隨機森林是非常具有代表性的Bagging集成演算法  所有的基評估器(base estimator)都是決策樹 單個決策樹的準確率越高，隨機森林的準確率也會越高 Bagging是依賴於平均值或多數決原則來決定集成結果的    DecisionTreeClassifier12345class sklearn.ensemble.RandomForestClassifier(n_">
+<meta name="keywords" content="Python,2019,演算法,機器學習(Machine Learning)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-演算法-隨機森林分類(RandomForestClassifier)">
+<meta property="og:url" content="http://www.taroballz.com/2019/05/25/ML_RandomForest_Classifier/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction隨機森林是非常具有代表性的Bagging集成演算法  所有的基評估器(base estimator)都是決策樹 單個決策樹的準確率越高，隨機森林的準確率也會越高 Bagging是依賴於平均值或多數決原則來決定集成結果的    DecisionTreeClassifier12345class sklearn.ensemble.RandomForestClassifier(n_">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/zMTSKlZ.jpg">
+<meta property="og:updated_time" content="2019-05-25T15:52:19.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-演算法-隨機森林分類(RandomForestClassifier)">
+<meta name="twitter:description" content="Introduction隨機森林是非常具有代表性的Bagging集成演算法  所有的基評估器(base estimator)都是決策樹 單個決策樹的準確率越高，隨機森林的準確率也會越高 Bagging是依賴於平均值或多數決原則來決定集成結果的    DecisionTreeClassifier12345class sklearn.ensemble.RandomForestClassifier(n_">
+<meta name="twitter:image" content="https://i.imgur.com/zMTSKlZ.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_RandomForest_Classifier" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/zMTSKlZ.jpg" rel="gallery_ck4x0bhrx008zgdq7v06by84n">
+        <img src="https://i.imgur.com/zMTSKlZ.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-演算法-隨機森林分類(RandomForestClassifier)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/05/25/ML_RandomForest_Classifier/" class="article-date">
+	  <time datetime="2019-05-25T15:25:00.000Z" itemprop="datePublished">五月 25, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>隨機森林是非常具有代表性的Bagging集成演算法</p>
+<ul>
+<li>所有的基評估器(base estimator)都是決策樹</li>
+<li>單個決策樹的準確率越高，隨機森林的準確率也會越高<ul>
+<li>Bagging是依賴於<strong>平均值</strong>或<strong>多數決原則</strong>來決定集成結果的</li>
+</ul>
+</li>
+</ul>
+<h1 id="DecisionTreeClassifier"><a href="#DecisionTreeClassifier" class="headerlink" title="DecisionTreeClassifier"></a>DecisionTreeClassifier</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.ensemble.RandomForestClassifier(n_estimators=’warn’, criterion=’gini’, </span><br><span class="line">max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, </span><br><span class="line">max_features=’auto’, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, </span><br><span class="line">bootstrap=True, oob_score=False, n_jobs=None, random_state=None, verbose=0, warm_start=False, </span><br><span class="line">class_weight=None)</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<ul>
+<li>其大部分的參數幾乎與決策樹一致</li>
+</ul>
+<h1 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h1><ul>
+<li>其是使用bagging的集成算法都會有的重要參數</li>
+</ul>
+<h2 id="n-estimators"><a href="#n-estimators" class="headerlink" title="n_estimators"></a>n_estimators</h2><blockquote>
+<p>森林中樹木的數量(base estimator的數量)</p>
+<ul>
+<li>通常此值越大，模型效果往往越好<ul>
+<li>任何模型都有決策邊界，其值達到一定程度時，精確性往往不在上升或開始波動</li>
+<li>其值越大，計算量與內存消耗量越大，訓練時間越長</li>
+<li>渴望在訓練難度和模型效果之間取得平衡</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="random-state"><a href="#random-state" class="headerlink" title="random_state"></a>random_state</h2><ul>
+<li>隨機森林中的<code>random_state</code>，其控制的是森林生成的模式(生成一片固定的森林)，而非讓一個森林之中只有一棵樹<ul>
+<li>固定生成的每棵樹的<code>random_state</code>;但是森林中樹跟樹之間還是不一樣</li>
+</ul>
+</li>
+<li>不像決策樹的<code>random_state</code>都是生成同一棵樹</li>
+</ul>
+<h2 id="bootstrap"><a href="#bootstrap" class="headerlink" title="bootstrap"></a>bootstrap</h2><blockquote>
+<p>bagging是通過樣本抽取後有放回的隨機抽樣技術來型成不同的訓練集<br><code>bootstrap</code>就是用來控制抽樣技術的參數</p>
+</blockquote>
+<ul>
+<li>參數默認為<code>True</code>:有放回的隨機採樣技術<ul>
+<li>通常這個參數不會被我們設置為<code>False</code></li>
+</ul>
+</li>
+<li>由於是有放回的抽樣技術，樣本可能在新的自助集中出現多次，其他樣本可能被忽略</li>
+<li>自助集大約平均會包含 <strong>63%</strong> 的原始數據<ul>
+<li>表示會有37%的數據集被浪費掉，沒有參與建模，其被稱為袋外數據(out of bag data;oob)<ul>
+<li>亦可以被用來作為集成算法的測試集使用</li>
+<li><strong>亦指在使用隨機森林時，我們可以不劃分測試集和訓練集，只需要用袋外數據來測試模型</strong></li>
+<li><strong>當原始樣本數及<code>n_estimators</code>不夠大的時候</strong>，也很可能沒有數據落在袋外，便無法使用oob數據來測試模型</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="oob-score"><a href="#oob-score" class="headerlink" title="oob_score"></a>oob_score</h2><ul>
+<li>若希望用袋外數據測試，實例化時將<code>oob_score</code>設為<code>True</code><ul>
+<li><code>RF_classifier = RandomForestClassifier(n_estimators=25,random_state=2,oob_score=True)</code></li>
+</ul>
+</li>
+<li>為<code>True</code>時無須再劃分訓練集及測試集</li>
+</ul>
+<h1 id="重要屬性"><a href="#重要屬性" class="headerlink" title="重要屬性"></a>重要屬性</h1><h2 id="estimators"><a href="#estimators" class="headerlink" title="estimators_"></a>estimators_</h2><ul>
+<li>使用<code>estimator.estimators_</code>查看森林中所有樹的狀況</li>
+<li>其返回每棵樹對象構建的參數，為一列表<ul>
+<li>可以發現每棵樹只有<code>random_state</code>不同</li>
+</ul>
+</li>
+<li>可使用列表的方式取出某棵樹，再利用<code>.屬性</code>的方式查看該樹的屬性<ul>
+<li><code>estimator.estimators_[0].random_state</code><ul>
+<li>查看<code>estimator</code>模型裡第0顆樹的<code>random_state</code>之值</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="oobscore"><a href="#oobscore" class="headerlink" title="oobscore"></a>oob<em>score</em></h2><ul>
+<li>要是建模<code>oob_score</code>為<code>True</code>時，可使用其屬性查看使用袋外數據測試的結果</li>
+</ul>
+<h1 id="重要接口"><a href="#重要接口" class="headerlink" title="重要接口"></a>重要接口</h1><p>和其他演算法模型一樣，隨機森林仍有<code>apply</code>、<code>fit</code>、<code>predict</code>、<code>score</code>等接口</p>
+<h2 id="predict-proba-predict-probability"><a href="#predict-proba-predict-probability" class="headerlink" title="predict_proba (predict probability)"></a>predict_proba (predict probability)</h2><p>返回每個<strong>測試樣本對應被分到每一類標籤的概率</strong></p>
+<ul>
+<li>標籤有幾種不一樣的分類就會返回幾個概率<ul>
+<li>二分類問題：數值大於0.5被分為1，小於0.5被分為0</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>傳統隨機森林是利用bagging規則，平均或多數決集成結果</p>
+<ul>
+<li><code>sklearn</code>中隨機森林<strong>是平均每個樣本對應的predict_proba返回的概率，得到一個平均概率，從而決定樣本的分類</strong></li>
+</ul>
+</blockquote>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="http://www.peixun.net/view/1281.html" target="_blank" rel="noopener">http://www.peixun.net/view/1281.html</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/05/26/ML_RandomForest_Regressor/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-演算法-隨機森林回歸(RandomForestRegressor)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/05/22/ML_Introduction_EnsembleLearning/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-集成學習(ensemble learning)方法概述</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DecisionTreeClassifier"><span class="nav-number">2.</span> <span class="nav-text">DecisionTreeClassifier</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要參數"><span class="nav-number">3.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#n-estimators"><span class="nav-number">3.1.</span> <span class="nav-text">n_estimators</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.</span> <span class="nav-text">random_state</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#bootstrap"><span class="nav-number">3.3.</span> <span class="nav-text">bootstrap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#oob-score"><span class="nav-number">3.4.</span> <span class="nav-text">oob_score</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要屬性"><span class="nav-number">4.</span> <span class="nav-text">重要屬性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#estimators"><span class="nav-number">4.1.</span> <span class="nav-text">estimators_</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#oobscore"><span class="nav-number">4.2.</span> <span class="nav-text">oobscore</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要接口"><span class="nav-number">5.</span> <span class="nav-text">重要接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#predict-proba-predict-probability"><span class="nav-number">5.1.</span> <span class="nav-text">predict_proba (predict probability)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

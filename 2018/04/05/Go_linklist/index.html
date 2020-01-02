@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang資料結構-day14-鏈表(Linked list) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang結構體(struct)鏈表(Linked list)">
+  
+  
+  
+  
+  <meta name="description" content="introduction 結構體會有一些自己的字段，但其中有一個字段，是指向自己結構體類型的指針類型 使用此結構體做為類型的變量，被稱為節點 每個節點包含下一個節點的地址，這樣可把所有的節點都串起來 通常鏈表中的第一個節點被叫做鏈表頭https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8">
+<meta name="keywords" content="2018,Golang,結構體(struct),鏈表(Linked list)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang資料結構-day14-鏈表(Linked list)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/05/Go_linklist/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction 結構體會有一些自己的字段，但其中有一個字段，是指向自己結構體類型的指針類型 使用此結構體做為類型的變量，被稱為節點 每個節點包含下一個節點的地址，這樣可把所有的節點都串起來 通常鏈表中的第一個節點被叫做鏈表頭https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/nntKFEI.jpg">
+<meta property="og:updated_time" content="2018-04-05T16:52:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang資料結構-day14-鏈表(Linked list)">
+<meta name="twitter:description" content="introduction 結構體會有一些自己的字段，但其中有一個字段，是指向自己結構體類型的指針類型 使用此結構體做為類型的變量，被稱為節點 每個節點包含下一個節點的地址，這樣可把所有的節點都串起來 通常鏈表中的第一個節點被叫做鏈表頭https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8">
+<meta name="twitter:image" content="https://i.imgur.com/nntKFEI.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_linklist" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/nntKFEI.jpg" rel="gallery_ck4x0bhqs005agdq7qatn1jaw">
+        <img src="https://i.imgur.com/nntKFEI.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang資料結構-day14-鏈表(Linked list)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/05/Go_linklist/" class="article-date">
+	  <time datetime="2018-04-04T16:00:00.000Z" itemprop="datePublished">四月 5, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ol>
+<li>結構體會有一些自己的字段，但其中有一個字段，是<strong>指向自己結構體類型</strong>的<strong>指針類型</strong></li>
+<li>使用此結構體做為類型的變量，被稱為節點</li>
+<li>每個節點包含下一個節點的地址，這樣可把所有的節點都串起來</li>
+<li>通常鏈表中的第一個節點被叫做<strong>鏈表頭</strong><br><a href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8</a></li>
+</ol>
+<a id="more"></a>
+<hr>
+<h1 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span>&#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student    <span class="comment">//[1]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 結構體的前半部為結構體的一般字段(屬性)，<code>Next</code>字段的類型為自身結構體的指針</p>
+<hr>
+<h1 id="單向鏈表"><a href="#單向鏈表" class="headerlink" title="單向鏈表"></a>單向鏈表</h1><p>又稱<strong>單向連結串列</strong>，它包含兩個域一個資訊域(一般屬性)和一個指標域(<code>Next</code>字段)。<br>指標域連結指向鏈表中的下一個節點，而<strong>最後一個節點則指向一個空值(<code>nil</code>)</strong>。<br>透過<code>Next</code>字段可將使用同種結構體類型的變量全部遍歷</p>
+<ul>
+<li><p>相當於使用一條繩子將所有結構體串起來<br><img src="https://i.imgur.com/WKcVwC6.png" alt="single chain"></p>
+</li>
+<li><p>缺點：要遍歷整張鏈表，需記住<strong>鏈表頭的地址</strong>；從其他任一節點開始遍歷都無法完整查看整張鏈表</p>
+</li>
+<li>若將最後一個節點的<code>next</code>字段指向<strong>鏈表頭地址</strong>，則為<strong>循環單鏈表</strong></li>
+</ul>
+<hr>
+<h2 id="鏈表與陣列"><a href="#鏈表與陣列" class="headerlink" title="鏈表與陣列"></a>鏈表與陣列</h2><p>陣列：在<strong>固定長度</strong>且<strong>連續內存空間</strong>中，通過<strong><code>index</code></strong>訪問各陣列內的元素<br>鏈表：鏈表的內存空間<strong>分配不是連續</strong>的，元素之間串聯需通過指針，(<code>Next</code>字段)<br>且鏈表的<strong>長度不固定</strong>，可隨時增加或減少</p>
+<hr>
+<h2 id="新增與插入節點-尾部插入法"><a href="#新增與插入節點-尾部插入法" class="headerlink" title="新增與插入節點-尾部插入法"></a>新增與插入節點-<strong>尾部插入法</strong></h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//創建頭節點</span></span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		Score : <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//創建第二節點</span></span><br><span class="line">	<span class="keyword">var</span> SecondNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Tom"</span>,</span><br><span class="line">		Age : <span class="number">27</span>,</span><br><span class="line">		Score :<span class="number">60</span>,</span><br><span class="line">		<span class="comment">//[1]</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//插入 第二節點地址 到 頭節點的Next字段中</span></span><br><span class="line">	HeadNode.Next = SecondNode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] <code>Next</code>字段不寫的情況下默認為空</p>
+<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><ul>
+<li>請注意!!，此方法新增的節點都只能在末尾插入</li>
+<li>讓末尾節點的<code>Next</code>字段，從原本指向空(<code>nil</code>)改成指向一個<strong>新的節點地址</strong></li>
+</ul>
+<hr>
+<h2 id="遍歷鏈表的節點"><a href="#遍歷鏈表的節點" class="headerlink" title="遍歷鏈表的節點"></a>遍歷鏈表的節點</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		Score : <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> SecondNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Tom"</span>,</span><br><span class="line">		Age : <span class="number">27</span>,</span><br><span class="line">		Score :<span class="number">60</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	HeadNode.Next = SecondNode</span><br><span class="line"></span><br><span class="line">	<span class="comment">//創建第三個節點</span></span><br><span class="line">	<span class="keyword">var</span> ThirdNode Student</span><br><span class="line">	ThirdNode.Name = <span class="string">"Amy"</span></span><br><span class="line">	ThirdNode.Age = <span class="number">20</span></span><br><span class="line">	ThirdNode.Score = <span class="number">70</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//插入第三個節點的地址 到第二個節點的Next字段</span></span><br><span class="line">	SecondNode.Next = &amp;ThirdNode</span><br><span class="line"></span><br><span class="line">	<span class="comment">//創建一個變量，接收節點資訊，並指向頭節點</span></span><br><span class="line">	view := HeadNode</span><br><span class="line"></span><br><span class="line">	<span class="comment">//只要節點中的資訊不為空，就會打印節點資訊</span></span><br><span class="line">	<span class="keyword">for</span> view != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*view)</span><br><span class="line"></span><br><span class="line">		<span class="comment">//將欲查看的下個節點 指向 已查看完節點的Next字段</span></span><br><span class="line">		view = view.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;Curtis 18 90 0xc04206a1e0&#125;</span><br><span class="line">&#123;Tom 27 60 0xc04206a210&#125;</span><br><span class="line">&#123;Amy 20 70 &lt;nil&gt;&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="批量創建節點-尾部插入"><a href="#批量創建節點-尾部插入" class="headerlink" title="批量創建節點-尾部插入"></a>批量創建節點-尾部插入</h2><h3 id="於main函數中實現"><a href="#於main函數中實現" class="headerlink" title="於main函數中實現"></a>於main函數中實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		Score : <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//定義一個變量記錄尾部節點的指針</span></span><br><span class="line">	tail := HeadNode</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		<span class="comment">//創建新節點</span></span><br><span class="line">		Node := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"Student%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//尾部節點的Next字段指向新節點的地址</span></span><br><span class="line">		tail.Next = &amp;Node</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//將尾部節點替換為新節點的地址，以獲取新節點的指針</span></span><br><span class="line">		tail = &amp;Node</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//遍歷鏈表節點</span></span><br><span class="line">	view(HeadNode)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="函數化實現"><a href="#函數化實現" class="headerlink" title="函數化實現"></a>函數化實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//尾部插入法函數</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loop_tail_insert</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	tail := Node</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Node := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"Student%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">		&#125;</span><br><span class="line">		tail.Next = &amp;Node</span><br><span class="line">		tail = &amp;Node</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name:  <span class="string">"Curtis"</span>,</span><br><span class="line">		Age:   <span class="number">18</span>,</span><br><span class="line">		Score: <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	loop_tail_insert(HeadNode)</span><br><span class="line">	</span><br><span class="line">	view(HeadNode)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;Curtis 18 90 0xc04206a210&#125;</span><br><span class="line">&#123;Student0 81 94.05090880450125 0xc04206a240&#125;</span><br><span class="line">&#123;Student1 47 43.771418718698015 0xc04206a270&#125;</span><br><span class="line">&#123;Student2 81 68.68230728671094 0xc04206a2a0&#125;</span><br><span class="line">&#123;Student3 25 15.651925473279125 0xc04206a2d0&#125;</span><br><span class="line">&#123;Student4 56 30.091186058528706 0xc04206a300&#125;</span><br><span class="line">&#123;Student5 94 81.36399609900968 0xc04206a330&#125;</span><br><span class="line">&#123;Student6 62 38.065718929968604 0xc04206a360&#125;</span><br><span class="line">&#123;Student7 28 46.88898449024232 0xc04206a390&#125;</span><br><span class="line">&#123;Student8 11 29.310185733681575 0xc04206a3c0&#125;</span><br><span class="line">&#123;Student9 37 21.855305259276427 &lt;nil&gt;&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="頭部插入法"><a href="#頭部插入法" class="headerlink" title="頭部插入法"></a>頭部插入法</h2><h3 id="於main函數中實現-1"><a href="#於main函數中實現-1" class="headerlink" title="於main函數中實現"></a>於main函數中實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		Score : <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//新建一個變量來記錄 原舊頭節點的指針</span></span><br><span class="line">	Head := HeadNode</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//創建節點</span></span><br><span class="line">		NewNode := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"stu%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">			</span><br><span class="line">			<span class="comment">//新的節點指向舊的頭節點</span></span><br><span class="line">			Next : Head,</span><br><span class="line">		&#125;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//將 舊的頭節點 替換成 新的頭節點 的指針</span></span><br><span class="line">		Head = &amp;NewNode</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//遍歷鏈表節點</span></span><br><span class="line">	view(Head)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="函數化實現-1"><a href="#函數化實現-1" class="headerlink" title="函數化實現"></a>函數化實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//頭部插入法函數</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loop_head_insert</span><span class="params">(Node *Student)</span><span class="params">(*Student)</span></span>&#123;</span><br><span class="line">	Head := Node</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		NewNode := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"stu%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">			Next : Head,</span><br><span class="line">		&#125;</span><br><span class="line">		Head = &amp;NewNode</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> Head</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">18</span>,</span><br><span class="line">		Score : <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	NewHead := loop_head_insert(HeadNode)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//遍歷鏈表節點</span></span><br><span class="line">	view(NewHead)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;stu9 37 21.855305259276427 0xc04206a3c0&#125;</span><br><span class="line">&#123;stu8 11 29.310185733681575 0xc04206a390&#125;</span><br><span class="line">&#123;stu7 28 46.88898449024232 0xc04206a360&#125;</span><br><span class="line">&#123;stu6 62 38.065718929968604 0xc04206a330&#125;</span><br><span class="line">&#123;stu5 94 81.36399609900968 0xc04206a300&#125;</span><br><span class="line">&#123;stu4 56 30.091186058528706 0xc04206a2d0&#125;</span><br><span class="line">&#123;stu3 25 15.651925473279125 0xc04206a2a0&#125;</span><br><span class="line">&#123;stu2 81 68.68230728671094 0xc04206a270&#125;</span><br><span class="line">&#123;stu1 47 43.771418718698015 0xc04206a240&#125;</span><br><span class="line">&#123;stu0 81 94.05090880450125 0xc04206a210&#125;</span><br><span class="line">&#123;Curtis 18 90 &lt;nil&gt;&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="刪除節點"><a href="#刪除節點" class="headerlink" title="刪除節點"></a>刪除節點</h2><p>紀錄要被刪除節點的上一節點地址，並將上一節點的<code>next</code>字段替換為要刪除節點的<code>next</code>字段(亦就是下一節點的地址)</p>
+<h3 id="於main函數中實現-2"><a href="#於main函數中實現-2" class="headerlink" title="於main函數中實現"></a>於main函數中實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loop_tail_insert</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	tail := Node</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Node := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"Student%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">		&#125;</span><br><span class="line">		tail.Next = &amp;Node</span><br><span class="line">		tail = &amp;Node</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name:  <span class="string">"Curtis"</span>,</span><br><span class="line">		Age:   <span class="number">18</span>,</span><br><span class="line">		Score: <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	loop_tail_insert(HeadNode)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//紀錄頭節點位置</span></span><br><span class="line">	Head := HeadNode</span><br><span class="line"></span><br><span class="line">	<span class="comment">//要刪除的節點特徵</span></span><br><span class="line">	choice := <span class="string">"Curtis"</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//遍歷節點找到要刪除的節點</span></span><br><span class="line">	<span class="keyword">for</span> Head != <span class="literal">nil</span>&#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">//確定第一個節點是否為刪除的節點</span></span><br><span class="line">		<span class="keyword">if</span> Head.Name == choice &#123;</span><br><span class="line">			Head = Head.Next</span><br><span class="line">			HeadNode = Head</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">			</span><br><span class="line">			<span class="comment">//當前節點 的 下一節點的字段符合特徵</span></span><br><span class="line">		&#125;   <span class="keyword">else</span> <span class="keyword">if</span> Head.Next.Name == choice&#123;</span><br><span class="line"></span><br><span class="line">			<span class="comment">//將當前節點的Next字段指向要被刪除節點的Next字段</span></span><br><span class="line">			Head.Next =Head.Next.Next</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">//否則當前節點  更新為  當前節點的Next字段指向的內存地址</span></span><br><span class="line">		Head = Head.Next</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//重新遍歷鏈表</span></span><br><span class="line">	view(HeadNode)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="函數化實現-2"><a href="#函數化實現-2" class="headerlink" title="函數化實現"></a>函數化實現</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loop_tail_insert</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	tail := Node</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Node := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"Student%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">		&#125;</span><br><span class="line">		tail.Next = &amp;Node</span><br><span class="line">		tail = &amp;Node</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">del</span> <span class="params">(Node *Student,choice <span class="keyword">string</span>)</span>*<span class="title">Student</span></span>&#123;</span><br><span class="line">	Head := Node</span><br><span class="line">	<span class="keyword">for</span> Head != <span class="literal">nil</span>&#123;</span><br><span class="line">		<span class="keyword">if</span> Head.Name == choice&#123;</span><br><span class="line">			Head = Head.Next</span><br><span class="line">			Node.Next = <span class="literal">nil</span></span><br><span class="line">			<span class="keyword">return</span> Head</span><br><span class="line">		&#125;<span class="keyword">else</span> <span class="keyword">if</span> Head.Next.Name == choice&#123;</span><br><span class="line">			Head.Next =Head.Next.Next</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		Head = Head.Next</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> Node</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name:  <span class="string">"Curtis"</span>,</span><br><span class="line">		Age:   <span class="number">18</span>,</span><br><span class="line">		Score: <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	loop_tail_insert(HeadNode)</span><br><span class="line">    </span><br><span class="line">	<span class="comment">//返回新節點</span></span><br><span class="line">	New_Node := del(HeadNode,<span class="string">"Curtis"</span>)</span><br><span class="line"></span><br><span class="line">	view(New_Node)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;Student0 81 94.05090880450125 0xc042074240&#125;</span><br><span class="line">&#123;Student1 47 43.771418718698015 0xc042074270&#125;</span><br><span class="line">&#123;Student2 81 68.68230728671094 0xc0420742a0&#125;</span><br><span class="line">&#123;Student3 25 15.651925473279125 0xc0420742d0&#125;</span><br><span class="line">&#123;Student4 56 30.091186058528706 0xc042074300&#125;</span><br><span class="line">&#123;Student5 94 81.36399609900968 0xc042074330&#125;</span><br><span class="line">&#123;Student6 62 38.065718929968604 0xc042074360&#125;</span><br><span class="line">&#123;Student7 28 46.88898449024232 0xc042074390&#125;</span><br><span class="line">&#123;Student8 11 29.310185733681575 0xc0420743c0&#125;</span><br><span class="line">&#123;Student9 37 21.855305259276427 &lt;nil&gt;&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="節點插入"><a href="#節點插入" class="headerlink" title="節點插入"></a>節點插入</h2><p>找到要被插入的節點，讓新節點指向原本的<code>Next</code>字段，在讓當前節點指向新節點</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">	Next *Student</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">view</span><span class="params">(head *Student)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> head != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(*head)</span><br><span class="line">		head = head.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">loop_tail_insert</span><span class="params">(Node *Student)</span></span>&#123;</span><br><span class="line">	tail := Node</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Node := Student&#123;</span><br><span class="line">			Name : fmt.Sprintf(<span class="string">"Student%d"</span>,i),</span><br><span class="line">			Age : rand.Intn(<span class="number">100</span>),</span><br><span class="line">			Score : rand.Float64() * <span class="number">100</span>,</span><br><span class="line">		&#125;</span><br><span class="line">		tail.Next = &amp;Node</span><br><span class="line">		tail = &amp;Node</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">insert</span> <span class="params">(HeadNode *Student,InsertNode *Student,choice <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> HeadNode != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">if</span> HeadNode.Name == choice &#123;</span><br><span class="line">			InsertNode.Next = HeadNode.Next</span><br><span class="line">			HeadNode.Next = InsertNode</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		HeadNode = HeadNode.Next</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> HeadNode *Student = &amp;Student&#123;</span><br><span class="line">		Name:  <span class="string">"Curtis"</span>,</span><br><span class="line">		Age:   <span class="number">18</span>,</span><br><span class="line">		Score: <span class="number">90.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	loop_tail_insert(HeadNode)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> InseretNode *Student = &amp;Student&#123;</span><br><span class="line">		Name:  <span class="string">"Insert"</span>,</span><br><span class="line">		Age:   <span class="number">9</span>,</span><br><span class="line">		Score: <span class="number">0.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	insert(HeadNode,InseretNode,<span class="string">"Student5"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//重新遍歷鏈表</span></span><br><span class="line">	view(HeadNode)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;Curtis 18 90 0xc042074210&#125;</span><br><span class="line">&#123;Student0 81 94.05090880450125 0xc042074240&#125;</span><br><span class="line">&#123;Student1 47 43.771418718698015 0xc042074270&#125;</span><br><span class="line">&#123;Student2 81 68.68230728671094 0xc0420742a0&#125;</span><br><span class="line">&#123;Student3 25 15.651925473279125 0xc0420742d0&#125;</span><br><span class="line">&#123;Student4 56 30.091186058528706 0xc042074300&#125;</span><br><span class="line">&#123;Student5 94 81.36399609900968 0xc0420743f0&#125;</span><br><span class="line">&#123;Insert 9 0 0xc042074330&#125;</span><br><span class="line">&#123;Student6 62 38.065718929968604 0xc042074360&#125;</span><br><span class="line">&#123;Student7 28 46.88898449024232 0xc042074390&#125;</span><br><span class="line">&#123;Student8 11 29.310185733681575 0xc0420743c0&#125;</span><br><span class="line">&#123;Student9 37 21.855305259276427 &lt;nil&gt;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="雙向鏈表"><a href="#雙向鏈表" class="headerlink" title="雙向鏈表"></a>雙向鏈表</h1><p>每個節點有兩個連線：一個指向前一個節點(<code>prev</code>字段)，（當此「連線」為第一個「連線」時，指向空值(<code>nil</code>)或者空列表）<br>而另一個指向下一個節點(<code>next</code>字段)，（當此「連線」為最後一個「連線」時，指向空值(<code>nil</code>)或者空列表）</p>
+<ul>
+<li>在任何節點皆能遍歷整張列表</li>
+</ul>
+<p><img src="https://i.imgur.com/Gi22xWZ.png" alt="double_direct_chain"></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/鏈表-Linked-list/">鏈表(Linked list)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/06/Go_binarytree/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang資料結構-day15-二元樹(binary tree)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/04/Go_package_/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day13-包(package)、線程同步(sync)與atomic操作</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#範例"><span class="nav-number">2.</span> <span class="nav-text">範例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#單向鏈表"><span class="nav-number">3.</span> <span class="nav-text">單向鏈表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#鏈表與陣列"><span class="nav-number">3.1.</span> <span class="nav-text">鏈表與陣列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#新增與插入節點-尾部插入法"><span class="nav-number">3.2.</span> <span class="nav-text">新增與插入節點-尾部插入法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">3.2.1.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遍歷鏈表的節點"><span class="nav-number">3.3.</span> <span class="nav-text">遍歷鏈表的節點</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">3.3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量創建節點-尾部插入"><span class="nav-number">3.4.</span> <span class="nav-text">批量創建節點-尾部插入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#於main函數中實現"><span class="nav-number">3.4.1.</span> <span class="nav-text">於main函數中實現</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函數化實現"><span class="nav-number">3.4.2.</span> <span class="nav-text">函數化實現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-1"><span class="nav-number">3.4.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#頭部插入法"><span class="nav-number">3.5.</span> <span class="nav-text">頭部插入法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#於main函數中實現-1"><span class="nav-number">3.5.1.</span> <span class="nav-text">於main函數中實現</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函數化實現-1"><span class="nav-number">3.5.2.</span> <span class="nav-text">函數化實現</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.5.3.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刪除節點"><span class="nav-number">3.6.</span> <span class="nav-text">刪除節點</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#於main函數中實現-2"><span class="nav-number">3.6.1.</span> <span class="nav-text">於main函數中實現</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函數化實現-2"><span class="nav-number">3.6.2.</span> <span class="nav-text">函數化實現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">3.6.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#節點插入"><span class="nav-number">3.7.</span> <span class="nav-text">節點插入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">3.7.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#雙向鏈表"><span class="nav-number">4.</span> <span class="nav-text">雙向鏈表</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

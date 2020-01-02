@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang物件導向初識-day13-結構體(struct) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang結構體(struct)">
+  
+  
+  
+  
+  <meta name="description" content="introduction 用來自定義複雜的數據結構，亦為一種自定義的類型(與golang自帶的int,string,map類型等價) struct可以包含多個字段，或稱屬性 struct類型可以定義方法，須注意和函數的區分 struct類型屬於值類型，因此要修改struct中的值，必須傳入指針 struct之間可以嵌套，自定義的struct中可再包含其他struct類型 Golang中沒有clas">
+<meta name="keywords" content="2018,Golang,結構體(struct)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang物件導向初識-day13-結構體(struct)">
+<meta property="og:url" content="http://www.taroballz.com/2018/04/04/Go_struct/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="introduction 用來自定義複雜的數據結構，亦為一種自定義的類型(與golang自帶的int,string,map類型等價) struct可以包含多個字段，或稱屬性 struct類型可以定義方法，須注意和函數的區分 struct類型屬於值類型，因此要修改struct中的值，必須傳入指針 struct之間可以嵌套，自定義的struct中可再包含其他struct類型 Golang中沒有clas">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/qKYsH3y.jpg">
+<meta property="og:updated_time" content="2018-04-05T06:18:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang物件導向初識-day13-結構體(struct)">
+<meta name="twitter:description" content="introduction 用來自定義複雜的數據結構，亦為一種自定義的類型(與golang自帶的int,string,map類型等價) struct可以包含多個字段，或稱屬性 struct類型可以定義方法，須注意和函數的區分 struct類型屬於值類型，因此要修改struct中的值，必須傳入指針 struct之間可以嵌套，自定義的struct中可再包含其他struct類型 Golang中沒有clas">
+<meta name="twitter:image" content="https://i.imgur.com/qKYsH3y.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_struct" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/qKYsH3y.jpg" rel="gallery_ck4x0bhr40068gdq7dd3tdfb1">
+        <img src="https://i.imgur.com/qKYsH3y.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang物件導向初識-day13-結構體(struct)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/04/04/Go_struct/" class="article-date">
+	  <time datetime="2018-04-03T16:00:00.000Z" itemprop="datePublished">四月 4, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ol>
+<li>用來自定義複雜的數據結構，亦為一種自定義的類型(與golang自帶的<code>int</code>,<code>string</code>,<code>map</code>類型等價)</li>
+<li>struct可以包含多個字段，或稱<strong>屬性</strong></li>
+<li>struct類型可以定義方法，須注意和函數的區分</li>
+<li>struct類型屬於<strong>值類型</strong>，因此要修改struct中的值，必須傳入<strong>指針</strong></li>
+<li>struct之間可以嵌套，自定義的struct中可再包含其他struct類型</li>
+<li><strong>Golang中沒有class類型，只有struct類型</strong><blockquote>
+<ul>
+<li>可將struct類型當作class類型使用</li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<a id="more"></a>
+<hr>
+<h1 id="定義struct"><a href="#定義struct" class="headerlink" title="定義struct"></a>定義struct</h1><p>用<code>type</code>定義一個自定義的類型，也包括<strong>自定義struct</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="keyword">struct</span>名 <span class="keyword">struct</span> &#123;</span><br><span class="line">	字段<span class="number">1</span> 類型</span><br><span class="line">	字段<span class="number">2</span> 類型</span><br><span class="line">	字段<span class="number">3</span> 類型</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>結構體中可包含多個字段</li>
+</ul>
+<h2 id="example"><a href="#example" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h1><h2 id="初始化為空"><a href="#初始化為空" class="headerlink" title="初始化為空"></a>初始化為空</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//聲明一個Student類型(struct)的變量</span></span><br><span class="line">	<span class="keyword">var</span> A Student   </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">var</span> AA Student = Student&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>當其初始化時字段皆為空</li>
+</ul>
+<hr>
+<h2 id="初始化時賦值"><a href="#初始化時賦值" class="headerlink" title="初始化時賦值"></a>初始化時賦值</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> B Student = Student&#123;</span><br><span class="line">		Name : <span class="string">"Jack"</span>,             <span class="comment">//[1]</span></span><br><span class="line">		Age : <span class="number">20</span>,</span><br><span class="line">		Score: <span class="number">89.5</span>,               <span class="comment">//[1]</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 字段之間賦值需用,隔開，最後字段也需以,結尾</p>
+<h3 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h3><ul>
+<li>亦可初始化部分字段，未初始化的字段會為空</li>
+</ul>
+<hr>
+<h2 id="使用new初始化-返回指針"><a href="#使用new初始化-返回指針" class="headerlink" title="使用new初始化(返回指針)"></a>使用new初始化(返回指針)</h2><p>struct為<strong>值類型</strong>，也可使用<code>new</code>函數初始化</p>
+<ul>
+<li>注意！返回的為<strong>指針類型</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> C *Student = <span class="built_in">new</span>(Student)   <span class="comment">//[1]</span></span><br><span class="line">	</span><br><span class="line">	D := <span class="built_in">new</span>(Student)  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] *Student為Student類型的指針</p>
+<hr>
+<h2 id="取址符-amp-初始化-返回指針"><a href="#取址符-amp-初始化-返回指針" class="headerlink" title="取址符&amp; 初始化(返回指針)"></a>取址符&amp; 初始化(返回指針)</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> E *Student = &amp;Student&#123;&#125;  <span class="comment">//[1]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] E變量的值是使用<code>&amp;</code>取址；所以類型應為<code>*Student</code>，接收<strong>Student類型的指針</strong></p>
+<hr>
+<h1 id="字段訪問"><a href="#字段訪問" class="headerlink" title="字段訪問"></a>字段訪問</h1><p>上數有提到struct類型可當作class類型來使用<br>所以要訪問struct中的字段(屬性)，與其他語言一樣，使用<code>struct名.字段</code>訪問及賦值</p>
+<ul>
+<li>字段名為大寫是外部包可訪問的</li>
+<li>字段名小寫表示為私有字段，外部不可訪問</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">print_info</span><span class="params">(name <span class="keyword">string</span>,age <span class="keyword">int</span>,score <span class="keyword">float64</span>)</span></span>&#123;</span><br><span class="line">	fmt.Printf(<span class="string">"%s's age is %d, he got %.1f point\n"</span>,name,age,score)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> A Student</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//使用 struct名.字段 賦值</span></span><br><span class="line">	A.Name = <span class="string">"Tom"</span></span><br><span class="line">	A.Age = <span class="number">18</span></span><br><span class="line">	A.Score = <span class="number">90.0</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> B Student = Student&#123;</span><br><span class="line">		Name : <span class="string">"Jack"</span>,</span><br><span class="line">		Age : <span class="number">20</span>,</span><br><span class="line">		Score: <span class="number">89.5</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">    <span class="comment">//使用 struct名.字段 訪問</span></span><br><span class="line">	print_info(A.Name,A.Age,A.Score)   </span><br><span class="line">	print_info(B.Name,B.Age,B.Score)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Tom&apos;s age is 18, he got 90.0 point</span><br><span class="line">Jack&apos;s age is 20, he got 89.5 point</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="訪問指針類型的struct-字段"><a href="#訪問指針類型的struct-字段" class="headerlink" title="訪問指針類型的struct 字段"></a>訪問指針類型的struct 字段</h1><p>照理來說訪問<strong>指針類型</strong>的struct 字段應為<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(*變量).字段</span><br></pre></td></tr></table></figure></p>
+<p>但Golang做了<strong>簡化</strong>，會<strong>自動判斷是否為指針類型自動轉換</strong><br>所以即使使用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">變量.字段</span><br></pre></td></tr></table></figure>
+<p>仍能訪問</p>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> E *Student = &amp;Student&#123;&#125;</span><br><span class="line">	</span><br><span class="line">	(*E).Name = <span class="string">"Curtis"</span></span><br><span class="line">	E.Age = <span class="number">18</span></span><br><span class="line">	E.Score = <span class="number">100.0</span></span><br><span class="line">	</span><br><span class="line">	fmt.Println(*E)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;Curtis 18 100&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="struct的內存布局"><a href="#struct的內存布局" class="headerlink" title="struct的內存布局"></a>struct的內存布局</h1><p>struct中所有的字段在內存都是<strong>連續</strong>的(與陣列相同)，布局如下<br><img src="https://i.imgur.com/7d9UP23.png" alt="struct"></p>
+<p>從圖中可以看到，即使結構體接收的為指針類型<br>兩指針的存放的地址是連續的<br>只是兩指針是指向不同的內存地址，指向的內存地址不連續而已</p>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	Age <span class="keyword">int</span></span><br><span class="line">	Score <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> E *Student = &amp;Student&#123;</span><br><span class="line">		Name : <span class="string">"Curtis"</span>,</span><br><span class="line">		Age : <span class="number">20</span>,</span><br><span class="line">		Score : <span class="number">80.0</span>,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">"Name:%p\n"</span>,&amp;E.Name)</span><br><span class="line">	fmt.Printf(<span class="string">"Age: %p\n"</span>,&amp;E.Age)</span><br><span class="line">	fmt.Printf(<span class="string">"Score:%p\n"</span>,&amp;E.Score)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Name:0xc04205a3e0</span><br><span class="line">Age: 0xc04205a3f0</span><br><span class="line">Score:0xc04205a3f8</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/04/04/Go_package_/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Go初識-day13-包(package)、線程同步(sync)與atomic操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/03/Go_map/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Go初識-day12-map類型(key-value pair)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#定義struct"><span class="nav-number">2.</span> <span class="nav-text">定義struct</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example"><span class="nav-number">2.1.</span> <span class="nav-text">example</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#初始化"><span class="nav-number">3.</span> <span class="nav-text">初始化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化為空"><span class="nav-number">3.1.</span> <span class="nav-text">初始化為空</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化時賦值"><span class="nav-number">3.2.</span> <span class="nav-text">初始化時賦值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">3.2.1.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用new初始化-返回指針"><span class="nav-number">3.3.</span> <span class="nav-text">使用new初始化(返回指針)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取址符-amp-初始化-返回指針"><span class="nav-number">3.4.</span> <span class="nav-text">取址符&amp; 初始化(返回指針)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字段訪問"><span class="nav-number">4.</span> <span class="nav-text">字段訪問</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#訪問指針類型的struct-字段"><span class="nav-number">5.</span> <span class="nav-text">訪問指針類型的struct 字段</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">5.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">5.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#struct的內存布局"><span class="nav-number">6.</span> <span class="nav-text">struct的內存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">6.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">6.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

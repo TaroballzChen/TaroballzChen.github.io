@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-讀取數據-API應用-圖像讀取 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="Introduction圖像基本知識 在電腦中圖片是由pixel(像素)組成的 圖片的特徵值就是像素值(長度x寬度x通道數) 黑白圖片又稱為單通道圖片：每一個像素點只有一個值(灰度值)，介於0～255之間 彩色圖片又稱為三通道圖片：每一個像素點由RGB三個值組成">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-讀取數據-API應用-圖像讀取">
+<meta property="og:url" content="http://www.taroballz.com/2019/01/06/DL_imageReadAPI/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction圖像基本知識 在電腦中圖片是由pixel(像素)組成的 圖片的特徵值就是像素值(長度x寬度x通道數) 黑白圖片又稱為單通道圖片：每一個像素點只有一個值(灰度值)，介於0～255之間 彩色圖片又稱為三通道圖片：每一個像素點由RGB三個值組成">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/QQ5bw1U.jpg">
+<meta property="og:updated_time" content="2019-07-29T15:00:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-讀取數據-API應用-圖像讀取">
+<meta name="twitter:description" content="Introduction圖像基本知識 在電腦中圖片是由pixel(像素)組成的 圖片的特徵值就是像素值(長度x寬度x通道數) 黑白圖片又稱為單通道圖片：每一個像素點只有一個值(灰度值)，介於0～255之間 彩色圖片又稱為三通道圖片：每一個像素點由RGB三個值組成">
+<meta name="twitter:image" content="https://i.imgur.com/QQ5bw1U.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_imageReadAPI" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/QQ5bw1U.jpg" rel="gallery_ck4x0bhp7001bgdq7l8v0tsyv">
+        <img src="https://i.imgur.com/QQ5bw1U.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-讀取數據-API應用-圖像讀取
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/01/06/DL_imageReadAPI/" class="article-date">
+	  <time datetime="2019-01-06T08:41:00.000Z" itemprop="datePublished">一月 6, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><h2 id="圖像基本知識"><a href="#圖像基本知識" class="headerlink" title="圖像基本知識"></a>圖像基本知識</h2><ul>
+<li>在電腦中圖片是由pixel(像素)組成的</li>
+<li><strong>圖片的特徵值就是像素值(長度x寬度x通道數)</strong></li>
+<li>黑白圖片又稱為單通道圖片：每一個像素點只有一個值(灰度值)，介於0～255之間</li>
+<li>彩色圖片又稱為三通道圖片：每一個像素點由RGB三個值組成</li>
+</ul>
+<a id="more"></a>
+<h2 id="張量表達圖片數據"><a href="#張量表達圖片數據" class="headerlink" title="張量表達圖片數據"></a>張量表達圖片數據</h2><h3 id="圖像數字化"><a href="#圖像數字化" class="headerlink" title="圖像數字化"></a>圖像數字化</h3><p>三要素：長度、寬度、通道數</p>
+<ul>
+<li>一通道：灰度值</li>
+<li>三通道：RGB</li>
+</ul>
+<h3 id="三要素與張量的關係"><a href="#三要素與張量的關係" class="headerlink" title="三要素與張量的關係"></a>三要素與張量的關係</h3><p>指定3-D張量：<code>[長度,寬度,通道數(channel)]</code></p>
+<ul>
+<li>通道數決定彩色或是黑白圖片</li>
+</ul>
+<h1 id="圖像基本操作"><a href="#圖像基本操作" class="headerlink" title="圖像基本操作"></a>圖像基本操作</h1><p>機器學習進行分類時，每一個樣本必須保持特徵值數量一致(將所有圖片統一大小，像素值一樣)</p>
+<h2 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h2><ul>
+<li>增加圖片數據的統一性</li>
+<li>所有圖片轉換成指定大小</li>
+<li>縮小圖片數據量，防止增加開銷</li>
+</ul>
+<h2 id="縮放圖片大小"><a href="#縮放圖片大小" class="headerlink" title="縮放圖片大小"></a>縮放圖片大小</h2><ul>
+<li><code>tf.image.resize_images(images,size)</code><ul>
+<li>resize過後的圖片可能會改變圖片的數據，整數(uint8)—-&gt;浮點數(float32)<ul>
+<li>一般圖片都是用uint8類型儲存，float32類型還原不了為一張圖片<ul>
+<li>uint8用於存儲：<strong>節約空間</strong></li>
+<li>float32用於<strong>提高矩陣計算的經度</strong></li>
+</ul>
+</li>
+<li>但是計算都是使用float32進行計算</li>
+</ul>
+</li>
+<li><code>images</code><ul>
+<li>4-D形狀(<code>[batch, height, width, channels]</code>)張量的圖片數據<ul>
+<li><code>batch</code>：幾張圖片</li>
+</ul>
+</li>
+<li>3-D形狀(<code>[height, width, channels]</code>)張量的圖片數據</li>
+</ul>
+</li>
+<li><code>size</code>：<ul>
+<li>1-D int32張量</li>
+<li><code>new_height</code>, <code>new_width</code>：圖像的新尺寸，例如<code>[200,200]</code></li>
+</ul>
+</li>
+<li>返回4-D格式 或 3-D格式的圖片</li>
+</ul>
+</li>
+</ul>
+<h1 id="構造圖片文件隊列"><a href="#構造圖片文件隊列" class="headerlink" title="構造圖片文件隊列"></a>構造圖片文件隊列</h1><p>與讀取文字文件的文件隊列相同</p>
+<h1 id="構造讀取器"><a href="#構造讀取器" class="headerlink" title="構造讀取器"></a>構造讀取器</h1><ul>
+<li>圖片是一張一張的讀取</li>
+<li><code>tf.WholeFileReader()</code><ul>
+<li>將<strong>文件的全部內容</strong>作為值輸出的讀取器</li>
+<li>常用於圖片讀取</li>
+<li>返回一個圖像讀取器實例</li>
+</ul>
+</li>
+</ul>
+<h2 id="method"><a href="#method" class="headerlink" title="method"></a>method</h2><ul>
+<li><code>read(file_queue)</code>：輸出將是一個<strong>文件名(key)</strong>和該<strong>文件的內容(value)</strong><ul>
+<li>預設value為一張圖片的內容</li>
+</ul>
+</li>
+</ul>
+<h1 id="圖片解碼"><a href="#圖片解碼" class="headerlink" title="圖片解碼"></a>圖片解碼</h1><p>其對應不同的圖片格式擁有不同的解碼器</p>
+<h2 id="JPEG"><a href="#JPEG" class="headerlink" title="JPEG"></a>JPEG</h2><ul>
+<li><code>tf.image.decode_jpeg(contents)</code><ul>
+<li>將JPEG編碼的圖像解碼為<strong>uint8類型的張量</strong></li>
+<li><code>contents</code>：讀取器讀取出來的文件內容<ul>
+<li>也就是<code>read</code>方法的<code>value</code>內容</li>
+</ul>
+</li>
+<li>返回一個uint8張量<ul>
+<li>3-D形狀(<code>[height,width,channels]</code>)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="PNG"><a href="#PNG" class="headerlink" title="PNG"></a>PNG</h2><ul>
+<li><code>tf.image.decode_png(contents)</code><ul>
+<li>將PNG編碼的圖像解碼為<strong>uint8 或 uint16類型的張量</strong></li>
+<li>返回一個uint8 或 uint16張量類型<ul>
+<li>3-D形狀(<code>[height,width,channels]</code>)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="批處理"><a href="#批處理" class="headerlink" title="批處理"></a>批處理</h1><p>在進行批處理之前<strong>長、寬、通道數</strong>全部都必須定義，不能有不確定的值，否則會報錯</p>
+<ul>
+<li>利用<code>set_shape</code>方法固定長、寬、通道數</li>
+<li>batch方法與文件批處理相同</li>
+</ul>
+<h1 id="讀取狗的圖片範例"><a href="#讀取狗的圖片範例" class="headerlink" title="讀取狗的圖片範例"></a>讀取狗的圖片範例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> glob</span><br><span class="line"></span><br><span class="line"><span class="comment"># 讀取狗的圖片並轉換成張量</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">picread</span><span class="params">(filelist)</span>:</span></span><br><span class="line">    <span class="comment"># 2. 構造文件隊列</span></span><br><span class="line">    file_queue = tf.train.string_input_producer(filelist)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 構造圖片讀取器讀取圖片內容(預設值是讀取一張圖片)</span></span><br><span class="line">    reader = tf.WholeFileReader()</span><br><span class="line">    key,val = reader.read(file_queue)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 對讀取圖片進行解碼</span></span><br><span class="line">    image_data = tf.image.decode_jpeg(val)  <span class="comment"># 讀取出來image_data為unit8類型，shape(?,?,?)，分別為長、寬、通道數</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 5. 處理圖片的大小(統一大小)</span></span><br><span class="line">    image_resize = tf.image.resize_images(image_data,[<span class="number">200</span>,<span class="number">200</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注意：批處理之前一定要把樣本的形狀固定[200,200,3]</span></span><br><span class="line">    image_resize.set_shape([<span class="number">200</span>,<span class="number">200</span>,<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 6. 進行批處理</span></span><br><span class="line">    image_batch = tf.train.batch([image_resize],batch_size=<span class="number">100</span>,num_threads=<span class="number">1</span>,capacity=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> image_batch</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># 1. 找到文件，並放入列表  路徑+名字---&gt;列表當中</span></span><br><span class="line">    file_name = glob.glob(<span class="string">"./dog_pic/*.jpg"</span>)</span><br><span class="line">    filelist = [path_name <span class="keyword">for</span> path_name <span class="keyword">in</span> file_name]</span><br><span class="line"></span><br><span class="line">    image_batch = picread(filelist)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 開啟會話運行結果</span></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="comment"># 定義一個線程協調器</span></span><br><span class="line">        coord = tf.train.Coordinator()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 開啟讀文件的線程</span></span><br><span class="line">        threads = tf.train.start_queue_runners(sess,coord = coord)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 查看讀取的內容(模擬訓練)</span></span><br><span class="line">        print(sess.run([image_batch]))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 回收子線程</span></span><br><span class="line">        coord.request_stop()</span><br><span class="line">        coord.join(threads)</span><br></pre></td></tr></table></figure>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[array([[[[255.        , 255.        , 255.        ],</span><br><span class="line">         [255.        , 255.        , 255.        ],</span><br><span class="line">         [255.        , 255.        , 255.        ],</span><br><span class="line">         ...,</span><br><span class="line">        [[199.        ,  98.        ,  56.        ],</span><br><span class="line">         [197.28      , 100.12      ,  55.08      ],</span><br><span class="line">         [204.24      , 103.479996  ,  57.239998  ],</span><br><span class="line">         ...,</span><br><span class="line">         [129.4002    ,  82.00026   ,  69.40021   ],</span><br><span class="line">         [109.520035  ,  77.16      ,  74.359985  ],</span><br><span class="line">         [ 94.56012   ,  72.20004   ,  74.04001   ]]]], dtype=float32)]</span><br></pre></td></tr></table></figure>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ul>
+<li>讀取出來的圖片矩陣要儲存，為了節省空間最好使用<code>uint8</code>類型進行儲存</li>
+<li>如要將圖片數據進行計算，為了提高精度需使用<code>tf.cast()</code>轉換類型的方法轉換成<code>float32</code>類型</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/02/16/Go_manage/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang基礎-補充知識-工程管理與go install
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/02/DL_csvReadAPI/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-讀取數據-API應用-csv檔讀取</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#圖像基本知識"><span class="nav-number">1.1.</span> <span class="nav-text">圖像基本知識</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#張量表達圖片數據"><span class="nav-number">1.2.</span> <span class="nav-text">張量表達圖片數據</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#圖像數字化"><span class="nav-number">1.2.1.</span> <span class="nav-text">圖像數字化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三要素與張量的關係"><span class="nav-number">1.2.2.</span> <span class="nav-text">三要素與張量的關係</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圖像基本操作"><span class="nav-number">2.</span> <span class="nav-text">圖像基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#目的"><span class="nav-number">2.1.</span> <span class="nav-text">目的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#縮放圖片大小"><span class="nav-number">2.2.</span> <span class="nav-text">縮放圖片大小</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#構造圖片文件隊列"><span class="nav-number">3.</span> <span class="nav-text">構造圖片文件隊列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#構造讀取器"><span class="nav-number">4.</span> <span class="nav-text">構造讀取器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">4.1.</span> <span class="nav-text">method</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#圖片解碼"><span class="nav-number">5.</span> <span class="nav-text">圖片解碼</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JPEG"><span class="nav-number">5.1.</span> <span class="nav-text">JPEG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PNG"><span class="nav-number">5.2.</span> <span class="nav-text">PNG</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#批處理"><span class="nav-number">6.</span> <span class="nav-text">批處理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讀取狗的圖片範例"><span class="nav-number">7.</span> <span class="nav-text">讀取狗的圖片範例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">7.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">8.</span> <span class="nav-text">tips</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

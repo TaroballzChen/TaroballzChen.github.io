@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-特徵工程-特徵選擇-嵌入法 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程">
+  
+  
+  
+  
+  <meta name="description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
+<meta name="keywords" content="Python,2019,機器學習(Machine Learning),特徵工程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-特徵工程-特徵選擇-嵌入法">
+<meta property="og:url" content="http://www.taroballz.com/2019/06/14/ML_feature_selection_embedded_method/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/blIlhIK.jpg">
+<meta property="og:updated_time" content="2019-06-21T17:30:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-特徵工程-特徵選擇-嵌入法">
+<meta name="twitter:description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
+<meta name="twitter:image" content="https://i.imgur.com/blIlhIK.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_feature_selection_embedded_method" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/blIlhIK.jpg" rel="gallery_ck4x0bhs2009dgdq7lnfklbu7">
+        <img src="https://i.imgur.com/blIlhIK.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-特徵工程-特徵選擇-嵌入法
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/06/14/ML_feature_selection_embedded_method/" class="article-date">
+	  <time datetime="2019-06-13T16:00:00.000Z" itemprop="datePublished">六月 14, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法<ul>
+<li>特徵選擇 及 演算法訓練 <strong>同時進行</strong></li>
+<li>特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程</li>
+<li><a href="https://i.imgur.com/30KO8Y1.png" target="_blank" rel="noopener">Embedded method</a><ul>
+<li>最後得到各個特徵的權值，根據權值從大到小選擇特徵</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效</li>
+<li>缺點1：無法有效界定<strong>有用特徵 權值係數的臨界值</strong><ul>
+<li>不像過濾法有p值可幫助我們做界定</li>
+<li>只能說要是權值係數為0時，則對模型毫無貢獻</li>
+<li>改善方法：<ul>
+<li>權值係數作為 <strong>超參數</strong>，使用<strong>學習曲線方法</strong>進行調參</li>
+<li>根據 <strong>模型本身性質</strong> 判斷權值係數範圍</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>缺點2：因為其是<strong>引入演算法</strong>來挑選特徵，且會<strong>使用全部特徵</strong><ul>
+<li>計算時間與所使用的演算法 及 數據量有關係</li>
+</ul>
+</li>
+<li><code>from sklearn.feature_selection import SelectFromModel</code>    </li>
+</ul>
+<a id="more"></a>
+<h1 id="SelectFromModel"><a href="#SelectFromModel" class="headerlink" title="SelectFromModel"></a>SelectFromModel</h1><ul>
+<li>為一種 元轉換器</li>
+<li>可與任何擬合後具有<code>coef_</code>, <code>feature_importances_</code>屬性 或 參數中可選懲罰項的評估器合用<ul>
+<li>RandomForest, DecisionTree：具有<code>feature_importances_</code>(取值範圍為0-1)<ul>
+<li>若重要性低於閥值：特徵不重要</li>
+</ul>
+</li>
+<li>LogisticRegression：l1,l2 懲罰項</li>
+<li>SVM：l2 懲罰項</li>
+</ul>
+</li>
+</ul>
+<h2 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h2><h3 id="estimator"><a href="#estimator" class="headerlink" title="estimator"></a>estimator</h3><p>所使用的演算法模型，只要是帶<code>feature_importances_</code> or <code>coef_</code> 屬性 or 帶有 l1, l2懲罰項的演算法都可以使用</p>
+<ul>
+<li><strong>必須將模型實例化後，填入實例化的模型變量</strong></li>
+</ul>
+<h3 id="threshold"><a href="#threshold" class="headerlink" title="threshold"></a>threshold</h3><p>特徵重要性的閥值，重要性低於指定的值都將被刪除</p>
+<ul>
+<li><strong>挑選threshold的值非常重要，其決定刪掉多少特徵</strong></li>
+<li>其為<strong>超參數</strong><ul>
+<li><strong>使用學習曲線方法調教此參數</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="fit-transform"><a href="#fit-transform" class="headerlink" title="fit_transform"></a>fit_transform</h3><p>與其他轉換器不一樣的是<code>fit_transform</code>參數中須放入兩個參數</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_Embedded = SelectFromModel(estimator=RFC_,threshold=<span class="number">0.005</span>).fit_transform(X,y)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一個參數須放入欲轉換的feature矩陣<code>X</code></li>
+<li>第二個參數為Label矩陣<code>y</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><ul>
+<li>比起必須思考很多統計量的過濾法來說，嵌入法可能是更有效的選擇</li>
+<li>過濾法計算較嵌入法快<ul>
+<li>大型數據中，優先使用過濾法</li>
+<li>或使用結合過濾法和嵌入法的包裝法(wrapper)</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/06/15/ML_feature_selection_wrapper_method/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-特徵工程-特徵選擇-包裝法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/06/12/ML_feature_selection_filter_method/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-特徵工程-特徵選擇(feature_selection)-過濾法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SelectFromModel"><span class="nav-number">2.</span> <span class="nav-text">SelectFromModel</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重要參數"><span class="nav-number">2.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#estimator"><span class="nav-number">2.1.1.</span> <span class="nav-text">estimator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threshold"><span class="nav-number">2.1.2.</span> <span class="nav-text">threshold</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform"><span class="nav-number">2.2.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">3.</span> <span class="nav-text">總結</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

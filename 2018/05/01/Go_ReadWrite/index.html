@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Golang物件導向初識-day21-讀寫文件 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="2018Golang接口(interface)osbufioioutil文件讀寫多態">
+  
+  
+  
+  
+  <meta name="description" content="終端讀寫 之前常使用的fmt包，就是操作終端的代表 操作終端相關文件句柄常量  os.Stdin:標準輸入 os.Stdout:標準輸出 os.Stderr:標準錯誤輸出">
+<meta name="keywords" content="2018,Golang,接口(interface),os,bufio,ioutil,文件讀寫,多態">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Golang物件導向初識-day21-讀寫文件">
+<meta property="og:url" content="http://www.taroballz.com/2018/05/01/Go_ReadWrite/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="終端讀寫 之前常使用的fmt包，就是操作終端的代表 操作終端相關文件句柄常量  os.Stdin:標準輸入 os.Stdout:標準輸出 os.Stderr:標準錯誤輸出">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/rT52qLM.jpg">
+<meta property="og:updated_time" content="2018-04-30T16:16:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Golang物件導向初識-day21-讀寫文件">
+<meta name="twitter:description" content="終端讀寫 之前常使用的fmt包，就是操作終端的代表 操作終端相關文件句柄常量  os.Stdin:標準輸入 os.Stdout:標準輸出 os.Stderr:標準錯誤輸出">
+<meta name="twitter:image" content="https://i.imgur.com/rT52qLM.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Go_ReadWrite" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/rT52qLM.jpg" rel="gallery_ck4x0bhq5003kgdq79r9v8zpm">
+        <img src="https://i.imgur.com/rT52qLM.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Golang物件導向初識-day21-讀寫文件
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/05/01/Go_ReadWrite/" class="article-date">
+	  <time datetime="2018-04-30T16:00:00.000Z" itemprop="datePublished">五月 1, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="終端讀寫"><a href="#終端讀寫" class="headerlink" title="終端讀寫"></a>終端讀寫</h1><ul>
+<li>之前常使用的fmt包，就是操作終端的代表</li>
+<li>操作<strong>終端</strong>相關<strong>文件句柄</strong>常量<blockquote>
+<ul>
+<li><code>os.Stdin</code>:標準輸入</li>
+<li><code>os.Stdout</code>:標準輸出</li>
+<li><code>os.Stderr</code>:標準錯誤輸出</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<a id="more"></a>
+<h2 id="Fprintln-Fprintf-搭配os實現終端寫入"><a href="#Fprintln-Fprintf-搭配os實現終端寫入" class="headerlink" title="Fprintln(Fprintf)搭配os實現終端寫入"></a>Fprintln(Fprintf)搭配os實現終端寫入</h2><p><code>fmt.Println(io.Writer, a ...interface{})</code></p>
+<ul>
+<li>第一個參數為一個實現io.Writer接口的實例</li>
+<li>第二個參數為內容</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">"fmt"</span></span><br><span class="line">    <span class="string">"os"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    fmt.Fprintln(os.Stdout,<span class="string">"Hello World"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>其中的<code>os.Stdout</code>實現了<code>io.Writer</code>這個接口，因此可作為參數被傳入</li>
+</ul>
+<h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br></pre></td></tr></table></figure>
+<ul>
+<li>可以發現其功能與<code>fmt.Println()</code>直接輸出的功能是一樣的</li>
+</ul>
+<hr>
+<h2 id="Scanln-Scanf-實現終端讀入"><a href="#Scanln-Scanf-實現終端讀入" class="headerlink" title="Scanln(Scanf)實現終端讀入"></a>Scanln(Scanf)實現終端讀入</h2><p>可使用<code>Scanln()</code>實現單行從終端讀入，其等價於<code>Scanf()</code><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testScanln</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span></span><br><span class="line">	fmt.Printf(<span class="string">"input int &amp; string:"</span>)</span><br><span class="line">	fmt.Scanln(&amp;a,&amp;b)</span><br><span class="line">	fmt.Fprintf(os.Stdout,<span class="string">"int:%d, string:%s"</span>,a,b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testScanln()</span><br><span class="line">&#125;</span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>其<code>fmt.Scanln(&amp;a,&amp;b)</code>等同於<code>fmt.Scanf(%d %s,a,b)</code></li>
+</ul>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; input int &amp; string:1234 Hello!!</span><br><span class="line">&gt; int:1234, string:Hello!!</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Sscanf實現字符串格式化讀入"><a href="#Sscanf實現字符串格式化讀入" class="headerlink" title="Sscanf實現字符串格式化讀入"></a>Sscanf實現字符串格式化讀入</h2><p>將特定的字符串格式化讀入，並賦值給不同的變量</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testSscanf</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> c <span class="keyword">float64</span></span><br><span class="line">	str := <span class="string">"18 Hello 12.3"</span></span><br><span class="line">	fmt.Sscanf(str,<span class="string">"%d %s %f"</span>, &amp;a, &amp;b, &amp;c)  <span class="comment">//注意給變量賦值要加上＆</span></span><br><span class="line">	fmt.Fprintf(os.Stdout,<span class="string">"int:%d, string:%s, float:%.2f"</span>, a, b, c)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testSscanf()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>fmt.Sscanf(string, format, ...variables)</code>:</li>
+</ul>
+<ol>
+<li>第一個參數為要讀入的字符串(string)</li>
+<li>第二個參數為要讀入的格式(format)</li>
+<li>第三個參數為可變參數，將讀入的值賦給各個變量(…variables)</li>
+</ol>
+<h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">int:18, string:Hello, float:12.30</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="文件讀寫"><a href="#文件讀寫" class="headerlink" title="文件讀寫"></a>文件讀寫</h1><p>套用終端讀寫使用的<code>Fprintln()</code>方法，只要將實現<code>io.Writer</code>接口的文件句柄傳參亦能實現讀寫文件的功能</p>
+<h2 id="建立-Write-文件句柄"><a href="#建立-Write-文件句柄" class="headerlink" title="建立(Write)文件句柄"></a>建立(Write)文件句柄</h2><p>使用<code>os.OpenFile()</code>方法來開啟文件，且其賦值的變量就為<strong>文件句柄</strong><br><code>os.OpenFile()</code>方法通常用作<strong>寫文件</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file,err := os.OpenFile(<span class="string">"test.log"</span>, os.O_CREATE|os.O_WRONLY, <span class="number">0664</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>第一個參數要是沒有填寫路徑則會打開(創建)在GoPATH下的文件</p>
+</li>
+<li><p>第二個參數為<strong>文件開啟的模式</strong> (為一常量)，標記之間可使用<code>|</code>(<strong>或</strong>操作)加成</p>
+<blockquote>
+<ul>
+<li><code>os.O_WRONLY</code>: 只寫</li>
+<li><code>os.O_CREATE</code>: 創建文件(如果文件不存在)</li>
+<li><code>os.O_RDONLY</code>: 只讀</li>
+<li><code>os.O_RDWR</code>: 讀寫皆可</li>
+<li><code>os.O_TRUNC</code>: 清空(文件存在情況下)</li>
+</ul>
+</blockquote>
+</li>
+<li><p>第三個參數設置<strong>權限控制</strong></p>
+<blockquote>
+<ul>
+<li><code>r</code> —&gt; 004</li>
+<li><code>w</code> —&gt; 002</li>
+<li><code>x</code> —&gt; 001</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	file,err := os.OpenFile(<span class="string">"/tmp/test.log"</span>,os.O_CREATE|os.O_WRONLY,<span class="number">0664</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"OpenFile Failed !, Error:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> file.Close()</span><br><span class="line">	fmt.Fprintln(file,<span class="string">"Test WritingFile!!"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; cat /tmp/test.log test.log</span><br><span class="line">&gt; Test WritingFile!!</span><br></pre></td></tr></table></figure>
+<ul>
+<li>從上述結果可以知道<code>File</code>這個變量亦實現了<code>io.Writer</code>接口，才能作為參數被傳入到Fprintln()函數中</li>
+</ul>
+<hr>
+<h2 id="建立-Read-文件句柄"><a href="#建立-Read-文件句柄" class="headerlink" title="建立(Read)文件句柄"></a>建立(Read)文件句柄</h2><p>使用<code>os.Open()</code>方法來開啟文件<br><code>os.Open()</code>方法通常用作<strong>讀文件</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file,err := os.Open(<span class="string">"test.log"</span>)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>只有一個參數，要是沒有填寫路徑預設會打開在GoPATH底下的同名文件</li>
+</ul>
+<hr>
+<h1 id="ioutil文件讀寫"><a href="#ioutil文件讀寫" class="headerlink" title="ioutil文件讀寫"></a>ioutil文件讀寫</h1><p>位於<code>io/ioutil</code>包中，可將整個文件直接讀取或是直接寫入</p>
+<ul>
+<li>應用於讀取或是寫入的文件大小不是很大的時候</li>
+</ul>
+<h2 id="讀操作"><a href="#讀操作" class="headerlink" title="讀操作"></a>讀操作</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testIoutilRead</span><span class="params">(FileName <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//ioutil.Readfile可直接讀取整份文件的內容至緩衝區</span></span><br><span class="line">	file,err := ioutil.ReadFile(FileName)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//os.Stderr亦實現了io.writer的操作，可返回錯誤至終端</span></span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"File Error: %s"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//讀出來的data為[]byte類型，需轉為string型</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(file))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testIoutilRead(<span class="string">"Testlog.log"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-4"><a href="#result-4" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Test Hello World</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="寫操作"><a href="#寫操作" class="headerlink" title="寫操作"></a>寫操作</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testIoutilWrite</span><span class="params">(FileName <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//將data直接寫入至文件中</span></span><br><span class="line">	err := ioutil.WriteFile(FileName,[]<span class="keyword">byte</span>(<span class="string">"Writing..."</span>),<span class="number">0664</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"File Write Error:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testIoutilWrite(<span class="string">"/tmp/test.log"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>ioutil.WriteFile</code>只有一個錯誤的返回值</li>
+<li>請注意寫入多data為<code>[]byte</code>類型</li>
+<li>第三個參數為<strong>權限設置</strong></li>
+</ul>
+<h3 id="result-5"><a href="#result-5" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; cat /tmp/test.log</span><br><span class="line">&gt; Writing...</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="帶緩衝區-bufio-的讀寫"><a href="#帶緩衝區-bufio-的讀寫" class="headerlink" title="帶緩衝區(bufio)的讀寫"></a>帶緩衝區(bufio)的讀寫</h1><p>不直接操作底層的io(包括文件或是終端)，而是將數據先寫入緩衝區，再由Golang或是操作系統將緩衝區的數據寫入文件中</p>
+<ul>
+<li>一般會先寫入到緩衝區中主要是為了性能，因為直接操作存放在硬碟的文件比記憶體的效率差很多</li>
+</ul>
+<h2 id="從終端讀入"><a href="#從終端讀入" class="headerlink" title="從終端讀入"></a>從終端讀入</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testbufio_terminalRead</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//NewReader的參數為一個實現io.Reader接口的實例</span></span><br><span class="line">	bufioRead :=  bufio.NewReader(os.Stdin)</span><br><span class="line">	fmt.Printf(<span class="string">"input something I can read:"</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//ReadBytes方法的參數填入分隔符 讀到何種字元為止（注意填入代表byte的單引號）</span></span><br><span class="line">	str,err := bufioRead.ReadBytes(<span class="string">'\n'</span>)    </span><br><span class="line">	<span class="keyword">if</span> err !=  <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"Terminal Read FAILED!!:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//讀到的bytes要將其轉為string</span></span><br><span class="line">	fmt.Println(<span class="keyword">string</span>(str))  </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testbufio_terminalRead()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>請注意<code>bufio.NewReader()</code>創造的實例有很多方法可以自己嘗試</li>
+<li>亦可將<code>os.Stdin</code>替換成其他實現<code>io.Reader</code>接口的實例，實現不同的讀操作(文件，網路等)</li>
+</ul>
+<h3 id="result-6"><a href="#result-6" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; input something I can read:You have to read this sentence</span><br><span class="line">&gt; You have to read this sentence</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="從文件讀入"><a href="#從文件讀入" class="headerlink" title="從文件讀入"></a>從文件讀入</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testbufio_FileRead</span><span class="params">(FileName <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//前面有介紹讀文件通常使用os.Open()</span></span><br><span class="line">	file, err := os.Open(FileName)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">"file open failed with Error:"</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//記得關閉文件</span></span><br><span class="line">	<span class="keyword">defer</span> file.Close()</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//新建一個緩衝區讀取的實例，file文件句柄實現了io.Reader接口</span></span><br><span class="line">	bufioRead := bufio.NewReader(file)</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">//一次讀入一行</span></span><br><span class="line">		line,err := bufioRead.ReadString(<span class="string">'\n'</span>)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">// io.EOF為讀到文件最後一行時會返回的錯誤，捕捉錯誤以 確定讀到最後一行</span></span><br><span class="line">		<span class="keyword">if</span> err == io.EOF &#123;</span><br><span class="line">			fmt.Println(<span class="string">"The End"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err != io.EOF &#123;</span><br><span class="line">            fmt.Println(<span class="string">"ReadLine Error:"</span>,err)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">		fmt.Printf(line)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testbufio_FileRead(<span class="string">"Testlog.log"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-7"><a href="#result-7" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Test Hello World</span><br><span class="line">The End</span><br></pre></td></tr></table></figure>
+<h3 id="os-File"><a href="#os-File" class="headerlink" title="os.File"></a>os.File</h3><p><code>os.File</code>是一個結構體(struct)<br>之前提到的<code>os.Stdin</code>,<code>os.Stdout</code>,<code>os.Stderr</code>,file文件句柄都屬於<code>os.File</code>的指針類型</p>
+<hr>
+<h2 id="寫入文件"><a href="#寫入文件" class="headerlink" title="寫入文件"></a>寫入文件</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testbufioWrite</span><span class="params">(FileName <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	file,err := os.OpenFile(FileName,os.O_WRONLY|os.O_CREATE,<span class="number">0664</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"File Open Error:%s"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> file.Close()</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//創建一個bufio.NewWriter對象</span></span><br><span class="line">	writer := bufio.NewWriter(file)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//將要寫的內容先存入緩衝區</span></span><br><span class="line">	writer.WriteString(<span class="string">"test bufio writing..."</span>)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//將寫入緩衝區(內存)的數據全部刷入文件(硬碟)</span></span><br><span class="line">	writer.Flush()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testbufioWrite(<span class="string">"bufioWritingTest.log"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="讀取壓縮文件"><a href="#讀取壓縮文件" class="headerlink" title="讀取壓縮文件"></a>讀取壓縮文件</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">testReadgzip</span><span class="params">(FileName <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	fi, err := os.Open(FileName)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"Open file err : %s"</span>,err)</span><br><span class="line">		os.Exit(<span class="number">1</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> fi.Close()   <span class="comment">//記得最後須關閉文件</span></span><br><span class="line">	</span><br><span class="line">	<span class="comment">//gzip.NewReader方法具解壓縮的功能</span></span><br><span class="line">	<span class="comment">//gz變量接收解壓所過後所得到的文字訊息</span></span><br><span class="line">	gz,err := gzip.NewReader(fi)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"ungzip Failed: %s"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//將gz變量讀取到的文字讀入緩存區中,並打印出來</span></span><br><span class="line">	r := bufio.NewReader(gz)</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		line,err := r.ReadString(<span class="string">'\n'</span>)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &amp;&amp; err == io.EOF &#123;</span><br><span class="line">			fmt.Fprintf(os.Stdout,<span class="string">"File Read Finish"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Print(line)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	testReadgzip(<span class="string">"Testlog.log.gz"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-8"><a href="#result-8" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Test Hello World</span><br><span class="line">File Read Finish</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="拷貝文件"><a href="#拷貝文件" class="headerlink" title="拷貝文件"></a>拷貝文件</h1><p>拷貝文件使用<code>io.Copy(dst Writer, src Reader)(written int64, err error)</code>方法</p>
+<ul>
+<li><code>dst</code>為原文件，實現了<code>Writer</code>接口</li>
+<li><code>src</code>為拷貝文件位置，實現了<code>Reader</code>接口</li>
+<li>翻閱Go文件源碼便可以知道，其實他是不斷的循環讀取src文件，並寫入到dst文件中<br><a href="https://golang.org/src/io/io.go" target="_blank" rel="noopener">https://golang.org/src/io/io.go</a> line:359</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestCopy</span><span class="params">(dst_file,src_file <span class="keyword">string</span>)</span><span class="params">(written <span class="keyword">int64</span>,err error)</span></span>&#123;</span><br><span class="line">	src,err := os.Open(src_file)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"dst File open Failed:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> src.Close()</span><br><span class="line"></span><br><span class="line">	dst,err := os.OpenFile(dst_file,os.O_CREATE|os.O_WRONLY,<span class="number">0666</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"src File open Failed:"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> dst.Close()</span><br><span class="line">	<span class="keyword">return</span> io.Copy(dst,src)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	_ ,err := TestCopy(<span class="string">"new_dst_file.go"</span>,<span class="string">"test2.go"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Fprintf(os.Stderr,<span class="string">"Copy Failed:%s"</span>,err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"Copy sucess"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-9"><a href="#result-9" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Copy sucess</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Golang/">Golang</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bufio/">bufio</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ioutil/">ioutil</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/os/">os</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多態/">多態</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/接口-interface/">接口(interface)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/文件讀寫/">文件讀寫</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/05/02/Go_Args/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Golang物件導向初識-day22-命令行參數
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/04/15/Go_reflect/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Golang物件導向初識-day20-反射(reflect)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#終端讀寫"><span class="nav-number">1.</span> <span class="nav-text">終端讀寫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Fprintln-Fprintf-搭配os實現終端寫入"><span class="nav-number">1.1.</span> <span class="nav-text">Fprintln(Fprintf)搭配os實現終端寫入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scanln-Scanf-實現終端讀入"><span class="nav-number">1.2.</span> <span class="nav-text">Scanln(Scanf)實現終端讀入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sscanf實現字符串格式化讀入"><span class="nav-number">1.3.</span> <span class="nav-text">Sscanf實現字符串格式化讀入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件讀寫"><span class="nav-number">2.</span> <span class="nav-text">文件讀寫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#建立-Write-文件句柄"><span class="nav-number">2.1.</span> <span class="nav-text">建立(Write)文件句柄</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.1.1.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#建立-Read-文件句柄"><span class="nav-number">2.2.</span> <span class="nav-text">建立(Read)文件句柄</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ioutil文件讀寫"><span class="nav-number">3.</span> <span class="nav-text">ioutil文件讀寫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#讀操作"><span class="nav-number">3.1.</span> <span class="nav-text">讀操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-4"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寫操作"><span class="nav-number">3.2.</span> <span class="nav-text">寫操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-5"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#帶緩衝區-bufio-的讀寫"><span class="nav-number">4.</span> <span class="nav-text">帶緩衝區(bufio)的讀寫</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#從終端讀入"><span class="nav-number">4.1.</span> <span class="nav-text">從終端讀入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-6"><span class="nav-number">4.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#從文件讀入"><span class="nav-number">4.2.</span> <span class="nav-text">從文件讀入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-7"><span class="nav-number">4.2.1.</span> <span class="nav-text">result</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#os-File"><span class="nav-number">4.2.2.</span> <span class="nav-text">os.File</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#寫入文件"><span class="nav-number">4.3.</span> <span class="nav-text">寫入文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#讀取壓縮文件"><span class="nav-number">5.</span> <span class="nav-text">讀取壓縮文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-8"><span class="nav-number">5.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拷貝文件"><span class="nav-number">6.</span> <span class="nav-text">拷貝文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-9"><span class="nav-number">6.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

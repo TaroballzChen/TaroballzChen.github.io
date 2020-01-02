@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python多進程">
+  
+  
+  
+  
+  <meta name="description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
+<meta name="keywords" content="Python,多進程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)">
+<meta property="og:url" content="http://www.taroballz.com/2018/01/11/processing_communcation/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:updated_time" content="2018-12-02T17:39:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)">
+<meta name="twitter:description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-processing_communcation" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/01/11/processing_communcation/" class="article-date">
+	  <time datetime="2018-01-10T16:00:00.000Z" itemprop="datePublished">一月 11, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h1><ul>
+<li>進程之間<strong>互相獨立</strong>，預設為<strong>不能共享數據</strong></li>
+<li>透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信<ul>
+<li>Queue(隊列)：<ul>
+<li>先進來的先出去，後進來的後出去</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>透過Manager實現進程之間的數據共享<a id="more"></a>
+</li>
+</ul>
+<h1 id="Notice"><a href="#Notice" class="headerlink" title="Notice:"></a>Notice:</h1><ul>
+<li>使用queue.Queue()調用的方法為線程隊列不適用於進程間的通信</li>
+</ul>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue :"></a>Queue :</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Queue</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(q,name)</span>:</span>                        <span class="comment">#以參數的方式將對列物件以參數型式導入子進程          </span></span><br><span class="line">    q.put(<span class="string">'My Process_name is %s and put the data to the id %d queue'</span>%(name,id(q)))</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    q = Queue()              <span class="comment">#於主進程創建隊列物件</span></span><br><span class="line">    process_list=[]</span><br><span class="line">    print(<span class="string">"main queue id: %d"</span>%id(q))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        proc = Process(target=func,args=(q,<span class="string">'Process-%d'</span>%i))</span><br><span class="line">        process_list.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">    print(q.get())    <span class="comment">#往管道中取數據</span></span><br><span class="line">    print(q.get())</span><br><span class="line">    print(q.get())</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Queue()</code>參數可填入管道的長度<ul>
+<li><code>Queue(3)</code>表示創建能存三筆資料的管道物件</li>
+</ul>
+</li>
+<li>創建的<code>Queue</code>物件可放置任意數據類型</li>
+<li>通過<code>Queue.get()</code>取數據<ul>
+<li>先<code>put</code>的先取出，後<code>put</code>的後取出</li>
+<li>要是<code>Queue</code>為空的情況下，還執意<code>get</code>的話，會堵塞到有數據可取出為止</li>
+<li>可使用<code>Queue.get_nowait()</code>方法，要是<strong>堵塞</strong>了會直接<strong>報錯</strong></li>
+</ul>
+</li>
+</ul>
+<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main queue id: 52342000</span><br><span class="line">My Process_name is Process-1 and put the data to the id 64566512 queue</span><br><span class="line">My Process_name is Process-0 and put the data to the id 43398512 queue</span><br><span class="line">My Process_name is Process-2 and put the data to the id 61551856 queue</span><br></pre></td></tr></table></figure></p>
+<p>從上面執行結果可知道我們所創建的Queue物件似乎為一個copy的對象並指向不同RAM地址貌似不是對同一個隊列進行操作<br>但是從主進程<code>get()</code>的結果卻發現的確是對同一隊列的資料進行操作，<br>原因應為copy後的隊列內部進行了pickle的序列化及反序列化的操作</p>
+<h3 id="判斷Queue是否為滿-full-或空-empty"><a href="#判斷Queue是否為滿-full-或空-empty" class="headerlink" title="判斷Queue是否為滿(full)或空(empty)"></a>判斷Queue是否為滿(full)或空(empty)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Queue.full() <span class="comment">#判斷管道是否為滿</span></span><br><span class="line"></span><br><span class="line">Queue.empty() <span class="comment">#判斷管道是否為空</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>返回bool值</li>
+</ul>
+<h2 id="Pipe-類似socket通信"><a href="#Pipe-類似socket通信" class="headerlink" title="Pipe (類似socket通信)"></a>Pipe (類似socket通信)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Pipe</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(conn)</span>:</span></span><br><span class="line">    conn.send(<span class="string">"Hi I'm your subprocess. My ID is %d"</span>%os.getpid())</span><br><span class="line">    print(<span class="string">"ID %d receive main_process message: "</span>%os.getpid(),conn.recv())</span><br><span class="line">    conn.close()</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main_conn , sub_conn = Pipe()    <span class="comment">#使用Pipe()函數同時建立主進程及自進程兩個通信的物件</span></span><br><span class="line">    processlist=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=func,args=(sub_conn,))</span><br><span class="line">        processlist.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">        print(<span class="string">"I'm mainprocess, I receive my sub_process message: "</span>,main_conn.recv())</span><br><span class="line">        main_conn.send(<span class="string">"Remember I'm your Master"</span>)</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> processlist:</span><br><span class="line">        each_process.join()</span><br></pre></td></tr></table></figure>
+<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m mainprocess, I receive my sub_process message:  Hi I&apos;m your subprocess. My ID is 8424</span><br><span class="line">ID 8424 receive main_process message:  Remember I&apos;m your Master</span><br><span class="line">I&apos;m mainprocess, I receive my sub_process message:  Hi I&apos;m your subprocess. My ID is 13468</span><br><span class="line">ID 13468 receive main_process message:  Remember I&apos;m your Master</span><br></pre></td></tr></table></figure></p>
+<h2 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a>Manager</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Manager</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(dic,lis,n)</span>:</span>            <span class="comment">#對字典及列表進行操作</span></span><br><span class="line">    dic[<span class="string">"Process_%s"</span>%n] = <span class="string">"1"</span></span><br><span class="line">    dic[<span class="string">'2'</span>] = <span class="number">2</span></span><br><span class="line">    dic[<span class="number">0.25</span>] = <span class="literal">None</span></span><br><span class="line">    lis.append(n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">with</span> Manager() <span class="keyword">as</span> manager:       <span class="comment">#創建一個Manager()的物件</span></span><br><span class="line">        dic = manager.dict()         <span class="comment">#透過Manager()物件創建一個空字典 此字典進程之間可以共享</span></span><br><span class="line">        lis = manager.list(range(<span class="number">5</span>)) <span class="comment">#透過Manager()物件創建一個含0-5數字的列表 此列表進程之間可以共享</span></span><br><span class="line">        process_list = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            proc = Process(target=func, args=(dic,lis,i))</span><br><span class="line">            proc.start()</span><br><span class="line">            process_list.append(proc)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">            each_process.join()</span><br><span class="line">        print(dic)</span><br><span class="line">        print(lis)</span><br></pre></td></tr></table></figure>
+<p>其結果為<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;0.25: None, &apos;Process_9&apos;: &apos;1&apos;, &apos;2&apos;: 2, &apos;Process_8&apos;: &apos;1&apos;, &apos;Process_4&apos;: &apos;1&apos;, &apos;Process_0&apos;: &apos;1&apos;, &apos;Process_7&apos;: &apos;1&apos;, &apos;Process_2&apos;: &apos;1&apos;, &apos;Process_6&apos;: &apos;1&apos;, &apos;Process_1&apos;: &apos;1&apos;, &apos;Process_3&apos;: &apos;1&apos;, &apos;Process_5&apos;: &apos;1&apos;&#125;</span><br><span class="line">[0, 1, 2, 3, 4, 0, 1, 2, 3, 6, 5, 4, 8, 7, 9]</span><br></pre></td></tr></table></figure></p>
+<p>我們可以發現使用Manager各個進程是對同一個列表及字典進行操作</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html" target="_blank" rel="noopener">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多進程/">多進程</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/01/17/gevent/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Python模塊-協程(yield,greenlet,gevent)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/09/multiprocessing/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python模塊-multiprocessing多進程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">2.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">3.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue"><span class="nav-number">3.1.</span> <span class="nav-text">Queue :</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷Queue是否為滿-full-或空-empty"><span class="nav-number">3.1.1.</span> <span class="nav-text">判斷Queue是否為滿(full)或空(empty)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pipe-類似socket通信"><span class="nav-number">3.2.</span> <span class="nav-text">Pipe (類似socket通信)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Manager"><span class="nav-number">3.3.</span> <span class="nav-text">Manager</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference:</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

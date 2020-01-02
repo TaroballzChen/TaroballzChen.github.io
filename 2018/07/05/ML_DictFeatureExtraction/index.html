@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>機器學習-特徵工程-字典特徵抽取(feature extraction) | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵工程特徵抽取(feature extraction)">
+  
+  
+  
+  
+  <meta name="description" content="機器學習機器學習是從數據(data)中自動分析獲得模型(model)，並利用規律對未知的數據進行預測(predict)  數據和特徵決定了機器學習的上限，而模型和算法只是逼近這個上限而已">
+<meta name="keywords" content="Python,2018,機器學習(Machine Learning),特徵工程,特徵抽取(feature extraction)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="機器學習-特徵工程-字典特徵抽取(feature extraction)">
+<meta property="og:url" content="http://www.taroballz.com/2018/07/05/ML_DictFeatureExtraction/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="機器學習機器學習是從數據(data)中自動分析獲得模型(model)，並利用規律對未知的數據進行預測(predict)  數據和特徵決定了機器學習的上限，而模型和算法只是逼近這個上限而已">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/ScDAZOF.jpg">
+<meta property="og:updated_time" content="2019-04-07T05:28:24.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="機器學習-特徵工程-字典特徵抽取(feature extraction)">
+<meta name="twitter:description" content="機器學習機器學習是從數據(data)中自動分析獲得模型(model)，並利用規律對未知的數據進行預測(predict)  數據和特徵決定了機器學習的上限，而模型和算法只是逼近這個上限而已">
+<meta name="twitter:image" content="https://i.imgur.com/ScDAZOF.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-ML_DictFeatureExtraction" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/ScDAZOF.jpg" rel="gallery_ck4x0bhrc0074gdq7o0d618ao">
+        <img src="https://i.imgur.com/ScDAZOF.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      機器學習-特徵工程-字典特徵抽取(feature extraction)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/05/ML_DictFeatureExtraction/" class="article-date">
+	  <time datetime="2018-07-04T16:00:00.000Z" itemprop="datePublished">七月 5, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="機器學習"><a href="#機器學習" class="headerlink" title="機器學習"></a>機器學習</h1><p>機器學習是從<strong>數據(data)</strong>中自動分析獲得模型(model)，並利用規律對未知的數據進行預測(predict)</p>
+<ul>
+<li>數據和特徵決定了機器學習的上限，而模型和算法只是逼近這個上限而已<a id="more"></a>
+</li>
+</ul>
+<h1 id="one-hot-編碼"><a href="#one-hot-編碼" class="headerlink" title="one-hot 編碼"></a>one-hot 編碼</h1><ul>
+<li>不讓不同的特徵(皮膚顏色：黃、黑、白, 性別：男、女)之間有優先級之分</li>
+<li>把不同類別的特徵轉換為以下形式，利於進行分析 </li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Sample\皮膚顏色</th>
+<th style="text-align:center">黑</th>
+<th style="text-align:center">黃</th>
+<th style="text-align:center">白</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<h1 id="特徵抽取-提取-feature-extraction"><a href="#特徵抽取-提取-feature-extraction" class="headerlink" title="特徵抽取/提取(feature extraction)"></a>特徵抽取/提取(feature extraction)</h1><p>特徵抽取是對<strong>任意數據(文本or圖像)</strong>等數據進行<strong>特徵值化</strong>便于機器學習</p>
+<ul>
+<li>特徵值化是為了計算機更好的去理解數據</li>
+</ul>
+<h2 id="sklearn特徵抽取API"><a href="#sklearn特徵抽取API" class="headerlink" title="sklearn特徵抽取API"></a>sklearn特徵抽取API</h2><ul>
+<li>使用<code>sklearn.feature_extraction</code></li>
+</ul>
+<hr>
+<h3 id="字典特徵抽取"><a href="#字典特徵抽取" class="headerlink" title="字典特徵抽取"></a>字典特徵抽取</h3><p>對<strong>字典數據</strong>進行特徵值化</p>
+<ul>
+<li>把字典中一些類別的數據，分別轉換成<strong>特徵</strong></li>
+<li>應用場景：<ul>
+<li>數據集中有很多的類別特徵(性別，人員乘坐的船艙…等)<ol>
+<li>將數據集的特徵轉換成字典類型</li>
+<li><code>DictVectorizer</code>轉換</li>
+</ol>
+</li>
+<li>本身拿到的數據就是字典類型即直接使用字典特徵抽取</li>
+</ul>
+</li>
+<li>使用<code>sklearn.feature_extraction.DictVectorizer</code></li>
+</ul>
+<h4 id="DictVectorizer-sparse-True-…"><a href="#DictVectorizer-sparse-True-…" class="headerlink" title="DictVectorizer(sparse=True,…)"></a>DictVectorizer(sparse=True,…)</h4><p>實例化了一個<strong>字典向量化</strong>的實例(轉換器類)</p>
+<ul>
+<li>sparse矩陣(節約內存，方便讀取處理)</li>
+<li><code>sparse=False</code>時則返回一般矩陣(ndarray type)</li>
+</ul>
+<h5 id="fit-transform-X"><a href="#fit-transform-X" class="headerlink" title="fit_transform(X)"></a>fit_transform(X)</h5><p>使用此方法就能將一個字典數據化</p>
+<ul>
+<li>X: <strong>字典</strong>或者包含<strong>字典的迭代器</strong></li>
+<li>返回值: 返回sparse矩陣</li>
+</ul>
+<h5 id="inverse-transform-X"><a href="#inverse-transform-X" class="headerlink" title="inverse_transform(X)"></a>inverse_transform(X)</h5><ul>
+<li>X: <strong>array陣列</strong>或者<strong>sparse矩陣</strong></li>
+<li>返回值: 轉換之前的數據格式(將陣列轉回原本的字典，形式會改變)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[&#123;&apos;city=Taipei&apos;: 1.0, &apos;temperature&apos;: 35.0&#125;, </span><br><span class="line"> &#123;&apos;city=Tainan&apos;: 1.0, &apos;temperature&apos;: 32.0&#125;, </span><br><span class="line"> &#123;&apos;city=Nantou&apos;: 1.0, &apos;temperature&apos;: 30.0&#125;, </span><br><span class="line"> &#123;&apos;city=Chiayi&apos;: 1.0, &apos;temperature&apos;: 31.0&#125;]</span><br></pre></td></tr></table></figure>
+<h5 id="get-feature-names"><a href="#get-feature-names" class="headerlink" title="get_feature_names()"></a>get_feature_names()</h5><ul>
+<li>返回<strong>類別</strong>的名稱</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[&apos;city=Chiayi&apos;, </span><br><span class="line"> &apos;city=Nantou&apos;, </span><br><span class="line"> &apos;city=Tainan&apos;, </span><br><span class="line"> &apos;city=Taipei&apos;, </span><br><span class="line"> &apos;temperature&apos;]</span><br></pre></td></tr></table></figure>
+<h5 id="transform-X"><a href="#transform-X" class="headerlink" title="transform(X)"></a>transform(X)</h5><ul>
+<li>按照原先的標準轉換</li>
+</ul>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><ol>
+<li>實例化類<code>DictVectorizer</code></li>
+<li>調用<code>fit_transform</code>方法輸入數據並轉換</li>
+</ol>
+<ul>
+<li>注意返回格式為<strong>sparse矩陣</strong></li>
+</ul>
+<h4 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line"></span><br><span class="line">dictData = [</span><br><span class="line">    &#123;<span class="string">"city"</span>:<span class="string">"Taipei"</span>,<span class="string">"temperature"</span>:<span class="number">35</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"city"</span>:<span class="string">"Tainan"</span>,<span class="string">"temperature"</span>:<span class="number">32</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"city"</span>:<span class="string">"Nantou"</span>,<span class="string">"temperature"</span>:<span class="number">30</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"city"</span>:<span class="string">"Chiayi"</span>,<span class="string">"temperature"</span>:<span class="number">31</span>&#125;,</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#字典數據抽取</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dictvec</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化 字典轉換器類</span></span><br><span class="line">    dict = DictVectorizer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    trans_data = dict.fit_transform(dictData)</span><br><span class="line"></span><br><span class="line">    print(trans_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    dictvec()</span><br></pre></td></tr></table></figure>
+<h5 id="sparse-True-預設"><a href="#sparse-True-預設" class="headerlink" title="sparse = True(預設)"></a>sparse = True(預設)</h5><p>結果返回<strong>稀疏(sparse)矩陣</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">(0, 3)	1.0</span><br><span class="line">(0, 4)	35.0</span><br><span class="line">(1, 2)	1.0</span><br><span class="line">(1, 4)	32.0</span><br><span class="line">(2, 1)	1.0</span><br><span class="line">(2, 4)	30.0</span><br><span class="line">(3, 0)	1.0</span><br><span class="line">(3, 4)	31.0</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>sparse矩陣較節約內存，提高加載數據的效率</li>
+<li>前面的元組為第幾行，第幾列，後面的數字為值</li>
+</ul>
+<h5 id="sparse-False"><a href="#sparse-False" class="headerlink" title="sparse = False"></a>sparse = False</h5><p><code>DictVectorizer(sparse=False)</code>，返回ndarray(一般矩陣)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[[ 0.  0.  0.  1. 35.]</span><br><span class="line"> [ 0.  0.  1.  0. 32.]</span><br><span class="line"> [ 0.  1.  0.  0. 30.]</span><br><span class="line"> [ 1.  0.  0.  0. 31.]]</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵抽取-feature-extraction/">特徵抽取(feature extraction)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/07/05/ML_FeaturePreProcessing/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          機器學習-特徵工程-特徵預處理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/07/05/ML_TextFeatureExtraction/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">機器學習-特徵工程-文本特徵抽取</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#機器學習"><span class="nav-number">1.</span> <span class="nav-text">機器學習</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#one-hot-編碼"><span class="nav-number">2.</span> <span class="nav-text">one-hot 編碼</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特徵抽取-提取-feature-extraction"><span class="nav-number">3.</span> <span class="nav-text">特徵抽取/提取(feature extraction)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn特徵抽取API"><span class="nav-number">3.1.</span> <span class="nav-text">sklearn特徵抽取API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字典特徵抽取"><span class="nav-number">3.1.1.</span> <span class="nav-text">字典特徵抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#DictVectorizer-sparse-True-…"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">DictVectorizer(sparse=True,…)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">3.1.1.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">3.1.1.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#get-feature-names"><span class="nav-number">3.1.1.1.3.</span> <span class="nav-text">get_feature_names()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#transform-X"><span class="nav-number">3.1.1.1.4.</span> <span class="nav-text">transform(X)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流程"><span class="nav-number">3.1.1.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Example"><span class="nav-number">3.1.1.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#sparse-True-預設"><span class="nav-number">3.1.1.3.1.</span> <span class="nav-text">sparse = True(預設)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#sparse-False"><span class="nav-number">3.1.1.3.2.</span> <span class="nav-text">sparse = False</span></a></li></ol></li></ol></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

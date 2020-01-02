@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>深度學習-tensorflow基礎-讀取數據-API應用-csv檔讀取 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  
+  
+  
+  
+  <meta name="description" content="構造文件名隊列(string_input_producer)不管任何形式的文件(csv,圖片,二進制)都會使用此API來構造文件名的隊列  tf.train.string_input_producer(string_tensor,shuffle=True) string_tensor：含有文件名的1階張量 列表裡面含有各個文件的路徑+文件名 可直接傳入列表，會將其轉換成一階張量   num_epo">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度學習-tensorflow基礎-讀取數據-API應用-csv檔讀取">
+<meta property="og:url" content="http://www.taroballz.com/2019/01/02/DL_csvReadAPI/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="構造文件名隊列(string_input_producer)不管任何形式的文件(csv,圖片,二進制)都會使用此API來構造文件名的隊列  tf.train.string_input_producer(string_tensor,shuffle=True) string_tensor：含有文件名的1階張量 列表裡面含有各個文件的路徑+文件名 可直接傳入列表，會將其轉換成一階張量   num_epo">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/Yn1zjMc.jpg">
+<meta property="og:updated_time" content="2019-07-29T17:41:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度學習-tensorflow基礎-讀取數據-API應用-csv檔讀取">
+<meta name="twitter:description" content="構造文件名隊列(string_input_producer)不管任何形式的文件(csv,圖片,二進制)都會使用此API來構造文件名的隊列  tf.train.string_input_producer(string_tensor,shuffle=True) string_tensor：含有文件名的1階張量 列表裡面含有各個文件的路徑+文件名 可直接傳入列表，會將其轉換成一階張量   num_epo">
+<meta name="twitter:image" content="https://i.imgur.com/Yn1zjMc.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
+
+
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_csvReadAPI" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+<div class="article-gallery">
+  <div class="article-gallery-photos">
+    
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Yn1zjMc.jpg" rel="gallery_ck4x0bhp9001hgdq7qcbdj1vg">
+        <img src="https://i.imgur.com/Yn1zjMc.jpg" itemprop="image">
+      </a>
+    
+  </div>
+</div>
+
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      深度學習-tensorflow基礎-讀取數據-API應用-csv檔讀取
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2019/01/02/DL_csvReadAPI/" class="article-date">
+	  <time datetime="2019-01-01T16:01:00.000Z" itemprop="datePublished">一月 2, 2019</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="構造文件名隊列-string-input-producer"><a href="#構造文件名隊列-string-input-producer" class="headerlink" title="構造文件名隊列(string_input_producer)"></a>構造文件名隊列(string_input_producer)</h1><p><strong>不管任何形式的文件(csv,圖片,二進制)都會使用此API來構造文件名的隊列</strong></p>
+<ul>
+<li><code>tf.train.string_input_producer(string_tensor,shuffle=True)</code><ul>
+<li><code>string_tensor</code>：含有文件名的1階張量<ul>
+<li>列表裡面含有各個文件的<strong>路徑+文件名</strong></li>
+<li><strong>可直接傳入列表，會將其轉換成一階張量</strong></li>
+</ul>
+</li>
+<li><code>num_epochs</code>：<ul>
+<li>當讀入的量比較少時，且批處理隊列所需要的數據量比較大時，會重複的使用已經讀取過的文件</li>
+<li>預設是過無限次的數據，直到滿足批處理隊列的大小為止，或者<strong>可限定讀取次數</strong></li>
+</ul>
+</li>
+<li><code>shuffle</code>：bool值，是否亂序讀取，預設為True</li>
+<li>返回一個具有<strong>路徑+檔名的字符串</strong>隊列</li>
+</ul>
+</li>
+<li>將輸出字符串(例如：文件名)輸入到管道隊列<a id="more"></a>
+</li>
+</ul>
+<h1 id="構造文件閱讀器"><a href="#構造文件閱讀器" class="headerlink" title="構造文件閱讀器"></a>構造文件閱讀器</h1><p>用於<strong>讀取隊列內容</strong>，<strong>不同文件格式所使用的閱讀器亦不同</strong></p>
+<h2 id="文本文件"><a href="#文本文件" class="headerlink" title="文本文件"></a>文本文件</h2><ul>
+<li>通常是以逗號作為分隔值的csv或txt格式</li>
+<li>預設是<strong>按行讀取</strong>，且<strong>一次只讀取一行</strong></li>
+<li><code>tf.TextLineReader()</code><ul>
+<li>返回一個讀取器的實例</li>
+</ul>
+</li>
+</ul>
+<h2 id="讀取TfRecords文件"><a href="#讀取TfRecords文件" class="headerlink" title="讀取TfRecords文件"></a>讀取TfRecords文件</h2><ul>
+<li><code>tf.TFRecordReader()</code><ul>
+<li>返回一個讀取器實例</li>
+</ul>
+</li>
+</ul>
+<h2 id="method"><a href="#method" class="headerlink" title="method"></a>method</h2><p>以上三種讀取器都有一個共同的方法：</p>
+<ul>
+<li><code>read(file_queue)</code>：從隊列中讀取指定數量內容<ul>
+<li>返回一個tensor元組<ul>
+<li>key為文件名;value為一個樣本內容(行,字節)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="文件內容解碼器"><a href="#文件內容解碼器" class="headerlink" title="文件內容解碼器"></a>文件內容解碼器</h1><p>由於從文件中讀取的是字符串或bits，需要函數去解析這些內容到張量</p>
+<h2 id="CSV解碼"><a href="#CSV解碼" class="headerlink" title="CSV解碼"></a>CSV解碼</h2><ul>
+<li><code>tf.decode_csv(records,record_defaults=None,field_delim=None,name=None)</code><ul>
+<li><code>records</code>：tensor型字符串，每個字符串是csv中讀取器讀取出來的記錄行<ul>
+<li>也就是閱讀器<code>read</code>方法<strong>返回的value值</strong></li>
+</ul>
+</li>
+<li><code>field_delim</code>：分割符號，預設的分割符號為”,”</li>
+<li><code>record_defaults</code>：決定所得張量類型(指定每樣本的每一column的類型)，並設置一個缺失值的默認值<ul>
+<li>可按照不同數據類型進行解碼<ul>
+<li><code>[[1],[&quot;None&quot;],[0.0]]</code>：有三個colmn分別為int類型(缺失值預設為1)，string型(缺失值預設為”None”)，float型(缺失值預設為0.0)</li>
+</ul>
+</li>
+<li>必須為一個二維的列表</li>
+</ul>
+</li>
+<li><strong>返回每個樣本每一列之值</strong><ul>
+<li>一列有多少值就用多少變量去接收</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>將csv轉換為張量，與<code>tf.TextLineReader</code>搭配使用</li>
+</ul>
+<h1 id="開啟子線程操作"><a href="#開啟子線程操作" class="headerlink" title="開啟子線程操作"></a>開啟子線程操作</h1><p>開啟線程進行讀取操作(於會話當中運行)，為固定寫法</p>
+<ul>
+<li><code>tf.train.strat_queue_runners(sess=None,coord=None)</code><ul>
+<li>收集所有圖中的隊列線程，並啟動線程</li>
+<li><code>coord</code>：其開啟線程後仍需要有回收的機制，因此須<strong>定義線程協調器</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="範例-讀取csv文件"><a href="#範例-讀取csv文件" class="headerlink" title="範例(讀取csv文件)"></a>範例(讀取csv文件)</h1><p>欲讀取A.csv,B.csv,C.csv中的數據其數據內容如下<br>A.csv:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Alpha1,A1</span><br><span class="line">Alpha2,A2</span><br><span class="line">Alpha3,A3</span><br></pre></td></tr></table></figure></p>
+<p>B.csv:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Beta1,B1</span><br><span class="line">Beta2,B2</span><br><span class="line">Beta3,B3</span><br></pre></td></tr></table></figure></p>
+<p>C.csv:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Gama1,C1</span><br><span class="line">Gama2,C2</span><br><span class="line">Gama3,C3</span><br></pre></td></tr></table></figure></p>
+<h2 id="代碼"><a href="#代碼" class="headerlink" title="代碼"></a>代碼</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="comment"># 定一個csv讀取函數其接收存放數據的路徑+文件列表</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">csvread</span><span class="params">(FileList)</span>:</span></span><br><span class="line">    <span class="comment"># 1. 構造文件隊列</span></span><br><span class="line">    file_queue = tf.train.string_input_producer(FileList)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 2. 構造csv閱讀器讀取隊列文件中的數據(按行讀取)</span></span><br><span class="line">    Reader = tf.TextLineReader()</span><br><span class="line">    key, val = Reader.read(file_queue)  <span class="comment"># 調用閱讀器的read方法，返回key與value</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 3. 對每一行內容解碼</span></span><br><span class="line">    records = [[<span class="string">"None"</span>],[<span class="string">"None"</span>]]  <span class="comment"># 根據column數決定二維陣列中有幾個列表，並填入默認值</span></span><br><span class="line">    Feature,Label = tf.decode_csv(val,record_defaults=records)  <span class="comment">#共兩列數據因此用兩個變量接收</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Feature,Label        <span class="comment"># 將每一列得到的值返回</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 找到欲訓練的文件，將所有文件的 路徑+文件名 放入列表</span></span><br><span class="line">    FileName = os.listdir(<span class="string">"./Training_Data"</span>)</span><br><span class="line">    filelist = [os.path.join(<span class="string">"./Training_Data/"</span>,name) <span class="keyword">for</span> name <span class="keyword">in</span> FileName] <span class="comment"># 拼接路徑</span></span><br><span class="line">    </span><br><span class="line">    Feature,Label = csvread(filelist)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        <span class="comment"># 定義一個線程協調器</span></span><br><span class="line">        coord = tf.train.Coordinator()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 開啟讀取文件的線程</span></span><br><span class="line">        threads = tf.train.start_queue_runners(sess,coord=coord)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 讀取內容(訓練操作)</span></span><br><span class="line">        print(sess.run([Feature,Label]))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 回收子線程</span></span><br><span class="line">        coord.request_stop()</span><br><span class="line">        coord.join(threads)</span><br></pre></td></tr></table></figure>
+<h2 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[b&apos;Alpha1&apos;, b&apos;A1&apos;]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>讀取一行的數據，如想要讀取多個數據須進行批處理操作</li>
+</ul>
+<h1 id="管道讀端批處理"><a href="#管道讀端批處理" class="headerlink" title="管道讀端批處理"></a>管道讀端批處理</h1><p>由於預設只會讀取一個樣本，如要進行批處理(進行多個數據的讀取)，使用以下兩個API，便於之後指定每批次多個樣本的訓練</p>
+<ul>
+<li><code>tf.train.batch(tensors,batch_size,num_threads=1,capacity=32,name=None)</code><ul>
+<li>其可讀取指定大小(個數)的張量</li>
+<li><code>tensors</code>：可以是包含張量的列表(一行有多少數據)，欲批處理的內容都要放到列表當中</li>
+<li><code>batch_size</code>：從隊列中讀取的批處理大小<ul>
+<li>每一次讀取多少條數據</li>
+<li>批處理大小，跟隊列，數據的數量多少沒有影響，只決定當前此批次取多少數據</li>
+<li>取的數據有無重複，對訓練並無影響</li>
+</ul>
+</li>
+<li><code>num_threads</code>：進入隊列的線程數</li>
+<li><code>capacity</code>：整數，隊列中元素的最大數量</li>
+<li>返回批處理完成多個value值的tensor</li>
+</ul>
+</li>
+<li><code>tf.train.shuffle_batch(tensors,batch_size,num_threads=1,capacity,min_after_dequeue)</code><ul>
+<li>亂序讀取指定大小(個數)的張量</li>
+<li><code>min_after_dequeue</code>：留下隊列裡的張量個數，能夠保持隨機打亂的狀態</li>
+</ul>
+</li>
+</ul>
+<h2 id="改善代碼"><a href="#改善代碼" class="headerlink" title="改善代碼"></a>改善代碼</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">csvread</span><span class="params">(FileList)</span>:</span></span><br><span class="line"></span><br><span class="line">    file_queue = tf.train.string_input_producer(FileList)</span><br><span class="line"></span><br><span class="line">    Reader = tf.TextLineReader()</span><br><span class="line">    key, val = Reader.read(file_queue)  <span class="comment"># 調用閱讀器的read方法，返回key與value</span></span><br><span class="line"></span><br><span class="line">    records = [[<span class="string">"None"</span>],[<span class="string">"None"</span>]]  <span class="comment"># 根據column數決定二維陣列中有幾個列表，並填入默認值</span></span><br><span class="line">    Feature,Label = tf.decode_csv(val,record_defaults=records)  <span class="comment">#共兩列數據因此用兩個變量接收</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 4. 欲讀取多個數據，批處理</span></span><br><span class="line">    Feature_batch, Label_batch = tf.train.batch([Feature,Label],batch_size=<span class="number">20</span>,num_threads=<span class="number">1</span>,capacity=<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> Feature_batch,Label_batch        <span class="comment"># 將每一列得到的值返回</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line"></span><br><span class="line">    FileName = os.listdir(<span class="string">"./Training_Data"</span>)</span><br><span class="line">    filelist = [os.path.join(<span class="string">"./Training_Data/"</span>,name) <span class="keyword">for</span> name <span class="keyword">in</span> FileName] <span class="comment"># 拼接路徑</span></span><br><span class="line"></span><br><span class="line">    Feature_batch,Label_batch = csvread(filelist)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    </span><br><span class="line">        coord = tf.train.Coordinator()</span><br><span class="line"></span><br><span class="line">        threads = tf.train.start_queue_runners(sess,coord=coord)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 讀取內容(訓練操作)，要取幾批次的數據進行訓練自行使用for循環訓練</span></span><br><span class="line">        print(sess.run([Feature_batch,Label_batch]))</span><br><span class="line"></span><br><span class="line">        coord.request_stop()</span><br><span class="line">        coord.join(threads)</span><br></pre></td></tr></table></figure>
+<h3 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[array([b&apos;Beta1&apos;, b&apos;Beta2&apos;, b&apos;Beta3&apos;, b&apos;Gama1&apos;, b&apos;Gama2&apos;, b&apos;Gama3&apos;,</span><br><span class="line">       b&apos;Alpha1&apos;, b&apos;Alpha2&apos;, b&apos;Alpha3&apos;, b&apos;Gama1&apos;, b&apos;Gama2&apos;, b&apos;Gama3&apos;,</span><br><span class="line">       b&apos;Alpha1&apos;, b&apos;Alpha2&apos;, b&apos;Alpha3&apos;, b&apos;Beta1&apos;, b&apos;Beta2&apos;, b&apos;Beta3&apos;,</span><br><span class="line">       b&apos;Gama1&apos;, b&apos;Gama2&apos;], dtype=object), </span><br><span class="line"> array([b&apos;B1&apos;, b&apos;B2&apos;, b&apos;B3&apos;, b&apos;C1&apos;, b&apos;C2&apos;, b&apos;C3&apos;, b&apos;A1&apos;, b&apos;A2&apos;, b&apos;A3&apos;,</span><br><span class="line">       b&apos;C1&apos;, b&apos;C2&apos;, b&apos;C3&apos;, b&apos;A1&apos;, b&apos;A2&apos;, b&apos;A3&apos;, b&apos;B1&apos;, b&apos;B2&apos;, b&apos;B3&apos;,</span><br><span class="line">       b&apos;C1&apos;, b&apos;C2&apos;], dtype=object)]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>即使文本中只有9條數據，但此批次取20個樣本，會有重複的樣本被取出，但對訓練並無影響</li>
+<li>但一般<code>batch_size</code> 跟 <code>capacity</code>都設為相同之值</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/06/DL_imageReadAPI/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          深度學習-tensorflow基礎-讀取數據-API應用-圖像讀取
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/01/DL_ReadProcess/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">深度學習-tensorflow基礎-讀取數據-文件讀取流程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#構造文件名隊列-string-input-producer"><span class="nav-number">1.</span> <span class="nav-text">構造文件名隊列(string_input_producer)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#構造文件閱讀器"><span class="nav-number">2.</span> <span class="nav-text">構造文件閱讀器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文本文件"><span class="nav-number">2.1.</span> <span class="nav-text">文本文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#讀取TfRecords文件"><span class="nav-number">2.2.</span> <span class="nav-text">讀取TfRecords文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#method"><span class="nav-number">2.3.</span> <span class="nav-text">method</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件內容解碼器"><span class="nav-number">3.</span> <span class="nav-text">文件內容解碼器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSV解碼"><span class="nav-number">3.1.</span> <span class="nav-text">CSV解碼</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#開啟子線程操作"><span class="nav-number">4.</span> <span class="nav-text">開啟子線程操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#範例-讀取csv文件"><span class="nav-number">5.</span> <span class="nav-text">範例(讀取csv文件)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#代碼"><span class="nav-number">5.1.</span> <span class="nav-text">代碼</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Result"><span class="nav-number">5.2.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#管道讀端批處理"><span class="nav-number">6.</span> <span class="nav-text">管道讀端批處理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#改善代碼"><span class="nav-number">6.1.</span> <span class="nav-text">改善代碼</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-1"><span class="nav-number">6.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
