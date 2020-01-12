@@ -125,7 +125,7 @@
         
           <section id="main">
   
-    <article id="post-Go_Timer"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-Go_ThreadPanic"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -133,7 +133,7 @@
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/05/19/Go_Timer/">Golang多線程初識-day28-定時器(超時處理)</a>
+      <a class="article-title" href="/2018/05/19/Go_ThreadPanic/">Golang多線程初識-day28-線程異常(panic)</a>
     </h1>
   
 
@@ -141,7 +141,7 @@
     
     <div class="article-meta">
       
-	<a href="/2018/05/19/Go_Timer/" class="article-date">
+	<a href="/2018/05/19/Go_ThreadPanic/" class="article-date">
 	  <time datetime="2018-05-18T16:00:00.000Z" itemprop="datePublished">五月 19, 2018</time>
 	</a>
 
@@ -155,17 +155,14 @@
       
         
           <div class="entry-thumbnail">
-            <a href="/2018/05/19/Go_Timer/"><img src="https://i.imgur.com/2T82aSw.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
+            <a href="/2018/05/19/Go_ThreadPanic/"><img src="https://i.imgur.com/sfpa1Qg.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
           </div>
           <div class="entry-summary">
-          introduction
-設置超時時間(timeout)，避免阻塞時間過長
-定時器位於time包中，使用NewTicker()方法生成定時器
-
+          introduction在實際業務開發中，我們可能會創建上萬個goroutine，當其中某個goroutine panic了，且沒有捕獲(recover)錯誤，那麼整個程序將會崩潰。所以，養成好習慣，每當創建一個goroutine，請記得於函數內寫下recover
 
         
           <p class="article-more-link">
-            <a href="/2018/05/19/Go_Timer/#more">Continue Reading →</a>
+            <a href="/2018/05/19/Go_ThreadPanic/#more">Continue Reading →</a>
           </p>
         </div>
       
@@ -177,7 +174,7 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/時間和日期-time/">時間和日期(time)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/管道-channel/">管道(channel)</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/goroutine/">goroutine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/錯誤處理/">錯誤處理</a></li></ul>
 
       
     </footer>

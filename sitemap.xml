@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.taroballz.com/2018/05/17/Go_channel/</loc>
+    
+    <lastmod>2020-01-12T14:11:27.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.taroballz.com/2020/01/02/Go_sync_Waitgroup/</loc>
     
     <lastmod>2020-01-02T16:11:19.000Z</lastmod>
@@ -593,13 +600,6 @@
     <loc>http://www.taroballz.com/2018/05/14/Go_goroutine/</loc>
     
     <lastmod>2018-05-17T14:54:56.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.taroballz.com/2018/05/17/Go_channel/</loc>
-    
-    <lastmod>2018-05-17T14:53:15.000Z</lastmod>
     
   </url>
   

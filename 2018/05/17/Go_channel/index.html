@@ -7,13 +7,13 @@
   <title>Golang多線程初識-day27-goroutine通信-管道(channel) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang多線程goroutine管道(channel)">
+  <meta name="keywords" content="2018Golang管道(channel)多線程goroutine">
   
   
   
   
   <meta name="description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
-<meta name="keywords" content="2018,Golang,多線程,goroutine,管道(channel)">
+<meta name="keywords" content="2018,Golang,管道(channel),多線程,goroutine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang多線程初識-day27-goroutine通信-管道(channel)">
 <meta property="og:url" content="http://www.taroballz.com/2018/05/17/Go_channel/index.html">
@@ -21,7 +21,7 @@
 <meta property="og:description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.imgur.com/7rD7VuU.jpg">
-<meta property="og:updated_time" content="2018-05-17T14:53:15.000Z">
+<meta property="og:updated_time" content="2020-01-12T14:11:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang多線程初識-day27-goroutine通信-管道(channel)">
 <meta name="twitter:description" content="introduction 類似unix中的管道(pipe)，或是隊列(queue) channel為引用類型的數據結構 先進先出 線程安全，多個goroutine同時訪問，不需要加鎖 channel是有類型的，整數的channel只能存放整數，依此類推 使用make()初始化管道">
@@ -138,7 +138,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/7rD7VuU.jpg" rel="gallery_ck563uo3c0036zhq7e3yn1ju4">
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/7rD7VuU.jpg" rel="gallery_ck5b3kpl6003d9kq758b3fpwg">
         <img src="https://i.imgur.com/7rD7VuU.jpg" itemprop="image">
       </a>
     
@@ -251,7 +251,11 @@
 <h2 id="example-2-1"><a href="#example-2-1" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendData</span><span class="params">(country <span class="keyword">string</span>, DataChan <span class="keyword">chan</span> <span class="keyword">string</span>, Signal <span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span></span>&#123;</span><br><span class="line">	DataChan &lt;- country</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//完成上述的任務後傳入信號</span></span><br><span class="line">	Signal &lt;- <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">getData</span><span class="params">(result <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		country,ok := &lt;-result</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(country)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	country := []<span class="keyword">string</span>&#123;<span class="string">"Washington"</span>,<span class="string">"Tripoli"</span>,<span class="string">"London"</span>,<span class="string">"Beijing"</span>,<span class="string">"Tokyo"</span>&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//創建一個存放data的管道</span></span><br><span class="line">	DataChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>,<span class="built_in">len</span>(country))</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//創建一個存放線程結束信號的管道,信號型態為空結構體(可自定義為任何形式)</span></span><br><span class="line">	SyncChan := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;,<span class="built_in">len</span>(country))</span><br><span class="line">	<span class="keyword">for</span> _,v := <span class="keyword">range</span> country &#123;</span><br><span class="line">		<span class="keyword">go</span> sendData(v,DataChan,SyncChan)</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//取到全部子線程結束的信號，關閉data管道</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="built_in">len</span>(country);i++ &#123;</span><br><span class="line">			&lt;- SyncChan</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(DataChan)</span><br><span class="line">	&#125;()</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//取data</span></span><br><span class="line">	getData(DataChan)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="result-6"><a href="#result-6" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Tripoli</span><br><span class="line">Washington</span><br><span class="line">Beijing</span><br><span class="line">London</span><br><span class="line">Tokyo</span><br></pre></td></tr></table></figure>
 <hr>
-<h1 id="補充-管道的只讀與只寫"><a href="#補充-管道的只讀與只寫" class="headerlink" title="(補充)管道的只讀與只寫"></a>(補充)管道的只讀與只寫</h1><h2 id="創建可讀可寫管道-一般"><a href="#創建可讀可寫管道-一般" class="headerlink" title="創建可讀可寫管道(一般)"></a>創建可讀可寫管道(一般)</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="補充-管道的只讀與只寫"><a href="#補充-管道的只讀與只寫" class="headerlink" title="(補充)管道的只讀與只寫"></a>(補充)管道的只讀與只寫</h1><p><strong>通常不會用以下的方法直接創建，會直接拿來當參數的類型使用居多</strong></p>
+<ul>
+<li>於函數中接受的形式參數類型為 只讀(只寫) 的通道時，可傳入可讀寫的雙向通道作為實體參數 <strong>(推薦)</strong></li>
+</ul>
+<h2 id="創建可讀可寫管道-一般"><a href="#創建可讀可寫管道-一般" class="headerlink" title="創建可讀可寫管道(一般)"></a>創建可讀可寫管道(一般)</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="創建只讀的管道"><a href="#創建只讀的管道" class="headerlink" title="創建只讀的管道"></a>創建<strong>只讀</strong>的管道</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 &lt;- <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(&lt;-<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="創建只寫的管道"><a href="#創建只寫的管道" class="headerlink" title="創建只寫的管道"></a>創建<strong>只寫</strong>的管道</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> 變量名 <span class="keyword">chan</span> &lt;- <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line">變量名 := <span class="built_in">make</span>(<span class="keyword">chan</span> &lt;- <span class="keyword">int</span> ,<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
 <hr>
@@ -319,11 +323,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/05/19/Go_Timer/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/05/19/Go_ThreadPanic/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Golang多線程初識-day28-定時器(超時處理)
+          Golang多線程初識-day28-線程異常(panic)
         
       </div>
     </a>
