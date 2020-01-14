@@ -7,24 +7,24 @@
   <title>Golang多線程初識-day28-定時器(超時處理) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang時間和日期(time)管道(channel)多線程">
+  <meta name="keywords" content="2018Golang多線程時間和日期(time)管道(channel)">
   
   
   
   
-  <meta name="description" content="introduction 設置超時時間(timeout)，避免阻塞時間過長 定時器位於time包中，使用NewTicker()方法生成定時器">
-<meta name="keywords" content="2018,Golang,時間和日期(time),管道(channel),多線程">
+  <meta name="description" content="introduction Timer可以讓用戶自定義超時的邏輯  尤其是在應對select處理多個channel的超時、單channel讀寫的超時等情形， 為一次性的時間觸發事件，其與Ticker不同   Ticker是按一定時間間隔持續觸發時間事件  設置超時時間(timeout)，避免阻塞時間過長 定時器(Ticker)位於time包中，使用NewTicker()方法生成定時器">
+<meta name="keywords" content="2018,Golang,多線程,時間和日期(time),管道(channel)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang多線程初識-day28-定時器(超時處理)">
 <meta property="og:url" content="http://www.taroballz.com/2018/05/19/Go_Timer/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="introduction 設置超時時間(timeout)，避免阻塞時間過長 定時器位於time包中，使用NewTicker()方法生成定時器">
+<meta property="og:description" content="introduction Timer可以讓用戶自定義超時的邏輯  尤其是在應對select處理多個channel的超時、單channel讀寫的超時等情形， 為一次性的時間觸發事件，其與Ticker不同   Ticker是按一定時間間隔持續觸發時間事件  設置超時時間(timeout)，避免阻塞時間過長 定時器(Ticker)位於time包中，使用NewTicker()方法生成定時器">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.imgur.com/2T82aSw.jpg">
-<meta property="og:updated_time" content="2018-05-19T14:39:57.000Z">
+<meta property="og:updated_time" content="2020-01-12T15:43:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang多線程初識-day28-定時器(超時處理)">
-<meta name="twitter:description" content="introduction 設置超時時間(timeout)，避免阻塞時間過長 定時器位於time包中，使用NewTicker()方法生成定時器">
+<meta name="twitter:description" content="introduction Timer可以讓用戶自定義超時的邏輯  尤其是在應對select處理多個channel的超時、單channel讀寫的超時等情形， 為一次性的時間觸發事件，其與Ticker不同   Ticker是按一定時間間隔持續觸發時間事件  設置超時時間(timeout)，避免阻塞時間過長 定時器(Ticker)位於time包中，使用NewTicker()方法生成定時器">
 <meta name="twitter:image" content="https://i.imgur.com/2T82aSw.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -62,32 +62,10 @@
 
 
   
-  
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
-    <img id="originBg" width="100%" alt="Hike News" src="">
-  </div>
-
-  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
-    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
-  </div>
-
-  <script>
-        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
-        var random = Math.floor((Math.random() * imgUrls.length ));
-        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
-          document.getElementById("originBg").src=imgUrls[random];
-          document.getElementById("blurBg").src=imgUrls[random];
-        } else {
-          document.getElementById("originBg").src='/' + imgUrls[random];
-          document.getElementById("blurBg").src='/' + imgUrls[random];
-        }
-    </script>
 
 
-
-
-<header id="allheader" class="site-header" role="banner" 
-   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
+   >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -138,7 +116,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/2T82aSw.jpg" rel="gallery_ck5b3kpl400369kq7fpgb9los">
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/2T82aSw.jpg" rel="gallery_ck5e5j19s004z85q7ico2t1ot">
         <img src="https://i.imgur.com/2T82aSw.jpg" itemprop="image">
       </a>
     
@@ -175,12 +153,20 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><ul>
+<li><p><code>Timer</code>可以讓用戶自定義超時的邏輯</p>
+<ul>
+<li>尤其是在應對<code>select</code>處理多個<code>channel</code>的超時、單<code>channel</code>讀寫的超時等情形，</li>
+<li>為<strong>一次性</strong>的時間觸發事件，其與<code>Ticker</code>不同</li>
+</ul>
+</li>
+<li><p><code>Ticker</code>是按一定時間間隔<strong>持續</strong>觸發時間事件</p>
+</li>
 <li>設置超時時間(timeout)，避免阻塞時間過長</li>
-<li>定時器位於<code>time</code>包中，使用<code>NewTicker()</code>方法生成定時器</li>
+<li>定時器(<code>Ticker</code>)位於<code>time</code>包中，使用<code>NewTicker()</code>方法生成定時器</li>
 </ul>
 <a id="more"></a>
 <hr>
-<h1 id="生成定時器"><a href="#生成定時器" class="headerlink" title="生成定時器"></a>生成定時器</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//使用NewTicker設置定時器,參數為時間的間隔</span></span><br><span class="line">	<span class="comment">//以下為設置一個一秒執行一次的定時器</span></span><br><span class="line">	timer := time.NewTicker(time.Second)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//使用range()方法從timer.C管道中取出數據</span></span><br><span class="line">	<span class="keyword">for</span> v:=  <span class="keyword">range</span>(timer.C) &#123;</span><br><span class="line">		fmt.Println(<span class="string">"hello"</span>,v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="生成定時器-Ticker"><a href="#生成定時器-Ticker" class="headerlink" title="生成定時器(Ticker)"></a>生成定時器(<code>Ticker</code>)</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="comment">//使用NewTicker設置定時器,參數為時間的間隔</span></span><br><span class="line">	<span class="comment">//以下為設置一個一秒執行一次的定時器</span></span><br><span class="line">	timer := time.NewTicker(time.Second)</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//使用range()方法從timer.C管道中取出數據</span></span><br><span class="line">	<span class="keyword">for</span> v:=  <span class="keyword">range</span>(timer.C) &#123;</span><br><span class="line">		fmt.Println(<span class="string">"hello"</span>,v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>timer.C</code> 本身為一個<strong>channel</strong>，其後端有一個goroutine，每隔一段<code>NewTicker()</code>方法設置的時間參數，會往裡面寫入時間</li>
 <li>上述利用<code>range()</code>方法將數據取出</li>
@@ -192,7 +178,20 @@
 <hr>
 <h1 id="一次性定時器"><a href="#一次性定時器" class="headerlink" title="一次性定時器"></a>一次性定時器</h1><ul>
 <li>搭配<code>select</code>一起使用，仍是用作設置timeout</li>
-<li><code>time.After(Time)</code>的參數為一時間</li>
+<li><p><code>time.After(Time)</code>的參數為一時間</p>
+<ul>
+<li>相當於<code>time.NewTimer(d).C</code></li>
+<li>為一 <strong>只讀channel</strong> 類型</li>
+</ul>
+</li>
+<li><p>其它創建方式</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">t := time.NewTimer(d)</span><br><span class="line">t := time.AfterFunc(d,f)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>定時時間：<code>d</code></li>
+<li>觸發後執行的動作：<code>f</code></li>
+<li>時間channel:<code>t</code></li>
+</ul>
+</li>
 </ul>
 <h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	IntChan1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line">	IntChan2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">2</span>)</span><br><span class="line">	i := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">//time.After開始計時</span></span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> IntChan1 &lt;- i:</span><br><span class="line">			fmt.Printf(<span class="string">"i value %d in Chan 1\n"</span>,i)</span><br><span class="line">		<span class="keyword">case</span> IntChan2 &lt;- i:</span><br><span class="line">			fmt.Printf(<span class="string">"i value %d in Chan 2\n"</span>,i)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//滿足time.After()參數設置的時間，</span></span><br><span class="line">		<span class="comment">//表示無法滿足上面任一case操作(兩管道皆已滿)，操作已超時</span></span><br><span class="line">		<span class="comment">//將time.After()管道中的時間丟棄，並完成select操作</span></span><br><span class="line">		<span class="keyword">case</span> &lt;- time.After(time.Second):</span><br><span class="line">			fmt.Println(<span class="string">"cross 1 second: timeout"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		i++</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">i value 0 in Chan 1</span><br><span class="line">i value 1 in Chan 2</span><br><span class="line">i value 2 in Chan 2</span><br><span class="line">cross 1 second: timeout</span><br><span class="line">cross 1 second: timeout</span><br><span class="line">cross 1 second: timeout</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
@@ -202,6 +201,11 @@
 </ul>
 <hr>
 <h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><ul>
+<li>使用time.NewTimer()作為一次性計時器</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	timer := time.NewTimer(<span class="number">5</span>*time.Second)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		&lt;- timer.C</span><br><span class="line">		fmt.Println(<span class="string">"開始執行函數"</span>)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	time.Sleep(<span class="number">3</span> * time.Second)  </span><br><span class="line">	succ := timer.Stop()    <span class="comment">//未到timer的timeout時可停止timer的運作</span></span><br><span class="line">	<span class="keyword">if</span> succ &#123;</span><br><span class="line">		fmt.Println(<span class="string">"timer stop succ"</span>)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"timer stop failed"</span>)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="example-3"><a href="#example-3" class="headerlink" title="example 3"></a>example 3</h2><ul>
 <li>使用time.NewTicker()作為一次性的計時器</li>
 </ul>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	IntChan1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">1</span>)</span><br><span class="line">	IntChan2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>,<span class="number">2</span>)</span><br><span class="line">	</span><br><span class="line">	timer :=  time.NewTicker(time.Second)</span><br><span class="line">	</span><br><span class="line">	i := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="keyword">select</span> &#123;</span><br><span class="line">		<span class="keyword">case</span> IntChan1 &lt;- i:</span><br><span class="line">			fmt.Printf(<span class="string">"i value %d in Chan 1\n"</span>,i)</span><br><span class="line">			time.Sleep(time.Millisecond*<span class="number">800</span>)</span><br><span class="line">		<span class="keyword">case</span> IntChan2 &lt;- i:</span><br><span class="line">			fmt.Printf(<span class="string">"i value %d in Chan 2\n"</span>,i)</span><br><span class="line">			time.Sleep(time.Millisecond*<span class="number">800</span>)</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//與上個例子一樣從管道中取出時間丟棄</span></span><br><span class="line">		<span class="keyword">case</span> &lt;- timer.C:</span><br><span class="line">			fmt.Println(<span class="string">"cross 1 second: timeout"</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		i++</span><br><span class="line">		</span><br><span class="line">		<span class="comment">//使用完一次性的計時器隨即關閉，關閉後對象就消失，在使用此對象會panic</span></span><br><span class="line">		timer.Stop()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -270,19 +274,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/05/21/Python_ML_numpy/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/05/19/Go_ThreadPanic/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Python機器學習-numpy
+          Golang多線程初識-day28-線程異常(panic)
         
       </div>
     </a>
   
   
-    <a href="/2018/05/19/Go_ThreadPanic/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/05/17/Go_channel/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Golang多線程初識-day28-線程異常(panic)</div>
+      <div class="article-nav-title">Golang多線程初識-day27-goroutine通信-管道(channel)</div>
     </a>
   
 </nav>
@@ -307,7 +311,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成定時器"><span class="nav-number">2.</span> <span class="nav-text">生成定時器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一次性定時器"><span class="nav-number">3.</span> <span class="nav-text">一次性定時器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">3.1.2.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">3.3.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#生成定時器-Ticker"><span class="nav-number">2.</span> <span class="nav-text">生成定時器(Ticker)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一次性定時器"><span class="nav-number">3.</span> <span class="nav-text">一次性定時器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">3.1.2.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">3.3.</span> <span class="nav-text">example 3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">3.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -360,9 +364,6 @@
 
 
     <!-- headerblur min height -->
-    
-      var headerblur = document.getElementById("header-blur");
-      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>

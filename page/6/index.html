@@ -53,32 +53,10 @@
 
 
   
-  
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
-    <img id="originBg" width="100%" alt="Hike News" src="">
-  </div>
-
-  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
-    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
-  </div>
-
-  <script>
-        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
-        var random = Math.floor((Math.random() * imgUrls.length ));
-        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
-          document.getElementById("originBg").src=imgUrls[random];
-          document.getElementById("blurBg").src=imgUrls[random];
-        } else {
-          document.getElementById("originBg").src='/' + imgUrls[random];
-          document.getElementById("blurBg").src='/' + imgUrls[random];
-        }
-    </script>
 
 
-
-
-<header id="allheader" class="site-header" role="banner" 
-   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
+   >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -124,6 +102,85 @@
       <div id="content" class="outer">
         
           <section id="main">
+  
+    <article id="post-ML_Model_Select_optimize"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2018/07/10/ML_Model_Select_optimize/">機器學習-模型的選擇與調校參數</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2018/07/10/ML_Model_Select_optimize/" class="article-date">
+	  <time datetime="2018-07-09T17:18:00.000Z" itemprop="datePublished">七月 10, 2018</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+ 
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+          <div class="entry-thumbnail">
+            <a href="/2018/07/10/ML_Model_Select_optimize/"><img src="https://i.imgur.com/PC2AaeO.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
+          </div>
+          <div class="entry-summary">
+          交叉驗證(cross validation)
+目的：為了讓被評估的模型更加準確可信
+觀察模型穩定性的一種方法
+
+
+交叉驗證通常搭配網格搜索一起使用
+將訓練數據分成n等分，以下圖為例：讓其中一等分當作驗證集 其他則為訓練集，總共驗證5次(組)，每次更換不同的驗證集，得到5組模型的結果，求出準確率的平均值作為最終結果，又稱5折交叉驗證
+
+
+        
+          <p class="article-more-link">
+            <a href="/2018/07/10/ML_Model_Select_optimize/#more">Continue Reading →</a>
+          </p>
+        </div>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li></ul>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+</article>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5037436714641355"
+     data-ad-slot="5630619875"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- Table of Contents -->
+
   
     <article id="post-ML_Classifier_Model"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
@@ -827,78 +884,6 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
 <!-- Table of Contents -->
 
   
-    <article id="post-Git_fixbug"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2018/07/02/Git_fixbug/">(補充)修復bug分支</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	<a href="/2018/07/02/Git_fixbug/" class="article-date">
-	  <time datetime="2018-07-01T16:00:00.000Z" itemprop="datePublished">七月 2, 2018</time>
-	</a>
-
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Git/">Git</a>
- 
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-          <div class="entry-thumbnail">
-            <a href="/2018/07/02/Git_fixbug/"><img src="https://i.imgur.com/3IdxkCr.jpg" class="attachment-thumb-featured size-thumb-featured wp-post-image" alt=""></a>
-          </div>
-          <div class="entry-summary">
-          保存當前分支的工作區狀態(stash)當你接到修復一個代號001的bug任務時，但是當前在dev分支上的工作還沒完成，也不能進行提交git提供了一個stash功能，可將當前的工作現場＂保存＂起來，待以後恢復現場再繼續工作
-
-        
-          <p class="article-more-link">
-            <a href="/2018/07/02/Git_fixbug/#more">Continue Reading →</a>
-          </p>
-        </div>
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Git/">Git</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
-
-      
-    </footer>
-    <hr class="entry-footer-hr">
-  </div>
-  
-</article>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block; text-align:center;"
-     data-ad-layout="in-article"
-     data-ad-format="fluid"
-     data-ad-client="ca-pub-5037436714641355"
-     data-ad-slot="5630619875"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-<!-- Table of Contents -->
-
-  
 
 
   <nav id="page-nav">
@@ -1009,6 +994,18 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/2020/01/15/Go_select/">Golang-select語句</a></h6>
+              <span>一月 15, 2020</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/2020/01/02/Go_sync_Waitgroup/">Golang多線程-線程同步(sync)包-WaitGroup</a></h6>
               <span>一月 2, 2020</span>
             </div>
@@ -1066,21 +1063,6 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-thumbnail">
-                <a href="/2019/06/16/ML_feature_decomposition/" title=""><img width="50" height="50" src="https://i.imgur.com/V4K73nl.jpg" class="attachment-thumb-small size-thumb-small wp-post-image" alt="preview-16" title=""></a>
-              </div>
-              <div class="widget-entry-summary">
-            
-
-              <h6 style="margin: 0;"><a href="/2019/06/16/ML_feature_decomposition/">機器學習-特徵工程-細談特徵降維</a></h6>
-              <span>六月 16, 2019</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1090,7 +1072,7 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">45</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MongoDB/">MongoDB</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基礎/">Python基礎</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python模塊/">Python模塊</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python機器學習/">Python機器學習</a><span class="category-list-count">33</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/被動信息蒐集/">被動信息蒐集</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">46</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/MongoDB/">MongoDB</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python基礎/">Python基礎</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python模塊/">Python模塊</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python機器學習/">Python機器學習</a><span class="category-list-count">33</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a><span class="category-list-count">18</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/被動信息蒐集/">被動信息蒐集</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1100,7 +1082,7 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a><span class="tag-list-count">81</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2019/">2019</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2019-加密/">2019 - 加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2020/">2020</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">45</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go基本結構/">Go基本結構</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/">Kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/">MongoDB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">58</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/atomic/">atomic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bufio/">bufio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flag/">flag</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goroutine/">goroutine</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/init函數/">init函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ioutil/">ioutil</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/json/">json</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/log/">log</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/">map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/">os</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/socket/">socket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tailf/">tailf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/">tensorflow</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/threading/">threading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二元樹-binary-tree/">二元樹(binary tree)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/估計器-Estimator/">估計器(Estimator)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/作用域/">作用域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/保留字/">保留字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/值類型與引用類型/">值類型與引用類型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/內置函數/">內置函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/函數/">函數</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/切片/">切片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/包-package/">包(package)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/協程/">協程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反射/">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反射-reflect/">反射(reflect)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令行參數-Args/">命令行參數(Args)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多態/">多態</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多線程/">多線程</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多進程/">多進程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串操作/">字符串操作</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工程管理/">工程管理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常量-const/">常量(const)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/指針/">指針</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序-sort/">排序(sort)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/接口-interface/">接口(interface)</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/數據集-dataset/">數據集(dataset)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/數據類型與操作符/">數據類型與操作符</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文件讀寫/">文件讀寫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/時間和日期-time/">時間和日期(time)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/格式化輸出/">格式化輸出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a><span class="tag-list-count">33</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正則表達式/">正則表達式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/流程控制/">流程控制</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/演算法/">演算法</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵工程/">特徵工程</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵抽取-feature-extraction/">特徵抽取(feature extraction)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵預處理/">特徵預處理</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/產生器/">產生器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/稀疏矩陣-sparse-matrix/">稀疏矩陣(sparse matrix)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/管道-channel/">管道(channel)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/網路編程/">網路編程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/線程同步-sync/">線程同步(sync)</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/缺失值/">缺失值</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/被動信息蒐集/">被動信息蒐集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/變量/">變量</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/轉換器-Transformer/">轉換器(Transformer)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/過擬合-overfitting/">過擬合(overfitting)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/遞歸函數/">遞歸函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/錯誤處理/">錯誤處理</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/鏈表-Linked-list/">鏈表(Linked list)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/閉包/">閉包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/降維/">降維</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/陣列/">陣列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集成學習方法/">集成學習方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/類型斷言/">類型斷言</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/2018/">2018</a><span class="tag-list-count">81</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2019/">2019</a><span class="tag-list-count">21</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2019-加密/">2019 - 加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/2020/">2020</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/">Golang</a><span class="tag-list-count">46</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Go基本結構/">Go基本結構</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Kafka/">Kafka</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MongoDB/">MongoDB</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">58</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/atomic/">atomic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bufio/">bufio</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/config/">config</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flag/">flag</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/goroutine/">goroutine</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/init函數/">init函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ioutil/">ioutil</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/json/">json</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/log/">log</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/map/">map</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/numpy/">numpy</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/os/">os</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/socket/">socket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tailf/">tailf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/">tensorflow</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/threading/">threading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二元樹-binary-tree/">二元樹(binary tree)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/估計器-Estimator/">估計器(Estimator)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/作用域/">作用域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/保留字/">保留字</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/值類型與引用類型/">值類型與引用類型</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/內置函數/">內置函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/函數/">函數</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/切片/">切片</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/包-package/">包(package)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/協程/">協程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反射/">反射</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/反射-reflect/">反射(reflect)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/命令行參數-Args/">命令行參數(Args)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多態/">多態</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多線程/">多線程</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多進程/">多進程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/字符串操作/">字符串操作</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工程管理/">工程管理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/常量-const/">常量(const)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/指針/">指針</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/排序-sort/">排序(sort)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/接口-interface/">接口(interface)</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/數據集-dataset/">數據集(dataset)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/數據類型與操作符/">數據類型與操作符</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/文件讀寫/">文件讀寫</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/時間和日期-time/">時間和日期(time)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/格式化輸出/">格式化輸出</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a><span class="tag-list-count">33</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/正則表達式/">正則表達式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/流程控制/">流程控制</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a><span class="tag-list-count">18</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/演算法/">演算法</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵工程/">特徵工程</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵抽取-feature-extraction/">特徵抽取(feature extraction)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/特徵預處理/">特徵預處理</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/產生器/">產生器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/稀疏矩陣-sparse-matrix/">稀疏矩陣(sparse matrix)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/管道-channel/">管道(channel)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/結構體-struct/">結構體(struct)</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/網路編程/">網路編程</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/線程同步-sync/">線程同步(sync)</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/缺失值/">缺失值</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/被動信息蒐集/">被動信息蒐集</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/變量/">變量</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/轉換器-Transformer/">轉換器(Transformer)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/過擬合-overfitting/">過擬合(overfitting)</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/遞歸函數/">遞歸函數</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/錯誤處理/">錯誤處理</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/鏈表-Linked-list/">鏈表(Linked list)</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/閉包/">閉包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/降維/">降維</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/陣列/">陣列</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集成學習方法/">集成學習方法</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/類型斷言/">類型斷言</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1110,7 +1092,7 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/2018/" style="font-size: 20px;">2018</a> <a href="/tags/2019/" style="font-size: 17.33px;">2019</a> <a href="/tags/2019-加密/" style="font-size: 10px;">2019 - 加密</a> <a href="/tags/2020/" style="font-size: 10px;">2020</a> <a href="/tags/Git/" style="font-size: 11.33px;">Git</a> <a href="/tags/Golang/" style="font-size: 18.67px;">Golang</a> <a href="/tags/Go基本結構/" style="font-size: 10px;">Go基本結構</a> <a href="/tags/Kafka/" style="font-size: 10px;">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 12.67px;">MongoDB</a> <a href="/tags/Python/" style="font-size: 19.33px;">Python</a> <a href="/tags/atomic/" style="font-size: 10px;">atomic</a> <a href="/tags/bufio/" style="font-size: 10px;">bufio</a> <a href="/tags/config/" style="font-size: 10px;">config</a> <a href="/tags/flag/" style="font-size: 10px;">flag</a> <a href="/tags/goroutine/" style="font-size: 12.67px;">goroutine</a> <a href="/tags/init函數/" style="font-size: 10px;">init函數</a> <a href="/tags/ioutil/" style="font-size: 10px;">ioutil</a> <a href="/tags/json/" style="font-size: 11.33px;">json</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/os/" style="font-size: 10.67px;">os</a> <a href="/tags/socket/" style="font-size: 10px;">socket</a> <a href="/tags/tailf/" style="font-size: 10px;">tailf</a> <a href="/tags/tensorflow/" style="font-size: 16.67px;">tensorflow</a> <a href="/tags/threading/" style="font-size: 10px;">threading</a> <a href="/tags/二元樹-binary-tree/" style="font-size: 10px;">二元樹(binary tree)</a> <a href="/tags/估計器-Estimator/" style="font-size: 10px;">估計器(Estimator)</a> <a href="/tags/作用域/" style="font-size: 10px;">作用域</a> <a href="/tags/保留字/" style="font-size: 10px;">保留字</a> <a href="/tags/值類型與引用類型/" style="font-size: 10px;">值類型與引用類型</a> <a href="/tags/內置函數/" style="font-size: 10px;">內置函數</a> <a href="/tags/函數/" style="font-size: 10.67px;">函數</a> <a href="/tags/切片/" style="font-size: 10px;">切片</a> <a href="/tags/包-package/" style="font-size: 10.67px;">包(package)</a> <a href="/tags/協程/" style="font-size: 10px;">協程</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/反射-reflect/" style="font-size: 10px;">反射(reflect)</a> <a href="/tags/命令行參數-Args/" style="font-size: 10px;">命令行參數(Args)</a> <a href="/tags/多態/" style="font-size: 11.33px;">多態</a> <a href="/tags/多線程/" style="font-size: 14.67px;">多線程</a> <a href="/tags/多進程/" style="font-size: 10.67px;">多進程</a> <a href="/tags/字符串操作/" style="font-size: 10.67px;">字符串操作</a> <a href="/tags/工程管理/" style="font-size: 10px;">工程管理</a> <a href="/tags/常量-const/" style="font-size: 10px;">常量(const)</a> <a href="/tags/指針/" style="font-size: 10px;">指針</a> <a href="/tags/排序-sort/" style="font-size: 10.67px;">排序(sort)</a> <a href="/tags/接口-interface/" style="font-size: 12px;">接口(interface)</a> <a href="/tags/數據集-dataset/" style="font-size: 10px;">數據集(dataset)</a> <a href="/tags/數據類型與操作符/" style="font-size: 10px;">數據類型與操作符</a> <a href="/tags/文件讀寫/" style="font-size: 10px;">文件讀寫</a> <a href="/tags/時間和日期-time/" style="font-size: 10.67px;">時間和日期(time)</a> <a href="/tags/格式化輸出/" style="font-size: 10px;">格式化輸出</a> <a href="/tags/機器學習-Machine-Learning/" style="font-size: 18px;">機器學習(Machine Learning)</a> <a href="/tags/正則表達式/" style="font-size: 10px;">正則表達式</a> <a href="/tags/流程控制/" style="font-size: 10.67px;">流程控制</a> <a href="/tags/深度學習-Deep-Learning/" style="font-size: 16.67px;">深度學習(Deep Learning)</a> <a href="/tags/演算法/" style="font-size: 16px;">演算法</a> <a href="/tags/特徵工程/" style="font-size: 15.33px;">特徵工程</a> <a href="/tags/特徵抽取-feature-extraction/" style="font-size: 10.67px;">特徵抽取(feature extraction)</a> <a href="/tags/特徵預處理/" style="font-size: 13.33px;">特徵預處理</a> <a href="/tags/產生器/" style="font-size: 10px;">產生器</a> <a href="/tags/稀疏矩陣-sparse-matrix/" style="font-size: 10px;">稀疏矩陣(sparse matrix)</a> <a href="/tags/管道-channel/" style="font-size: 10.67px;">管道(channel)</a> <a href="/tags/結構體-struct/" style="font-size: 14px;">結構體(struct)</a> <a href="/tags/網路編程/" style="font-size: 10.67px;">網路編程</a> <a href="/tags/線程同步-sync/" style="font-size: 11.33px;">線程同步(sync)</a> <a href="/tags/缺失值/" style="font-size: 10px;">缺失值</a> <a href="/tags/被動信息蒐集/" style="font-size: 10px;">被動信息蒐集</a> <a href="/tags/變量/" style="font-size: 10px;">變量</a> <a href="/tags/轉換器-Transformer/" style="font-size: 10px;">轉換器(Transformer)</a> <a href="/tags/過擬合-overfitting/" style="font-size: 10px;">過擬合(overfitting)</a> <a href="/tags/遞歸函數/" style="font-size: 10px;">遞歸函數</a> <a href="/tags/錯誤處理/" style="font-size: 11.33px;">錯誤處理</a> <a href="/tags/鏈表-Linked-list/" style="font-size: 10.67px;">鏈表(Linked list)</a> <a href="/tags/閉包/" style="font-size: 10px;">閉包</a> <a href="/tags/降維/" style="font-size: 10px;">降維</a> <a href="/tags/陣列/" style="font-size: 10px;">陣列</a> <a href="/tags/集成學習方法/" style="font-size: 10.67px;">集成學習方法</a> <a href="/tags/類型斷言/" style="font-size: 10px;">類型斷言</a>
+      <a href="/tags/2018/" style="font-size: 20px;">2018</a> <a href="/tags/2019/" style="font-size: 17.33px;">2019</a> <a href="/tags/2019-加密/" style="font-size: 10px;">2019 - 加密</a> <a href="/tags/2020/" style="font-size: 10.67px;">2020</a> <a href="/tags/Git/" style="font-size: 11.33px;">Git</a> <a href="/tags/Golang/" style="font-size: 18.67px;">Golang</a> <a href="/tags/Go基本結構/" style="font-size: 10px;">Go基本結構</a> <a href="/tags/Kafka/" style="font-size: 10px;">Kafka</a> <a href="/tags/MongoDB/" style="font-size: 12.67px;">MongoDB</a> <a href="/tags/Python/" style="font-size: 19.33px;">Python</a> <a href="/tags/atomic/" style="font-size: 10px;">atomic</a> <a href="/tags/bufio/" style="font-size: 10px;">bufio</a> <a href="/tags/config/" style="font-size: 10px;">config</a> <a href="/tags/flag/" style="font-size: 10px;">flag</a> <a href="/tags/goroutine/" style="font-size: 13.33px;">goroutine</a> <a href="/tags/init函數/" style="font-size: 10px;">init函數</a> <a href="/tags/ioutil/" style="font-size: 10px;">ioutil</a> <a href="/tags/json/" style="font-size: 11.33px;">json</a> <a href="/tags/log/" style="font-size: 10px;">log</a> <a href="/tags/map/" style="font-size: 10px;">map</a> <a href="/tags/numpy/" style="font-size: 10px;">numpy</a> <a href="/tags/os/" style="font-size: 10.67px;">os</a> <a href="/tags/socket/" style="font-size: 10px;">socket</a> <a href="/tags/tailf/" style="font-size: 10px;">tailf</a> <a href="/tags/tensorflow/" style="font-size: 16.67px;">tensorflow</a> <a href="/tags/threading/" style="font-size: 10px;">threading</a> <a href="/tags/二元樹-binary-tree/" style="font-size: 10px;">二元樹(binary tree)</a> <a href="/tags/估計器-Estimator/" style="font-size: 10px;">估計器(Estimator)</a> <a href="/tags/作用域/" style="font-size: 10px;">作用域</a> <a href="/tags/保留字/" style="font-size: 10px;">保留字</a> <a href="/tags/值類型與引用類型/" style="font-size: 10px;">值類型與引用類型</a> <a href="/tags/內置函數/" style="font-size: 10px;">內置函數</a> <a href="/tags/函數/" style="font-size: 10.67px;">函數</a> <a href="/tags/切片/" style="font-size: 10px;">切片</a> <a href="/tags/包-package/" style="font-size: 10.67px;">包(package)</a> <a href="/tags/協程/" style="font-size: 10px;">協程</a> <a href="/tags/反射/" style="font-size: 10px;">反射</a> <a href="/tags/反射-reflect/" style="font-size: 10px;">反射(reflect)</a> <a href="/tags/命令行參數-Args/" style="font-size: 10px;">命令行參數(Args)</a> <a href="/tags/多態/" style="font-size: 11.33px;">多態</a> <a href="/tags/多線程/" style="font-size: 14.67px;">多線程</a> <a href="/tags/多進程/" style="font-size: 10.67px;">多進程</a> <a href="/tags/字符串操作/" style="font-size: 10.67px;">字符串操作</a> <a href="/tags/工程管理/" style="font-size: 10px;">工程管理</a> <a href="/tags/常量-const/" style="font-size: 10px;">常量(const)</a> <a href="/tags/指針/" style="font-size: 10px;">指針</a> <a href="/tags/排序-sort/" style="font-size: 10.67px;">排序(sort)</a> <a href="/tags/接口-interface/" style="font-size: 12px;">接口(interface)</a> <a href="/tags/數據集-dataset/" style="font-size: 10px;">數據集(dataset)</a> <a href="/tags/數據類型與操作符/" style="font-size: 10px;">數據類型與操作符</a> <a href="/tags/文件讀寫/" style="font-size: 10px;">文件讀寫</a> <a href="/tags/時間和日期-time/" style="font-size: 10.67px;">時間和日期(time)</a> <a href="/tags/格式化輸出/" style="font-size: 10px;">格式化輸出</a> <a href="/tags/機器學習-Machine-Learning/" style="font-size: 18px;">機器學習(Machine Learning)</a> <a href="/tags/正則表達式/" style="font-size: 10px;">正則表達式</a> <a href="/tags/流程控制/" style="font-size: 10.67px;">流程控制</a> <a href="/tags/深度學習-Deep-Learning/" style="font-size: 16.67px;">深度學習(Deep Learning)</a> <a href="/tags/演算法/" style="font-size: 16px;">演算法</a> <a href="/tags/特徵工程/" style="font-size: 15.33px;">特徵工程</a> <a href="/tags/特徵抽取-feature-extraction/" style="font-size: 10.67px;">特徵抽取(feature extraction)</a> <a href="/tags/特徵預處理/" style="font-size: 13.33px;">特徵預處理</a> <a href="/tags/產生器/" style="font-size: 10px;">產生器</a> <a href="/tags/稀疏矩陣-sparse-matrix/" style="font-size: 10px;">稀疏矩陣(sparse matrix)</a> <a href="/tags/管道-channel/" style="font-size: 10.67px;">管道(channel)</a> <a href="/tags/結構體-struct/" style="font-size: 14px;">結構體(struct)</a> <a href="/tags/網路編程/" style="font-size: 10.67px;">網路編程</a> <a href="/tags/線程同步-sync/" style="font-size: 11.33px;">線程同步(sync)</a> <a href="/tags/缺失值/" style="font-size: 10px;">缺失值</a> <a href="/tags/被動信息蒐集/" style="font-size: 10px;">被動信息蒐集</a> <a href="/tags/變量/" style="font-size: 10px;">變量</a> <a href="/tags/轉換器-Transformer/" style="font-size: 10px;">轉換器(Transformer)</a> <a href="/tags/過擬合-overfitting/" style="font-size: 10px;">過擬合(overfitting)</a> <a href="/tags/遞歸函數/" style="font-size: 10px;">遞歸函數</a> <a href="/tags/錯誤處理/" style="font-size: 11.33px;">錯誤處理</a> <a href="/tags/鏈表-Linked-list/" style="font-size: 10.67px;">鏈表(Linked list)</a> <a href="/tags/閉包/" style="font-size: 10px;">閉包</a> <a href="/tags/降維/" style="font-size: 10px;">降維</a> <a href="/tags/陣列/" style="font-size: 10px;">陣列</a> <a href="/tags/集成學習方法/" style="font-size: 10.67px;">集成學習方法</a> <a href="/tags/類型斷言/" style="font-size: 10px;">類型斷言</a>
     </div>
   </div>
 
@@ -1120,7 +1102,7 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">6</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">一月 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">七月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">六月 2019</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/05/">五月 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">三月 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">二月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">8</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">十一月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">七月 2018</a><span class="archive-list-count">23</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">六月 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">五月 2018</a><span class="archive-list-count">16</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">四月 2018</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">三月 2018</a><span class="archive-list-count">14</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">6</span></li></ul>
     </div>
   </div>
 
@@ -1175,9 +1157,6 @@ sklearn還存在許多對預測模型評估的方法皆收錄在sklearn.metrics�
 
 
     <!-- headerblur min height -->
-    
-      var headerblur = document.getElementById("header-blur");
-      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
     
     
 </script>
