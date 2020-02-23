@@ -12,19 +12,19 @@
   
   
   
-  <meta name="description" content="Introduction 反射，可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:獲取變量的值，返回reflect.Value類型  reflect.Value.Kind:可以獲取變量的類別，返回一個常量 refl">
+  <meta name="description" content="Introduction 反射，是指電腦程序在運行時(Run Time)可以訪問、檢測和修改它本身狀態或行為的一種能力。 程序在運行時能夠觀察並修改自己的行為   可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:">
 <meta name="keywords" content="2018,Golang,json,反射(reflect)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang物件導向初識-day20-反射(reflect)">
 <meta property="og:url" content="http://www.taroballz.com/2018/04/15/Go_reflect/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="Introduction 反射，可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:獲取變量的值，返回reflect.Value類型  reflect.Value.Kind:可以獲取變量的類別，返回一個常量 refl">
+<meta property="og:description" content="Introduction 反射，是指電腦程序在運行時(Run Time)可以訪問、檢測和修改它本身狀態或行為的一種能力。 程序在運行時能夠觀察並修改自己的行為   可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:">
 <meta property="og:locale" content="zh-tw">
 <meta property="og:image" content="https://i.imgur.com/OKjSiig.jpg">
-<meta property="og:updated_time" content="2018-04-14T17:03:18.000Z">
+<meta property="og:updated_time" content="2020-01-18T18:53:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Golang物件導向初識-day20-反射(reflect)">
-<meta name="twitter:description" content="Introduction 反射，可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:獲取變量的值，返回reflect.Value類型  reflect.Value.Kind:可以獲取變量的類別，返回一個常量 refl">
+<meta name="twitter:description" content="Introduction 反射，是指電腦程序在運行時(Run Time)可以訪問、檢測和修改它本身狀態或行為的一種能力。 程序在運行時能夠觀察並修改自己的行為   可以在運行時動態的獲取變量的相關信息，包括類型與值 在Golang中有提供官方的package可實現反射 主要有兩個函數  reflect.TypeOf:獲取變量的類型，返回reflect.Type類型 reflect.ValueOf:">
 <meta name="twitter:image" content="https://i.imgur.com/OKjSiig.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -116,7 +116,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/OKjSiig.jpg" rel="gallery_ck5e5j19r004v85q75zholh10">
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/OKjSiig.jpg" rel="gallery_ck6ywnf5b005in9q7oj2nagku">
         <img src="https://i.imgur.com/OKjSiig.jpg" itemprop="image">
       </a>
     
@@ -153,7 +153,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
-<li>反射，可以在運行時動態的獲取變量的相關信息，包括<strong>類型</strong>與<strong>值</strong></li>
+<li>反射，是指電腦程序在運行時(Run Time)可以訪問、檢測和修改它本身狀態或行為的一種能力。<ul>
+<li>程序在運行時能夠<strong>觀察</strong>並修改自己的行為</li>
+</ul>
+</li>
+<li>可以在運行時動態的獲取變量的相關信息，包括<strong>類型</strong>與<strong>值</strong></li>
 <li>在Golang中有提供官方的package可實現反射</li>
 <li>主要有兩個函數<blockquote>
 <ol>
