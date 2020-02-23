@@ -7,13 +7,13 @@
   <title>Golang多線程初識-day28-定時器(超時處理) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang多線程時間和日期(time)管道(channel)">
+  <meta name="keywords" content="2018Golang時間和日期(time)多線程管道(channel)">
   
   
   
   
   <meta name="description" content="introduction Timer可以讓用戶自定義超時的邏輯  尤其是在應對select處理多個channel的超時、單channel讀寫的超時等情形， 為一次性的時間觸發事件，其與Ticker不同   Ticker是按一定時間間隔持續觸發時間事件  設置超時時間(timeout)，避免阻塞時間過長 定時器(Ticker)位於time包中，使用NewTicker()方法生成定時器">
-<meta name="keywords" content="2018,Golang,多線程,時間和日期(time),管道(channel)">
+<meta name="keywords" content="2018,Golang,時間和日期(time),多線程,管道(channel)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang多線程初識-day28-定時器(超時處理)">
 <meta property="og:url" content="http://www.taroballz.com/2018/05/19/Go_Timer/index.html">
@@ -62,10 +62,32 @@
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +138,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/2T82aSw.jpg" rel="gallery_ck6ywnf4h0032n9q7gmrx6jt5">
+      <a class="article-gallery-img fancybox" href="https://i.imgur.com/2T82aSw.jpg" rel="gallery_ck6zan55d0034urq7ic3x0xo1">
         <img src="https://i.imgur.com/2T82aSw.jpg" itemprop="image">
       </a>
     
@@ -365,6 +387,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -435,6 +460,23 @@
   </div>
 
   <a id="rocket" href="#top" class=""></a>
-  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
