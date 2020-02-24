@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.taroballz.com/2020/02/25/DL_Tensorflow_keras_regression/</loc>
+    
+    <lastmod>2020-02-24T17:04:16.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.taroballz.com/2020/02/24/DL_Tensorflow_keras_classifier_callbackFunc/</loc>
     
     <lastmod>2020-02-24T15:16:25.000Z</lastmod>
@@ -583,14 +590,14 @@
   </url>
   
   <url>
-    <loc>http://www.taroballz.com/2018/05/27/MongoDB_operation/</loc>
+    <loc>http://www.taroballz.com/2018/05/27/MongoDB_introduction/</loc>
     
     <lastmod>2018-05-28T16:50:53.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://www.taroballz.com/2018/05/27/MongoDB_introduction/</loc>
+    <loc>http://www.taroballz.com/2018/05/27/MongoDB_operation/</loc>
     
     <lastmod>2018-05-28T16:50:53.000Z</lastmod>
     
