@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.taroballz.com/2019/07/31/DL_NeuralNetwork_intro/</loc>
+    
+    <lastmod>2020-02-24T17:54:17.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.taroballz.com/2020/02/25/DL_Tensorflow_keras_regression/</loc>
     
     <lastmod>2020-02-24T17:04:16.000Z</lastmod>
@@ -75,13 +82,6 @@
     <loc>http://www.taroballz.com/about/index.html</loc>
     
     <lastmod>2019-10-07T08:22:29.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.taroballz.com/2019/07/31/DL_NeuralNetwork_intro/</loc>
-    
-    <lastmod>2019-08-28T15:07:57.000Z</lastmod>
     
   </url>
   
