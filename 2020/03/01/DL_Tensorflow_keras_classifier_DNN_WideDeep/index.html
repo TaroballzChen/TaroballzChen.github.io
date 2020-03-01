@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <title>Tensorflow2-tensorflow-keras-Wide &amp; Deep 模型初識 | Taroballz StudyNotes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2020">
+  
+  
+  
+  
+  <meta name="description" content="Introduction Google於2016年發布，可用於分類和回歸模型 其已被應用到Google Play中的應用推薦   將一組數據的訊息以稀特徵及密特徵兩種特徵表示，並基於兩種特徵構建模型">
+<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2020">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tensorflow2-tensorflow-keras-Wide &amp; Deep 模型初識">
+<meta property="og:url" content="http://www.taroballz.com/2020/03/01/DL_Tensorflow_keras_classifier_DNN_WideDeep/index.html">
+<meta property="og:site_name" content="Taroballz StudyNotes">
+<meta property="og:description" content="Introduction Google於2016年發布，可用於分類和回歸模型 其已被應用到Google Play中的應用推薦   將一組數據的訊息以稀特徵及密特徵兩種特徵表示，並基於兩種特徵構建模型">
+<meta property="og:locale" content="zh-tw">
+<meta property="og:image" content="https://i.imgur.com/UQoU3x1.png">
+<meta property="og:image" content="https://i.imgur.com/donvT38.png">
+<meta property="og:image" content="https://i.imgur.com/TFQIBY7.png">
+<meta property="og:updated_time" content="2020-03-01T19:51:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tensorflow2-tensorflow-keras-Wide &amp; Deep 模型初識">
+<meta name="twitter:description" content="Introduction Google於2016年發布，可用於分類和回歸模型 其已被應用到Google Play中的應用推薦   將一組數據的訊息以稀特徵及密特徵兩種特徵表示，並基於兩種特徵構建模型">
+<meta name="twitter:image" content="https://i.imgur.com/UQoU3x1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/fashion.css">
+  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+</head>
+</html>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  
+
+
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
+   >
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="436px" height="110px" alt="Hike News" src="https://i.imgur.com/9QmF6Bl.png">
+              </a>
+            
+          </h1>
+          
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+
+            <div class="clearfix sf-menu">
+              <ul id="main-nav" class="menu sf-js-enabled sf-arrows"  style="touch-action: pan-y;">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/about">About</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-DL_Tensorflow_keras_classifier_DNN_WideDeep" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Tensorflow2-tensorflow-keras-Wide &amp; Deep 模型初識
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	<a href="/2020/03/01/DL_Tensorflow_keras_classifier_DNN_WideDeep/" class="article-date">
+	  <time datetime="2020-03-01T08:48:00.000Z" itemprop="datePublished">三月 1, 2020</time>
+	</a>
+
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+ 
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul>
+<li>Google於2016年發布，可用於分類和回歸模型<ul>
+<li>其已被應用到Google Play中的應用推薦</li>
+</ul>
+</li>
+<li>將一組數據的訊息以<strong>稀特徵</strong>及<strong>密特徵</strong>兩種特徵表示，並基於兩種特徵構建模型</li>
+</ul>
+<a id="more"></a>
+<h1 id="稀疏特徵"><a href="#稀疏特徵" class="headerlink" title="稀疏特徵"></a>稀疏特徵</h1><ul>
+<li>離散值特徵<ul>
+<li>從眾多選項中選擇一個<ul>
+<li>性別、膚色、工作類型等</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>若能以one-hot編碼表示的話，wide &amp; deep模型就會認為此特徵為稀疏特徵</li>
+<li>稀疏特徵之間是可以進行叉乘(組合)的<ul>
+<li>性別 x 膚色</li>
+<li>性別 x 工作累型</li>
+</ul>
+</li>
+<li>叉乘之後的<strong>共現信息</strong>是可以精確刻畫樣本的，及補全樣本的可能性<ul>
+<li>實現記憶樣本的效果</li>
+</ul>
+</li>
+</ul>
+<h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ul>
+<li>有效，廣泛應用於業界<ul>
+<li>如常遇到重複的樣本，就能快速的並有效的處理</li>
+<li>廣告點擊預測</li>
+</ul>
+</li>
+</ul>
+<h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><p>一般現實中的樣本、物體有太多維度，若將其全部表示成離散特徵，會變得非常巨大</p>
+<ul>
+<li>需要人工設計<ul>
+<li>找出最有效的稀疏特徵</li>
+</ul>
+</li>
+<li>可能過擬合<ul>
+<li>所有特徵都進行叉乘，相當於記住每一個樣本了</li>
+</ul>
+</li>
+<li>泛化能力差<ul>
+<li>沒出現過就不會起效果</li>
+</ul>
+</li>
+</ul>
+<h1 id="密集特徵"><a href="#密集特徵" class="headerlink" title="密集特徵"></a>密集特徵</h1><p>需要用向量去表達的特徵</p>
+<ul>
+<li>Ex: 詞表={人工智能，你，他，慕課網}</li>
+<li>利用詮釋實數的一個向量來表達一個詞，例如<code>他 = [0.3,0.2,0.6,(n維向量)]</code></li>
+<li>因此便可利用兩向量之間的距離來表達兩個詞之間的距離<ul>
+<li><code>男 - 女 = 國王 - 王后</code></li>
+</ul>
+</li>
+<li>Word2vec工具：將詞語轉化成向量的工具</li>
+</ul>
+<h2 id="優點-1"><a href="#優點-1" class="headerlink" title="優點"></a>優點</h2><ul>
+<li>帶有語意的信息，不同向量之間有相關性</li>
+<li>兼容沒有出現過的特徵組合<ul>
+<li>當遇到新樣本時，通過計算向量之間的差距，來衡量兩樣本之間的相似性</li>
+</ul>
+</li>
+<li>更少的人工參與</li>
+</ul>
+<h2 id="缺點-1"><a href="#缺點-1" class="headerlink" title="缺點"></a>缺點</h2><ul>
+<li>過度泛化，導致推薦不怎麼相關的產品</li>
+</ul>
+<h1 id="模型結構"><a href="#模型結構" class="headerlink" title="模型結構"></a>模型結構</h1><h2 id="Wide-vs-Wide-amp-deep"><a href="#Wide-vs-Wide-amp-deep" class="headerlink" title="Wide vs. Wide &amp; deep"></a>Wide vs. Wide &amp; deep</h2><p><img src="https://i.imgur.com/UQoU3x1.png" alt="wide and deep vs wide"></p>
+<ul>
+<li><p>Wide模型</p>
+<ul>
+<li>只有一層；因此所有輸入(<strong>稀疏特徵；one-hot表示</strong>)皆連到輸出單元上</li>
+</ul>
+</li>
+<li><p>Wide &amp; deep模型</p>
+<ul>
+<li>模型左半部分為Wide模型；右半部分便為Deep模型</li>
+</ul>
+</li>
+</ul>
+<h2 id="Deep-vs-Wide-amp-deep"><a href="#Deep-vs-Wide-amp-deep" class="headerlink" title="Deep vs. Wide &amp; deep"></a>Deep vs. Wide &amp; deep</h2><p><img src="https://i.imgur.com/donvT38.png" alt="wide and deep vs deep"></p>
+<ul>
+<li><p>Deep模型</p>
+<ul>
+<li>擁有多層的神經網絡</li>
+<li><strong>對於一個輸入的數據(稀疏特徵;Sparse Features)，將其表示為一個密集的向量表達(密集特徵;Dense Embeddings)</strong><ul>
+<li>密集特徵是稀疏特徵的<strong>密集向量表達</strong></li>
+</ul>
+</li>
+<li>在Dense Embeddings之上為全連接的神經網絡亦為隱層(Hidden Layers)</li>
+<li>最後在連接至輸出層(Output Units)</li>
+</ul>
+</li>
+<li><p>Wide &amp; deep模型</p>
+<ul>
+<li>模型左半部分為Wide模型；右半部分便為Deep模型</li>
+</ul>
+</li>
+</ul>
+<h2 id="Google-Play商店的模型結構-Wide-amp-deep模型"><a href="#Google-Play商店的模型結構-Wide-amp-deep模型" class="headerlink" title="Google Play商店的模型結構(Wide &amp; deep模型)"></a>Google Play商店的模型結構(Wide &amp; deep模型)</h2><p><img src="https://i.imgur.com/TFQIBY7.png" alt="googe play wide and deep structure"></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2020/">2020</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+
+      
+        
+	<section id="comments" class="comment">
+	  <div id="disqus_thread">
+	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  </div>
+	</section>
+
+	<script type="text/javascript">
+	var disqus_shortname = 'Taroballz';
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	(function(){
+	  var dsq = document.createElement('script');
+	  dsq.type = 'text/javascript';
+	  dsq.async = true;
+	  dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
+	  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	}());
+	</script>
+
+
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5037436714641355"
+     data-ad-slot="5630619875"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+      
+    </footer>
+    <hr class="entry-footer-hr">
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/02/28/DL_Tensorflow_keras_classifier_SimpleDNN_selu_dropout/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Tensorflow2-tensorflow-keras-深度神經網絡(DNN)_dropout</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block; text-align:center;"
+     data-ad-layout="in-article"
+     data-ad-format="fluid"
+     data-ad-client="ca-pub-5037436714641355"
+     data-ad-slot="5630619875"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#稀疏特徵"><span class="nav-number">2.</span> <span class="nav-text">稀疏特徵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#優點"><span class="nav-number">2.1.</span> <span class="nav-text">優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺點"><span class="nav-number">2.2.</span> <span class="nav-text">缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#密集特徵"><span class="nav-number">3.</span> <span class="nav-text">密集特徵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#優點-1"><span class="nav-number">3.1.</span> <span class="nav-text">優點</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺點-1"><span class="nav-number">3.2.</span> <span class="nav-text">缺點</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#模型結構"><span class="nav-number">4.</span> <span class="nav-text">模型結構</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Wide-vs-Wide-amp-deep"><span class="nav-number">4.1.</span> <span class="nav-text">Wide vs. Wide &amp; deep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-vs-Wide-amp-deep"><span class="nav-number">4.2.</span> <span class="nav-text">Deep vs. Wide &amp; deep</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Google-Play商店的模型結構-Wide-amp-deep模型"><span class="nav-number">4.3.</span> <span class="nav-text">Google Play商店的模型結構(Wide &amp; deep模型)</span></a></li></ol></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav> -->
+    <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2020 Taroballz StudyNotes All Rights Reserved.
+        
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hipaper" target="_blank">hipaper</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var wrapdiv = document.getElementById("wrap");
+    var contentdiv = document.getElementById("content");
+
+    wrapdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+
+
+    <!-- headerblur min height -->
+    
+    
+</script>
+    
+<div style="display: none;">
+  <script src="https://s11.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+</div>
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+
+  <div style="display: none;">
+    <script src="https://s95.cnzz.com/z_stat.php?id=1260716016&web_id=1260716016" language="JavaScript"></script>
+  </div>
+
+
+
+	<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>

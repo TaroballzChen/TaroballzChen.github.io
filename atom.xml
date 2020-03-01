@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.taroballz.com/"/>
-  <updated>2020-03-01T08:37:02.000Z</updated>
+  <updated>2020-03-01T19:51:29.000Z</updated>
   <id>http://www.taroballz.com/</id>
   
   <author>
@@ -15,6 +15,40 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Tensorflow2-tensorflow-keras-Wide &amp; Deep 模型初識</title>
+    <link href="http://www.taroballz.com/2020/03/01/DL_Tensorflow_keras_classifier_DNN_WideDeep/"/>
+    <id>http://www.taroballz.com/2020/03/01/DL_Tensorflow_keras_classifier_DNN_WideDeep/</id>
+    <published>2020-03-01T08:48:00.000Z</published>
+    <updated>2020-03-01T19:51:29.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul><li>Google於2016年發布，可用於分類和回歸模型<ul><li>其已被應用到Google Play中的應用推薦</li></ul></li><li>將一組數據的訊息以<strong>稀特徵</strong>及<strong>密特徵</strong>兩種特徵表示，並基於兩種特徵構建模型</li></ul><a id="more"></a><h1 id="稀疏特徵"><a href="#稀疏特徵" class="headerlink" title="稀疏特徵"></a>稀疏特徵</h1><ul><li>離散值特徵<ul><li>從眾多選項中選擇一個<ul><li>性別、膚色、工作類型等</li></ul></li></ul></li><li>若能以one-hot編碼表示的話，wide &amp; deep模型就會認為此特徵為稀疏特徵</li><li>稀疏特徵之間是可以進行叉乘(組合)的<ul><li>性別 x 膚色</li><li>性別 x 工作累型</li></ul></li><li>叉乘之後的<strong>共現信息</strong>是可以精確刻畫樣本的，及補全樣本的可能性<ul><li>實現記憶樣本的效果</li></ul></li></ul><h2 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h2><ul><li>有效，廣泛應用於業界<ul><li>如常遇到重複的樣本，就能快速的並有效的處理</li><li>廣告點擊預測</li></ul></li></ul><h2 id="缺點"><a href="#缺點" class="headerlink" title="缺點"></a>缺點</h2><p>一般現實中的樣本、物體有太多維度，若將其全部表示成離散特徵，會變得非常巨大</p><ul><li>需要人工設計<ul><li>找出最有效的稀疏特徵</li></ul></li><li>可能過擬合<ul><li>所有特徵都進行叉乘，相當於記住每一個樣本了</li></ul></li><li>泛化能力差<ul><li>沒出現過就不會起效果</li></ul></li></ul><h1 id="密集特徵"><a href="#密集特徵" class="headerlink" title="密集特徵"></a>密集特徵</h1><p>需要用向量去表達的特徵</p><ul><li>Ex: 詞表={人工智能，你，他，慕課網}</li><li>利用詮釋實數的一個向量來表達一個詞，例如<code>他 = [0.3,0.2,0.6,(n維向量)]</code></li><li>因此便可利用兩向量之間的距離來表達兩個詞之間的距離<ul><li><code>男 - 女 = 國王 - 王后</code></li></ul></li><li>Word2vec工具：將詞語轉化成向量的工具</li></ul><h2 id="優點-1"><a href="#優點-1" class="headerlink" title="優點"></a>優點</h2><ul><li>帶有語意的信息，不同向量之間有相關性</li><li>兼容沒有出現過的特徵組合<ul><li>當遇到新樣本時，通過計算向量之間的差距，來衡量兩樣本之間的相似性</li></ul></li><li>更少的人工參與</li></ul><h2 id="缺點-1"><a href="#缺點-1" class="headerlink" title="缺點"></a>缺點</h2><ul><li>過度泛化，導致推薦不怎麼相關的產品</li></ul><h1 id="模型結構"><a href="#模型結構" class="headerlink" title="模型結構"></a>模型結構</h1><h2 id="Wide-vs-Wide-amp-deep"><a href="#Wide-vs-Wide-amp-deep" class="headerlink" title="Wide vs. Wide &amp; deep"></a>Wide vs. Wide &amp; deep</h2><p><img src="https://i.imgur.com/UQoU3x1.png" alt="wide and deep vs wide"></p><ul><li><p>Wide模型</p><ul><li>只有一層；因此所有輸入(<strong>稀疏特徵；one-hot表示</strong>)皆連到輸出單元上</li></ul></li><li><p>Wide &amp; deep模型</p><ul><li>模型左半部分為Wide模型；右半部分便為Deep模型</li></ul></li></ul><h2 id="Deep-vs-Wide-amp-deep"><a href="#Deep-vs-Wide-amp-deep" class="headerlink" title="Deep vs. Wide &amp; deep"></a>Deep vs. Wide &amp; deep</h2><p><img src="https://i.imgur.com/donvT38.png" alt="wide and deep vs deep"></p><ul><li><p>Deep模型</p><ul><li>擁有多層的神經網絡</li><li><strong>對於一個輸入的數據(稀疏特徵;Sparse Features)，將其表示為一個密集的向量表達(密集特徵;Dense Embeddings)</strong><ul><li>密集特徵是稀疏特徵的<strong>密集向量表達</strong></li></ul></li><li>在Dense Embeddings之上為全連接的神經網絡亦為隱層(Hidden Layers)</li><li>最後在連接至輸出層(Output Units)</li></ul></li><li><p>Wide &amp; deep模型</p><ul><li>模型左半部分為Wide模型；右半部分便為Deep模型</li></ul></li></ul><h2 id="Google-Play商店的模型結構-Wide-amp-deep模型"><a href="#Google-Play商店的模型結構-Wide-amp-deep模型" class="headerlink" title="Google Play商店的模型結構(Wide &amp; deep模型)"></a>Google Play商店的模型結構(Wide &amp; deep模型)</h2><p><img src="https://i.imgur.com/TFQIBY7.png" alt="googe play wide and deep structure"></p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Introduction&quot;&gt;&lt;a href=&quot;#Introduction&quot; class=&quot;headerlink&quot; title=&quot;Introduction&quot;&gt;&lt;/a&gt;Introduction&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Google於2016年發布，可用於分類和回歸模型&lt;ul&gt;
+&lt;li&gt;其已被應用到Google Play中的應用推薦&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;將一組數據的訊息以&lt;strong&gt;稀特徵&lt;/strong&gt;及&lt;strong&gt;密特徵&lt;/strong&gt;兩種特徵表示，並基於兩種特徵構建模型&lt;/li&gt;
+&lt;/ul&gt;
+    
+    </summary>
+    
+      <category term="tensorflow深度學習" scheme="http://www.taroballz.com/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/"/>
+    
+    
+      <category term="Python" scheme="http://www.taroballz.com/tags/Python/"/>
+    
+      <category term="tensorflow" scheme="http://www.taroballz.com/tags/tensorflow/"/>
+    
+      <category term="深度學習(Deep Learning)" scheme="http://www.taroballz.com/tags/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92-Deep-Learning/"/>
+    
+      <category term="2020" scheme="http://www.taroballz.com/tags/2020/"/>
+    
+  </entry>
   
   <entry>
     <title>Tensorflow2-tensorflow-keras-深度神經網絡(DNN)_dropout</title>
@@ -761,55 +795,6 @@
       <category term="機器學習(Machine Learning)" scheme="http://www.taroballz.com/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/"/>
     
       <category term="特徵工程" scheme="http://www.taroballz.com/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>機器學習-特徵預處理-處理連續型數據</title>
-    <link href="http://www.taroballz.com/2019/06/09/ML_continueVar_Preprocessing/"/>
-    <id>http://www.taroballz.com/2019/06/09/ML_continueVar_Preprocessing/</id>
-    <published>2019-06-08T16:23:54.000Z</published>
-    <updated>2019-06-11T17:18:55.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><ul><li><p>二值化(binarizer)</p><ul><li>根據閥值(threshold)將數值二元化(大於閥值設為1;小於or等於閥值設為0)<ul><li>用於處理連續型變量<ul><li>連續型變量劃分為二分類</li><li>決定僅考慮某種現象存在與否</li></ul></li></ul></li></ul></li><li><p>分段(KBinsDiscretizer;分箱)</p><ul><li>將連續型數據劃分為不同分類變量<ul><li>例如：根據不同的年齡段分成老年、中年、青少年、小孩、幼齡</li></ul></li></ul></li></ul><a id="more"></a><h1 id="二值化-Binarizer"><a href="#二值化-Binarizer" class="headerlink" title="二值化(Binarizer)"></a>二值化(<code>Binarizer</code>)</h1><ul><li><code>from sklearn.preprocessing import Binarizer</code></li><li><code>Binarizer</code>為特徵專用，不能使用一維數據，需進行<code>reshape(-1,1)</code>升維成二維 一列的數據</li><li>實例化指定<code>threshold</code><ul><li><code>Binarizer(threshold=?)</code></li><li>大於<code>threshold</code>值會設為1，小於等於<code>threshold</code>值會設為0</li></ul></li></ul><h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p>與其他轉換器(transformer)一樣皆具有<code>fit_transform</code>、<code>fit</code>、<code>transform</code>、<code>inverse_transform</code> 等方法</p><h1 id="分段-KBinsDiscretizer"><a href="#分段-KBinsDiscretizer" class="headerlink" title="分段(KBinsDiscretizer)"></a>分段(<code>KBinsDiscretizer</code>)</h1><ul><li><code>from sklearn.preprocessing import KBinsDiscretizer</code></li><li>將連續型數據排序後，按順序分箱後編碼</li><li><code>KBinsDiscretizer</code>為特徵專用，不能使用一維數據，需進行<code>reshape(-1,1)</code>升維成二維 一列的數據</li></ul><h2 id="實例化的重要參數"><a href="#實例化的重要參數" class="headerlink" title="實例化的重要參數"></a>實例化的重要參數</h2><h3 id="n-bins"><a href="#n-bins" class="headerlink" title="n_bins"></a>n_bins</h3><p>每個特徵中分箱的個數</p><ul><li>預設為5，將連續型數據分為5類</li><li>一次會被運用到所有<code>fit</code>進來的特徵矩陣<ul><li>若一次導入有10個feature的特徵矩陣，全部特徵都會被分為指定的類數別</li><li>若希望不同特徵的分箱數不同，則<strong>必須實例化多個不同的分箱依據的<code>KBinsDiscretizer</code>轉換器</strong></li></ul></li></ul><h3 id="encode"><a href="#encode" class="headerlink" title="encode"></a>encode</h3><p>編碼的方式</p><ul><li>預設為<code>&quot;onehot&quot;</code>：返回sparse matrix，含有該類別的樣本為1，反之為0<ul><li>分為多少箱就有多少列</li></ul></li><li><code>&quot;ordinal&quot;</code>：每個特徵(箱)被編碼為一個整數，返回一列含有不同整數編碼的箱的矩陣</li><li><code>&quot;onehot-dense&quot;</code>：做onehot編碼後，返回一個密集數組</li></ul><h3 id="strategy"><a href="#strategy" class="headerlink" title="strategy"></a>strategy</h3><p>用來定義箱寬的方式</p><ul><li>預設為<code>&quot;quantile&quot;</code>：表示等位分箱，<strong>每個特徵中的每個箱內的樣本數量相同</strong><ul><li>根據<strong>箱內樣本的數量</strong>進行分割</li></ul></li><li><code>&quot;uniform&quot;</code>：表示等寬分箱，每個特徵中的每個箱最大值之間差為(<code>(特徵.max() - 特徵.min()) / (n_bins)</code>)<ul><li>根據數據的<strong>值</strong>來進行分箱</li></ul></li><li><code>&quot;kmeans&quot;</code>：表示按聚類分箱<ul><li>每個箱中的值到最近的一維k均值聚類的簇心的距離相同</li></ul></li></ul><h2 id="方法-1"><a href="#方法-1" class="headerlink" title="方法"></a>方法</h2><p>與其他轉換器(transformer)一樣皆具有<code>fit_transform</code>、<code>fit</code>、<code>transform</code>、<code>inverse_transform</code> 等方法</p><h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol><li><a href="http://www.peixun.net/view/1281.html" target="_blank" rel="noopener">http://www.peixun.net/view/1281.html</a></li></ol>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h1 id=&quot;Introduction&quot;&gt;&lt;a href=&quot;#Introduction&quot; class=&quot;headerlink&quot; title=&quot;Introduction&quot;&gt;&lt;/a&gt;Introduction&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;二值化(binarizer)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;根據閥值(threshold)將數值二元化(大於閥值設為1;小於or等於閥值設為0)&lt;ul&gt;
-&lt;li&gt;用於處理連續型變量&lt;ul&gt;
-&lt;li&gt;連續型變量劃分為二分類&lt;/li&gt;
-&lt;li&gt;決定僅考慮某種現象存在與否&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;分段(KBinsDiscretizer;分箱)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;將連續型數據劃分為不同分類變量&lt;ul&gt;
-&lt;li&gt;例如：根據不同的年齡段分成老年、中年、青少年、小孩、幼齡&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-    
-    </summary>
-    
-      <category term="Python機器學習" scheme="http://www.taroballz.com/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/"/>
-    
-    
-      <category term="Python" scheme="http://www.taroballz.com/tags/Python/"/>
-    
-      <category term="2019" scheme="http://www.taroballz.com/tags/2019/"/>
-    
-      <category term="機器學習(Machine Learning)" scheme="http://www.taroballz.com/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/"/>
-    
-      <category term="特徵預處理" scheme="http://www.taroballz.com/tags/%E7%89%B9%E5%BE%B5%E9%A0%90%E8%99%95%E7%90%86/"/>
     
   </entry>
   

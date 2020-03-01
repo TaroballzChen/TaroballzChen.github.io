@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.taroballz.com/2020/03/01/DL_Tensorflow_keras_classifier_DNN_WideDeep/</loc>
+    
+    <lastmod>2020-03-01T19:51:29.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.taroballz.com/2020/02/28/DL_Tensorflow_keras_classifier_SimpleDNN_selu_dropout/</loc>
     
     <lastmod>2020-03-01T08:37:02.000Z</lastmod>
