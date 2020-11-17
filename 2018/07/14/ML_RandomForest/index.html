@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-演算法-隨機森林(random forest) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)集成學習方法">
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)集成學習方法" />
   
   
   
   
   <meta name="description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
-<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning),集成學習方法">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-演算法-隨機森林(random forest)">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/14/ML_RandomForest/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/bRLZMDF.jpg">
-<meta property="og:updated_time" content="2019-05-22T02:25:38.000Z">
+<meta property="article:published_time" content="2018-07-14T10:15:00.000Z">
+<meta property="article:modified_time" content="2019-05-22T02:25:38.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="演算法">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="集成學習方法">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-演算法-隨機森林(random forest)">
-<meta name="twitter:description" content="隨機森林(random forest)在機器學習中，隨機森林是一個包含多個決策樹的分類器，並且其輸出的類別是由個別樹輸出的類別的眾數而定  如果訓練了五個樹其中有四個樹的結果為True，一個的結果為False，那麼最終的結果為True(投票決定)">
 <meta name="twitter:image" content="https://i.imgur.com/bRLZMDF.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +49,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +146,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/bRLZMDF.jpg" rel="gallery_ck79gai0i008ps6q7nl3fk1cr">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/bRLZMDF.jpg" rel="gallery_ckhlqn4cb008yclzx293rh7yo noopener">
         <img src="https://i.imgur.com/bRLZMDF.jpg" itemprop="image">
       </a>
     
@@ -142,7 +172,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -192,8 +222,8 @@
 <li>min_samples_leaf :</li>
 <li>bootstrap : boolean，預設為True，是否在構建樹時使用放回抽樣</li>
 </ul>
-<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>隨機森林搭配超參數優化(GridSearchCV)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split,GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">datapath = <span class="string">"/Volumes/MacData/MEGA/pythonwork/jupyter_project/Kaggle Dataset/Titanic/train.csv"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RandomForestTest</span><span class="params">()</span>:</span></span><br><span class="line">    data = pd.read_csv(datapath)</span><br><span class="line">    X = data[[<span class="string">"Pclass"</span>,<span class="string">"Sex"</span>,<span class="string">"Age"</span>]]</span><br><span class="line">    Y = data[<span class="string">"Survived"</span>]</span><br><span class="line"></span><br><span class="line">    X[<span class="string">"Age"</span>].fillna(X[<span class="string">"Age"</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    DV = DictVectorizer(sparse=<span class="literal">False</span>)</span><br><span class="line">    X_train = DV.fit_transform(X_train.to_dict(orient=<span class="string">"records"</span>))</span><br><span class="line">    X_test = DV.transform(X_test.to_dict(orient=<span class="string">"records"</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 實例化隨機森林分類器</span></span><br><span class="line">    RF = RandomForestClassifier()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 測試超參數優化</span></span><br><span class="line">    RF_param = &#123;<span class="string">"n_estimators"</span>:[<span class="number">10</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">150</span>,<span class="number">200</span>],<span class="string">"max_depth"</span>:[<span class="number">5</span>,<span class="number">10</span>,<span class="number">15</span>,<span class="number">20</span>]&#125;</span><br><span class="line">    </span><br><span class="line">    GSCV = GridSearchCV(RF,param_grid=RF_param,cv=<span class="number">5</span>)</span><br><span class="line">    GSCV.fit(X_train,y_train)</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">"accuracy score"</span>,GSCV.score(X_test,y_test))</span><br><span class="line">    print(<span class="string">"The best model param :"</span>,GSCV.best_params_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    RandomForestTest()</span><br></pre></td></tr></table></figure></p>
-<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">accuracy score 0.8071748878923767</span><br><span class="line">The best model param : &#123;&apos;max_depth&apos;: 5, &apos;n_estimators&apos;: 150&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><p>隨機森林搭配超參數優化(GridSearchCV)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split,GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction <span class="keyword">import</span> DictVectorizer</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line">datapath = <span class="string">&quot;/Volumes/MacData/MEGA/pythonwork/jupyter_project/Kaggle Dataset/Titanic/train.csv&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">RandomForestTest</span>():</span></span><br><span class="line">    data = pd.read_csv(datapath)</span><br><span class="line">    X = data[[<span class="string">&quot;Pclass&quot;</span>,<span class="string">&quot;Sex&quot;</span>,<span class="string">&quot;Age&quot;</span>]]</span><br><span class="line">    Y = data[<span class="string">&quot;Survived&quot;</span>]</span><br><span class="line"></span><br><span class="line">    X[<span class="string">&quot;Age&quot;</span>].fillna(X[<span class="string">&quot;Age&quot;</span>].mean(),inplace=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">    X_train,X_test,y_train,y_test = train_test_split(X,Y,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    DV = DictVectorizer(sparse=<span class="literal">False</span>)</span><br><span class="line">    X_train = DV.fit_transform(X_train.to_dict(orient=<span class="string">&quot;records&quot;</span>))</span><br><span class="line">    X_test = DV.transform(X_test.to_dict(orient=<span class="string">&quot;records&quot;</span>))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 實例化隨機森林分類器</span></span><br><span class="line">    RF = RandomForestClassifier()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 測試超參數優化</span></span><br><span class="line">    RF_param = &#123;<span class="string">&quot;n_estimators&quot;</span>:[<span class="number">10</span>,<span class="number">50</span>,<span class="number">100</span>,<span class="number">150</span>,<span class="number">200</span>],<span class="string">&quot;max_depth&quot;</span>:[<span class="number">5</span>,<span class="number">10</span>,<span class="number">15</span>,<span class="number">20</span>]&#125;</span><br><span class="line">    </span><br><span class="line">    GSCV = GridSearchCV(RF,param_grid=RF_param,cv=<span class="number">5</span>)</span><br><span class="line">    GSCV.fit(X_train,y_train)</span><br><span class="line">    </span><br><span class="line">    print(<span class="string">&quot;accuracy score&quot;</span>,GSCV.score(X_test,y_test))</span><br><span class="line">    print(<span class="string">&quot;The best model param :&quot;</span>,GSCV.best_params_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    RandomForestTest()</span><br></pre></td></tr></table></figure></p>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">accuracy score 0.8071748878923767</span><br><span class="line">The best model param : &#123;&#39;max_depth&#39;: 5, &#39;n_estimators&#39;: 150&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="優缺點"><a href="#優缺點" class="headerlink" title="優缺點"></a>優缺點</h1><ul>
 <li>優點<ul>
 <li>在當前所有演算法中，具有極好的準確率，也是使用最多的</li>
@@ -213,17 +243,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/集成學習方法/">集成學習方法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BC%94%E7%AE%97%E6%B3%95/" rel="tag">演算法</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9B%86%E6%88%90%E5%AD%B8%E7%BF%92%E6%96%B9%E6%B3%95/" rel="tag">集成學習方法</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -303,7 +333,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#隨機森林-random-forest"><span class="nav-number">1.</span> <span class="nav-text">隨機森林(random forest)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#建立多個決策樹的過程"><span class="nav-number">1.1.</span> <span class="nav-text">建立多個決策樹的過程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#為何要隨機抽樣訓練集"><span class="nav-number">1.2.</span> <span class="nav-text">為何要隨機抽樣訓練集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#為什麼要有放回的抽樣"><span class="nav-number">1.3.</span> <span class="nav-text">為什麼要有放回的抽樣</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#調用隨機森林API"><span class="nav-number">2.</span> <span class="nav-text">調用隨機森林API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">2.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優缺點"><span class="nav-number">3.</span> <span class="nav-text">優缺點</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%A8%E6%A9%9F%E6%A3%AE%E6%9E%97-random-forest"><span class="nav-number">1.</span> <span class="nav-text">隨機森林(random forest)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E5%A4%9A%E5%80%8B%E6%B1%BA%E7%AD%96%E6%A8%B9%E7%9A%84%E9%81%8E%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">建立多個決策樹的過程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BD%95%E8%A6%81%E9%9A%A8%E6%A9%9F%E6%8A%BD%E6%A8%A3%E8%A8%93%E7%B7%B4%E9%9B%86"><span class="nav-number">1.2.</span> <span class="nav-text">為何要隨機抽樣訓練集</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%82%BA%E4%BB%80%E9%BA%BC%E8%A6%81%E6%9C%89%E6%94%BE%E5%9B%9E%E7%9A%84%E6%8A%BD%E6%A8%A3"><span class="nav-number">1.3.</span> <span class="nav-text">為什麼要有放回的抽樣</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AA%BF%E7%94%A8%E9%9A%A8%E6%A9%9F%E6%A3%AE%E6%9E%97API"><span class="nav-number">2.</span> <span class="nav-text">調用隨機森林API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">2.1.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">2.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E"><span class="nav-number">3.</span> <span class="nav-text">優缺點</span></a></li></ol>
     
     </div>
   </aside>
@@ -357,6 +387,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -396,13 +429,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -429,7 +472,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -441,7 +484,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

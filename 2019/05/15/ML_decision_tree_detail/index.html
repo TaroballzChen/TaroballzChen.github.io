@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2019演算法機器學習(Machine Learning)">
+  <meta name="keywords" content="Python2019演算法機器學習(Machine Learning)" />
   
   
   
   
   <meta name="description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
-<meta name="keywords" content="Python,2019,演算法,機器學習(Machine Learning)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)">
 <meta property="og:url" content="http://www.taroballz.com/2019/05/15/ML_decision_tree_detail/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/z2b7JA0.jpg">
-<meta property="og:updated_time" content="2019-05-19T06:39:38.000Z">
+<meta property="article:published_time" content="2019-05-15T13:25:00.000Z">
+<meta property="article:modified_time" content="2019-05-19T06:39:38.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2019">
+<meta property="article:tag" content="演算法">
+<meta property="article:tag" content="機器學習(Machine Learning)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-演算法-細談決策樹分類樹(DecisionTreeClassifier)">
-<meta name="twitter:description" content="Introduction 一種非參數的監督學習(有目標值)的演算法 非參數：不限制數據的結構與類型 任何數據皆適用">
 <meta name="twitter:image" content="https://i.imgur.com/z2b7JA0.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/z2b7JA0.jpg" rel="gallery_ck79gai0s009ks6q7tdzcurzd">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/z2b7JA0.jpg" rel="gallery_ckhlqn4cs009tclzxb7xz67tj noopener">
         <img src="https://i.imgur.com/z2b7JA0.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -177,7 +206,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="DecisionTreeClassifier"><a href="#DecisionTreeClassifier" class="headerlink" title="DecisionTreeClassifier"></a>DecisionTreeClassifier</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.tree.DecisionTreeClassifier (criterion=’gini’, splitter=’best’, max_depth=None, </span><br><span class="line">min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, </span><br><span class="line">max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)</span><br></pre></td></tr></table></figure>
+<h1 id="DecisionTreeClassifier"><a href="#DecisionTreeClassifier" class="headerlink" title="DecisionTreeClassifier"></a>DecisionTreeClassifier</h1><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">class sklearn.tree.DecisionTreeClassifier (criterion=’gini’, splitter=’best’, max_depth=None, </span><br><span class="line">min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, </span><br><span class="line">max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, class_weight=None, presort=False)</span><br></pre></td></tr></table></figure>
 <h2 id="重要參數"><a href="#重要參數" class="headerlink" title="重要參數"></a>重要參數</h2><h3 id="criterion"><a href="#criterion" class="headerlink" title="criterion"></a>criterion</h3><blockquote>
 <p>對分類樹來說，找出最佳節點及分枝的指標為＂不純度＂，<strong>不純度越低，決策樹對訓練集得的擬合越好</strong>。<br>決策樹就是追求不純度相關指標的最優化</p>
 <ul>
@@ -267,7 +296,7 @@
 <h3 id="min-impurity-decrease"><a href="#min-impurity-decrease" class="headerlink" title="min_impurity_decrease"></a>min_impurity_decrease</h3><blockquote>
 <p>限制信息增益的大小<br>信息增益小於設定數值的分枝不會發生</p>
 </blockquote>
-<h3 id="利用matplotlib畫出學習曲線來確認最優的剪枝參數"><a href="#利用matplotlib畫出學習曲線來確認最優的剪枝參數" class="headerlink" title="利用matplotlib畫出學習曲線來確認最優的剪枝參數"></a>利用matplotlib畫出學習曲線來確認最優的剪枝參數</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">y_eff = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):   <span class="comment"># 測試的條件數</span></span><br><span class="line">    tree_clf = tree.DecisionTreeClassifier(criterion=<span class="string">"entropy"</span></span><br><span class="line">                                          ,random_state = <span class="number">30</span></span><br><span class="line">                                          ,splitter = <span class="string">"random"</span></span><br><span class="line">                                          ,max_depth = i+<span class="number">1</span>   <span class="comment">#測試條件</span></span><br><span class="line">                                          )</span><br><span class="line">  tree_clf = tree_clf.fit(Xtrain,ytrain)</span><br><span class="line">  score = tree_clf.score(Xtest,ytest)</span><br><span class="line">  y_eff.append(score)</span><br><span class="line">plt.plot(range(<span class="number">1</span>,<span class="number">11</span>),y_eff,color=<span class="string">"red"</span>,label=<span class="string">"max_depth"</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<h3 id="利用matplotlib畫出學習曲線來確認最優的剪枝參數"><a href="#利用matplotlib畫出學習曲線來確認最優的剪枝參數" class="headerlink" title="利用matplotlib畫出學習曲線來確認最優的剪枝參數"></a>利用matplotlib畫出學習曲線來確認最優的剪枝參數</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">y_eff = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):   <span class="comment"># 測試的條件數</span></span><br><span class="line">    tree_clf = tree.DecisionTreeClassifier(criterion=<span class="string">&quot;entropy&quot;</span></span><br><span class="line">                                          ,random_state = <span class="number">30</span></span><br><span class="line">                                          ,splitter = <span class="string">&quot;random&quot;</span></span><br><span class="line">                                          ,max_depth = i+<span class="number">1</span>   <span class="comment">#測試條件</span></span><br><span class="line">                                          )</span><br><span class="line">  tree_clf = tree_clf.fit(Xtrain,ytrain)</span><br><span class="line">  score = tree_clf.score(Xtest,ytest)</span><br><span class="line">  y_eff.append(score)</span><br><span class="line">plt.plot(<span class="built_in">range</span>(<span class="number">1</span>,<span class="number">11</span>),y_eff,color=<span class="string">&quot;red&quot;</span>,label=<span class="string">&quot;max_depth&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 <h2 id="目標權重參數"><a href="#目標權重參數" class="headerlink" title="目標權重參數"></a>目標權重參數</h2><p>控制目標權重的參數</p>
 <h3 id="class-weight"><a href="#class-weight" class="headerlink" title="class_weight"></a>class_weight</h3><blockquote>
 <p>樣本不平衡是指在一組數據集中，某個標籤天生佔有很大的比例<br>完成樣本標籤平衡的參數，對樣本標籤進行一定的均衡</p>
@@ -312,7 +341,7 @@
 <li>一個怎樣調整參數都無法提升的表現的可能性仍存在</li>
 </ul>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
-<li><a href="http://www.peixun.net/view/1281.html" target="_blank" rel="noopener">http://www.peixun.net/view/1281.html</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.peixun.net/view/1281.html">http://www.peixun.net/view/1281.html</a></li>
 </ol>
 
       
@@ -320,17 +349,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/" rel="tag">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BC%94%E7%AE%97%E6%B3%95/" rel="tag">演算法</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -410,7 +439,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn中的決策樹"><span class="nav-number">2.</span> <span class="nav-text">sklearn中的決策樹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DecisionTreeClassifier"><span class="nav-number">3.</span> <span class="nav-text">DecisionTreeClassifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重要參數"><span class="nav-number">3.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#criterion"><span class="nav-number">3.1.1.</span> <span class="nav-text">criterion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隨機性參數"><span class="nav-number">3.2.</span> <span class="nav-text">隨機性參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.1.</span> <span class="nav-text">random_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#splitter"><span class="nav-number">3.3.</span> <span class="nav-text">splitter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#剪枝參數"><span class="nav-number">3.4.</span> <span class="nav-text">剪枝參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#max-depth"><span class="nav-number">3.4.1.</span> <span class="nav-text">max_depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-leaf"><span class="nav-number">3.4.2.</span> <span class="nav-text">min_samples_leaf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-split"><span class="nav-number">3.4.3.</span> <span class="nav-text">min_samples_split</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-features"><span class="nav-number">3.4.4.</span> <span class="nav-text">max_features</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-impurity-decrease"><span class="nav-number">3.4.5.</span> <span class="nav-text">min_impurity_decrease</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用matplotlib畫出學習曲線來確認最優的剪枝參數"><span class="nav-number">3.4.6.</span> <span class="nav-text">利用matplotlib畫出學習曲線來確認最優的剪枝參數</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目標權重參數"><span class="nav-number">3.5.</span> <span class="nav-text">目標權重參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-weight"><span class="nav-number">3.5.1.</span> <span class="nav-text">class_weight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-weight-fraction-leaf"><span class="nav-number">3.5.2.</span> <span class="nav-text">min_weight_fraction_leaf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#重要屬性和接口"><span class="nav-number">4.</span> <span class="nav-text">重要屬性和接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-apply-Xtest"><span class="nav-number">4.1.</span> <span class="nav-text">estimator.apply(Xtest)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-predict-Xtest"><span class="nav-number">4.2.</span> <span class="nav-text">estimator.predict(Xtest)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#結論"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn%E4%B8%AD%E7%9A%84%E6%B1%BA%E7%AD%96%E6%A8%B9"><span class="nav-number">2.</span> <span class="nav-text">sklearn中的決策樹</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#DecisionTreeClassifier"><span class="nav-number">3.</span> <span class="nav-text">DecisionTreeClassifier</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%8F%83%E6%95%B8"><span class="nav-number">3.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#criterion"><span class="nav-number">3.1.1.</span> <span class="nav-text">criterion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%A8%E6%A9%9F%E6%80%A7%E5%8F%83%E6%95%B8"><span class="nav-number">3.2.</span> <span class="nav-text">隨機性參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.1.</span> <span class="nav-text">random_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#splitter"><span class="nav-number">3.3.</span> <span class="nav-text">splitter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%AA%E6%9E%9D%E5%8F%83%E6%95%B8"><span class="nav-number">3.4.</span> <span class="nav-text">剪枝參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#max-depth"><span class="nav-number">3.4.1.</span> <span class="nav-text">max_depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-leaf"><span class="nav-number">3.4.2.</span> <span class="nav-text">min_samples_leaf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-samples-split"><span class="nav-number">3.4.3.</span> <span class="nav-text">min_samples_split</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#max-features"><span class="nav-number">3.4.4.</span> <span class="nav-text">max_features</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-impurity-decrease"><span class="nav-number">3.4.5.</span> <span class="nav-text">min_impurity_decrease</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A9%E7%94%A8matplotlib%E7%95%AB%E5%87%BA%E5%AD%B8%E7%BF%92%E6%9B%B2%E7%B7%9A%E4%BE%86%E7%A2%BA%E8%AA%8D%E6%9C%80%E5%84%AA%E7%9A%84%E5%89%AA%E6%9E%9D%E5%8F%83%E6%95%B8"><span class="nav-number">3.4.6.</span> <span class="nav-text">利用matplotlib畫出學習曲線來確認最優的剪枝參數</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A8%99%E6%AC%8A%E9%87%8D%E5%8F%83%E6%95%B8"><span class="nav-number">3.5.</span> <span class="nav-text">目標權重參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#class-weight"><span class="nav-number">3.5.1.</span> <span class="nav-text">class_weight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#min-weight-fraction-leaf"><span class="nav-number">3.5.2.</span> <span class="nav-text">min_weight_fraction_leaf</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%B1%AC%E6%80%A7%E5%92%8C%E6%8E%A5%E5%8F%A3"><span class="nav-number">4.</span> <span class="nav-text">重要屬性和接口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-apply-Xtest"><span class="nav-number">4.1.</span> <span class="nav-text">estimator.apply(Xtest)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#estimator-predict-Xtest"><span class="nav-number">4.2.</span> <span class="nav-text">estimator.predict(Xtest)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">5.</span> <span class="nav-text">結論</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol>
     
     </div>
   </aside>
@@ -464,6 +493,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -503,13 +535,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -536,7 +578,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -548,7 +590,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Python-多任務執行-多線程(threading) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python多線程threading">
+  <meta name="keywords" content="Python多線程threading" />
   
   
   
   
   <meta name="description" content="Preface: 要同時間執行兩個以上的函數，需用到多任務執行的模塊，例如threading模塊 線程(Thread)是實現多任務的一種手段  Introduction: python的thread模塊是比較底層的模塊,python的threading模塊是對thread做了一些包裝，可以更加方便的被使用">
-<meta name="keywords" content="Python,多線程,threading">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python-多任務執行-多線程(threading)">
 <meta property="og:url" content="http://www.taroballz.com/2018/12/02/Threading/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Preface: 要同時間執行兩個以上的函數，需用到多任務執行的模塊，例如threading模塊 線程(Thread)是實現多任務的一種手段  Introduction: python的thread模塊是比較底層的模塊,python的threading模塊是對thread做了一些包裝，可以更加方便的被使用">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/uUAj2EH.jpg">
-<meta property="og:updated_time" content="2018-12-01T18:26:54.000Z">
+<meta property="article:published_time" content="2018-12-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-01T18:26:54.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="多線程">
+<meta property="article:tag" content="threading">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python-多任務執行-多線程(threading)">
-<meta name="twitter:description" content="Preface: 要同時間執行兩個以上的函數，需用到多任務執行的模塊，例如threading模塊 線程(Thread)是實現多任務的一種手段  Introduction: python的thread模塊是比較底層的模塊,python的threading模塊是對thread做了一些包裝，可以更加方便的被使用">
 <meta name="twitter:image" content="https://i.imgur.com/uUAj2EH.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +47,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +144,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/uUAj2EH.jpg" rel="gallery_ck79gai1900b6s6q7w6cp2061">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/uUAj2EH.jpg" rel="gallery_ckhlqn4dx00bbclzx6rqt3v4n noopener">
         <img src="https://i.imgur.com/uUAj2EH.jpg" itemprop="image">
       </a>
     
@@ -142,7 +170,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -161,18 +189,14 @@
 </ul>
 <a id="more"></a>
 <h1 id="Notice"><a href="#Notice" class="headerlink" title="Notice:"></a>Notice:</h1><h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><ul>
-<li><code>threading</code>模塊中有一個<code>Thread</code>類<h2 id="Example-I"><a href="#Example-I" class="headerlink" title="Example I:"></a>Example I:</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayHello</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"Hello"</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">5</span>):</span><br><span class="line">        <span class="comment">#創建一個線程的物件</span></span><br><span class="line">        t = threading.Thread(target=sayHello)</span><br><span class="line">        <span class="comment">#啟動線程</span></span><br><span class="line">        t.start()</span><br></pre></td></tr></table></figure>
-</li>
+<li><code>threading</code>模塊中有一個<code>Thread</code>類<h2 id="Example-I"><a href="#Example-I" class="headerlink" title="Example I:"></a>Example I:</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sayHello</span>():</span></span><br><span class="line">    print(<span class="string">&quot;Hello&quot;</span>)</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">5</span>):</span><br><span class="line">        <span class="comment">#創建一個線程的物件</span></span><br><span class="line">        t = threading.Thread(target=sayHello)</span><br><span class="line">        <span class="comment">#啟動線程</span></span><br><span class="line">        t.start()</span><br></pre></td></tr></table></figure></li>
 </ul>
 <ul>
 <li>主線程會等待子線程執行結束之後才會結束程序</li>
 </ul>
 <h1 id="查看線程信息-enumerate"><a href="#查看線程信息-enumerate" class="headerlink" title="查看線程信息(enumerate)"></a>查看線程信息(enumerate)</h1><ul>
-<li><p>使用<code>threading</code>模塊下的<code>enumerate</code>可獲取當前程序所有線程信息(包括主線程)，返回一個列表</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sing</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"I'm singing"</span>)</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dance</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"I'm dancing"</span>)</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(<span class="string">"In the Main"</span>)</span><br><span class="line">    t1 = threading.Thread(target=sing)</span><br><span class="line">    t2 = threading.Thread(target=dance)</span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        length = len(threading.enumerate())</span><br><span class="line">        print(<span class="string">"當前線程數為：%d"</span>%length)</span><br><span class="line">        <span class="keyword">if</span> length &lt;= <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        sleep(<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>主線程會等到所有子線程都結束後才結束主線程</p>
-</li>
+<li>使用<code>threading</code>模塊下的<code>enumerate</code>可獲取當前程序所有線程信息(包括主線程)，返回一個列表<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sing</span>():</span></span><br><span class="line">    print(<span class="string">&quot;I&#x27;m singing&quot;</span>)</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dance</span>():</span></span><br><span class="line">    print(<span class="string">&quot;I&#x27;m dancing&quot;</span>)</span><br><span class="line">    sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    print(<span class="string">&quot;In the Main&quot;</span>)</span><br><span class="line">    t1 = threading.Thread(target=sing)</span><br><span class="line">    t2 = threading.Thread(target=dance)</span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        length = <span class="built_in">len</span>(threading.<span class="built_in">enumerate</span>())</span><br><span class="line">        print(<span class="string">&quot;當前線程數為：%d&quot;</span>%length)</span><br><span class="line">        <span class="keyword">if</span> length &lt;= <span class="number">1</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        sleep(<span class="number">0.5</span>)</span><br></pre></td></tr></table></figure></li>
+<li>主線程會等到所有子線程都結束後才結束主線程</li>
 <li>當調用<code>Thread</code>的時候，<strong>不會創建線程</strong><ul>
 <li>使用<code>Thread</code>創建出來的線程物件(線程實例化對象)調用<code>start</code>方法的時候：<ol>
 <li>才會<strong>創建線程</strong></li>
@@ -182,8 +206,8 @@
 </ul>
 </li>
 </ul>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In the Main</span><br><span class="line">I&apos;m singing</span><br><span class="line">I&apos;m dancing</span><br><span class="line">當前線程數為：3</span><br><span class="line">當前線程數為：3</span><br><span class="line">當前線程數為：1</span><br></pre></td></tr></table></figure></p>
-<h1 id="通過繼承Thread類創建線程"><a href="#通過繼承Thread類創建線程" class="headerlink" title="通過繼承Thread類創建線程"></a>通過繼承<code>Thread</code>類創建線程</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment">#Thread類中的name屬性保存了當前線程的名字</span></span><br><span class="line">            msg = <span class="string">"I'm "</span> + self.name + <span class="string">"@"</span> +str(i)</span><br><span class="line">            </span><br><span class="line">            print(msg)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment">#創建了一個線程物件(線程實例化對象)</span></span><br><span class="line">    t = MyThread()</span><br><span class="line">    t.start()</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">In the Main</span><br><span class="line">I&#39;m singing</span><br><span class="line">I&#39;m dancing</span><br><span class="line">當前線程數為：3</span><br><span class="line">當前線程數為：3</span><br><span class="line">當前線程數為：1</span><br></pre></td></tr></table></figure></p>
+<h1 id="通過繼承Thread類創建線程"><a href="#通過繼承Thread類創建線程" class="headerlink" title="通過繼承Thread類創建線程"></a>通過繼承<code>Thread</code>類創建線程</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyThread</span>(<span class="params">threading.Thread</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">            time.sleep(<span class="number">1</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment">#Thread類中的name屬性保存了當前線程的名字</span></span><br><span class="line">            msg = <span class="string">&quot;I&#x27;m &quot;</span> + self.name + <span class="string">&quot;@&quot;</span> +<span class="built_in">str</span>(i)</span><br><span class="line">            </span><br><span class="line">            print(msg)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    <span class="comment">#創建了一個線程物件(線程實例化對象)</span></span><br><span class="line">    t = MyThread()</span><br><span class="line">    t.start()</span><br></pre></td></tr></table></figure>
 <ul>
 <li>上面使用<code>t = MyThread</code>創建一個線程物件，其與使用<code>threading.Thread()</code>創建線程物件<strong>沒有差別</strong></li>
 <li>使用繼承的方法創建Thread，通常用於<strong>執行複雜操作</strong>時，也就是無法完全用<code>threading.Thread(target=函數名)</code>完整執行所有動作時使用</li>
@@ -244,17 +268,16 @@
 <li>如果鎖物件之前是<strong>未上鎖</strong>的，那麼調用<code>acquire</code>方法便不會堵塞</li>
 <li>如果在調用<code>acquire</code>對鎖物件上鎖之前，已經被其他線程先行上鎖，會堵塞到鎖物件被<code>release</code>為止</li>
 </ul>
-<h4 id="未上鎖"><a href="#未上鎖" class="headerlink" title="未上鎖"></a>未上鎖</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">number = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_one</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> number</span><br><span class="line">    number +=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(<span class="number">1000000</span>,))</span><br><span class="line">    t2 =  threading.Thread(target = func2,args=(<span class="number">1000000</span>,))</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()   <span class="comment">#主線程等待線程完成再繼續往下執行</span></span><br><span class="line">    t2.join()</span><br><span class="line">    print(<span class="string">"in the main Thread, number="</span>,number)</span><br></pre></td></tr></table></figure>
+<h4 id="未上鎖"><a href="#未上鎖" class="headerlink" title="未上鎖"></a>未上鎖</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">number = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_one</span>():</span></span><br><span class="line">    <span class="keyword">global</span> number</span><br><span class="line">    number +=<span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(<span class="number">1000000</span>,))</span><br><span class="line">    t2 =  threading.Thread(target = func2,args=(<span class="number">1000000</span>,))</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()   <span class="comment">#主線程等待線程完成再繼續往下執行</span></span><br><span class="line">    t2.join()</span><br><span class="line">    print(<span class="string">&quot;in the main Thread, number=&quot;</span>,number)</span><br></pre></td></tr></table></figure>
 <p>result</p>
 <ol>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number= 1660809</span><br></pre></td></tr></table></figure>
-</li>
-<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number= 1594271</span><br></pre></td></tr></table></figure>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number&#x3D; 1660809</span><br></pre></td></tr></table></figure></li>
+<li><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number&#x3D; 1594271</span><br></pre></td></tr></table></figure>
+3.<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number&#x3D; 1704507</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>3.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number= 1704507</span><br></pre></td></tr></table></figure></p>
-<h4 id="有上鎖"><a href="#有上鎖" class="headerlink" title="有上鎖"></a>有上鎖</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">number = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_one</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">global</span> number</span><br><span class="line">    Lock.acquire()</span><br><span class="line">    number +=<span class="number">1</span></span><br><span class="line">    Lock.release()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    Lock = threading.Lock()</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(<span class="number">1000000</span>,))</span><br><span class="line">    t2 =  threading.Thread(target = func2,args=(<span class="number">1000000</span>,))</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line">    print(<span class="string">"in the main Thread, number="</span>,number)</span><br></pre></td></tr></table></figure>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number= 2000000</span><br></pre></td></tr></table></figure></p>
+<h4 id="有上鎖"><a href="#有上鎖" class="headerlink" title="有上鎖"></a>有上鎖</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">number = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span>(<span class="params">n</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        add_one()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_one</span>():</span></span><br><span class="line">    <span class="keyword">global</span> number</span><br><span class="line">    Lock.acquire()</span><br><span class="line">    number +=<span class="number">1</span></span><br><span class="line">    Lock.release()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    Lock = threading.Lock()</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(<span class="number">1000000</span>,))</span><br><span class="line">    t2 =  threading.Thread(target = func2,args=(<span class="number">1000000</span>,))</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    t2.start()</span><br><span class="line">    t1.join()</span><br><span class="line">    t2.join()</span><br><span class="line">    print(<span class="string">&quot;in the main Thread, number=&quot;</span>,number)</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">in the main Thread, number&#x3D; 2000000</span><br></pre></td></tr></table></figure></p>
 <h1 id="傳遞參數"><a href="#傳遞參數" class="headerlink" title="傳遞參數"></a>傳遞參數</h1><ul>
 <li>使用線程執行函數時傳遞參數(args)<ul>
 <li>指定將來創建線程物件時，傳遞什麼參數過去</li>
@@ -265,7 +288,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">(temp)</span>:</span></span><br><span class="line">    temp.append(<span class="number">33</span>)</span><br><span class="line">    print(<span class="string">"-----in test1 %s"</span>%temp)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">"----- in test2 Thread"</span>)</span><br><span class="line"></span><br><span class="line">g_nums = [<span class="number">11</span>,<span class="number">22</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(g_nums,))</span><br><span class="line">    t2 =  threading.Thread(target = func2)</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    t2.start()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">"int the main Thread"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span>(<span class="params">temp</span>):</span></span><br><span class="line">    temp.append(<span class="number">33</span>)</span><br><span class="line">    print(<span class="string">&quot;-----in test1 %s&quot;</span>%temp)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span>():</span></span><br><span class="line">    print(<span class="string">&quot;----- in test2 Thread&quot;</span>)</span><br><span class="line"></span><br><span class="line">g_nums = [<span class="number">11</span>,<span class="number">22</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    t1 =  threading.Thread(target=func1,args=(g_nums,))</span><br><span class="line">    t2 =  threading.Thread(target = func2)</span><br><span class="line"></span><br><span class="line">    t1.start()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    t2.start()</span><br><span class="line">    time.sleep(<span class="number">1</span>)</span><br><span class="line">    print(<span class="string">&quot;int the main Thread&quot;</span>)</span><br></pre></td></tr></table></figure>
 <p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-----in test1 [11, 22, 33]</span><br><span class="line">----- in test2 Thread</span><br><span class="line">int the main Thread</span><br></pre></td></tr></table></figure></p>
 
       
@@ -273,17 +296,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/threading/">threading</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/threading/" rel="tag">threading</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%B7%9A%E7%A8%8B/" rel="tag">多線程</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -363,7 +386,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">3.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">4.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I"><span class="nav-number">4.1.</span> <span class="nav-text">Example I:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查看線程信息-enumerate"><span class="nav-number">5.</span> <span class="nav-text">查看線程信息(enumerate)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#通過繼承Thread類創建線程"><span class="nav-number">6.</span> <span class="nav-text">通過繼承Thread類創建線程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#共享全局變量-重要"><span class="nav-number">7.</span> <span class="nav-text">共享全局變量(重要)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#共享全局變量遇到的問題"><span class="nav-number">7.1.</span> <span class="nav-text">共享全局變量遇到的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#線程同步-協同步調"><span class="nav-number">7.2.</span> <span class="nav-text">線程同步(協同步調)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#互斥鎖"><span class="nav-number">7.2.1.</span> <span class="nav-text">互斥鎖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#未上鎖"><span class="nav-number">7.2.1.1.</span> <span class="nav-text">未上鎖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#有上鎖"><span class="nav-number">7.2.1.2.</span> <span class="nav-text">有上鎖</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#傳遞參數"><span class="nav-number">8.</span> <span class="nav-text">傳遞參數</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">3.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">4.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I"><span class="nav-number">4.1.</span> <span class="nav-text">Example I:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%B7%9A%E7%A8%8B%E4%BF%A1%E6%81%AF-enumerate"><span class="nav-number">5.</span> <span class="nav-text">查看線程信息(enumerate)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%80%9A%E9%81%8E%E7%B9%BC%E6%89%BFThread%E9%A1%9E%E5%89%B5%E5%BB%BA%E7%B7%9A%E7%A8%8B"><span class="nav-number">6.</span> <span class="nav-text">通過繼承Thread類創建線程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%85%A8%E5%B1%80%E8%AE%8A%E9%87%8F-%E9%87%8D%E8%A6%81"><span class="nav-number">7.</span> <span class="nav-text">共享全局變量(重要)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B1%E4%BA%AB%E5%85%A8%E5%B1%80%E8%AE%8A%E9%87%8F%E9%81%87%E5%88%B0%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">7.1.</span> <span class="nav-text">共享全局變量遇到的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B7%9A%E7%A8%8B%E5%90%8C%E6%AD%A5-%E5%8D%94%E5%90%8C%E6%AD%A5%E8%AA%BF"><span class="nav-number">7.2.</span> <span class="nav-text">線程同步(協同步調)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%92%E6%96%A5%E9%8E%96"><span class="nav-number">7.2.1.</span> <span class="nav-text">互斥鎖</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%AA%E4%B8%8A%E9%8E%96"><span class="nav-number">7.2.1.1.</span> <span class="nav-text">未上鎖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E4%B8%8A%E9%8E%96"><span class="nav-number">7.2.1.2.</span> <span class="nav-text">有上鎖</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%82%B3%E9%81%9E%E5%8F%83%E6%95%B8"><span class="nav-number">8.</span> <span class="nav-text">傳遞參數</span></a></li></ol>
     
     </div>
   </aside>
@@ -417,6 +440,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -456,13 +482,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -489,7 +525,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -501,7 +537,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

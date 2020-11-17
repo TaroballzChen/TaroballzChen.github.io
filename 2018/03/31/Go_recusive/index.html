@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day9-遞歸函數 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang遞歸函數">
+  <meta name="keywords" content="2018Golang遞歸函數" />
   
   
   
   
   <meta name="description" content="introduction一個函數調用了自己，就叫做遞歸 設計原則 一個大問題可拆分出多個邏輯相同的子問題 且問題的規模會不斷的縮小，最後收斂 定義好出口條件   若沒有定義好出口條件，會造成死循環">
-<meta name="keywords" content="2018,Golang,遞歸函數">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day9-遞歸函數">
 <meta property="og:url" content="http://www.taroballz.com/2018/03/31/Go_recusive/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="introduction一個函數調用了自己，就叫做遞歸 設計原則 一個大問題可拆分出多個邏輯相同的子問題 且問題的規模會不斷的縮小，最後收斂 定義好出口條件   若沒有定義好出口條件，會造成死循環">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-03-31T13:40:27.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-03-30T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-03-31T13:40:27.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="遞歸函數">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day9-遞歸函數">
-<meta name="twitter:description" content="introduction一個函數調用了自己，就叫做遞歸 設計原則 一個大問題可拆分出多個邏輯相同的子問題 且問題的規模會不斷的縮小，最後收斂 定義好出口條件   若沒有定義好出口條件，會造成死循環">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +45,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -150,17 +178,16 @@
 <li>若沒有定義好出口條件，會造成死循環<a id="more"></a>
 </li>
 </ul>
-<h1 id="無限循環"><a href="#無限循環" class="headerlink" title="無限循環"></a>無限循環</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Hello World"</span>)</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">	main()</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure></p>
-<p>如果未設置退出遞歸的條件將無限循環下去</p>
+<h1 id="無限循環"><a href="#無限循環" class="headerlink" title="無限循環"></a>無限循環</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Hello World&quot;</span>)</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">	main()</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure><br>如果未設置退出遞歸的條件將無限循環下去</p>
 <hr>
-<h1 id="設置退出條件"><a href="#設置退出條件" class="headerlink" title="設置退出條件"></a>設置退出條件</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">recusive</span><span class="params">(n <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"Hello World"</span>)</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">	<span class="keyword">if</span> n &gt; <span class="number">5</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> </span><br><span class="line">	&#125;</span><br><span class="line">	recusive(n+<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	recusive(<span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="設置退出條件"><a href="#設置退出條件" class="headerlink" title="設置退出條件"></a>設置退出條件</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">recusive</span><span class="params">(n <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Hello World&quot;</span>)</span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">	<span class="keyword">if</span> n &gt; <span class="number">5</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> </span><br><span class="line">	&#125;</span><br><span class="line">	recusive(n+<span class="number">1</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	recusive(<span class="number">0</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br><span class="line">Hello World</span><br></pre></td></tr></table></figure></p>
-<h1 id="階乘"><a href="#階乘" class="headerlink" title="階乘"></a>階乘</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">multi</span><span class="params">(n <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> multi(n<span class="number">-1</span>)* n</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> input <span class="keyword">int</span></span><br><span class="line">	fmt.Printf(<span class="string">"number &gt;&gt;"</span>)</span><br><span class="line">	fmt.Scanf(<span class="string">"%d\n"</span>,&amp;input)</span><br><span class="line">	</span><br><span class="line">	result := multi(input)</span><br><span class="line">	fmt.Printf(<span class="string">"%d! result :%d\n"</span>,input,result)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="階乘"><a href="#階乘" class="headerlink" title="階乘"></a>階乘</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">multi</span><span class="params">(n <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> multi(n<span class="number">-1</span>)* n</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> input <span class="keyword">int</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;number &gt;&gt;&quot;</span>)</span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d\n&quot;</span>,&amp;input)</span><br><span class="line">	</span><br><span class="line">	result := multi(input)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;%d! result :%d\n&quot;</span>,input,result)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>result</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">number &gt;&gt;3</span><br><span class="line">3! result :6</span><br><span class="line">number &gt;&gt;4</span><br><span class="line">4! result :24</span><br><span class="line">number &gt;&gt;5</span><br><span class="line">5! result :120</span><br></pre></td></tr></table></figure>
 <h1 id="斐波那契數列"><a href="#斐波那契數列" class="headerlink" title="斐波那契數列"></a>斐波那契數列</h1><p>返回的數為數列前兩數相加</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Fibonacci</span><span class="params">(n <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span> || n == <span class="number">2</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> Fibonacci(n<span class="number">-1</span>) + Fibonacci(n<span class="number">-2</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> input <span class="keyword">int</span></span><br><span class="line">	fmt.Printf(<span class="string">"number &gt;&gt;"</span>)</span><br><span class="line">	fmt.Scanf(<span class="string">"%d\n"</span>,&amp;input)</span><br><span class="line">	</span><br><span class="line">	result := Fibonacci(input)</span><br><span class="line">	fmt.Printf(<span class="string">"Fib(%d) result :%d\n"</span>,input,result)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Fibonacci</span><span class="params">(n <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> n == <span class="number">1</span> || n == <span class="number">2</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> Fibonacci(n<span class="number">-1</span>) + Fibonacci(n<span class="number">-2</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> input <span class="keyword">int</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;number &gt;&gt;&quot;</span>)</span><br><span class="line">	fmt.Scanf(<span class="string">&quot;%d\n&quot;</span>,&amp;input)</span><br><span class="line">	</span><br><span class="line">	result := Fibonacci(input)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Fib(%d) result :%d\n&quot;</span>,input,result)</span><br><span class="line"></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">number &gt;&gt;3</span><br><span class="line">Fib(3) result :2</span><br><span class="line">number &gt;&gt;4</span><br><span class="line">Fib(4) result :3</span><br><span class="line">number &gt;&gt;5</span><br><span class="line">Fib(5) result :5</span><br><span class="line">number &gt;&gt;6</span><br><span class="line">Fib(6) result :8</span><br></pre></td></tr></table></figure></p>
 
       
@@ -172,13 +199,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/遞歸函數/">遞歸函數</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%81%9E%E6%AD%B8%E5%87%BD%E6%95%B8/" rel="tag">遞歸函數</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -258,7 +285,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#設計原則"><span class="nav-number">2.</span> <span class="nav-text">設計原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#無限循環"><span class="nav-number">3.</span> <span class="nav-text">無限循環</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#設置退出條件"><span class="nav-number">4.</span> <span class="nav-text">設置退出條件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#階乘"><span class="nav-number">5.</span> <span class="nav-text">階乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#斐波那契數列"><span class="nav-number">6.</span> <span class="nav-text">斐波那契數列</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%AD%E8%A8%88%E5%8E%9F%E5%89%87"><span class="nav-number">2.</span> <span class="nav-text">設計原則</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%84%A1%E9%99%90%E5%BE%AA%E7%92%B0"><span class="nav-number">3.</span> <span class="nav-text">無限循環</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A8%AD%E7%BD%AE%E9%80%80%E5%87%BA%E6%A2%9D%E4%BB%B6"><span class="nav-number">4.</span> <span class="nav-text">設置退出條件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%9A%8E%E4%B9%98"><span class="nav-number">5.</span> <span class="nav-text">階乘</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B8%E5%88%97"><span class="nav-number">6.</span> <span class="nav-text">斐波那契數列</span></a></li></ol>
     
     </div>
   </aside>
@@ -312,6 +339,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -351,13 +381,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -384,7 +424,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -396,7 +436,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

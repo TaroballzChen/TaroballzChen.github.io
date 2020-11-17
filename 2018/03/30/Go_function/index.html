@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day8-細談函數 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang函數">
+  <meta name="keywords" content="2018Golang函數" />
   
   
   
   
   <meta name="description" content="聲明語法123func 函數名 (參數列表)(返回值列表)&amp;#123;	函數主體&amp;#125;  參數列表可以為空但一定要有() 返回值列表也可以是空的，多個返回值需加()">
-<meta name="keywords" content="2018,Golang,函數">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day8-細談函數">
 <meta property="og:url" content="http://www.taroballz.com/2018/03/30/Go_function/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="聲明語法123func 函數名 (參數列表)(返回值列表)&amp;#123;	函數主體&amp;#125;  參數列表可以為空但一定要有() 返回值列表也可以是空的，多個返回值需加()">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-06-05T14:44:31.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-03-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-06-05T14:44:31.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="函數">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day8-細談函數">
-<meta name="twitter:description" content="聲明語法123func 函數名 (參數列表)(返回值列表)&amp;#123;	函數主體&amp;#125;  參數列表可以為空但一定要有() 返回值列表也可以是空的，多個返回值需加()">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +45,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -166,9 +194,9 @@
 <ul>
 <li>多個<strong>同類型</strong>參數可一起聲明，返回多個返回值，返回值須加上<code>()</code></li>
 </ul>
-<h2 id="錯誤範例"><a href="#錯誤範例" class="headerlink" title="錯誤範例"></a>錯誤範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="錯誤範例"><a href="#錯誤範例" class="headerlink" title="錯誤範例"></a>錯誤範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">()</span></span></span><br><span class="line">&#123;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ul>
-<li>函數聲明必須與<code>{</code>在同一行，否則無法編譯</li>
+<li>函數聲明必須與<code>&#123;</code>在同一行，否則無法編譯</li>
 </ul>
 <hr>
 <h1 id="函數的特點"><a href="#函數的特點" class="headerlink" title="函數的特點"></a>函數的特點</h1><ul>
@@ -185,33 +213,32 @@
 <li>支持多返回值</li>
 </ul>
 <hr>
-<h2 id="函數可以賦值給變量"><a href="#函數可以賦值給變量" class="headerlink" title="函數可以賦值給變量"></a>函數可以賦值給變量</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	c :=  add   <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(<span class="string">"add func address ="</span>,add)</span><br><span class="line">	fmt.Println(<span class="string">"c address ="</span>,c)</span><br><span class="line">	</span><br><span class="line">	sum := c(<span class="number">10</span>,<span class="number">20</span>)        <span class="comment">//[2]</span></span><br><span class="line">	fmt.Println(<span class="string">"sum is"</span>,sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="函數可以賦值給變量"><a href="#函數可以賦值給變量" class="headerlink" title="函數可以賦值給變量"></a>函數可以賦值給變量</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	c :=  add   <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;add func address =&quot;</span>,add)</span><br><span class="line">	fmt.Println(<span class="string">&quot;c address =&quot;</span>,c)</span><br><span class="line">	</span><br><span class="line">	sum := c(<span class="number">10</span>,<span class="number">20</span>)        <span class="comment">//[2]</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;sum is&quot;</span>,sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] add函數賦值給一個變量，c變量為一<strong>指針</strong>指向函數的地址</p>
 <ul>
-<li>其等同於：<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> c <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span><span class="title">int</span></span></span><br><span class="line"><span class="function"><span class="title">c</span> = <span class="title">add</span></span></span><br></pre></td></tr></table></figure>
+<li>其等同於：<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> c <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span><span class="title">int</span></span></span><br><span class="line">c = add</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>[2] c變量可以直接當作函數調用</p>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add func address = 0x48c950  </span><br><span class="line">c address = 0x48c950</span><br><span class="line">sum is 30</span><br></pre></td></tr></table></figure></p>
-<p>從結果可以知道<code>add</code>函數跟<code>c</code>變量指向的是同一個內存地址</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add func address &#x3D; 0x48c950  </span><br><span class="line">c address &#x3D; 0x48c950</span><br><span class="line">sum is 30</span><br></pre></td></tr></table></figure><br>從結果可以知道<code>add</code>函數跟<code>c</code>變量指向的是同一個內存地址</p>
 <hr>
-<h2 id="函數亦可為類型"><a href="#函數亦可為類型" class="headerlink" title="函數亦可為類型"></a>函數亦可為類型</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> add_func <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span> <span class="title">int</span> //[1]</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sub</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a-b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operator</span><span class="params">(op add_func, a <span class="keyword">int</span>, b <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;  <span class="comment">//[2]</span></span><br><span class="line">	<span class="keyword">return</span> op(a,b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operator_2</span><span class="params">(op <span class="keyword">func</span>(<span class="keyword">int</span>,<span class="keyword">int</span>)</span><span class="title">int</span>, <span class="title">a</span>,<span class="title">b</span> <span class="title">int</span>)<span class="title">int</span></span> &#123;  <span class="comment">//[3]</span></span><br><span class="line">	<span class="keyword">return</span> op(a,b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	c := add</span><br><span class="line">	sum := operator(c,<span class="number">100</span>,<span class="number">200</span>)   <span class="comment">//[4]</span></span><br><span class="line">	sub := operator_2(sub,<span class="number">200</span>,<span class="number">100</span>)</span><br><span class="line">	fmt.Println(<span class="string">"sum ="</span>,sum)</span><br><span class="line">	fmt.Println(<span class="string">"sub ="</span>,sub)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="函數亦可為類型"><a href="#函數亦可為類型" class="headerlink" title="函數亦可為類型"></a>函數亦可為類型</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> add_func <span class="function"><span class="keyword">func</span><span class="params">(<span class="keyword">int</span>,<span class="keyword">int</span>)</span> <span class="title">int</span> //[1]</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">add</span><span class="params">(a,b <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a + b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sub</span><span class="params">(a,b <span class="keyword">int</span>)</span><span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> a-b</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operator</span><span class="params">(op add_func, a <span class="keyword">int</span>, b <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;  <span class="comment">//[2]</span></span><br><span class="line">	<span class="keyword">return</span> op(a,b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">operator_2</span><span class="params">(op <span class="keyword">func</span>(<span class="keyword">int</span>,<span class="keyword">int</span>)</span><span class="title">int</span>, <span class="title">a</span>,<span class="title">b</span> <span class="title">int</span>)<span class="title">int</span></span> &#123;  <span class="comment">//[3]</span></span><br><span class="line">	<span class="keyword">return</span> op(a,b)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	c := add</span><br><span class="line">	sum := operator(c,<span class="number">100</span>,<span class="number">200</span>)   <span class="comment">//[4]</span></span><br><span class="line">	sub := operator_2(sub,<span class="number">200</span>,<span class="number">100</span>)</span><br><span class="line">	fmt.Println(<span class="string">&quot;sum =&quot;</span>,sum)</span><br><span class="line">	fmt.Println(<span class="string">&quot;sub =&quot;</span>,sub)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] <code>type</code>關鍵字可以用來定義一種<strong>自訂義的類型</strong>，其中<code>add_func</code>為類型名<br>[2] <code>operator</code>函數接受自訂義為<code>add_func</code>的函數類型<br>[3] 如果不使用<code>type</code>定義自訂義類型的話，直接於<strong>形式參數後面接上自訂義函數類型</strong>也是允許的<br>[4] <code>c</code>變量指向的<code>add</code>函數符合自訂義的<code>add_func</code>這個函數類型</p>
 <blockquote>
 <ul>
 <li>須注意傳入的參數必須符合自訂義的函數類型格式，否則會造成類型不匹配而無法編譯</li>
 </ul>
 </blockquote>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sum = 300</span><br><span class="line">sub = 100</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sum &#x3D; 300</span><br><span class="line">sub &#x3D; 100</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h2 id="匿名函數"><a href="#匿名函數" class="headerlink" title="匿名函數"></a>匿名函數</h2><p>沒有名字的函數</p>
-<h3 id="聲明時可直接調用"><a href="#聲明時可直接調用" class="headerlink" title="聲明時可直接調用"></a>聲明時可直接調用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">func</span><span class="params">(a, b <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">"a ="</span>,a)</span><br><span class="line">		fmt.Println(<span class="string">"b ="</span>,b)</span><br><span class="line">		fmt.Println(<span class="string">"a + b="</span>,a+b)</span><br><span class="line">		<span class="keyword">return</span>  </span><br><span class="line">	&#125;(<span class="number">10</span>,<span class="number">20</span>)                      <span class="comment">//[1]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>[1] 在函數寫完之後直接在<code>}</code>右邊加<code>()</code>並填入參數調用</p>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = 10</span><br><span class="line">b = 20</span><br><span class="line">a + b= 30</span><br></pre></td></tr></table></figure></p>
+<h3 id="聲明時可直接調用"><a href="#聲明時可直接調用" class="headerlink" title="聲明時可直接調用"></a>聲明時可直接調用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">func</span><span class="params">(a, b <span class="keyword">int</span>)</span></span>&#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;a =&quot;</span>,a)</span><br><span class="line">		fmt.Println(<span class="string">&quot;b =&quot;</span>,b)</span><br><span class="line">		fmt.Println(<span class="string">&quot;a + b=&quot;</span>,a+b)</span><br><span class="line">		<span class="keyword">return</span>  </span><br><span class="line">	&#125;(<span class="number">10</span>,<span class="number">20</span>)                      <span class="comment">//[1]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>[1] 在函數寫完之後直接在<code>&#125;</code>右邊加<code>()</code>並填入參數調用</p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; 10</span><br><span class="line">b &#x3D; 20</span><br><span class="line">a + b&#x3D; 30</span><br></pre></td></tr></table></figure></p>
 <hr>
-<h3 id="使用變量調用"><a href="#使用變量調用" class="headerlink" title="使用變量調用"></a>使用變量調用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	sum := <span class="function"><span class="keyword">func</span><span class="params">(a, b <span class="keyword">int</span>)</span></span>&#123;                       <span class="comment">//[1]</span></span><br><span class="line">		    fmt.Println(<span class="string">"a ="</span>,a)</span><br><span class="line">		    fmt.Println(<span class="string">"b ="</span>,b)</span><br><span class="line">		    fmt.Println(<span class="string">"a + b="</span>,a+b)</span><br><span class="line">		    <span class="keyword">return</span>  </span><br><span class="line">	    &#125;</span><br><span class="line">	    </span><br><span class="line">    sum(<span class="number">10</span>,<span class="number">20</span>)  <span class="comment">//[2]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用變量調用"><a href="#使用變量調用" class="headerlink" title="使用變量調用"></a>使用變量調用</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	sum := <span class="function"><span class="keyword">func</span><span class="params">(a, b <span class="keyword">int</span>)</span></span>&#123;                       <span class="comment">//[1]</span></span><br><span class="line">		    fmt.Println(<span class="string">&quot;a =&quot;</span>,a)</span><br><span class="line">		    fmt.Println(<span class="string">&quot;b =&quot;</span>,b)</span><br><span class="line">		    fmt.Println(<span class="string">&quot;a + b=&quot;</span>,a+b)</span><br><span class="line">		    <span class="keyword">return</span>  </span><br><span class="line">	    &#125;</span><br><span class="line">	    </span><br><span class="line">    sum(<span class="number">10</span>,<span class="number">20</span>)  <span class="comment">//[2]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] 在聲明變量時定義一個匿名函數<br>[2] <code>變量()</code>，於<code>()</code>中填入參數並調用匿名函數</p>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = 10</span><br><span class="line">b = 20</span><br><span class="line">a + b= 30</span><br></pre></td></tr></table></figure></p>
+<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a &#x3D; 10</span><br><span class="line">b &#x3D; 20</span><br><span class="line">a + b&#x3D; 30</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h1 id="函數參數傳遞方式"><a href="#函數參數傳遞方式" class="headerlink" title="函數參數傳遞方式"></a>函數參數傳遞方式</h1><ul>
 <li><p>值傳遞</p>
@@ -256,23 +283,18 @@
 <ul>
 <li>多個defer語句，按<strong>先進後出</strong>的方式執行<blockquote>
 <ul>
-<li>會先執行第二次聲明的defer語句，在執行第一次執行的defer語句<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">0</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(i)</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">"second_defer"</span>)</span><br><span class="line">	</span><br><span class="line">	i = <span class="number">10</span></span><br><span class="line">	fmt.Println(i)</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<blockquote>
-<p>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">second_defer</span><br><span class="line">0</span><br></pre></td></tr></table></figure></p>
-<ul>
+<li>會先執行第二次聲明的defer語句，在執行第一次執行的defer語句<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> i <span class="keyword">int</span> = <span class="number">0</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(i)</span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(<span class="string">&quot;second_defer&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	i = <span class="number">10</span></span><br><span class="line">	fmt.Println(i)</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+result<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">10</span><br><span class="line">second_defer</span><br><span class="line">0</span><br></pre></td></tr></table></figure></li>
 <li>先聲明的defer語句被壓至stack中，取值時從最晚聲明的defer語句開始取，所以”second defer”會先被執行</li>
 </ul>
 </blockquote>
+</li>
+</ul>
 <hr>
 <ul>
 <li>defer語句中的變量，<strong>在defer聲明時就決定了</strong></li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	i := <span class="number">0</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(i)  <span class="comment">//[1]</span></span><br><span class="line">	i++</span><br><span class="line">	fmt.Println(i)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	i := <span class="number">0</span></span><br><span class="line">	<span class="keyword">defer</span> fmt.Println(i)  <span class="comment">//[1]</span></span><br><span class="line">	i++</span><br><span class="line">	fmt.Println(i)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] 即使<code>i++</code>，但<code>i</code>在defer聲明時就確定<code>i</code>之值，當<strong>函數返回</strong>時打印出來的<code>i</code>仍為0<br>result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">0</span><br></pre></td></tr></table></figure></p>
 <hr>
 <h2 id="用途"><a href="#用途" class="headerlink" title="用途"></a>用途</h2><h3 id="關閉文件句柄"><a href="#關閉文件句柄" class="headerlink" title="關閉文件句柄"></a>關閉文件句柄</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">read</span><span class="params">()</span></span>&#123;</span><br><span class="line">	file := open(filename)</span><br><span class="line">	<span class="keyword">defer</span> file.<span class="built_in">close</span>()</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//文件操作語句</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -287,13 +309,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/函數/">函數</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%87%BD%E6%95%B8/" rel="tag">函數</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -373,7 +395,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#聲明語法"><span class="nav-number">1.</span> <span class="nav-text">聲明語法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">1.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">1.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">1.3.</span> <span class="nav-text">example 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-4"><span class="nav-number">1.4.</span> <span class="nav-text">example 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-5"><span class="nav-number">1.5.</span> <span class="nav-text">example 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#錯誤範例"><span class="nav-number">1.6.</span> <span class="nav-text">錯誤範例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函數的特點"><span class="nav-number">2.</span> <span class="nav-text">函數的特點</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#函數可以賦值給變量"><span class="nav-number">2.1.</span> <span class="nav-text">函數可以賦值給變量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函數亦可為類型"><span class="nav-number">2.2.</span> <span class="nav-text">函數亦可為類型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匿名函數"><span class="nav-number">2.3.</span> <span class="nav-text">匿名函數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聲明時可直接調用"><span class="nav-number">2.3.1.</span> <span class="nav-text">聲明時可直接調用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用變量調用"><span class="nav-number">2.3.2.</span> <span class="nav-text">使用變量調用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#函數參數傳遞方式"><span class="nav-number">3.</span> <span class="nav-text">函數參數傳遞方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#命名返回值的名字"><span class="nav-number">4.</span> <span class="nav-text">命名返回值的名字</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-1"><span class="nav-number">4.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-1"><span class="nav-number">4.2.</span> <span class="nav-text">example 2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#忽略返回值"><span class="nav-number">5.</span> <span class="nav-text">_ 忽略返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#可變參數"><span class="nav-number">6.</span> <span class="nav-text">可變參數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-2"><span class="nav-number">6.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-2"><span class="nav-number">6.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3-1"><span class="nav-number">6.3.</span> <span class="nav-text">example 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">6.4.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#defer"><span class="nav-number">7.</span> <span class="nav-text">defer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特性"><span class="nav-number">7.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用途"><span class="nav-number">7.2.</span> <span class="nav-text">用途</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#關閉文件句柄"><span class="nav-number">7.2.1.</span> <span class="nav-text">關閉文件句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#鎖資源的解放"><span class="nav-number">7.2.2.</span> <span class="nav-text">鎖資源的解放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#數據庫連接的釋放"><span class="nav-number">7.2.3.</span> <span class="nav-text">數據庫連接的釋放</span></a></li></ol></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%81%B2%E6%98%8E%E8%AA%9E%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">聲明語法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">1.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">1.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3"><span class="nav-number">1.3.</span> <span class="nav-text">example 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-4"><span class="nav-number">1.4.</span> <span class="nav-text">example 4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-5"><span class="nav-number">1.5.</span> <span class="nav-text">example 5</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%8C%AF%E8%AA%A4%E7%AF%84%E4%BE%8B"><span class="nav-number">1.6.</span> <span class="nav-text">錯誤範例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B8%E7%9A%84%E7%89%B9%E9%BB%9E"><span class="nav-number">2.</span> <span class="nav-text">函數的特點</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B8%E5%8F%AF%E4%BB%A5%E8%B3%A6%E5%80%BC%E7%B5%A6%E8%AE%8A%E9%87%8F"><span class="nav-number">2.1.</span> <span class="nav-text">函數可以賦值給變量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%BD%E6%95%B8%E4%BA%A6%E5%8F%AF%E7%82%BA%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">函數亦可為類型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BF%E5%90%8D%E5%87%BD%E6%95%B8"><span class="nav-number">2.3.</span> <span class="nav-text">匿名函數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%B2%E6%98%8E%E6%99%82%E5%8F%AF%E7%9B%B4%E6%8E%A5%E8%AA%BF%E7%94%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">聲明時可直接調用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%AE%8A%E9%87%8F%E8%AA%BF%E7%94%A8"><span class="nav-number">2.3.2.</span> <span class="nav-text">使用變量調用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%87%BD%E6%95%B8%E5%8F%83%E6%95%B8%E5%82%B3%E9%81%9E%E6%96%B9%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">函數參數傳遞方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%91%BD%E5%90%8D%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%90%8D%E5%AD%97"><span class="nav-number">4.</span> <span class="nav-text">命名返回值的名字</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-1"><span class="nav-number">4.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-1"><span class="nav-number">4.2.</span> <span class="nav-text">example 2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E8%BF%94%E5%9B%9E%E5%80%BC"><span class="nav-number">5.</span> <span class="nav-text">_ 忽略返回值</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%AF%E8%AE%8A%E5%8F%83%E6%95%B8"><span class="nav-number">6.</span> <span class="nav-text">可變參數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1-2"><span class="nav-number">6.1.</span> <span class="nav-text">example 1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2-2"><span class="nav-number">6.2.</span> <span class="nav-text">example 2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-3-1"><span class="nav-number">6.3.</span> <span class="nav-text">example 3</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">6.4.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#defer"><span class="nav-number">7.</span> <span class="nav-text">defer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E6%80%A7"><span class="nav-number">7.1.</span> <span class="nav-text">特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E9%80%94"><span class="nav-number">7.2.</span> <span class="nav-text">用途</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%97%9C%E9%96%89%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84"><span class="nav-number">7.2.1.</span> <span class="nav-text">關閉文件句柄</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%8E%96%E8%B3%87%E6%BA%90%E7%9A%84%E8%A7%A3%E6%94%BE"><span class="nav-number">7.2.2.</span> <span class="nav-text">鎖資源的解放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E5%BA%AB%E9%80%A3%E6%8E%A5%E7%9A%84%E9%87%8B%E6%94%BE"><span class="nav-number">7.2.3.</span> <span class="nav-text">數據庫連接的釋放</span></a></li></ol></li></ol></li></ol>
     
     </div>
   </aside>
@@ -427,6 +449,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -466,13 +491,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -499,7 +534,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -511,7 +546,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

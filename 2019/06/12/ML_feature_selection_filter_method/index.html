@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-特徵工程-特徵選擇(feature_selection)-過濾法 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程">
+  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程" />
   
   
   
   
   <meta name="description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
-<meta name="keywords" content="Python,2019,機器學習(Machine Learning),特徵工程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-特徵工程-特徵選擇(feature_selection)-過濾法">
 <meta property="og:url" content="http://www.taroballz.com/2019/06/12/ML_feature_selection_filter_method/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/1aFt2wh.jpg">
-<meta property="og:updated_time" content="2019-07-08T16:44:55.000Z">
+<meta property="article:published_time" content="2019-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-07-08T16:44:55.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2019">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="特徵工程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-特徵工程-特徵選擇(feature_selection)-過濾法">
-<meta name="twitter:description" content="Introduction從所有的特徵中，選擇出有意義的或對模型有幫助的特徵  避免必須將所有特徵都導入模型進行訓練的窘境 重要！！：必須與數據提供者討論 若是我們無法找到合適領域的人幫助理解數據來選擇特徵的話，可使用以下四種方法 過濾法 嵌入法 包裝法 降維演算法">
 <meta name="twitter:image" content="https://i.imgur.com/1aFt2wh.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/1aFt2wh.jpg" rel="gallery_ck79gai0v009us6q7g79tau09">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/1aFt2wh.jpg" rel="gallery_ckhlqn4d200a4clzxaub5ahy3 noopener">
         <img src="https://i.imgur.com/1aFt2wh.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -207,7 +236,7 @@
 <ul>
 <li><code>score_func</code><ul>
 <li>指定轉換器<strong>用於評估的統計量</strong>，可以是<code>chi2</code>等標準</li>
-<li>ref：<a href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html" target="_blank" rel="noopener">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html</a></li>
+<li>ref：<a target="_blank" rel="noopener" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html">https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html</a></li>
 </ul>
 </li>
 <li><code>k</code><ul>
@@ -255,8 +284,7 @@
 </li>
 <li><p>因此須選取 <strong>卡方值很大</strong>且<strong>P值>=0.05 or 0.01</strong> 的特徵(與標籤相關的特徵)</p>
 <ul>
-<li><p>可從<code>chi2</code>實例獲得 <strong>各個特徵對應的 卡方值 及 P值</strong></p>
-  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> chi2</span><br><span class="line"></span><br><span class="line">chivalue,pvalues_chi = chi2(X,y)</span><br></pre></td></tr></table></figure>
+<li>可從<code>chi2</code>實例獲得 <strong>各個特徵對應的 卡方值 及 P值</strong>  <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> chi2</span><br><span class="line"></span><br><span class="line">chivalue,pvalues_chi = chi2(X,y)</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>X</code>為feature矩陣</li>
 <li><code>y</code>為Label矩陣</li>
@@ -302,51 +330,9 @@
 </li>
 <li><p>選取<strong>P值&lt;0.05 or 0.01</strong> 的特徵(與標籤相關的特徵)</p>
 <ul>
-<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> f_classif</span><br><span class="line"></span><br><span class="line">F, pvalues_f = f_classif(X,y)</span><br></pre></td></tr></table></figure>
-<p>*<code>pvalues</code>為各特徵相對標籤的p值，為一ndarray</p>
-</li>
-<li><code>K_value = F.shape[0] - (pvalues_f &gt; 0.01).sum()</code> 將得到超參數<code>k</code>值該定為多少</li>
-</ul>
-</li>
-<li><p>F檢驗在服從<strong>正態分布</strong>時效果會非常穩定</p>
-<ul>
-<li>如要使用F檢驗過濾特徵，會先將數據轉換為 服從正態分布 的形式<ul>
-<li><code>StandardScalar</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>再結合<code>feature_selection.SelectKBest</code>一起聯用</p>
-<ul>
-<li>輸入 <strong>評分標準</strong> 來選出前<code>K</code>個分數最高的特徵</li>
-</ul>
-</li>
-</ul>
-<h2 id="互信息法"><a href="#互信息法" class="headerlink" title="互信息法"></a>互信息法</h2><ul>
-<li>是用來捕捉特徵與標籤之間的<strong>任意關係</strong>(線性及非線性)的過濾方法<ul>
-<li>故比F檢驗更強大</li>
-</ul>
-</li>
-<li>互信息分類<ul>
-<li><code>feature_selection.mutual_info_classif</code></li>
-</ul>
-</li>
-<li>互信息回歸<ul>
-<li><code>feature_selection.mutual_info_regression</code></li>
-</ul>
-</li>
-<li><p>返回 <strong>每個特徵 與 標籤 之間的 互信息量的估計</strong></p>
-<ul>
-<li>介於0-1之間<ul>
-<li>0：表示兩組數據相互獨立</li>
-<li>1：表示兩組數據<strong>完全相關</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>選取 <strong>結果值大於0</strong>的特徵(與標籤相關的特徵)</p>
-<ul>
-<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> mutual_info_classif <span class="keyword">as</span> MIC</span><br><span class="line"></span><br><span class="line">result = MIC(X,y)</span><br></pre></td></tr></table></figure>
+<li><p>```python<br>from sklearn.feature_selection import f_classif</p>
+<p>F, pvalues_f = f_classif(X,y)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">      *&#96;pvalues&#96;為各特徵相對標籤的p值，為一ndarray</span><br><span class="line">    * &#96;K_value &#x3D; F.shape[0] - (pvalues_f &gt; 0.01).sum()&#96; 將得到超參數&#96;k&#96;值該定為多少</span><br><span class="line">    </span><br><span class="line">* F檢驗在服從**正態分布**時效果會非常穩定</span><br><span class="line">    * 如要使用F檢驗過濾特徵，會先將數據轉換為 服從正態分布 的形式</span><br><span class="line">        * &#96;StandardScalar&#96;</span><br><span class="line"></span><br><span class="line">* 再結合&#96;feature_selection.SelectKBest&#96;一起聯用</span><br><span class="line">    * 輸入 **評分標準** 來選出前&#96;K&#96;個分數最高的特徵</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">## 互信息法</span><br><span class="line">* 是用來捕捉特徵與標籤之間的**任意關係**(線性及非線性)的過濾方法</span><br><span class="line">    * 故比F檢驗更強大</span><br><span class="line">* 互信息分類</span><br><span class="line">    * &#96;feature_selection.mutual_info_classif&#96;</span><br><span class="line">* 互信息回歸</span><br><span class="line">    * &#96;feature_selection.mutual_info_regression&#96;</span><br><span class="line">* 返回 **每個特徵 與 標籤 之間的 互信息量的估計**</span><br><span class="line">    * 介於0-1之間</span><br><span class="line">        * 0：表示兩組數據相互獨立</span><br><span class="line">        * 1：表示兩組數據**完全相關**</span><br><span class="line">        </span><br><span class="line">* 選取 **結果值大於0**的特徵(與標籤相關的特徵)</span><br><span class="line">    * &#96;&#96;&#96;python</span><br><span class="line">      from sklearn.feature_selection import mutual_info_classif as MIC</span><br><span class="line">      </span><br><span class="line">      result &#x3D; MIC(X,y)</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>result</code>為各特徵的戶信息量估計  </li>
 </ul>
@@ -365,17 +351,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/" rel="tag">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/" rel="tag">特徵工程</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -455,7 +441,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#過濾法-Filter"><span class="nav-number">2.</span> <span class="nav-text">過濾法(Filter)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方差過濾法-VarianceThreshold"><span class="nav-number">3.</span> <span class="nav-text">方差過濾法(VarianceThreshold)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相關性過濾"><span class="nav-number">4.</span> <span class="nav-text">相關性過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#卡方過濾"><span class="nav-number">4.1.</span> <span class="nav-text">卡方過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SelectKBest"><span class="nav-number">4.1.1.</span> <span class="nav-text">SelectKBest()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#卡方檢驗"><span class="nav-number">4.1.2.</span> <span class="nav-text">卡方檢驗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F檢驗-ANOVA"><span class="nav-number">4.2.</span> <span class="nav-text">F檢驗(ANOVA)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#互信息法"><span class="nav-number">4.3.</span> <span class="nav-text">互信息法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">5.</span> <span class="nav-text">總結</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%81%8E%E6%BF%BE%E6%B3%95-Filter"><span class="nav-number">2.</span> <span class="nav-text">過濾法(Filter)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE%E9%81%8E%E6%BF%BE%E6%B3%95-VarianceThreshold"><span class="nav-number">3.</span> <span class="nav-text">方差過濾法(VarianceThreshold)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%B8%E9%97%9C%E6%80%A7%E9%81%8E%E6%BF%BE"><span class="nav-number">4.</span> <span class="nav-text">相關性過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%A1%E6%96%B9%E9%81%8E%E6%BF%BE"><span class="nav-number">4.1.</span> <span class="nav-text">卡方過濾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SelectKBest"><span class="nav-number">4.1.1.</span> <span class="nav-text">SelectKBest()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform"><span class="nav-number">4.1.1.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%A1%E6%96%B9%E6%AA%A2%E9%A9%97"><span class="nav-number">4.1.2.</span> <span class="nav-text">卡方檢驗</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#F%E6%AA%A2%E9%A9%97-ANOVA"><span class="nav-number">4.2.</span> <span class="nav-text">F檢驗(ANOVA)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">5.</span> <span class="nav-text">總結</span></a></li></ol>
     
     </div>
   </aside>
@@ -509,6 +495,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -548,13 +537,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -581,7 +580,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -593,7 +592,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

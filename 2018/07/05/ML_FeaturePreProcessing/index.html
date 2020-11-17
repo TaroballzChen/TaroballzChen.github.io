@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-特徵工程-特徵預處理 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵預處理特徵工程缺失值">
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵預處理特徵工程缺失值" />
   
   
   
   
   <meta name="description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
-<meta name="keywords" content="Python,2018,機器學習(Machine Learning),特徵預處理,特徵工程,缺失值">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-特徵工程-特徵預處理">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/05/ML_FeaturePreProcessing/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/Ec84PmD.jpg">
-<meta property="og:updated_time" content="2019-06-03T16:55:08.000Z">
+<meta property="article:published_time" content="2018-07-05T10:34:00.000Z">
+<meta property="article:modified_time" content="2019-06-03T16:55:08.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="特徵預處理">
+<meta property="article:tag" content="特徵工程">
+<meta property="article:tag" content="缺失值">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-特徵工程-特徵預處理">
-<meta name="twitter:description" content="Introduction 特徵預處理通常是對數據進行處理 通過特定的統計方法(數學方法) 將數據轉換成演算法要求的數據   特徵預處理  數值型數據：採用標準縮放  分為歸一化(normalization) 及 標準化(standardization) 兩種,通常也要同時處理缺失值類別型的數據：one-hot編碼時間類型數據：對時間進行切分   使用sklearn自帶的特徵預處理API進行處理">
 <meta name="twitter:image" content="https://i.imgur.com/Ec84PmD.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +50,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +147,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Ec84PmD.jpg" rel="gallery_ck79gai0a007ss6q737i899jz">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/Ec84PmD.jpg" rel="gallery_ckhlqn4bx0085clzx61tf9srz noopener">
         <img src="https://i.imgur.com/Ec84PmD.jpg" itemprop="image">
       </a>
     
@@ -142,7 +173,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -217,7 +248,7 @@ X" = X'\times (mx-mi)+mi</script><blockquote>
 <li>實例化MinMaxScalar</li>
 <li>通過fit_transform轉換</li>
 </ol>
-<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Normalize</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MMScale</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    MM = MinMaxScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = MM.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(scale_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    MMScale()</span><br></pre></td></tr></table></figure>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MinMaxScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#Normalize</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">MMScale</span>():</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    MM = MinMaxScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = MM.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(scale_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    MMScale()</span><br></pre></td></tr></table></figure>
 <h3 id="返回normalize的結果"><a href="#返回normalize的結果" class="headerlink" title="返回normalize的結果"></a>返回normalize的結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[0.6        0.         0.         1.        ]</span><br><span class="line"> [1.         0.375      1.         0.88095238]</span><br><span class="line"> [0.         1.         0.53333333 0.        ]]</span><br></pre></td></tr></table></figure>
 <h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
 <li>Normalize方法對於異常點的處理效果不好<blockquote>
@@ -278,7 +309,7 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
 <li>實例化StandardScaler</li>
 <li>通過fit_transform轉換</li>
 </ol>
-<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">StdScale</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    SS = StandardScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = SS.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"Result: \n"</span>,scale_data)</span><br><span class="line">    print(<span class="string">"Mean: \n"</span>,SS.mean_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    StdScale()</span><br></pre></td></tr></table></figure>
+<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">StdScale</span>():</span></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    SS = StandardScaler()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    scale_data = SS.fit_transform(data)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&quot;Result: \n&quot;</span>,scale_data)</span><br><span class="line">    print(<span class="string">&quot;Mean: \n&quot;</span>,SS.mean_)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    StdScale()</span><br></pre></td></tr></table></figure>
 <h3 id="返回標準化後的矩陣"><a href="#返回標準化後的矩陣" class="headerlink" title="返回標準化後的矩陣"></a>返回標準化後的矩陣</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Result: </span><br><span class="line"> [[ 0.16222142 -1.1111678  -1.25103507  0.83635719]</span><br><span class="line"> [ 1.13554995 -0.20203051  1.19664225  0.56943468]</span><br><span class="line"> [-1.29777137  1.31319831  0.05439283 -1.40579187]]</span><br><span class="line">Mean: </span><br><span class="line"> [8.50000000e+01 5.66666667e+00 1.76666667e+03 6.43333333e-01]</span><br></pre></td></tr></table></figure>
 <h2 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h2><p>在以有樣本足夠多的情況下比較穩定，適合現代嘈雜大數據的場景</p>
 <h1 id="缺失值"><a href="#缺失值" class="headerlink" title="缺失值"></a>缺失值</h1><p>處理缺失值只有兩種方法</p>
@@ -317,7 +348,7 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
 </li>
 <li>調用fit_transform</li>
 </ol>
-<h2 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> Imputer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">HasNanData = [[np.nan,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,np.nan,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缺失值處理</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_nan</span><span class="params">()</span>:</span></span><br><span class="line">    fill = Imputer()</span><br><span class="line">    Data = fill.fit_transform(HasNanData)</span><br><span class="line">    print(Data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    fill_nan()</span><br></pre></td></tr></table></figure>
+<h2 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> Imputer</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">HasNanData = [[np.nan,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>],[<span class="number">120</span>,<span class="number">5</span>,np.nan,<span class="number">0.75</span>],[<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 缺失值處理</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fill_nan</span>():</span></span><br><span class="line">    fill = Imputer()</span><br><span class="line">    Data = fill.fit_transform(HasNanData)</span><br><span class="line">    print(Data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    fill_nan()</span><br></pre></td></tr></table></figure>
 <h3 id="填補結果"><a href="#填補結果" class="headerlink" title="填補結果"></a>填補結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[8.25e+01 2.00e+00 1.00e+03 8.00e-01]</span><br><span class="line"> [1.20e+02 5.00e+00 1.40e+03 7.50e-01]</span><br><span class="line"> [4.50e+01 1.00e+01 1.80e+03 3.80e-01]]</span><br></pre></td></tr></table></figure>
 <h2 id="tips-2"><a href="#tips-2" class="headerlink" title="tips"></a>tips</h2><ul>
 <li>np.nan<ul>
@@ -333,17 +364,17 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵預處理/">特徵預處理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/缺失值/">缺失值</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/" rel="tag">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E9%A0%90%E8%99%95%E7%90%86/" rel="tag">特徵預處理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%BA%E5%A4%B1%E5%80%BC/" rel="tag">缺失值</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -423,7 +454,7 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據無量綱化"><span class="nav-number">2.</span> <span class="nav-text">數據無量綱化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#效果"><span class="nav-number">2.1.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn特徵預處理"><span class="nav-number">3.</span> <span class="nav-text">sklearn特徵預處理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#歸一化-normalize"><span class="nav-number">4.</span> <span class="nav-text">歸一化(normalize)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MinMaxScalar-feature-range-0-1-…"><span class="nav-number">4.1.</span> <span class="nav-text">MinMaxScalar(feature_range=(0,1)…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">4.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">4.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">4.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回normalize的結果"><span class="nav-number">4.3.1.</span> <span class="nav-text">返回normalize的結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.4.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#標準化-standardization"><span class="nav-number">5.</span> <span class="nav-text">標準化(standardization)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#方差"><span class="nav-number">5.1.</span> <span class="nav-text">方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StandardScaler-…"><span class="nav-number">5.2.</span> <span class="nav-text">StandardScaler(…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-X"><span class="nav-number">5.2.1.</span> <span class="nav-text">fit(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mean"><span class="nav-number">5.2.3.</span> <span class="nav-text">mean_</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var"><span class="nav-number">5.2.4.</span> <span class="nav-text">var_</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程-1"><span class="nav-number">5.3.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">5.4.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回標準化後的矩陣"><span class="nav-number">5.4.1.</span> <span class="nav-text">返回標準化後的矩陣</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">5.5.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缺失值"><span class="nav-number">6.</span> <span class="nav-text">缺失值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Imputer-missing-values-’Nan’-strategy-’mean’-axis-0"><span class="nav-number">6.1.</span> <span class="nav-text">Imputer(missing_values=’Nan’,strategy=’mean’,axis=0)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-2"><span class="nav-number">6.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程-2"><span class="nav-number">6.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-2"><span class="nav-number">6.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#填補結果"><span class="nav-number">6.3.1.</span> <span class="nav-text">填補結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-2"><span class="nav-number">6.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E7%84%A1%E9%87%8F%E7%B6%B1%E5%8C%96"><span class="nav-number">2.</span> <span class="nav-text">數據無量綱化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%88%E6%9E%9C"><span class="nav-number">2.1.</span> <span class="nav-text">效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn%E7%89%B9%E5%BE%B5%E9%A0%90%E8%99%95%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">sklearn特徵預處理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%B8%E4%B8%80%E5%8C%96-normalize"><span class="nav-number">4.</span> <span class="nav-text">歸一化(normalize)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MinMaxScalar-feature-range-0-1-%E2%80%A6"><span class="nav-number">4.1.</span> <span class="nav-text">MinMaxScalar(feature_range&#x3D;(0,1)…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">4.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">4.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9Enormalize%E7%9A%84%E7%B5%90%E6%9E%9C"><span class="nav-number">4.3.1.</span> <span class="nav-text">返回normalize的結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">4.4.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%99%E6%BA%96%E5%8C%96-standardization"><span class="nav-number">5.</span> <span class="nav-text">標準化(standardization)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E5%B7%AE"><span class="nav-number">5.1.</span> <span class="nav-text">方差</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#StandardScaler-%E2%80%A6"><span class="nav-number">5.2.</span> <span class="nav-text">StandardScaler(…)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-X"><span class="nav-number">5.2.1.</span> <span class="nav-text">fit(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mean"><span class="nav-number">5.2.3.</span> <span class="nav-text">mean_</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#var"><span class="nav-number">5.2.4.</span> <span class="nav-text">var_</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="nav-number">5.3.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">5.4.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E6%A8%99%E6%BA%96%E5%8C%96%E5%BE%8C%E7%9A%84%E7%9F%A9%E9%99%A3"><span class="nav-number">5.4.1.</span> <span class="nav-text">返回標準化後的矩陣</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">5.5.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BC%BA%E5%A4%B1%E5%80%BC"><span class="nav-number">6.</span> <span class="nav-text">缺失值</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Imputer-missing-values-%E2%80%99Nan%E2%80%99-strategy-%E2%80%99mean%E2%80%99-axis-0"><span class="nav-number">6.1.</span> <span class="nav-text">Imputer(missing_values&#x3D;’Nan’,strategy&#x3D;’mean’,axis&#x3D;0)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-2"><span class="nav-number">6.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-2"><span class="nav-number">6.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-2"><span class="nav-number">6.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A1%AB%E8%A3%9C%E7%B5%90%E6%9E%9C"><span class="nav-number">6.3.1.</span> <span class="nav-text">填補結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-2"><span class="nav-number">6.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -477,6 +508,9 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -516,13 +550,23 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -549,7 +593,7 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -561,7 +605,7 @@ var = \frac {(X1-mean)^2 + (X2-mean)^2 + ...}  {n(每個特徵樣本數)}</scrip
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

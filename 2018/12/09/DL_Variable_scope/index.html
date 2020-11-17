@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>深度學習-tensorflow基礎-變量作用域(命名空間) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018" />
   
   
   
   
   <meta name="description" content="Introduction 目的是為了使代碼更清晰區分功能，使其作用分明 讓tensorboard更清晰顯示代碼運作的模式">
-<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度學習-tensorflow基礎-變量作用域(命名空間)">
 <meta property="og:url" content="http://www.taroballz.com/2018/12/09/DL_Variable_scope/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 目的是為了使代碼更清晰區分功能，使其作用分明 讓tensorboard更清晰顯示代碼運作的模式">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/ZjNbF7Q.jpg">
-<meta property="og:updated_time" content="2019-07-27T07:31:34.000Z">
+<meta property="article:published_time" content="2018-12-08T17:42:00.000Z">
+<meta property="article:modified_time" content="2019-07-27T07:31:34.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="深度學習(Deep Learning)">
+<meta property="article:tag" content="2018">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度學習-tensorflow基礎-變量作用域(命名空間)">
-<meta name="twitter:description" content="Introduction 目的是為了使代碼更清晰區分功能，使其作用分明 讓tensorboard更清晰顯示代碼運作的模式">
 <meta name="twitter:image" content="https://i.imgur.com/ZjNbF7Q.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/ZjNbF7Q.jpg" rel="gallery_ck79gahy80015s6q7lx97dk0t">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/ZjNbF7Q.jpg" rel="gallery_ckhlqn47d001aclzx48p16c6h noopener">
         <img src="https://i.imgur.com/ZjNbF7Q.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -170,12 +199,12 @@
 </li>
 </ul>
 <hr>
-<h1 id="未使用作用域"><a href="#未使用作用域" class="headerlink" title="未使用作用域"></a>未使用作用域</h1><p>以上一篇文章所使用的線性回歸代碼作為例子<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span><span class="params">()</span>:</span></span><br><span class="line">    X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">"x_data"</span>)</span><br><span class="line">    y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">"w"</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">    bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">"bias"</span>)</span><br><span class="line"></span><br><span class="line">    y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"起始初始化權重：%f, 初始化偏置：%f"</span>%(weight.eval(),bias.eval()))</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 建立事件文件(指定存放文件夾及graph)</span></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">"./summary/"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"優化%d次後 權重：%f, 優化偏置：%f"</span> % (i,weight.eval(), bias.eval()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure></p>
+<h1 id="未使用作用域"><a href="#未使用作用域" class="headerlink" title="未使用作用域"></a>未使用作用域</h1><p>以上一篇文章所使用的線性回歸代碼作為例子<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span>():</span></span><br><span class="line">    X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">&quot;x_data&quot;</span>)</span><br><span class="line">    y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">&quot;w&quot;</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">    bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">&quot;bias&quot;</span>)</span><br><span class="line"></span><br><span class="line">    y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">&quot;起始初始化權重：%f, 初始化偏置：%f&quot;</span>%(weight.<span class="built_in">eval</span>(),bias.<span class="built_in">eval</span>()))</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 建立事件文件(指定存放文件夾及graph)</span></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">&quot;./summary/&quot;</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">&quot;優化%d次後 權重：%f, 優化偏置：%f&quot;</span> % (i,weight.<span class="built_in">eval</span>(), bias.<span class="built_in">eval</span>()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure></p>
 <h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><p><img src="https://i.imgur.com/wcRUsYa.png" alt="Imgur"></p>
 <ul>
 <li>可以看到很多op裸露在外面較雜亂</li>
 </ul>
-<h1 id="使用作用域整理"><a href="#使用作用域整理" class="headerlink" title="使用作用域整理"></a>使用作用域整理</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"data_preparation"</span>):</span><br><span class="line">        X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">"x_data"</span>)</span><br><span class="line">        y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"LinearRegression_model_build"</span>):</span><br><span class="line">        weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">"w"</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">        bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">"bias"</span>)</span><br><span class="line">        y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"loss_calculate"</span>):</span><br><span class="line">        loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">"optimize"</span>):</span><br><span class="line">        train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">"起始初始化權重：%f, 初始化偏置：%f"</span>%(weight.eval(),bias.eval()))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 建立事件文件(指定存放文件夾及graph)</span></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">"./summary/"</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">"優化%d次後 權重：%f, 優化偏置：%f"</span> % (i,weight.eval(), bias.eval()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure>
+<h1 id="使用作用域整理"><a href="#使用作用域整理" class="headerlink" title="使用作用域整理"></a>使用作用域整理</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">LinearRegression</span>():</span></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">&quot;data_preparation&quot;</span>):</span><br><span class="line">        X = tf.random_normal([<span class="number">100</span>,<span class="number">1</span>],mean=<span class="number">1.75</span>,stddev=<span class="number">0.5</span>, name=<span class="string">&quot;x_data&quot;</span>)</span><br><span class="line">        y_true = tf.matmul(X,[[<span class="number">0.7</span>]]) + <span class="number">0.8</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">&quot;LinearRegression_model_build&quot;</span>):</span><br><span class="line">        weight =  tf.Variable(tf.random_normal([<span class="number">1</span>,<span class="number">1</span>],mean=<span class="number">0.0</span>,stddev=<span class="number">1.0</span>),name=<span class="string">&quot;w&quot;</span>) <span class="comment">#必須用變量定義才能優化(改變)</span></span><br><span class="line">        bias = tf.Variable(<span class="number">0.0</span>,name=<span class="string">&quot;bias&quot;</span>)</span><br><span class="line">        y_predict = tf.matmul(X,weight) + bias</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">&quot;loss_calculate&quot;</span>):</span><br><span class="line">        loss = tf.reduce_mean(tf.square(y_true - y_predict))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.variable_scope(<span class="string">&quot;optimize&quot;</span>):</span><br><span class="line">        train_op = tf.train.GradientDescentOptimizer(<span class="number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    init_var_op = tf.global_variables_initializer()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">        sess.run(init_var_op)</span><br><span class="line"></span><br><span class="line">        print(<span class="string">&quot;起始初始化權重：%f, 初始化偏置：%f&quot;</span>%(weight.<span class="built_in">eval</span>(),bias.<span class="built_in">eval</span>()))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 建立事件文件(指定存放文件夾及graph)</span></span><br><span class="line">        FileWriter = tf.summary.FileWriter(<span class="string">&quot;./summary/&quot;</span>,graph=sess.graph)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1000</span>):</span><br><span class="line">            sess.run(train_op)</span><br><span class="line">            <span class="keyword">if</span> i%<span class="number">50</span> == <span class="number">0</span>:</span><br><span class="line">                print(<span class="string">&quot;優化%d次後 權重：%f, 優化偏置：%f&quot;</span> % (i,weight.<span class="built_in">eval</span>(), bias.<span class="built_in">eval</span>()))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    LinearRegression()</span><br></pre></td></tr></table></figure>
 <h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><p><img src="https://i.imgur.com/4aDEpuk.png" alt="Imgur"></p>
 <ul>
 <li>產生的graph比未整理過的清爽</li>
@@ -187,17 +216,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92-Deep-Learning/" rel="tag">深度學習(Deep Learning)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -277,7 +306,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#創建作用域"><span class="nav-number">2.</span> <span class="nav-text">創建作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#未使用作用域"><span class="nav-number">3.</span> <span class="nav-text">未使用作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用作用域整理"><span class="nav-number">4.</span> <span class="nav-text">使用作用域整理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%B5%E5%BB%BA%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">2.</span> <span class="nav-text">創建作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AA%E4%BD%BF%E7%94%A8%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">3.</span> <span class="nav-text">未使用作用域</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E4%BD%9C%E7%94%A8%E5%9F%9F%E6%95%B4%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">使用作用域整理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -331,6 +360,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -370,13 +402,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -403,7 +445,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -415,7 +457,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

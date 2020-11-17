@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-數據集(dataset) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018機器學習(Machine Learning)數據集(dataset)">
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)數據集(dataset)" />
   
   
   
   
   <meta name="description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
-<meta name="keywords" content="Python,2018,機器學習(Machine Learning),數據集(dataset)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-數據集(dataset)">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/06/ML_SklearDataSet/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/3rhDugK.jpg">
-<meta property="og:updated_time" content="2019-04-03T17:38:42.000Z">
+<meta property="article:published_time" content="2018-07-06T15:22:00.000Z">
+<meta property="article:modified_time" content="2019-04-03T17:38:42.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="數據集(dataset)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-數據集(dataset)">
-<meta name="twitter:description" content="Introduction在對model進行訓練及評估時不能使用同樣的數據集即便是同一數據集也需劃分成訓練集與測試集  訓練集與測試集的比例為75%：25% （仍可隨自己的需求自由劃分） 訓練集用於訓練構建模型 測試數據則用於模型檢驗使用，用於評估模型是否有效">
 <meta name="twitter:image" content="https://i.imgur.com/3rhDugK.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/3rhDugK.jpg" rel="gallery_ck79gai0m008zs6q7ahva5ty3">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/3rhDugK.jpg" rel="gallery_ckhlqn4cg0098clzx5vx505lr noopener">
         <img src="https://i.imgur.com/3rhDugK.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -161,7 +190,7 @@
 <a id="more"></a>
 <ul>
 <li>學習階段可用的數據集：sklearn, kaggle, UCI<ul>
-<li>UCI:<a href="http://archive.ics.uci.edu/ml/index.php" target="_blank" rel="noopener">http://archive.ics.uci.edu/ml/index.php</a></li>
+<li>UCI:<a target="_blank" rel="noopener" href="http://archive.ics.uci.edu/ml/index.php">http://archive.ics.uci.edu/ml/index.php</a></li>
 </ul>
 </li>
 </ul>
@@ -233,17 +262,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/數據集-dataset/">數據集(dataset)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B8%E6%93%9A%E9%9B%86-dataset/" rel="tag">數據集(dataset)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -323,7 +352,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn數據集"><span class="nav-number">2.</span> <span class="nav-text">sklearn數據集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-datasets"><span class="nav-number">2.1.</span> <span class="nav-text">sklearn.datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-load"><span class="nav-number">2.1.1.</span> <span class="nav-text">datasets.load_*()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分類數據集"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">分類數據集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#回歸數據集"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">回歸數據集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-fetch-data-home-None"><span class="nav-number">2.1.2.</span> <span class="nav-text">datasets.fetch_*(data_home=None)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datasets-fetch-20newgroups-data-home-None-subset-’train’"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">datasets.fetch_20newgroups(data_home=None,subset=’train’)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-clear-data-home-data-home-None"><span class="nav-number">2.1.3.</span> <span class="nav-text">datasets.clear_data_home(data_home=None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#數據集返回的類型"><span class="nav-number">2.1.4.</span> <span class="nav-text">數據集返回的類型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據集分割"><span class="nav-number">3.</span> <span class="nav-text">數據集分割</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#train-test-split-arrays-options"><span class="nav-number">3.1.</span> <span class="nav-text">train_test_split( *arrays **options)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn%E6%95%B8%E6%93%9A%E9%9B%86"><span class="nav-number">2.</span> <span class="nav-text">sklearn數據集</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sklearn-datasets"><span class="nav-number">2.1.</span> <span class="nav-text">sklearn.datasets</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-load"><span class="nav-number">2.1.1.</span> <span class="nav-text">datasets.load_*()</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E9%A1%9E%E6%95%B8%E6%93%9A%E9%9B%86"><span class="nav-number">2.1.1.1.</span> <span class="nav-text">分類數據集</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%9B%9E%E6%AD%B8%E6%95%B8%E6%93%9A%E9%9B%86"><span class="nav-number">2.1.1.2.</span> <span class="nav-text">回歸數據集</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-fetch-data-home-None"><span class="nav-number">2.1.2.</span> <span class="nav-text">datasets.fetch_*(data_home&#x3D;None)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#datasets-fetch-20newgroups-data-home-None-subset-%E2%80%99train%E2%80%99"><span class="nav-number">2.1.2.1.</span> <span class="nav-text">datasets.fetch_20newgroups(data_home&#x3D;None,subset&#x3D;’train’)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#datasets-clear-data-home-data-home-None"><span class="nav-number">2.1.3.</span> <span class="nav-text">datasets.clear_data_home(data_home&#x3D;None)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E9%9B%86%E8%BF%94%E5%9B%9E%E7%9A%84%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.1.4.</span> <span class="nav-text">數據集返回的類型</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E9%9B%86%E5%88%86%E5%89%B2"><span class="nav-number">3.</span> <span class="nav-text">數據集分割</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#train-test-split-arrays-options"><span class="nav-number">3.1.</span> <span class="nav-text">train_test_split( *arrays **options)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.2.</span> <span class="nav-text">Example</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -377,6 +406,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -416,13 +448,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -449,7 +491,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -461,7 +503,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

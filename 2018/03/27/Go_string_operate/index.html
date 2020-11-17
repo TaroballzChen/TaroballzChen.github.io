@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day5-字符串操作 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang字符串操作">
+  <meta name="keywords" content="2018Golang字符串操作" />
   
   
   
   
   <meta name="description" content="strings庫的使用判斷字符串開頭strings.HasPrefix(str string, prefix string) bool判斷字符串str是否以prefix開頭，並返回bool值">
-<meta name="keywords" content="2018,Golang,字符串操作">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day5-字符串操作">
 <meta property="og:url" content="http://www.taroballz.com/2018/03/27/Go_string_operate/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="strings庫的使用判斷字符串開頭strings.HasPrefix(str string, prefix string) bool判斷字符串str是否以prefix開頭，並返回bool值">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-03-30T15:16:31.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-03-26T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-03-30T15:16:31.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="字符串操作">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day5-字符串操作">
-<meta name="twitter:description" content="strings庫的使用判斷字符串開頭strings.HasPrefix(str string, prefix string) bool判斷字符串str是否以prefix開頭，並返回bool值">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +45,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -141,19 +169,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="strings庫的使用"><a href="#strings庫的使用" class="headerlink" title="strings庫的使用"></a>strings庫的使用</h1><h2 id="判斷字符串開頭"><a href="#判斷字符串開頭" class="headerlink" title="判斷字符串開頭"></a>判斷字符串開頭</h2><p><code>strings.HasPrefix(str string, prefix string) bool</code><br>判斷字符串<code>str</code>是否以<code>prefix</code><strong>開頭</strong>，並返回<code>bool</code>值<br><a id="more"></a></p>
-<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"https://google.com"</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span> = <span class="string">"http://www.taroballz.com"</span></span><br><span class="line">	</span><br><span class="line">	aa := strings.HasPrefix(a,<span class="string">"https://"</span>)</span><br><span class="line">	bb := strings.HasPrefix(b,<span class="string">"https://"</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(aa)</span><br><span class="line">	fmt.Println(bb)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">&quot;https://google.com&quot;</span></span><br><span class="line">	<span class="keyword">var</span> b <span class="keyword">string</span> = <span class="string">&quot;http://www.taroballz.com&quot;</span></span><br><span class="line">	</span><br><span class="line">	aa := strings.HasPrefix(a,<span class="string">&quot;https://&quot;</span>)</span><br><span class="line">	bb := strings.HasPrefix(b,<span class="string">&quot;https://&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(aa)</span><br><span class="line">	fmt.Println(bb)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="判斷字符串結尾"><a href="#判斷字符串結尾" class="headerlink" title="判斷字符串結尾"></a>判斷字符串結尾</h2><p><code>strings.HasSuffix(str string, suffix string) bool</code><br>判斷字符串<code>str</code>是否以<code>suffix</code><strong>結尾</strong>，並返回<code>bool</code>值</p>
-<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="string">"http://www.example.com/index.php"</span></span><br><span class="line">	b := <span class="string">"http://www.demo.com/default.aspx"</span></span><br><span class="line">	</span><br><span class="line">	aa := strings.HasSuffix(a,<span class="string">"php"</span>)</span><br><span class="line">	bb := strings.HasSuffix(b,<span class="string">"php"</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(aa)</span><br><span class="line">	fmt.Println(bb)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	a := <span class="string">&quot;http://www.example.com/index.php&quot;</span></span><br><span class="line">	b := <span class="string">&quot;http://www.demo.com/default.aspx&quot;</span></span><br><span class="line">	</span><br><span class="line">	aa := strings.HasSuffix(a,<span class="string">&quot;php&quot;</span>)</span><br><span class="line">	bb := strings.HasSuffix(b,<span class="string">&quot;php&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(aa)</span><br><span class="line">	fmt.Println(bb)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="字符串出現的位置"><a href="#字符串出現的位置" class="headerlink" title="字符串出現的位置"></a>字符串出現的位置</h2><h3 id="判斷首次出現"><a href="#判斷首次出現" class="headerlink" title="判斷首次出現"></a>判斷首次出現</h3><p><code>strings.Index(str string, choice string) int</code><br>判斷<code>choice</code>在<code>str</code>中<strong>首次出現</strong>的位置，如果沒有返回-1</p>
-<h4 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello World"</span></span><br><span class="line">	result := strings.Index(a,<span class="string">"l"</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="example-2"><a href="#example-2" class="headerlink" title="example"></a>example</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line">	result := strings.Index(a,<span class="string">&quot;l&quot;</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
 <hr>
 <h3 id="判斷最後出現"><a href="#判斷最後出現" class="headerlink" title="判斷最後出現"></a>判斷最後出現</h3><p><code>strings.LastIndex(str string, choice string) int</code><br>判斷<code>choice</code>在<code>str</code>中<strong>最後出現</strong>的位置，如果沒有返回-1</p>
-<h4 id="example-3"><a href="#example-3" class="headerlink" title="example"></a>example</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">"Hello World"</span></span><br><span class="line">	result := strings.LastIndex(a,<span class="string">"l"</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="example-3"><a href="#example-3" class="headerlink" title="example"></a>example</h4><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">string</span> = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line">	result := strings.LastIndex(a,<span class="string">&quot;l&quot;</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">9</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="字符串替換"><a href="#字符串替換" class="headerlink" title="字符串替換"></a>字符串替換</h2><p><code>strings.Replace(str string, old string, new string, n int)</code><br>將<code>str</code>中的<code>old</code>替換成<code>new</code>，共替換<code>n</code>次</p>
@@ -193,13 +221,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/字符串操作/">字符串操作</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%93%8D%E4%BD%9C/" rel="tag">字符串操作</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -279,7 +307,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#strings庫的使用"><span class="nav-number">1.</span> <span class="nav-text">strings庫的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#判斷字符串開頭"><span class="nav-number">1.1.</span> <span class="nav-text">判斷字符串開頭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">1.1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.1.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#判斷字符串結尾"><span class="nav-number">1.2.</span> <span class="nav-text">判斷字符串結尾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串出現的位置"><span class="nav-number">1.3.</span> <span class="nav-text">字符串出現的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷首次出現"><span class="nav-number">1.3.1.</span> <span class="nav-text">判斷首次出現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#example-2"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-2"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷最後出現"><span class="nav-number">1.3.2.</span> <span class="nav-text">判斷最後出現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#example-3"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串替換"><span class="nav-number">1.4.</span> <span class="nav-text">字符串替換</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串記數"><span class="nav-number">1.5.</span> <span class="nav-text">字符串記數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成重複的字符串"><span class="nav-number">1.6.</span> <span class="nav-text">生成重複的字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大小寫轉換"><span class="nav-number">1.7.</span> <span class="nav-text">大小寫轉換</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串轉小寫"><span class="nav-number">1.7.1.</span> <span class="nav-text">字符串轉小寫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串轉大寫"><span class="nav-number">1.7.2.</span> <span class="nav-text">字符串轉大寫</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#除去特定字符串"><span class="nav-number">1.8.</span> <span class="nav-text">除去特定字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#除去字符串首尾的空白字符"><span class="nav-number">1.8.1.</span> <span class="nav-text">除去字符串首尾的空白字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#除去字符串首尾字符"><span class="nav-number">1.8.2.</span> <span class="nav-text">除去字符串首尾字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#除去字符串首字符"><span class="nav-number">1.8.3.</span> <span class="nav-text">除去字符串首字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#除去字符串尾字符"><span class="nav-number">1.8.4.</span> <span class="nav-text">除去字符串尾字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分割字符串"><span class="nav-number">1.9.</span> <span class="nav-text">分割字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#以空格分割"><span class="nav-number">1.9.1.</span> <span class="nav-text">以空格分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自訂義分割"><span class="nav-number">1.9.2.</span> <span class="nav-text">自訂義分割</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合併字符串"><span class="nav-number">1.10.</span> <span class="nav-text">合併字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#strconv庫的使用"><span class="nav-number">2.</span> <span class="nav-text">strconv庫的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整數轉字符串"><span class="nav-number">2.1.</span> <span class="nav-text">整數轉字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串轉整數"><span class="nav-number">2.2.</span> <span class="nav-text">字符串轉整數</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#strings%E5%BA%AB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">strings庫的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%96%8B%E9%A0%AD"><span class="nav-number">1.1.</span> <span class="nav-text">判斷字符串開頭</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">1.1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.1.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%B5%90%E5%B0%BE"><span class="nav-number">1.2.</span> <span class="nav-text">判斷字符串結尾</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BA%E7%8F%BE%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.3.</span> <span class="nav-text">字符串出現的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E9%A6%96%E6%AC%A1%E5%87%BA%E7%8F%BE"><span class="nav-number">1.3.1.</span> <span class="nav-text">判斷首次出現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#example-2"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-2"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E6%9C%80%E5%BE%8C%E5%87%BA%E7%8F%BE"><span class="nav-number">1.3.2.</span> <span class="nav-text">判斷最後出現</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#example-3"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#result-3"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8F%9B"><span class="nav-number">1.4.</span> <span class="nav-text">字符串替換</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A8%98%E6%95%B8"><span class="nav-number">1.5.</span> <span class="nav-text">字符串記數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E9%87%8D%E8%A4%87%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.6.</span> <span class="nav-text">生成重複的字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E5%B0%8F%E5%AF%AB%E8%BD%89%E6%8F%9B"><span class="nav-number">1.7.</span> <span class="nav-text">大小寫轉換</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%89%E5%B0%8F%E5%AF%AB"><span class="nav-number">1.7.1.</span> <span class="nav-text">字符串轉小寫</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%89%E5%A4%A7%E5%AF%AB"><span class="nav-number">1.7.2.</span> <span class="nav-text">字符串轉大寫</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%A4%E5%8E%BB%E7%89%B9%E5%AE%9A%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.8.</span> <span class="nav-text">除去特定字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E5%8E%BB%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A6%96%E5%B0%BE%E7%9A%84%E7%A9%BA%E7%99%BD%E5%AD%97%E7%AC%A6"><span class="nav-number">1.8.1.</span> <span class="nav-text">除去字符串首尾的空白字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E5%8E%BB%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A6%96%E5%B0%BE%E5%AD%97%E7%AC%A6"><span class="nav-number">1.8.2.</span> <span class="nav-text">除去字符串首尾字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E5%8E%BB%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A6%96%E5%AD%97%E7%AC%A6"><span class="nav-number">1.8.3.</span> <span class="nav-text">除去字符串首字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%A4%E5%8E%BB%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B0%BE%E5%AD%97%E7%AC%A6"><span class="nav-number">1.8.4.</span> <span class="nav-text">除去字符串尾字符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E5%89%B2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.9.</span> <span class="nav-text">分割字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A5%E7%A9%BA%E6%A0%BC%E5%88%86%E5%89%B2"><span class="nav-number">1.9.1.</span> <span class="nav-text">以空格分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E8%A8%82%E7%BE%A9%E5%88%86%E5%89%B2"><span class="nav-number">1.9.2.</span> <span class="nav-text">自訂義分割</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E4%BD%B5%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.10.</span> <span class="nav-text">合併字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#strconv%E5%BA%AB%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">strconv庫的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B4%E6%95%B8%E8%BD%89%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">2.1.</span> <span class="nav-text">整數轉字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%89%E6%95%B4%E6%95%B8"><span class="nav-number">2.2.</span> <span class="nav-text">字符串轉整數</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -333,6 +361,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -372,13 +403,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -405,7 +446,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -417,7 +458,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

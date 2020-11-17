@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-轉換器&amp;估計器(Transformer &amp; Estimator) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018機器學習(Machine Learning)轉換器(Transformer)估計器(Estimator)">
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)轉換器(Transformer)估計器(Estimator)" />
   
   
   
   
   <meta name="description" content="轉換器(transformer) 從原數據集經過轉換器轉為預處理數據集 為一實現特徵工程的APIIntroduction之前所使用數據轉換的流程如下   實例化(實例化的就是一個轉換器類(transformer)) 調用fit_transsform(X)方法">
-<meta name="keywords" content="Python,2018,機器學習(Machine Learning),轉換器(Transformer),估計器(Estimator)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-轉換器&amp;估計器(Transformer &amp; Estimator)">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/07/ML_Transformer_Estimator/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="轉換器(transformer) 從原數據集經過轉換器轉為預處理數據集 為一實現特徵工程的APIIntroduction之前所使用數據轉換的流程如下   實例化(實例化的就是一個轉換器類(transformer)) 調用fit_transsform(X)方法">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/G8ieSmv.jpg">
-<meta property="og:updated_time" content="2019-04-14T11:43:26.000Z">
+<meta property="article:published_time" content="2018-07-07T09:00:00.000Z">
+<meta property="article:modified_time" content="2019-04-14T11:43:26.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="轉換器(Transformer)">
+<meta property="article:tag" content="估計器(Estimator)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-轉換器&amp;估計器(Transformer &amp; Estimator)">
-<meta name="twitter:description" content="轉換器(transformer) 從原數據集經過轉換器轉為預處理數據集 為一實現特徵工程的APIIntroduction之前所使用數據轉換的流程如下   實例化(實例化的就是一個轉換器類(transformer)) 調用fit_transsform(X)方法">
 <meta name="twitter:image" content="https://i.imgur.com/G8ieSmv.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +49,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +146,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/G8ieSmv.jpg" rel="gallery_ck79gai0n0092s6q78oqktpez">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/G8ieSmv.jpg" rel="gallery_ckhlqn4cl009fclzx1eev0cw7 noopener">
         <img src="https://i.imgur.com/G8ieSmv.jpg" itemprop="image">
       </a>
     
@@ -142,7 +172,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -186,12 +216,12 @@
 </ul>
 </li>
 </ul>
-<h2 id="Example-I-fit-transform-fit-transform"><a href="#Example-I-fit-transform-fit-transform" class="headerlink" title="Example I (fit_transform = fit + transform)"></a>Example I (fit_transform = fit + transform)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">fit_transform_test = StandardScaler()</span><br><span class="line">DATA = fit_transform_test.fit_transform(data)</span><br><span class="line">print(<span class="string">"fit_transform result:\n"</span>,DATA)</span><br><span class="line"></span><br><span class="line">fit_then_transform = StandardScaler()</span><br><span class="line">fit_then_transform.fit(data)</span><br><span class="line">DATA = fit_then_transform.transform(data)</span><br><span class="line">print(<span class="string">"fit_then_transform result:\n"</span>,DATA)</span><br></pre></td></tr></table></figure>
+<h2 id="Example-I-fit-transform-fit-transform"><a href="#Example-I-fit-transform-fit-transform" class="headerlink" title="Example I (fit_transform = fit + transform)"></a>Example I (fit_transform = fit + transform)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">fit_transform_test = StandardScaler()</span><br><span class="line">DATA = fit_transform_test.fit_transform(data)</span><br><span class="line">print(<span class="string">&quot;fit_transform result:\n&quot;</span>,DATA)</span><br><span class="line"></span><br><span class="line">fit_then_transform = StandardScaler()</span><br><span class="line">fit_then_transform.fit(data)</span><br><span class="line">DATA = fit_then_transform.transform(data)</span><br><span class="line">print(<span class="string">&quot;fit_then_transform result:\n&quot;</span>,DATA)</span><br></pre></td></tr></table></figure>
 <h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fit_transform result:</span><br><span class="line"> [[-1. -1. -1.]</span><br><span class="line"> [ 1.  1.  1.]]</span><br><span class="line">fit_then_transform result:</span><br><span class="line"> [[-1. -1. -1.]</span><br><span class="line"> [ 1.  1.  1.]]</span><br></pre></td></tr></table></figure>
 <ul>
 <li>可以看到其結果是一樣的</li>
 </ul>
-<h2 id="Example-II-fit的結果對其他數據transform"><a href="#Example-II-fit的結果對其他數據transform" class="headerlink" title="Example II (fit的結果對其他數據transform)"></a>Example II (fit的結果對其他數據transform)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">data2 = [[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>],</span><br><span class="line">         [<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>]]</span><br><span class="line"></span><br><span class="line">fit_then_transform = StandardScaler()</span><br><span class="line">fit_then_transform.fit(data)</span><br><span class="line">DATA = fit_then_transform.transform(data2)</span><br><span class="line">print(<span class="string">"fit_then_transform result:\n"</span>,DATA)</span><br></pre></td></tr></table></figure>
+<h2 id="Example-II-fit的結果對其他數據transform"><a href="#Example-II-fit的結果對其他數據transform" class="headerlink" title="Example II (fit的結果對其他數據transform)"></a>Example II (fit的結果對其他數據transform)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],</span><br><span class="line">        [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]]</span><br><span class="line"></span><br><span class="line">data2 = [[<span class="number">11</span>,<span class="number">12</span>,<span class="number">13</span>],</span><br><span class="line">         [<span class="number">14</span>,<span class="number">15</span>,<span class="number">16</span>]]</span><br><span class="line"></span><br><span class="line">fit_then_transform = StandardScaler()</span><br><span class="line">fit_then_transform.fit(data)</span><br><span class="line">DATA = fit_then_transform.transform(data2)</span><br><span class="line">print(<span class="string">&quot;fit_then_transform result:\n&quot;</span>,DATA)</span><br></pre></td></tr></table></figure>
 <h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fit_transform result:</span><br><span class="line"> [[-1. -1. -1.]</span><br><span class="line"> [ 1.  1.  1.]]</span><br><span class="line">fit_then_transform result:</span><br><span class="line"> [[5.66666667 5.66666667 5.66666667]</span><br><span class="line"> [7.66666667 7.66666667 7.66666667]]</span><br></pre></td></tr></table></figure>
 <ul>
 <li>拿對第一組數據(data)fit的結果對第二組數據(data2)transform</li>
@@ -237,17 +267,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/估計器-Estimator/">估計器(Estimator)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/轉換器-Transformer/">轉換器(Transformer)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BC%B0%E8%A8%88%E5%99%A8-Estimator/" rel="tag">估計器(Estimator)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%89%E6%8F%9B%E5%99%A8-Transformer/" rel="tag">轉換器(Transformer)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -327,7 +357,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#轉換器-transformer"><span class="nav-number">1.</span> <span class="nav-text">轉換器(transformer)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-fit-transform-fit-transform"><span class="nav-number">1.3.</span> <span class="nav-text">Example I (fit_transform = fit + transform)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-fit的結果對其他數據transform"><span class="nav-number">1.4.</span> <span class="nav-text">Example II (fit的結果對其他數據transform)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">1.5.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#估計器-estimator"><span class="nav-number">2.</span> <span class="nav-text">估計器(estimator)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-1"><span class="nav-number">2.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">2.2.</span> <span class="nav-text">流程</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%89%E6%8F%9B%E5%99%A8-transformer"><span class="nav-number">1.</span> <span class="nav-text">轉換器(transformer)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction"><span class="nav-number">1.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.</span> <span class="nav-text">方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-fit-transform-fit-transform"><span class="nav-number">1.3.</span> <span class="nav-text">Example I (fit_transform &#x3D; fit + transform)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">1.3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-fit%E7%9A%84%E7%B5%90%E6%9E%9C%E5%B0%8D%E5%85%B6%E4%BB%96%E6%95%B8%E6%93%9Atransform"><span class="nav-number">1.4.</span> <span class="nav-text">Example II (fit的結果對其他數據transform)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">1.4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">1.5.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%B0%E8%A8%88%E5%99%A8-estimator"><span class="nav-number">2.</span> <span class="nav-text">估計器(estimator)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Introduction-1"><span class="nav-number">2.1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">流程</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -381,6 +411,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -420,13 +453,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -453,7 +496,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -465,7 +508,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>深度學習-tensorflow基礎-會話(Session) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018">
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2018" />
   
   
   
   
   <meta name="description" content="Introductiontensorflow分為前端系統及後端系統  前端系統：定義程序的圖；定義程序的架構 後端系統：運算圖結構">
-<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2018">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深度學習-tensorflow基礎-會話(Session)">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/22/DL_tensorflow_session/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introductiontensorflow分為前端系統及後端系統  前端系統：定義程序的圖；定義程序的架構 後端系統：運算圖結構">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/MrDdPj3.jpg">
-<meta property="og:updated_time" content="2019-07-23T16:32:56.000Z">
+<meta property="article:published_time" content="2018-07-22T09:50:00.000Z">
+<meta property="article:modified_time" content="2019-07-23T16:32:56.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="深度學習(Deep Learning)">
+<meta property="article:tag" content="2018">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="深度學習-tensorflow基礎-會話(Session)">
-<meta name="twitter:description" content="Introductiontensorflow分為前端系統及後端系統  前端系統：定義程序的圖；定義程序的架構 後端系統：運算圖結構">
 <meta name="twitter:image" content="https://i.imgur.com/MrDdPj3.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/MrDdPj3.jpg" rel="gallery_ck79gahym0025s6q7lw5gl8b0">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/MrDdPj3.jpg" rel="gallery_ckhlqn484002bclzx0td5a1nw noopener">
         <img src="https://i.imgur.com/MrDdPj3.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -184,7 +213,7 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 <ul>
 <li>只要有上下文環境也能使用<code>eval()</code>函數(比起<code>run</code>更為方便)</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(result.eval())</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(result.<span class="built_in">eval</span>())</span><br></pre></td></tr></table></figure>
 <h2 id="指定服務器地址運行-target"><a href="#指定服務器地址運行-target" class="headerlink" title="指定服務器地址運行(target)"></a>指定服務器地址運行(target)</h2><p><code>tf.Session(target=&#39;&#39;)</code></p>
 <ul>
 <li>若<code>target</code>參數留空(預設值)，會話將僅使用本地電腦中的設備運行</li>
@@ -194,7 +223,7 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 </li>
 </ul>
 <hr>
-<h2 id="指定圖運行"><a href="#指定圖運行" class="headerlink" title="指定圖運行"></a>指定圖運行</h2><p>在tf.Session(graph=指定圖)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">g = tf.Graph()</span><br><span class="line">print(<span class="string">"g.graph:"</span>,g)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> g.as_default():        </span><br><span class="line">    c = tf.constant(<span class="number">10.0</span>)</span><br><span class="line">    print(<span class="string">"c.graph in g_graph"</span>,c.graph)</span><br><span class="line"></span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line">print(<span class="string">"get_default_graphL:"</span>,graph)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 只能運行一個圖</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=g) <span class="keyword">as</span> sess: <span class="comment"># 於Session()的graph參數決定運行的圖</span></span><br><span class="line">    print(sess.run(c))</span><br><span class="line">    print(<span class="string">'sess.graph:'</span>,sess.graph)</span><br></pre></td></tr></table></figure></p>
+<h2 id="指定圖運行"><a href="#指定圖運行" class="headerlink" title="指定圖運行"></a>指定圖運行</h2><p>在tf.Session(graph=指定圖)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">g = tf.Graph()</span><br><span class="line">print(<span class="string">&quot;g.graph:&quot;</span>,g)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> g.as_default():        </span><br><span class="line">    c = tf.constant(<span class="number">10.0</span>)</span><br><span class="line">    print(<span class="string">&quot;c.graph in g_graph&quot;</span>,c.graph)</span><br><span class="line"></span><br><span class="line">graph = tf.get_default_graph()</span><br><span class="line">print(<span class="string">&quot;get_default_graphL:&quot;</span>,graph)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 只能運行一個圖</span></span><br><span class="line"><span class="keyword">with</span> tf.Session(graph=g) <span class="keyword">as</span> sess: <span class="comment"># 於Session()的graph參數決定運行的圖</span></span><br><span class="line">    print(sess.run(c))</span><br><span class="line">    print(<span class="string">&#x27;sess.graph:&#x27;</span>,sess.graph)</span><br></pre></td></tr></table></figure></p>
 <h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">g.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x100ff3780&gt;</span><br><span class="line">c.graph in g_graph &lt;tensorflow.python.framework.ops.Graph object at 0x100ff3780&gt;</span><br><span class="line">get_default_graphL: &lt;tensorflow.python.framework.ops.Graph object at 0x102830128&gt;</span><br><span class="line">10.0</span><br><span class="line">sess.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x100ff3780&gt;</span><br></pre></td></tr></table></figure>
 <ul>
 <li>預設的圖和指定的圖內存位置不一樣，要是不從graph參數指定圖，默認會運行預設的</li>
@@ -206,8 +235,8 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 <li>可知道當前graph使用到哪些tensor及operation</li>
 <li><code>tf.Session(config=tf.ConfigProto(log_device_placement=True))</code></li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>)</span><br><span class="line"></span><br><span class="line">result = tf.add(a, b)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="literal">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(result))</span><br><span class="line">    print(<span class="string">'result.graph:'</span>,result.graph)</span><br><span class="line">    print(<span class="string">'sess.graph:'</span>,sess.graph)</span><br></pre></td></tr></table></figure>
-<h3 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Device mapping: no known devices.</span><br><span class="line">Add: (Add): /job:localhost/replica:0/task:0/device:CPU:0</span><br><span class="line">Const: (Const): /job:localhost/replica:0/task:0/device:CPU:0</span><br><span class="line">Const_1: (Const): /job:localhost/replica:0/task:0/device:CPU:0</span><br><span class="line">3.0</span><br><span class="line">result.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x101ebe160&gt;</span><br><span class="line">sess.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x101ebe160&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">a = tf.constant(<span class="number">1.0</span>)</span><br><span class="line">b = tf.constant(<span class="number">2.0</span>)</span><br><span class="line"></span><br><span class="line">result = tf.add(a, b)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session(config=tf.ConfigProto(log_device_placement=<span class="literal">True</span>)) <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(result))</span><br><span class="line">    print(<span class="string">&#x27;result.graph:&#x27;</span>,result.graph)</span><br><span class="line">    print(<span class="string">&#x27;sess.graph:&#x27;</span>,sess.graph)</span><br></pre></td></tr></table></figure>
+<h3 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Device mapping: no known devices.</span><br><span class="line">Add: (Add): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;device:CPU:0</span><br><span class="line">Const: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;device:CPU:0</span><br><span class="line">Const_1: (Const): &#x2F;job:localhost&#x2F;replica:0&#x2F;task:0&#x2F;device:CPU:0</span><br><span class="line">3.0</span><br><span class="line">result.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x101ebe160&gt;</span><br><span class="line">sess.graph: &lt;tensorflow.python.framework.ops.Graph object at 0x101ebe160&gt;</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="交互式Session"><a href="#交互式Session" class="headerlink" title="交互式Session"></a>交互式Session</h2><ul>
 <li>一般於命令行中進行操作</li>
@@ -219,24 +248,20 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 <ul>
 <li><p>fetches：嵌套列表、元組、namedtuple、dict或OrderedDict，運行operator和計算tensor(重載的運算符也能運行)</p>
 <ul>
-<li><p>主要參數，要運行的Tensor 或是 Operation</p>
-<ul>
-<li>不能是一般float或是int類型，會報錯<br>如：(報錯)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var1 = <span class="number">2.0</span></span><br><span class="line">var2 = <span class="number">3.0</span></span><br><span class="line">sum = var1 + var2</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  print(sess.run(sum))</span><br></pre></td></tr></table></figure>
-</li>
+<li>主要參數，要運行的Tensor 或是 Operation<ul>
+<li>不能是一般float或是int類型，會報錯<br>如：(報錯)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var1 = <span class="number">2.0</span></span><br><span class="line">var2 = <span class="number">3.0</span></span><br><span class="line"><span class="built_in">sum</span> = var1 + var2</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  print(sess.run(<span class="built_in">sum</span>))</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li><p><strong>若要是同時運行多個物件則要放入一個list</strong>，如<code>[a,b,result]</code></p>
-</li>
+<li><strong>若要是同時運行多個物件則要放入一個list</strong>，如<code>[a,b,result]</code></li>
 <li>有重載機制<ul>
-<li>當operation與一般類型進行計算時，預設會重載成operation類型<br>如：(正常執行)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var1 = <span class="number">2.0</span></span><br><span class="line">a = tf.constant(<span class="number">3.0</span>)</span><br><span class="line">sum = var1 + a</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  print(sess.run(sum))</span><br></pre></td></tr></table></figure>
+<li>當operation與一般類型進行計算時，預設會重載成operation類型<br>如：(正常執行)<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var1 = <span class="number">2.0</span></span><br><span class="line">a = tf.constant(<span class="number">3.0</span>)</span><br><span class="line"><span class="built_in">sum</span> = var1 + a</span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">  print(sess.run(<span class="built_in">sum</span>))</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-</ul>
+<li><p>feed_dict：允許調用者覆蓋graph中指定張量的值，結合placeholder使用</p>
 <ul>
-<li>feed_dict：允許調用者覆蓋graph中指定張量的值，結合placeholder使用<ul>
 <li>在程序執行的時候，不確定輸入的是甚麼，提前<strong>佔個位</strong>，再用feed_dict指定參數</li>
 <li>placeholder提供<strong>佔位符</strong><ul>
 <li>提供相對應數據shape大小的空間，但沒有具體數據</li>
@@ -261,8 +286,8 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 <h2 id="Example-II-不知道筆數的數據"><a href="#Example-II-不知道筆數的數據" class="headerlink" title="Example II 不知道筆數的數據"></a>Example II 不知道筆數的數據</h2><ul>
 <li>往往實際的情況是，在固定特徵數的條件下，我們不知道樣本的數目</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],range(<span class="number">3</span>),range(<span class="number">4</span>,<span class="number">7</span>),range(<span class="number">9</span>,<span class="number">12</span>)])</span><br><span class="line"></span><br><span class="line">plt = tf.placeholder(tf.float32,shape=[<span class="literal">None</span>,<span class="number">3</span>]) <span class="comment">#shape不知道為多少列，但知道多少行(特徵)</span></span><br><span class="line">print(plt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(plt, feed_dict=&#123;plt:data&#125;))</span><br></pre></td></tr></table></figure>
-<h3 id="Result-3"><a href="#Result-3" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Tensor(&quot;Placeholder:0&quot;, shape=(?, 3), dtype=float32)</span><br><span class="line">[[ 1.  2.  3.]</span><br><span class="line"> [ 4.  5.  6.]</span><br><span class="line"> [ 0.  1.  2.]</span><br><span class="line"> [ 4.  5.  6.]</span><br><span class="line"> [ 9. 10. 11.]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">data = np.array([[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>],[<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>],<span class="built_in">range</span>(<span class="number">3</span>),<span class="built_in">range</span>(<span class="number">4</span>,<span class="number">7</span>),<span class="built_in">range</span>(<span class="number">9</span>,<span class="number">12</span>)])</span><br><span class="line"></span><br><span class="line">plt = tf.placeholder(tf.float32,shape=[<span class="literal">None</span>,<span class="number">3</span>]) <span class="comment">#shape不知道為多少列，但知道多少行(特徵)</span></span><br><span class="line">print(plt)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    print(sess.run(plt, feed_dict=&#123;plt:data&#125;))</span><br></pre></td></tr></table></figure>
+<h3 id="Result-3"><a href="#Result-3" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Tensor(&quot;Placeholder:0&quot;, shape&#x3D;(?, 3), dtype&#x3D;float32)</span><br><span class="line">[[ 1.  2.  3.]</span><br><span class="line"> [ 4.  5.  6.]</span><br><span class="line"> [ 0.  1.  2.]</span><br><span class="line"> [ 4.  5.  6.]</span><br><span class="line"> [ 9. 10. 11.]]</span><br></pre></td></tr></table></figure>
 <h2 id="Session異常"><a href="#Session異常" class="headerlink" title="Session異常"></a>Session異常</h2><p>返回值異常案例：</p>
 <ul>
 <li>RuntimeError：如果它Session處於無效狀態(例如已關閉)</li>
@@ -275,17 +300,17 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92-Deep-Learning/" rel="tag">深度學習(Deep Learning)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -365,7 +390,7 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#會話"><span class="nav-number">2.</span> <span class="nav-text">會話</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-Session"><span class="nav-number">3.</span> <span class="nav-text">tf.Session()</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#會話資源"><span class="nav-number">3.1.</span> <span class="nav-text">會話資源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-I"><span class="nav-number">3.1.1.</span> <span class="nav-text">Method I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-II-使用上下文管理器-with"><span class="nav-number">3.1.2.</span> <span class="nav-text">Method II 使用上下文管理器(with)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定服務器地址運行-target"><span class="nav-number">3.2.</span> <span class="nav-text">指定服務器地址運行(target)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指定圖運行"><span class="nav-number">3.3.</span> <span class="nav-text">指定圖運行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.3.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看運行設備情況"><span class="nav-number">3.4.</span> <span class="nav-text">查看運行設備情況</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#交互式Session"><span class="nav-number">3.5.</span> <span class="nav-text">交互式Session</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session的run方法"><span class="nav-number">4.</span> <span class="nav-text">Session的run方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-固定筆數的數據"><span class="nav-number">4.1.</span> <span class="nav-text">Example I 固定筆數的數據</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-2"><span class="nav-number">4.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-不知道筆數的數據"><span class="nav-number">4.2.</span> <span class="nav-text">Example II 不知道筆數的數據</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-3"><span class="nav-number">4.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session異常"><span class="nav-number">4.3.</span> <span class="nav-text">Session異常</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%83%E8%A9%B1"><span class="nav-number">2.</span> <span class="nav-text">會話</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-Session"><span class="nav-number">3.</span> <span class="nav-text">tf.Session()</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%83%E8%A9%B1%E8%B3%87%E6%BA%90"><span class="nav-number">3.1.</span> <span class="nav-text">會話資源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-I"><span class="nav-number">3.1.1.</span> <span class="nav-text">Method I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Method-II-%E4%BD%BF%E7%94%A8%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8-with"><span class="nav-number">3.1.2.</span> <span class="nav-text">Method II 使用上下文管理器(with)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%9C%8D%E5%8B%99%E5%99%A8%E5%9C%B0%E5%9D%80%E9%81%8B%E8%A1%8C-target"><span class="nav-number">3.2.</span> <span class="nav-text">指定服務器地址運行(target)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E5%9C%96%E9%81%8B%E8%A1%8C"><span class="nav-number">3.3.</span> <span class="nav-text">指定圖運行</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.3.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%81%8B%E8%A1%8C%E8%A8%AD%E5%82%99%E6%83%85%E6%B3%81"><span class="nav-number">3.4.</span> <span class="nav-text">查看運行設備情況</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E4%BA%92%E5%BC%8FSession"><span class="nav-number">3.5.</span> <span class="nav-text">交互式Session</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Session%E7%9A%84run%E6%96%B9%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">Session的run方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-%E5%9B%BA%E5%AE%9A%E7%AD%86%E6%95%B8%E7%9A%84%E6%95%B8%E6%93%9A"><span class="nav-number">4.1.</span> <span class="nav-text">Example I 固定筆數的數據</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-2"><span class="nav-number">4.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-%E4%B8%8D%E7%9F%A5%E9%81%93%E7%AD%86%E6%95%B8%E7%9A%84%E6%95%B8%E6%93%9A"><span class="nav-number">4.2.</span> <span class="nav-text">Example II 不知道筆數的數據</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result-3"><span class="nav-number">4.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session%E7%95%B0%E5%B8%B8"><span class="nav-number">4.3.</span> <span class="nav-text">Session異常</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -419,6 +444,9 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -458,13 +486,23 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -491,7 +529,7 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -503,7 +541,7 @@ sess = tf.Session \to sess.run(...) \to sess.close()</script><ul>
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

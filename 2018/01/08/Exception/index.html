@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Python基礎-異常處理 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python">
+  <meta name="keywords" content="Python" />
   
   
   
   
-  <meta name="description" content="Introduction:可自訂義當程序出錯時，自動執行其他程序或做其他處理 Example:1234567try:                    #代碼塊，邏輯    inp = input(&quot;請輸入序號&quot;)    i = int(inp)except Exception as e:  #上述代碼塊如出錯，自動執行當前塊的內容    print(&quot;發生錯誤： &quot;,e)    i = 1p">
-<meta name="keywords" content="Python">
+  <meta name="description" content="Introduction:可自訂義當程序出錯時，自動執行其他程序或做其他處理 Example:1234567try:                    #代碼塊，邏輯    inp &#x3D; input(&quot;請輸入序號&quot;)    i &#x3D; int(inp)except Exception as e:  #上述代碼塊如出錯，自動執行當前塊的內容    print(&quot;發生錯誤：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python基礎-異常處理">
 <meta property="og:url" content="http://www.taroballz.com/2018/01/08/Exception/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="Introduction:可自訂義當程序出錯時，自動執行其他程序或做其他處理 Example:1234567try:                    #代碼塊，邏輯    inp = input(&quot;請輸入序號&quot;)    i = int(inp)except Exception as e:  #上述代碼塊如出錯，自動執行當前塊的內容    print(&quot;發生錯誤： &quot;,e)    i = 1p">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-04-03T18:57:13.000Z">
+<meta property="og:description" content="Introduction:可自訂義當程序出錯時，自動執行其他程序或做其他處理 Example:1234567try:                    #代碼塊，邏輯    inp &#x3D; input(&quot;請輸入序號&quot;)    i &#x3D; int(inp)except Exception as e:  #上述代碼塊如出錯，自動執行當前塊的內容    print(&quot;發生錯誤：">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-01-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-04-03T18:57:13.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python基礎-異常處理">
-<meta name="twitter:description" content="Introduction:可自訂義當程序出錯時，自動執行其他程序或做其他處理 Example:1234567try:                    #代碼塊，邏輯    inp = input(&quot;請輸入序號&quot;)    i = int(inp)except Exception as e:  #上述代碼塊如出錯，自動執行當前塊的內容    print(&quot;發生錯誤： &quot;,e)    i = 1p">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +43,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -130,7 +156,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python基礎/">Python基礎</a>
+    <a class="article-category-link" href="/categories/Python%E5%9F%BA%E7%A4%8E/">Python基礎</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -141,7 +167,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction:"></a>Introduction:</h1><p>可自訂義當程序出錯時，自動執行其他程序或做其他處理</p>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example:"></a>Example:</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:                    <span class="comment">#代碼塊，邏輯</span></span><br><span class="line">    inp = input(<span class="string">"請輸入序號"</span>)</span><br><span class="line">    i = int(inp)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:  <span class="comment">#上述代碼塊如出錯，自動執行當前塊的內容</span></span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,e)</span><br><span class="line">    i = <span class="number">1</span></span><br><span class="line">print(i)</span><br></pre></td></tr></table></figure>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example:"></a>Example:</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:                    <span class="comment">#代碼塊，邏輯</span></span><br><span class="line">    inp = <span class="built_in">input</span>(<span class="string">&quot;請輸入序號&quot;</span>)</span><br><span class="line">    i = <span class="built_in">int</span>(inp)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:  <span class="comment">#上述代碼塊如出錯，自動執行當前塊的內容</span></span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,e)</span><br><span class="line">    i = <span class="number">1</span></span><br><span class="line">print(i)</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
 <ul>
 <li>要是try代碼塊中的代碼沒有出錯則會繼續執行</li>
@@ -151,26 +177,24 @@
 <blockquote>
 <p>Exception (BOSS級) 可捕獲任何異常訊息<br>IndexError<br>ValueError<br>AttributeError<br>ImportError<br>IndentationError   ….等等</p>
 </blockquote>
-<h1 id="Application"><a href="#Application" class="headerlink" title="Application:"></a>Application:</h1><p>可同時捕獲多種不同的錯誤，讓其進行不同的程序(錯誤的細項放前面執行，最後才用Exception)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    int(<span class="string">"w3r"</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'IndexError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'ValueError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'Exception'</span>,e)</span><br></pre></td></tr></table></figure></p>
+<h1 id="Application"><a href="#Application" class="headerlink" title="Application:"></a>Application:</h1><p>可同時捕獲多種不同的錯誤，讓其進行不同的程序(錯誤的細項放前面執行，最後才用Exception)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">int</span>(<span class="string">&quot;w3r&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;IndexError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;ValueError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;Exception&#x27;</span>,e)</span><br></pre></td></tr></table></figure></p>
 <h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="else"><a href="#else" class="headerlink" title="else"></a>else</h2><p>在except之後鍵入else:</p>
 <ul>
 <li>要是try代碼塊中執行代碼出錯　→　會捕捉錯誤訊息並執行except代碼塊中的程序</li>
 <li>要是try中代碼塊中的代碼執行沒有出錯　→　當try代碼塊中代碼執行完成時則會執行else代碼塊中的程序</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    int(<span class="string">"w3r"</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'IndexError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'ValueError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'Exception'</span>,e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"else"</span>,<span class="string">"執行代碼並無發生錯誤"</span>)</span><br></pre></td></tr></table></figure>
-<h2 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h2><p>最後不管有無出錯皆會執行finally代碼塊中的代碼<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    int(<span class="string">"w3r"</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'IndexError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'ValueError'</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">"發生錯誤： "</span>,<span class="string">'Exception'</span>,e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">"else"</span>,<span class="string">"執行代碼並無發生錯誤"</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">"finally:...."</span>,<span class="string">"不管最後有沒有出錯都要執行我"</span>)</span><br></pre></td></tr></table></figure></p>
-<h1 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced :"></a>Advanced :</h1><h2 id="主動觸發異常"><a href="#主動觸發異常" class="headerlink" title="主動觸發異常"></a>主動觸發異常</h2><p>上述所說都是由Python內部解釋器解釋時所觸發的異常<br>我們也可以讓程序運行時主動觸發異常 → 使用<strong>raise</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">"出現異常"</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(e)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">int</span>(<span class="string">&quot;w3r&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;IndexError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;ValueError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;Exception&#x27;</span>,e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;else&quot;</span>,<span class="string">&quot;執行代碼並無發生錯誤&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="finally"><a href="#finally" class="headerlink" title="finally"></a>finally</h2><p>最後不管有無出錯皆會執行finally代碼塊中的代碼<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="built_in">int</span>(<span class="string">&quot;w3r&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> IndexError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;IndexError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;ValueError&#x27;</span>,e)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(<span class="string">&quot;發生錯誤： &quot;</span>,<span class="string">&#x27;Exception&#x27;</span>,e)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    print(<span class="string">&quot;else&quot;</span>,<span class="string">&quot;執行代碼並無發生錯誤&quot;</span>)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    print(<span class="string">&quot;finally:....&quot;</span>,<span class="string">&quot;不管最後有沒有出錯都要執行我&quot;</span>)</span><br></pre></td></tr></table></figure></p>
+<h1 id="Advanced"><a href="#Advanced" class="headerlink" title="Advanced :"></a>Advanced :</h1><h2 id="主動觸發異常"><a href="#主動觸發異常" class="headerlink" title="主動觸發異常"></a>主動觸發異常</h2><p>上述所說都是由Python內部解釋器解釋時所觸發的異常<br>我們也可以讓程序運行時主動觸發異常 → 使用<strong>raise</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> Exception(<span class="string">&quot;出現異常&quot;</span>)</span><br><span class="line"><span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">    print(e)</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li><em>用於嵌套函數中某函數執行失敗並retrun False時拋出異常，並讓日誌紀錄</em></li>
 <li><em>不必在另外寫一個函數用於紀錄日誌</em></li>
 <li><em>只需將出錯訊息進行raise Exception 於except Exception代碼塊中連同其他出錯訊息一起記錄</em></li>
 </ul>
-<h2 id="自訂義異常-編寫一個類"><a href="#自訂義異常-編寫一個類" class="headerlink" title="自訂義異常(編寫一個類)"></a>自訂義異常(編寫一個類)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">self_definitionError</span><span class="params">(Exception)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span>  <span class="title">__init__</span><span class="params">(self, msg)</span>:</span></span><br><span class="line">        self.message = msg</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.message</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> self_definition(<span class="string">'自訂義錯誤'</span>)</span><br><span class="line"><span class="keyword">except</span> self_definitionError <span class="keyword">as</span> e:</span><br><span class="line">    print(e)             <span class="comment">#使用print方法，則會調用e對象的__str__()方法，獲取值後返回</span></span><br></pre></td></tr></table></figure>
+<h2 id="自訂義異常-編寫一個類"><a href="#自訂義異常-編寫一個類" class="headerlink" title="自訂義異常(編寫一個類)"></a>自訂義異常(編寫一個類)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">self_definitionError</span>(<span class="params">Exception</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span>  <span class="title">__init__</span>(<span class="params">self, msg</span>):</span></span><br><span class="line">        self.message = msg</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__str__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.message</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">raise</span> self_definition(<span class="string">&#x27;自訂義錯誤&#x27;</span>)</span><br><span class="line"><span class="keyword">except</span> self_definitionError <span class="keyword">as</span> e:</span><br><span class="line">    print(e)             <span class="comment">#使用print方法，則會調用e對象的__str__()方法，獲取值後返回</span></span><br></pre></td></tr></table></figure>
 <h2 id="assert-斷言"><a href="#assert-斷言" class="headerlink" title="assert(斷言)"></a>assert(斷言)</h2><p>assert 後的條件成立則繼續執行，條件不成立時 程序報錯為AssertionError<br>用於強制用戶服從，不服從則報錯，可用Exception捕獲異常，但一般不會這麼做</p>
-<h3 id="example-I"><a href="#example-I" class="headerlink" title="example I"></a>example I</h3><p>條件成立，沒有發生異常<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">1</span></span><br><span class="line">print(<span class="string">'OK'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>顯示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OK</span><br></pre></td></tr></table></figure></p>
-<h3 id="example-II"><a href="#example-II" class="headerlink" title="example II"></a>example II</h3><p>條件不成立，發生AssertionError異常<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">2</span></span><br><span class="line">print(<span class="string">'OK'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>顯示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Traceback(most recent call last):</span><br><span class="line">        assert 1 == 2</span><br><span class="line">AssertionError</span><br></pre></td></tr></table></figure></p>
+<h3 id="example-I"><a href="#example-I" class="headerlink" title="example I"></a>example I</h3><p>條件成立，沒有發生異常<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">1</span></span><br><span class="line">print(<span class="string">&#x27;OK&#x27;</span>)</span><br></pre></td></tr></table></figure><br>顯示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<h3 id="example-II"><a href="#example-II" class="headerlink" title="example II"></a>example II</h3><p>條件不成立，發生AssertionError異常<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">assert</span> <span class="number">1</span> == <span class="number">2</span></span><br><span class="line">print(<span class="string">&#x27;OK&#x27;</span>)</span><br></pre></td></tr></table></figure><br>顯示:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Traceback(most recent call last):</span><br><span class="line">        assert 1 &#x3D;&#x3D; 2</span><br><span class="line">AssertionError</span><br></pre></td></tr></table></figure></p>
 <h3 id="conclusion"><a href="#conclusion" class="headerlink" title="conclusion"></a>conclusion</h3><p>多線程會使用到此方法，通常用在寫好的程序中前面加入assert條件判斷<br>欲使用程序必須滿足assert後面的條件才能運行<br>類似if else</p>
 
       
@@ -178,17 +202,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python基礎/">Python基礎</a>
+    <a class="article-category-link" href="/categories/Python%E5%9F%BA%E7%A4%8E/">Python基礎</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -268,7 +292,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types-of-Error"><span class="nav-number">3.</span> <span class="nav-text">Types of Error:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Application"><span class="nav-number">4.</span> <span class="nav-text">Application:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">5.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#else"><span class="nav-number">5.1.</span> <span class="nav-text">else</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finally"><span class="nav-number">5.2.</span> <span class="nav-text">finally</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Advanced"><span class="nav-number">6.</span> <span class="nav-text">Advanced :</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主動觸發異常"><span class="nav-number">6.1.</span> <span class="nav-text">主動觸發異常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自訂義異常-編寫一個類"><span class="nav-number">6.2.</span> <span class="nav-text">自訂義異常(編寫一個類)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assert-斷言"><span class="nav-number">6.3.</span> <span class="nav-text">assert(斷言)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-I"><span class="nav-number">6.3.1.</span> <span class="nav-text">example I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-II"><span class="nav-number">6.3.2.</span> <span class="nav-text">example II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conclusion"><span class="nav-number">6.3.3.</span> <span class="nav-text">conclusion</span></a></li></ol></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">2.</span> <span class="nav-text">Example:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Types-of-Error"><span class="nav-number">3.</span> <span class="nav-text">Types of Error:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Application"><span class="nav-number">4.</span> <span class="nav-text">Application:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">5.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#else"><span class="nav-number">5.1.</span> <span class="nav-text">else</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finally"><span class="nav-number">5.2.</span> <span class="nav-text">finally</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Advanced"><span class="nav-number">6.</span> <span class="nav-text">Advanced :</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E5%8B%95%E8%A7%B8%E7%99%BC%E7%95%B0%E5%B8%B8"><span class="nav-number">6.1.</span> <span class="nav-text">主動觸發異常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E8%A8%82%E7%BE%A9%E7%95%B0%E5%B8%B8-%E7%B7%A8%E5%AF%AB%E4%B8%80%E5%80%8B%E9%A1%9E"><span class="nav-number">6.2.</span> <span class="nav-text">自訂義異常(編寫一個類)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#assert-%E6%96%B7%E8%A8%80"><span class="nav-number">6.3.</span> <span class="nav-text">assert(斷言)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#example-I"><span class="nav-number">6.3.1.</span> <span class="nav-text">example I</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-II"><span class="nav-number">6.3.2.</span> <span class="nav-text">example II</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#conclusion"><span class="nav-number">6.3.3.</span> <span class="nav-text">conclusion</span></a></li></ol></li></ol></li></ol>
     
     </div>
   </aside>
@@ -322,6 +346,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -361,13 +388,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -394,7 +431,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -406,7 +443,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

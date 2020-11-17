@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day4-作用域、數據類型與操作符 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang作用域數據類型與操作符">
+  <meta name="keywords" content="2018Golang作用域數據類型與操作符" />
   
   
   
   
-  <meta name="description" content="變量的作用域 在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問  若函數內部有語句塊，如for,if,switch內部的語句塊，亦指{}內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收    在函數外部聲明的變量叫做全局變量  生命週期作用於整個程序 如果變量名為大寫可以在外部訪問調用 函數外部只能聲明變量、常量，不能執行代碼">
-<meta name="keywords" content="2018,Golang,作用域,數據類型與操作符">
+  <meta name="description" content="變量的作用域 在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問  若函數內部有語句塊，如for,if,switch內部的語句塊，亦指&amp;#123;&amp;#125;內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收    在函數外部聲明的變量叫做全局變量  生命週期作用於整個程序 如果變量名為大寫可以在外部訪問調用 函數外部只能聲明變量、常量，不能執行">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day4-作用域、數據類型與操作符">
 <meta property="og:url" content="http://www.taroballz.com/2018/03/26/Go_variables_location/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="變量的作用域 在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問  若函數內部有語句塊，如for,if,switch內部的語句塊，亦指{}內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收    在函數外部聲明的變量叫做全局變量  生命週期作用於整個程序 如果變量名為大寫可以在外部訪問調用 函數外部只能聲明變量、常量，不能執行代碼">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-03-26T12:34:22.000Z">
+<meta property="og:description" content="變量的作用域 在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問  若函數內部有語句塊，如for,if,switch內部的語句塊，亦指&amp;#123;&amp;#125;內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收    在函數外部聲明的變量叫做全局變量  生命週期作用於整個程序 如果變量名為大寫可以在外部訪問調用 函數外部只能聲明變量、常量，不能執行">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-03-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-03-26T12:34:22.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="作用域">
+<meta property="article:tag" content="數據類型與操作符">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day4-作用域、數據類型與操作符">
-<meta name="twitter:description" content="變量的作用域 在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問  若函數內部有語句塊，如for,if,switch內部的語句塊，亦指{}內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收    在函數外部聲明的變量叫做全局變量  生命週期作用於整個程序 如果變量名為大寫可以在外部訪問調用 函數外部只能聲明變量、常量，不能執行代碼">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +46,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -143,7 +172,7 @@
         <h1 id="變量的作用域"><a href="#變量的作用域" class="headerlink" title="變量的作用域"></a>變量的作用域</h1><ol>
 <li>在函數內部聲明的變量叫做局部變量，生命週期僅限於函數內部；可見性也僅限於函數內部，函數外部皆無法訪問<blockquote>
 <ul>
-<li>若函數內部有<strong>語句塊</strong>，如<code>for</code>,<code>if</code>,<code>switch</code>內部的語句塊，亦指<code>{}</code>內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收</li>
+<li>若函數內部有<strong>語句塊</strong>，如<code>for</code>,<code>if</code>,<code>switch</code>內部的語句塊，亦指<code>&#123;&#125;</code>內部，在語句塊內部定義的變量，在跳脫語句塊後也會回收</li>
 </ul>
 </blockquote>
 </li>
@@ -163,25 +192,23 @@
 <p>[1] 聲明變量時未初始化值，默認初始化為<code>false</code></p>
 <h3 id="相關操作符"><a href="#相關操作符" class="headerlink" title="相關操作符"></a>相關操作符</h3><p><code>!</code> : 取反值<br><code>&amp;&amp;</code> : and 操作 (注意<strong>短路</strong>特性，一開始為<code>false</code>即為false)<br><code>||</code> : or 操作  (注意<strong>短路</strong>特性，一開始為<code>true</code>即為true)</p>
 <h2 id="數字類型"><a href="#數字類型" class="headerlink" title="數字類型"></a>數字類型</h2><p>主要有<code>int</code>,<code>int8</code>,<code>in16</code>,<code>int32</code>,<code>int64</code>,<code>uint8</code>,<code>uint16</code>,<code>uint32</code>,<code>uint64</code>,<code>float32</code>,<code>float64</code></p>
-<h3 id="聲明-1"><a href="#聲明-1" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int8</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int16</span> = <span class="number">200</span></span><br><span class="line"><span class="keyword">var</span> c <span class="keyword">float32</span></span><br><span class="line"><span class="keyword">var</span> d <span class="keyword">float64</span></span><br></pre></td></tr></table></figure>
-<h3 id="類型轉換"><a href="#類型轉換" class="headerlink" title="類型轉換"></a>類型轉換</h3><p>在Go語言中不同的數字類型之間是不能直接賦值的<br>以下為<strong>錯誤</strong>的代碼<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int8</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int16</span> = a</span><br></pre></td></tr></table></figure></p>
-<p>需透過<strong>類型轉換</strong>才能成功賦值or運算</p>
+<h3 id="聲明-1"><a href="#聲明-1" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int8</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int16</span> = <span class="number">200</span></span><br><span class="line"><span class="keyword">var</span> c <span class="keyword">float32</span></span><br><span class="line"><span class="keyword">var</span> d <span class="keyword">float64</span>	</span><br></pre></td></tr></table></figure>
+<h3 id="類型轉換"><a href="#類型轉換" class="headerlink" title="類型轉換"></a>類型轉換</h3><p>在Go語言中不同的數字類型之間是不能直接賦值的<br>以下為<strong>錯誤</strong>的代碼<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int8</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int16</span> = a</span><br></pre></td></tr></table></figure><br>需透過<strong>類型轉換</strong>才能成功賦值or運算</p>
 <h4 id="語法"><a href="#語法" class="headerlink" title="語法"></a>語法</h4><p><code>目標類型(欲轉換的變量)</code><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">int8</span> = <span class="number">100</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">int16</span> = <span class="keyword">int16</span>(a)</span><br></pre></td></tr></table></figure></p>
 <h3 id="邏輯操作符"><a href="#邏輯操作符" class="headerlink" title="邏輯操作符"></a>邏輯操作符</h3><p><code>==</code>,<code>!=</code>,<code>&lt;</code>,<code>&lt;=</code>,<code>&gt;</code>,<code>&gt;=</code><br>用於判斷邏輯操作符兩邊之間的關係，返回bool值</p>
 <h3 id="數學操作符"><a href="#數學操作符" class="headerlink" title="數學操作符"></a>數學操作符</h3><p><code>+</code>,<code>-</code>,<code>*</code>,<code>/</code>,<code>%</code></p>
-<h3 id="practice"><a href="#practice" class="headerlink" title="practice"></a>practice</h3><p>使用<code>math/rand</code>生成10個隨機整數，10個小於100的隨機整數以及10個隨機浮點數<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"math/rand"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randint</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Int()</span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randint_100</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Intn(<span class="number">100</span>) <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randfloat</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Float32()</span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;     <span class="comment">//[2]</span></span><br><span class="line">	rand.Seed(time.Now().UnixNano())   <span class="comment">//[3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	fmt.Println(<span class="string">"print randnumber:"</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randint()</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"print randnumber &lt; 100:"</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randint_100()</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"print randfloatnumber"</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randfloat()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>[1] <code>rand.Intn</code>為隨機生成一個參數範圍以內的數<br>[2] 因為Seed初始化在每次運行程序時都必須要做，可放在init函數裡值行<br>[3] 使用當前時間<strong>奈秒</strong>數的時間戳作為Seed使得其每次產出的數字皆不一樣</p>
+<h3 id="practice"><a href="#practice" class="headerlink" title="practice"></a>practice</h3><p>使用<code>math/rand</code>生成10個隨機整數，10個小於100的隨機整數以及10個隨機浮點數<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;math/rand&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randint</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Int()</span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randint_100</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Intn(<span class="number">100</span>) <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Create_randfloat</span><span class="params">()</span></span>&#123;</span><br><span class="line">	randnum :=  rand.Float32()</span><br><span class="line">	fmt.Println(randnum)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span>&#123;     <span class="comment">//[2]</span></span><br><span class="line">	rand.Seed(time.Now().UnixNano())   <span class="comment">//[3]</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	fmt.Println(<span class="string">&quot;print randnumber:&quot;</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randint()</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">&quot;print randnumber &lt; 100:&quot;</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randint_100()</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">&quot;print randfloatnumber&quot;</span>)</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++&#123;</span><br><span class="line">		Create_randfloat()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>[1] <code>rand.Intn</code>為隨機生成一個參數範圍以內的數<br>[2] 因為Seed初始化在每次運行程序時都必須要做，可放在init函數裡值行<br>[3] 使用當前時間<strong>奈秒</strong>數的時間戳作為Seed使得其每次產出的數字皆不一樣</p>
 <h2 id="字符類型-byte"><a href="#字符類型-byte" class="headerlink" title="字符類型(byte)"></a>字符類型(byte)</h2><p>相當於c語言中的<code>char</code>類型<br>一個<code>byte</code>佔據8<code>bits</code></p>
-<h3 id="聲明-2"><a href="#聲明-2" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">byte</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="string">'c'</span> <span class="comment">//[1]</span></span><br></pre></td></tr></table></figure>
+<h3 id="聲明-2"><a href="#聲明-2" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a <span class="keyword">byte</span></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="string">&#x27;c&#x27;</span> <span class="comment">//[1]</span></span><br></pre></td></tr></table></figure>
 <p>[1]使用<code>&#39;&#39;</code>(單引號)來表示字符，只能存放一個字符</p>
-<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="string">'c'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    fmt.Println(b)            <span class="comment">//[1]</span></span><br><span class="line">    fmt.Printf(<span class="string">"%c\n"</span>,b)        <span class="comment">//[2]</span></span><br><span class="line">    fmt.Println(<span class="keyword">string</span>(b))    <span class="comment">//[3]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="example"><a href="#example" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> b <span class="keyword">byte</span> = <span class="string">&#x27;c&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    fmt.Println(b)            <span class="comment">//[1]</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;%c\n&quot;</span>,b)        <span class="comment">//[2]</span></span><br><span class="line">    fmt.Println(<span class="keyword">string</span>(b))    <span class="comment">//[3]</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] 默認打印byte會顯示此字符對應的ASCII碼數字<br>[2] 使用<code>Printf</code>格式化輸出，可打印原字符<br>[3] 將字符轉成字符串類型也可打印原字符</p>
 <h3 id="result"><a href="#result" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">99</span><br><span class="line">c</span><br><span class="line">c</span><br></pre></td></tr></table></figure>
 <h2 id="字符串類型"><a href="#字符串類型" class="headerlink" title="字符串類型"></a>字符串類型</h2><p>0個或多個字符組成的字符串</p>
-<h3 id="聲明-3"><a href="#聲明-3" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span> <span class="comment">//[1]</span></span><br><span class="line"><span class="keyword">var</span> hello <span class="keyword">string</span> = <span class="string">"Hello World!!"</span> <span class="comment">//[2]</span></span><br><span class="line"><span class="keyword">var</span> speical <span class="keyword">string</span> = <span class="string">`\n \t`</span>   <span class="comment">//[3]</span></span><br></pre></td></tr></table></figure>
+<h3 id="聲明-3"><a href="#聲明-3" class="headerlink" title="聲明"></a>聲明</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span> <span class="comment">//[1]</span></span><br><span class="line"><span class="keyword">var</span> hello <span class="keyword">string</span> = <span class="string">&quot;Hello World!!&quot;</span> <span class="comment">//[2]</span></span><br><span class="line"><span class="keyword">var</span> speical <span class="keyword">string</span> = <span class="string">`\n \t`</span>   <span class="comment">//[3]</span></span><br></pre></td></tr></table></figure>
 <p>[1] 聲明<code>string</code>時沒有初始化變量默認為<strong>空字符串</strong><br>[2] 使用<code>&quot;&quot;</code>(雙引號)來表示字符串，可存放0或多個字符串，具有<strong>轉譯</strong>的功能<br>[3] 使用``(反引號)來表示字符串，可存放0或多個字符串，<strong>不具轉譯功能</strong>(輸出甚麼就是甚麼)，為<strong>原生字符串</strong>，可用在<strong>輸出多行</strong></p>
-<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> hello <span class="keyword">string</span> = <span class="string">"Hello\tWorld\n!!"</span></span><br><span class="line"><span class="keyword">var</span> speical <span class="keyword">string</span> = <span class="string">`Hello\tWorld\n!!`</span></span><br><span class="line"><span class="keyword">var</span> poem <span class="keyword">string</span> = <span class="string">`白日依山盡</span></span><br><span class="line"><span class="string">黃河 入海流</span></span><br><span class="line"><span class="string">欲窮千里目，更上一層樓`</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"str ="</span>,str)</span><br><span class="line">	fmt.Println(<span class="string">"hello ="</span>,hello)</span><br><span class="line">	fmt.Println(<span class="string">"special ="</span>,speical)</span><br><span class="line">	fmt.Println(<span class="string">"poem = "</span>,poem)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">str = </span><br><span class="line">hello = Hello	World</span><br><span class="line">!!</span><br><span class="line">special = Hello\tWorld\n!!</span><br><span class="line">poem =  白日依山盡</span><br><span class="line">黃河 入海流</span><br><span class="line">欲窮千里目，更上一層樓</span><br></pre></td></tr></table></figure>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="example"></a>example</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> str <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> hello <span class="keyword">string</span> = <span class="string">&quot;Hello\tWorld\n!!&quot;</span></span><br><span class="line"><span class="keyword">var</span> speical <span class="keyword">string</span> = <span class="string">`Hello\tWorld\n!!`</span></span><br><span class="line"><span class="keyword">var</span> poem <span class="keyword">string</span> = <span class="string">`白日依山盡</span></span><br><span class="line"><span class="string">黃河 入海流</span></span><br><span class="line"><span class="string">欲窮千里目，更上一層樓`</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;str =&quot;</span>,str)</span><br><span class="line">	fmt.Println(<span class="string">&quot;hello =&quot;</span>,hello)</span><br><span class="line">	fmt.Println(<span class="string">&quot;special =&quot;</span>,speical)</span><br><span class="line">	fmt.Println(<span class="string">&quot;poem = &quot;</span>,poem)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">str &#x3D; </span><br><span class="line">hello &#x3D; Hello	World</span><br><span class="line">!!</span><br><span class="line">special &#x3D; Hello\tWorld\n!!</span><br><span class="line">poem &#x3D;  白日依山盡</span><br><span class="line">黃河 入海流</span><br><span class="line">欲窮千里目，更上一層樓</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="entry-meta entry-footer">
@@ -191,13 +218,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/作用域/">作用域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/數據類型與操作符/">數據類型與操作符</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" rel="tag">作用域</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B8%E6%93%9A%E9%A1%9E%E5%9E%8B%E8%88%87%E6%93%8D%E4%BD%9C%E7%AC%A6/" rel="tag">數據類型與操作符</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -277,7 +304,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#變量的作用域"><span class="nav-number">1.</span> <span class="nav-text">變量的作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#數據類型與操作符"><span class="nav-number">2.</span> <span class="nav-text">數據類型與操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bool類型"><span class="nav-number">2.1.</span> <span class="nav-text">bool類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聲明"><span class="nav-number">2.1.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相關操作符"><span class="nav-number">2.1.2.</span> <span class="nav-text">相關操作符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#數字類型"><span class="nav-number">2.2.</span> <span class="nav-text">數字類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聲明-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#類型轉換"><span class="nav-number">2.2.2.</span> <span class="nav-text">類型轉換</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#語法"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">語法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#邏輯操作符"><span class="nav-number">2.2.3.</span> <span class="nav-text">邏輯操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#數學操作符"><span class="nav-number">2.2.4.</span> <span class="nav-text">數學操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#practice"><span class="nav-number">2.2.5.</span> <span class="nav-text">practice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符類型-byte"><span class="nav-number">2.3.</span> <span class="nav-text">字符類型(byte)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聲明-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.3.2.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">2.3.3.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字符串類型"><span class="nav-number">2.4.</span> <span class="nav-text">字符串類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聲明-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">2.4.3.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%8A%E9%87%8F%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.</span> <span class="nav-text">變量的作用域</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B8%E6%93%9A%E9%A1%9E%E5%9E%8B%E8%88%87%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">數據類型與操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#bool%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">bool類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%B2%E6%98%8E"><span class="nav-number">2.1.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E9%97%9C%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.1.2.</span> <span class="nav-text">相關操作符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%B8%E5%AD%97%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.2.</span> <span class="nav-text">數字類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%B2%E6%98%8E-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%9E%E5%9E%8B%E8%BD%89%E6%8F%9B"><span class="nav-number">2.2.2.</span> <span class="nav-text">類型轉換</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AA%9E%E6%B3%95"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">語法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%82%8F%E8%BC%AF%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.2.3.</span> <span class="nav-text">邏輯操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B8%E5%AD%B8%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-number">2.2.4.</span> <span class="nav-text">數學操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#practice"><span class="nav-number">2.2.5.</span> <span class="nav-text">practice</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E9%A1%9E%E5%9E%8B-byte"><span class="nav-number">2.3.</span> <span class="nav-text">字符類型(byte)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%B2%E6%98%8E-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example"><span class="nav-number">2.3.2.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result"><span class="nav-number">2.3.3.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E9%A1%9E%E5%9E%8B"><span class="nav-number">2.4.</span> <span class="nav-text">字符串類型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%B2%E6%98%8E-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">聲明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#example-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">2.4.3.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
     
     </div>
   </aside>
@@ -331,6 +358,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -370,13 +400,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -403,7 +443,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -415,7 +455,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

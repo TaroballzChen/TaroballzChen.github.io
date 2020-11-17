@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-特徵工程-降維 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵預處理特徵工程降維">
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵預處理特徵工程降維" />
   
   
   
   
-  <meta name="description" content="Introduction降維不是將array的維度減少(3D陣列-&amp;gt;2D陣列)，而使指將特徵的數量減少  有些特徵與目標值較無關係，會選擇將此特徵剃除，稱之為降維 拋棄掉對模型帶來負面影響的特徵   得到一組＂特徵間相互獨立(不相關)＂主變量的過程">
-<meta name="keywords" content="Python,2018,機器學習(Machine Learning),特徵預處理,特徵工程,降維">
+  <meta name="description" content="Introduction降維不是將array的維度減少(3D陣列-&gt;2D陣列)，而使指將特徵的數量減少  有些特徵與目標值較無關係，會選擇將此特徵剃除，稱之為降維 拋棄掉對模型帶來負面影響的特徵   得到一組＂特徵間相互獨立(不相關)＂主變量的過程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-特徵工程-降維">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/06/ML_DecreaseFeature/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="Introduction降維不是將array的維度減少(3D陣列-&amp;gt;2D陣列)，而使指將特徵的數量減少  有些特徵與目標值較無關係，會選擇將此特徵剃除，稱之為降維 拋棄掉對模型帶來負面影響的特徵   得到一組＂特徵間相互獨立(不相關)＂主變量的過程">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:description" content="Introduction降維不是將array的維度減少(3D陣列-&gt;2D陣列)，而使指將特徵的數量減少  有些特徵與目標值較無關係，會選擇將此特徵剃除，稱之為降維 拋棄掉對模型帶來負面影響的特徵   得到一組＂特徵間相互獨立(不相關)＂主變量的過程">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/xNq2wCp.jpg">
-<meta property="og:updated_time" content="2019-06-21T17:18:25.000Z">
+<meta property="article:published_time" content="2018-07-05T16:10:00.000Z">
+<meta property="article:modified_time" content="2019-06-21T17:18:25.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="特徵預處理">
+<meta property="article:tag" content="特徵工程">
+<meta property="article:tag" content="降維">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-特徵工程-降維">
-<meta name="twitter:description" content="Introduction降維不是將array的維度減少(3D陣列-&amp;gt;2D陣列)，而使指將特徵的數量減少  有些特徵與目標值較無關係，會選擇將此特徵剃除，稱之為降維 拋棄掉對模型帶來負面影響的特徵   得到一組＂特徵間相互獨立(不相關)＂主變量的過程">
 <meta name="twitter:image" content="https://i.imgur.com/xNq2wCp.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +50,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +147,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/xNq2wCp.jpg" rel="gallery_ck79gai050079s6q7y14uekot">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/xNq2wCp.jpg" rel="gallery_ckhlqn4bo007mclzxbpnncv3f noopener">
         <img src="https://i.imgur.com/xNq2wCp.jpg" itemprop="image">
       </a>
     
@@ -142,7 +173,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -224,7 +255,7 @@
 </li>
 <li>調用<code>fit_transform</code></li>
 </ol>
-<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> VarianceThreshold</span><br><span class="line"></span><br><span class="line">UnFS_data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>, <span class="number">10</span>, <span class="number">1800</span>, <span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">30</span>, <span class="number">7</span>, <span class="number">3500</span>, <span class="number">0.11</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">75</span>, <span class="number">8</span>, <span class="number">2700</span>, <span class="number">0.29</span>,<span class="number">1</span>],]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">featureSelect_VT</span><span class="params">()</span>:</span></span><br><span class="line">    VT = VarianceThreshold(threshold=<span class="number">0.0</span>)</span><br><span class="line">    FS_data = VT.fit_transform(UnFS_data)</span><br><span class="line">    print(FS_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    featureSelect_VT()</span><br></pre></td></tr></table></figure>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_selection <span class="keyword">import</span> VarianceThreshold</span><br><span class="line"></span><br><span class="line">UnFS_data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>, <span class="number">10</span>, <span class="number">1800</span>, <span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">30</span>, <span class="number">7</span>, <span class="number">3500</span>, <span class="number">0.11</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">75</span>, <span class="number">8</span>, <span class="number">2700</span>, <span class="number">0.29</span>,<span class="number">1</span>],]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">featureSelect_VT</span>():</span></span><br><span class="line">    VT = VarianceThreshold(threshold=<span class="number">0.0</span>)</span><br><span class="line">    FS_data = VT.fit_transform(UnFS_data)</span><br><span class="line">    print(FS_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    featureSelect_VT()</span><br></pre></td></tr></table></figure>
 <ul>
 <li>根據自己的需求設置<code>threshold</code>之值，默認為0</li>
 </ul>
@@ -301,7 +332,7 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
 <li><code>y</code> : 特徵y數據，為array_like形式</li>
 <li>返回一元組，第一個值為r值</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> pearsonr</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">12.5</span>,<span class="number">21.2</span>],</span><br><span class="line">        [<span class="number">15.3</span>,<span class="number">23.9</span>],</span><br><span class="line">        [<span class="number">23.2</span>,<span class="number">32.9</span>],</span><br><span class="line">        [<span class="number">26.4</span>,<span class="number">34.1</span>],</span><br><span class="line">        [<span class="number">33.5</span>,<span class="number">42.5</span>],</span><br><span class="line">        [<span class="number">34.4</span>,<span class="number">43.2</span>],</span><br><span class="line">        [<span class="number">39.4</span>,<span class="number">49.0</span>],</span><br><span class="line">        [<span class="number">45.2</span>,<span class="number">52.8</span>],</span><br><span class="line">        [<span class="number">55.4</span>,<span class="number">59.4</span>],</span><br><span class="line">        [<span class="number">60.9</span>,<span class="number">63.5</span>]]</span><br><span class="line"></span><br><span class="line">X = [x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">Y = [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line"></span><br><span class="line">r_value = pearsonr(X,Y)</span><br><span class="line">print(<span class="string">"Relation Coefficient : %s"</span>%r_value[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> pearsonr</span><br><span class="line"></span><br><span class="line">data = [[<span class="number">12.5</span>,<span class="number">21.2</span>],</span><br><span class="line">        [<span class="number">15.3</span>,<span class="number">23.9</span>],</span><br><span class="line">        [<span class="number">23.2</span>,<span class="number">32.9</span>],</span><br><span class="line">        [<span class="number">26.4</span>,<span class="number">34.1</span>],</span><br><span class="line">        [<span class="number">33.5</span>,<span class="number">42.5</span>],</span><br><span class="line">        [<span class="number">34.4</span>,<span class="number">43.2</span>],</span><br><span class="line">        [<span class="number">39.4</span>,<span class="number">49.0</span>],</span><br><span class="line">        [<span class="number">45.2</span>,<span class="number">52.8</span>],</span><br><span class="line">        [<span class="number">55.4</span>,<span class="number">59.4</span>],</span><br><span class="line">        [<span class="number">60.9</span>,<span class="number">63.5</span>]]</span><br><span class="line"></span><br><span class="line">X = [x[<span class="number">0</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line">Y = [x[<span class="number">1</span>] <span class="keyword">for</span> x <span class="keyword">in</span> data]</span><br><span class="line"></span><br><span class="line">r_value = pearsonr(X,Y)</span><br><span class="line">print(<span class="string">&quot;Relation Coefficient : %s&quot;</span>%r_value[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
 <p>Result<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Relation Coefficient : 0.9941983762371883</span><br></pre></td></tr></table></figure></p>
 <h3 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h3><ul>
 <li>特徵與特徵相關性很高的情況下，可在進行其處理<ul>
@@ -415,7 +446,7 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
 </li>
 <li>調用fit_transform</li>
 </ol>
-<h2 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"></span><br><span class="line">UnDD_data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>, <span class="number">10</span>, <span class="number">1800</span>, <span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">30</span>, <span class="number">7</span>, <span class="number">3500</span>, <span class="number">0.11</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">75</span>, <span class="number">8</span>, <span class="number">2700</span>, <span class="number">0.29</span>,<span class="number">1</span>],]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主成分分析進行特徵降維</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DecreaseDimension_PCA</span><span class="params">()</span>:</span></span><br><span class="line">    pca = PCA(n_components=<span class="number">0.95</span>)</span><br><span class="line">    DD_data = pca.fit_transform(UnDD_data)</span><br><span class="line">    print(DD_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    DecreaseDimension_PCA()</span><br></pre></td></tr></table></figure>
+<h2 id="Example-2"><a href="#Example-2" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"></span><br><span class="line">UnDD_data = [[<span class="number">90</span>,<span class="number">2</span>,<span class="number">1000</span>,<span class="number">0.8</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">120</span>,<span class="number">5</span>,<span class="number">2500</span>,<span class="number">0.75</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>,<span class="number">10</span>,<span class="number">1800</span>,<span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">45</span>, <span class="number">10</span>, <span class="number">1800</span>, <span class="number">0.38</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">30</span>, <span class="number">7</span>, <span class="number">3500</span>, <span class="number">0.11</span>,<span class="number">1</span>],</span><br><span class="line">             [<span class="number">75</span>, <span class="number">8</span>, <span class="number">2700</span>, <span class="number">0.29</span>,<span class="number">1</span>],]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 主成分分析進行特徵降維</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">DecreaseDimension_PCA</span>():</span></span><br><span class="line">    pca = PCA(n_components=<span class="number">0.95</span>)</span><br><span class="line">    DD_data = pca.fit_transform(UnDD_data)</span><br><span class="line">    print(DD_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    DecreaseDimension_PCA()</span><br></pre></td></tr></table></figure>
 <h3 id="降維結果"><a href="#降維結果" class="headerlink" title="降維結果"></a>降維結果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[[-1216.836117  ]</span><br><span class="line"> [  282.78600381]</span><br><span class="line"> [ -416.41490377]</span><br><span class="line"> [ -416.41490377]</span><br><span class="line"> [ 1283.6463807 ]</span><br><span class="line"> [  483.23354004]]</span><br></pre></td></tr></table></figure>
 <h2 id="重要屬性"><a href="#重要屬性" class="headerlink" title="重要屬性"></a>重要屬性</h2><h3 id="explainedvariance"><a href="#explainedvariance" class="headerlink" title="explainedvariance"></a>explained<em>variance</em></h3><p>查看降維後每個新特徵所帶的信息量大小(可解釋性方差的大小)</p>
 <ul>
@@ -466,17 +497,17 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵預處理/">特徵預處理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/降維/">降維</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/" rel="tag">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E9%A0%90%E8%99%95%E7%90%86/" rel="tag">特徵預處理</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%99%8D%E7%B6%AD/" rel="tag">降維</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -556,7 +587,7 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#特徵選擇-feature-selection"><span class="nav-number">2.</span> <span class="nav-text">特徵選擇(feature_selection)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主要方法"><span class="nav-number">2.1.</span> <span class="nav-text">主要方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VarianceThreshold-方差門檻"><span class="nav-number">2.2.</span> <span class="nav-text">VarianceThreshold(方差門檻)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VarianceThreshold-threshold-0-0"><span class="nav-number">2.2.1.</span> <span class="nav-text">VarianceThreshold(threshold = 0.0)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#流程"><span class="nav-number">2.2.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">2.2.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特徵篩選後"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">特徵篩選後</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">2.2.4.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特徵為二分類"><span class="nav-number">2.2.5.</span> <span class="nav-text">特徵為二分類</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#結論"><span class="nav-number">2.2.6.</span> <span class="nav-text">結論</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他特徵選擇方法"><span class="nav-number">2.3.</span> <span class="nav-text">其他特徵選擇方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相關係數"><span class="nav-number">2.4.</span> <span class="nav-text">相關係數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特點"><span class="nav-number">2.4.1.</span> <span class="nav-text">特點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">2.4.3.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips-1"><span class="nav-number">2.4.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主成分分析-PCA"><span class="nav-number">3.</span> <span class="nav-text">主成分分析(PCA)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#高維度數據的問題"><span class="nav-number">3.1.</span> <span class="nav-text">高維度數據的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重要參數"><span class="nav-number">3.2.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n-components-None"><span class="nav-number">3.2.1.</span> <span class="nav-text">n_components=None</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svd-solver"><span class="nav-number">3.2.2.</span> <span class="nav-text">svd_solver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.3.</span> <span class="nav-text">random_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">3.3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform"><span class="nav-number">3.3.2.</span> <span class="nav-text">inverse_transform</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程-1"><span class="nav-number">3.4.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-2"><span class="nav-number">3.5.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#降維結果"><span class="nav-number">3.5.1.</span> <span class="nav-text">降維結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重要屬性"><span class="nav-number">3.6.</span> <span class="nav-text">重要屬性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#explainedvariance"><span class="nav-number">3.6.1.</span> <span class="nav-text">explainedvariance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#explainedvariance-ratio"><span class="nav-number">3.6.2.</span> <span class="nav-text">explainedvariance_ratio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#components"><span class="nav-number">3.6.3.</span> <span class="nav-text">components_</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-2"><span class="nav-number">3.7.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%89%B9%E5%BE%B5%E9%81%B8%E6%93%87-feature-selection"><span class="nav-number">2.</span> <span class="nav-text">特徵選擇(feature_selection)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="nav-number">2.1.</span> <span class="nav-text">主要方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VarianceThreshold-%E6%96%B9%E5%B7%AE%E9%96%80%E6%AA%BB"><span class="nav-number">2.2.</span> <span class="nav-text">VarianceThreshold(方差門檻)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VarianceThreshold-threshold-0-0"><span class="nav-number">2.2.1.</span> <span class="nav-text">VarianceThreshold(threshold &#x3D; 0.0)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.2.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example"><span class="nav-number">2.2.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E5%BE%B5%E7%AF%A9%E9%81%B8%E5%BE%8C"><span class="nav-number">2.2.3.1.</span> <span class="nav-text">特徵篩選後</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips"><span class="nav-number">2.2.4.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%B5%E7%82%BA%E4%BA%8C%E5%88%86%E9%A1%9E"><span class="nav-number">2.2.5.</span> <span class="nav-text">特徵為二分類</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B5%90%E8%AB%96"><span class="nav-number">2.2.6.</span> <span class="nav-text">結論</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E7%89%B9%E5%BE%B5%E9%81%B8%E6%93%87%E6%96%B9%E6%B3%95"><span class="nav-number">2.3.</span> <span class="nav-text">其他特徵選擇方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%B8%E9%97%9C%E4%BF%82%E6%95%B8"><span class="nav-number">2.4.</span> <span class="nav-text">相關係數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E9%BB%9E"><span class="nav-number">2.4.1.</span> <span class="nav-text">特點</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-1"><span class="nav-number">2.4.2.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API"><span class="nav-number">2.4.3.</span> <span class="nav-text">API</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tips-1"><span class="nav-number">2.4.4.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90-PCA"><span class="nav-number">3.</span> <span class="nav-text">主成分分析(PCA)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%B6%AD%E5%BA%A6%E6%95%B8%E6%93%9A%E7%9A%84%E5%95%8F%E9%A1%8C"><span class="nav-number">3.1.</span> <span class="nav-text">高維度數據的問題</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%8F%83%E6%95%B8"><span class="nav-number">3.2.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#n-components-None"><span class="nav-number">3.2.1.</span> <span class="nav-text">n_components&#x3D;None</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#svd-solver"><span class="nav-number">3.2.2.</span> <span class="nav-text">svd_solver</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#random-state"><span class="nav-number">3.2.3.</span> <span class="nav-text">random_state</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform"><span class="nav-number">3.3.2.</span> <span class="nav-text">inverse_transform</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B-1"><span class="nav-number">3.4.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-2"><span class="nav-number">3.5.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%99%8D%E7%B6%AD%E7%B5%90%E6%9E%9C"><span class="nav-number">3.5.1.</span> <span class="nav-text">降維結果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%B1%AC%E6%80%A7"><span class="nav-number">3.6.</span> <span class="nav-text">重要屬性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#explainedvariance"><span class="nav-number">3.6.1.</span> <span class="nav-text">explainedvariance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#explainedvariance-ratio"><span class="nav-number">3.6.2.</span> <span class="nav-text">explainedvariance_ratio</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#components"><span class="nav-number">3.6.3.</span> <span class="nav-text">components_</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-2"><span class="nav-number">3.7.</span> <span class="nav-text">tips</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -610,6 +641,9 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -649,13 +683,23 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -682,7 +726,7 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -694,7 +738,7 @@ r = \frac{n\sum xy-\sum x \sum y }{\sqrt{n\sum x^2 - (\sum x )^2} \sqrt{n\sum y^
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

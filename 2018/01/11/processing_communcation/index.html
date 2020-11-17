@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python多進程">
+  <meta name="keywords" content="Python多進程" />
   
   
   
   
   <meta name="description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
-<meta name="keywords" content="Python,多進程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)">
 <meta property="og:url" content="http://www.taroballz.com/2018/01/11/processing_communcation/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-12-02T17:39:48.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-01-10T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-02T17:39:48.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="多進程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python模塊-進程間的通信(Queue,Pipe)與數據共享(Manager)">
-<meta name="twitter:description" content="Introduction: 進程之間互相獨立，預設為不能共享數據 透過multiprocess模塊中的Pipe及Queue實現不同進程之間的通信 Queue(隊列)： 先進來的先出去，後進來的後出去     透過Manager實現進程之間的數據共享">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +44,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -130,7 +157,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -155,7 +182,7 @@
 <h1 id="Notice"><a href="#Notice" class="headerlink" title="Notice:"></a>Notice:</h1><ul>
 <li>使用queue.Queue()調用的方法為線程隊列不適用於進程間的通信</li>
 </ul>
-<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue :"></a>Queue :</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Queue</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(q,name)</span>:</span>                        <span class="comment">#以參數的方式將對列物件以參數型式導入子進程          </span></span><br><span class="line">    q.put(<span class="string">'My Process_name is %s and put the data to the id %d queue'</span>%(name,id(q)))</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    q = Queue()              <span class="comment">#於主進程創建隊列物件</span></span><br><span class="line">    process_list=[]</span><br><span class="line">    print(<span class="string">"main queue id: %d"</span>%id(q))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        proc = Process(target=func,args=(q,<span class="string">'Process-%d'</span>%i))</span><br><span class="line">        process_list.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">    print(q.get())    <span class="comment">#往管道中取數據</span></span><br><span class="line">    print(q.get())</span><br><span class="line">    print(q.get())</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()</span><br></pre></td></tr></table></figure>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Queue"><a href="#Queue" class="headerlink" title="Queue :"></a>Queue :</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Queue</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">q,name</span>):</span>                        <span class="comment">#以參數的方式將對列物件以參數型式導入子進程          </span></span><br><span class="line">    q.put(<span class="string">&#x27;My Process_name is %s and put the data to the id %d queue&#x27;</span>%(name,<span class="built_in">id</span>(q)))</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    q = Queue()              <span class="comment">#於主進程創建隊列物件</span></span><br><span class="line">    process_list=[]</span><br><span class="line">    print(<span class="string">&quot;main queue id: %d&quot;</span>%<span class="built_in">id</span>(q))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        proc = Process(target=func,args=(q,<span class="string">&#x27;Process-%d&#x27;</span>%i))</span><br><span class="line">        process_list.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">    print(q.get())    <span class="comment">#往管道中取數據</span></span><br><span class="line">    print(q.get())</span><br><span class="line">    print(q.get())</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join() </span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>Queue()</code>參數可填入管道的長度<ul>
 <li><code>Queue(3)</code>表示創建能存三筆資料的管道物件</li>
@@ -169,35 +196,33 @@
 </ul>
 </li>
 </ul>
-<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main queue id: 52342000</span><br><span class="line">My Process_name is Process-1 and put the data to the id 64566512 queue</span><br><span class="line">My Process_name is Process-0 and put the data to the id 43398512 queue</span><br><span class="line">My Process_name is Process-2 and put the data to the id 61551856 queue</span><br></pre></td></tr></table></figure></p>
-<p>從上面執行結果可知道我們所創建的Queue物件似乎為一個copy的對象並指向不同RAM地址貌似不是對同一個隊列進行操作<br>但是從主進程<code>get()</code>的結果卻發現的確是對同一隊列的資料進行操作，<br>原因應為copy後的隊列內部進行了pickle的序列化及反序列化的操作</p>
+<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">main queue id: 52342000</span><br><span class="line">My Process_name is Process-1 and put the data to the id 64566512 queue</span><br><span class="line">My Process_name is Process-0 and put the data to the id 43398512 queue</span><br><span class="line">My Process_name is Process-2 and put the data to the id 61551856 queue</span><br></pre></td></tr></table></figure><br>從上面執行結果可知道我們所創建的Queue物件似乎為一個copy的對象並指向不同RAM地址貌似不是對同一個隊列進行操作<br>但是從主進程<code>get()</code>的結果卻發現的確是對同一隊列的資料進行操作，<br>原因應為copy後的隊列內部進行了pickle的序列化及反序列化的操作</p>
 <h3 id="判斷Queue是否為滿-full-或空-empty"><a href="#判斷Queue是否為滿-full-或空-empty" class="headerlink" title="判斷Queue是否為滿(full)或空(empty)"></a>判斷Queue是否為滿(full)或空(empty)</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Queue.full() <span class="comment">#判斷管道是否為滿</span></span><br><span class="line"></span><br><span class="line">Queue.empty() <span class="comment">#判斷管道是否為空</span></span><br></pre></td></tr></table></figure>
 <ul>
 <li>返回bool值</li>
 </ul>
-<h2 id="Pipe-類似socket通信"><a href="#Pipe-類似socket通信" class="headerlink" title="Pipe (類似socket通信)"></a>Pipe (類似socket通信)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Pipe</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(conn)</span>:</span></span><br><span class="line">    conn.send(<span class="string">"Hi I'm your subprocess. My ID is %d"</span>%os.getpid())</span><br><span class="line">    print(<span class="string">"ID %d receive main_process message: "</span>%os.getpid(),conn.recv())</span><br><span class="line">    conn.close()</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main_conn , sub_conn = Pipe()    <span class="comment">#使用Pipe()函數同時建立主進程及自進程兩個通信的物件</span></span><br><span class="line">    processlist=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=func,args=(sub_conn,))</span><br><span class="line">        processlist.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">        print(<span class="string">"I'm mainprocess, I receive my sub_process message: "</span>,main_conn.recv())</span><br><span class="line">        main_conn.send(<span class="string">"Remember I'm your Master"</span>)</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> processlist:</span><br><span class="line">        each_process.join()</span><br></pre></td></tr></table></figure>
-<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">I&apos;m mainprocess, I receive my sub_process message:  Hi I&apos;m your subprocess. My ID is 8424</span><br><span class="line">ID 8424 receive main_process message:  Remember I&apos;m your Master</span><br><span class="line">I&apos;m mainprocess, I receive my sub_process message:  Hi I&apos;m your subprocess. My ID is 13468</span><br><span class="line">ID 13468 receive main_process message:  Remember I&apos;m your Master</span><br></pre></td></tr></table></figure></p>
-<h2 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a>Manager</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Manager</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(dic,lis,n)</span>:</span>            <span class="comment">#對字典及列表進行操作</span></span><br><span class="line">    dic[<span class="string">"Process_%s"</span>%n] = <span class="string">"1"</span></span><br><span class="line">    dic[<span class="string">'2'</span>] = <span class="number">2</span></span><br><span class="line">    dic[<span class="number">0.25</span>] = <span class="literal">None</span></span><br><span class="line">    lis.append(n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    <span class="keyword">with</span> Manager() <span class="keyword">as</span> manager:       <span class="comment">#創建一個Manager()的物件</span></span><br><span class="line">        dic = manager.dict()         <span class="comment">#透過Manager()物件創建一個空字典 此字典進程之間可以共享</span></span><br><span class="line">        lis = manager.list(range(<span class="number">5</span>)) <span class="comment">#透過Manager()物件創建一個含0-5數字的列表 此列表進程之間可以共享</span></span><br><span class="line">        process_list = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">            proc = Process(target=func, args=(dic,lis,i))</span><br><span class="line">            proc.start()</span><br><span class="line">            process_list.append(proc)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">            each_process.join()</span><br><span class="line">        print(dic)</span><br><span class="line">        print(lis)</span><br></pre></td></tr></table></figure>
-<p>其結果為<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;0.25: None, &apos;Process_9&apos;: &apos;1&apos;, &apos;2&apos;: 2, &apos;Process_8&apos;: &apos;1&apos;, &apos;Process_4&apos;: &apos;1&apos;, &apos;Process_0&apos;: &apos;1&apos;, &apos;Process_7&apos;: &apos;1&apos;, &apos;Process_2&apos;: &apos;1&apos;, &apos;Process_6&apos;: &apos;1&apos;, &apos;Process_1&apos;: &apos;1&apos;, &apos;Process_3&apos;: &apos;1&apos;, &apos;Process_5&apos;: &apos;1&apos;&#125;</span><br><span class="line">[0, 1, 2, 3, 4, 0, 1, 2, 3, 6, 5, 4, 8, 7, 9]</span><br></pre></td></tr></table></figure></p>
-<p>我們可以發現使用Manager各個進程是對同一個列表及字典進行操作</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html" target="_blank" rel="noopener">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
+<h2 id="Pipe-類似socket通信"><a href="#Pipe-類似socket通信" class="headerlink" title="Pipe (類似socket通信)"></a>Pipe (類似socket通信)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Pipe</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">conn</span>):</span></span><br><span class="line">    conn.send(<span class="string">&quot;Hi I&#x27;m your subprocess. My ID is %d&quot;</span>%os.getpid())</span><br><span class="line">    print(<span class="string">&quot;ID %d receive main_process message: &quot;</span>%os.getpid(),conn.recv())</span><br><span class="line">    conn.close()</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main_conn , sub_conn = Pipe()    <span class="comment">#使用Pipe()函數同時建立主進程及自進程兩個通信的物件</span></span><br><span class="line">    processlist=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=func,args=(sub_conn,))</span><br><span class="line">        processlist.append(proc)</span><br><span class="line">        proc.start()</span><br><span class="line">        print(<span class="string">&quot;I&#x27;m mainprocess, I receive my sub_process message: &quot;</span>,main_conn.recv())</span><br><span class="line">        main_conn.send(<span class="string">&quot;Remember I&#x27;m your Master&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> processlist:</span><br><span class="line">        each_process.join()</span><br></pre></td></tr></table></figure>
+<p>其結果如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">I&#39;m mainprocess, I receive my sub_process message:  Hi I&#39;m your subprocess. My ID is 8424</span><br><span class="line">ID 8424 receive main_process message:  Remember I&#39;m your Master</span><br><span class="line">I&#39;m mainprocess, I receive my sub_process message:  Hi I&#39;m your subprocess. My ID is 13468</span><br><span class="line">ID 13468 receive main_process message:  Remember I&#39;m your Master</span><br></pre></td></tr></table></figure></p>
+<h2 id="Manager"><a href="#Manager" class="headerlink" title="Manager"></a>Manager</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process,Manager</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">dic,lis,n</span>):</span>            <span class="comment">#對字典及列表進行操作</span></span><br><span class="line">    dic[<span class="string">&quot;Process_%s&quot;</span>%n] = <span class="string">&quot;1&quot;</span></span><br><span class="line">    dic[<span class="string">&#x27;2&#x27;</span>] = <span class="number">2</span></span><br><span class="line">    dic[<span class="number">0.25</span>] = <span class="literal">None</span></span><br><span class="line">    lis.append(n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    <span class="keyword">with</span> Manager() <span class="keyword">as</span> manager:       <span class="comment">#創建一個Manager()的物件</span></span><br><span class="line">        dic = manager.<span class="built_in">dict</span>()         <span class="comment">#透過Manager()物件創建一個空字典 此字典進程之間可以共享</span></span><br><span class="line">        lis = manager.<span class="built_in">list</span>(<span class="built_in">range</span>(<span class="number">5</span>)) <span class="comment">#透過Manager()物件創建一個含0-5數字的列表 此列表進程之間可以共享</span></span><br><span class="line">        process_list = []</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">            proc = Process(target=func, args=(dic,lis,i))</span><br><span class="line">            proc.start()</span><br><span class="line">            process_list.append(proc)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">            each_process.join()</span><br><span class="line">        print(dic)</span><br><span class="line">        print(lis)</span><br></pre></td></tr></table></figure>
+<p>其結果為<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;0.25: None, &#39;Process_9&#39;: &#39;1&#39;, &#39;2&#39;: 2, &#39;Process_8&#39;: &#39;1&#39;, &#39;Process_4&#39;: &#39;1&#39;, &#39;Process_0&#39;: &#39;1&#39;, &#39;Process_7&#39;: &#39;1&#39;, &#39;Process_2&#39;: &#39;1&#39;, &#39;Process_6&#39;: &#39;1&#39;, &#39;Process_1&#39;: &#39;1&#39;, &#39;Process_3&#39;: &#39;1&#39;, &#39;Process_5&#39;: &#39;1&#39;&#125;</span><br><span class="line">[0, 1, 2, 3, 4, 0, 1, 2, 3, 6, 5, 4, 8, 7, 9]</span><br></pre></td></tr></table></figure><br>我們可以發現使用Manager各個進程是對同一個列表及字典進行操作</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多進程/">多進程</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E9%80%B2%E7%A8%8B/" rel="tag">多進程</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -277,7 +302,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">2.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">3.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue"><span class="nav-number">3.1.</span> <span class="nav-text">Queue :</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判斷Queue是否為滿-full-或空-empty"><span class="nav-number">3.1.1.</span> <span class="nav-text">判斷Queue是否為滿(full)或空(empty)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pipe-類似socket通信"><span class="nav-number">3.2.</span> <span class="nav-text">Pipe (類似socket通信)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Manager"><span class="nav-number">3.3.</span> <span class="nav-text">Manager</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference:</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">2.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">3.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Queue"><span class="nav-number">3.1.</span> <span class="nav-text">Queue :</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A4%E6%96%B7Queue%E6%98%AF%E5%90%A6%E7%82%BA%E6%BB%BF-full-%E6%88%96%E7%A9%BA-empty"><span class="nav-number">3.1.1.</span> <span class="nav-text">判斷Queue是否為滿(full)或空(empty)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Pipe-%E9%A1%9E%E4%BC%BCsocket%E9%80%9A%E4%BF%A1"><span class="nav-number">3.2.</span> <span class="nav-text">Pipe (類似socket通信)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Manager"><span class="nav-number">3.3.</span> <span class="nav-text">Manager</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">4.</span> <span class="nav-text">Reference:</span></a></li></ol>
     
     </div>
   </aside>
@@ -331,6 +356,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -370,13 +398,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -403,7 +441,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -415,7 +453,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

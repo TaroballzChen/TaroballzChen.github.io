@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-演算法-Naive Bayes Classifier | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)">
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)" />
   
   
   
   
   <meta name="description" content="Introductionnaive：假設特徵與特徵之間是相互獨立的較常用於文檔的分類，求出一個文本佔不同類別的概率多少，並找出最大的概率  例如在獲得一文檔時，文檔為科技類別的概率 使用sklearn.naive_bayes.MultinomialNB">
-<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-演算法-Naive Bayes Classifier">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/08/ML_Naive_Bayes_Classifier/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introductionnaive：假設特徵與特徵之間是相互獨立的較常用於文檔的分類，求出一個文本佔不同類別的概率多少，並找出最大的概率  例如在獲得一文檔時，文檔為科技類別的概率 使用sklearn.naive_bayes.MultinomialNB">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/oQhLcFd.jpg">
-<meta property="og:updated_time" content="2019-05-19T07:28:17.000Z">
+<meta property="article:published_time" content="2018-07-08T10:11:00.000Z">
+<meta property="article:modified_time" content="2019-05-19T07:28:17.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="演算法">
+<meta property="article:tag" content="機器學習(Machine Learning)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-演算法-Naive Bayes Classifier">
-<meta name="twitter:description" content="Introductionnaive：假設特徵與特徵之間是相互獨立的較常用於文檔的分類，求出一個文本佔不同類別的概率多少，並找出最大的概率  例如在獲得一文檔時，文檔為科技類別的概率 使用sklearn.naive_bayes.MultinomialNB">
 <meta name="twitter:image" content="https://i.imgur.com/oQhLcFd.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/oQhLcFd.jpg" rel="gallery_ck79gai0h008ls6q7x5ht4p7u">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/oQhLcFd.jpg" rel="gallery_ckhlqn4c9008uclzxdhem7hrc noopener">
         <img src="https://i.imgur.com/oQhLcFd.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -224,7 +253,7 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
 <li>為naive bayes的一種分類演算法</li>
 <li>alpha：為Laplace Smoothing係數(並非超參數，對結果不會有影響)</li>
 </ul>
-<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> MultinomialNB</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> fetch_20newsgroups</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">naive_bayes_test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 實例化數據集</span></span><br><span class="line">    news = fetch_20newsgroups(subset=<span class="string">"all"</span>)</span><br><span class="line">    x_train, x_test, y_train, y_test = train_test_split(news.data,news.target,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用tf-idf方法找出代表性的詞彙，並標與權重</span></span><br><span class="line">    tf = TfidfVectorizer()</span><br><span class="line">    x_train = tf.fit_transform(x_train)</span><br><span class="line">    x_test = tf.transform(x_test)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用naive bayes進行分類</span></span><br><span class="line">    mlt = MultinomialNB(alpha=<span class="number">1.0</span>)</span><br><span class="line">    mlt.fit(x_train,y_train)</span><br><span class="line">    y_predict = mlt.predict(x_test)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"預測的文章類別為：\n"</span>,y_predict)</span><br><span class="line">    print(<span class="string">"準確率："</span>,mlt.score(x_test,y_test))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    naive_bayes_test()</span><br></pre></td></tr></table></figure>
+<h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> MultinomialNB</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> fetch_20newsgroups</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">naive_bayes_test</span>():</span></span><br><span class="line">    <span class="comment"># 實例化數據集</span></span><br><span class="line">    news = fetch_20newsgroups(subset=<span class="string">&quot;all&quot;</span>)</span><br><span class="line">    x_train, x_test, y_train, y_test = train_test_split(news.data,news.target,test_size=<span class="number">0.25</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用tf-idf方法找出代表性的詞彙，並標與權重</span></span><br><span class="line">    tf = TfidfVectorizer()</span><br><span class="line">    x_train = tf.fit_transform(x_train)</span><br><span class="line">    x_test = tf.transform(x_test)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 使用naive bayes進行分類</span></span><br><span class="line">    mlt = MultinomialNB(alpha=<span class="number">1.0</span>)</span><br><span class="line">    mlt.fit(x_train,y_train)</span><br><span class="line">    y_predict = mlt.predict(x_test)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">&quot;預測的文章類別為：\n&quot;</span>,y_predict)</span><br><span class="line">    print(<span class="string">&quot;準確率：&quot;</span>,mlt.score(x_test,y_test))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    naive_bayes_test()</span><br></pre></td></tr></table></figure>
 <h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">預測的文章類別為：</span><br><span class="line"> [14  2  4 ... 10 14 14]</span><br><span class="line">準確率： 0.8582342954159593</span><br></pre></td></tr></table></figure>
 <h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ul>
 <li>訓練集的誤差大(詞彙並沒有精準的反應文章主題)，預測效果也會低落</li>
@@ -258,17 +287,17 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BC%94%E7%AE%97%E6%B3%95/" rel="tag">演算法</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -348,7 +377,7 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#概率"><span class="nav-number">1.1.</span> <span class="nav-text">概率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#聯合概率"><span class="nav-number">1.1.1.</span> <span class="nav-text">聯合概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#條件概率"><span class="nav-number">1.1.2.</span> <span class="nav-text">條件概率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bayes-Equation"><span class="nav-number">2.</span> <span class="nav-text">Bayes Equation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">2.1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#公式"><span class="nav-number">2.2.</span> <span class="nav-text">公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laplace-Smoothing"><span class="nav-number">2.3.</span> <span class="nav-text">Laplace Smoothing</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#naive-bayes-MultinomialNB-alpha-1-0"><span class="nav-number">3.</span> <span class="nav-text">naive_bayes.MultinomialNB(alpha=1.0)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">4.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">5.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#優缺點"><span class="nav-number">6.</span> <span class="nav-text">優缺點</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E7%8E%87"><span class="nav-number">1.1.</span> <span class="nav-text">概率</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%AF%E5%90%88%E6%A6%82%E7%8E%87"><span class="nav-number">1.1.1.</span> <span class="nav-text">聯合概率</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%9D%E4%BB%B6%E6%A6%82%E7%8E%87"><span class="nav-number">1.1.2.</span> <span class="nav-text">條件概率</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bayes-Equation"><span class="nav-number">2.</span> <span class="nav-text">Bayes Equation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Background"><span class="nav-number">2.1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AC%E5%BC%8F"><span class="nav-number">2.2.</span> <span class="nav-text">公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Laplace-Smoothing"><span class="nav-number">2.3.</span> <span class="nav-text">Laplace Smoothing</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#naive-bayes-MultinomialNB-alpha-1-0"><span class="nav-number">3.</span> <span class="nav-text">naive_bayes.MultinomialNB(alpha&#x3D;1.0)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">4.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">5.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%84%AA%E7%BC%BA%E9%BB%9E"><span class="nav-number">6.</span> <span class="nav-text">優缺點</span></a></li></ol>
     
     </div>
   </aside>
@@ -402,6 +431,9 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -441,13 +473,23 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -474,7 +516,7 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -486,7 +528,7 @@ P(F1|C) = \frac {Ni + \alpha} {N + \alpha m}</script><ul>
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

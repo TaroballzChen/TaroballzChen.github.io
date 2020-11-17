@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day24-錯誤處理 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang錯誤處理">
+  <meta name="keywords" content="2018Golang錯誤處理" />
   
   
   
   
-  <meta name="description" content="定義錯誤 errors.New(&amp;quot;錯誤碼&amp;quot;) : 生成一個錯誤類型的實例 12345678910111213package mainimport (	&quot;errors&quot;	&quot;fmt&quot;)//定義一個errNotFound的變量為error類型，並用errors.New產生實例var errNotFound error = errors.New(&quot;NotFoundError&quot;)func">
-<meta name="keywords" content="2018,Golang,錯誤處理">
+  <meta name="description" content="定義錯誤 errors.New(&quot;錯誤碼&quot;) : 生成一個錯誤類型的實例12345678910111213package mainimport (	&quot;errors&quot;	&quot;fmt&quot;)&#x2F;&#x2F;定義一個errNotFound的變量為error類型，並用errors.New產生實例var errNotFound error &#x3D; errors.New(&amp;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day24-錯誤處理">
 <meta property="og:url" content="http://www.taroballz.com/2018/05/08/Go_Error/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="定義錯誤 errors.New(&amp;quot;錯誤碼&amp;quot;) : 生成一個錯誤類型的實例 12345678910111213package mainimport (	&quot;errors&quot;	&quot;fmt&quot;)//定義一個errNotFound的變量為error類型，並用errors.New產生實例var errNotFound error = errors.New(&quot;NotFoundError&quot;)func">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:description" content="定義錯誤 errors.New(&quot;錯誤碼&quot;) : 生成一個錯誤類型的實例12345678910111213package mainimport (	&quot;errors&quot;	&quot;fmt&quot;)&#x2F;&#x2F;定義一個errNotFound的變量為error類型，並用errors.New產生實例var errNotFound error &#x3D; errors.New(&amp;">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/y40JAgF.jpg">
-<meta property="og:updated_time" content="2018-05-07T19:04:26.000Z">
+<meta property="article:published_time" content="2018-05-07T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-05-07T19:04:26.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="錯誤處理">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day24-錯誤處理">
-<meta name="twitter:description" content="定義錯誤 errors.New(&amp;quot;錯誤碼&amp;quot;) : 生成一個錯誤類型的實例 12345678910111213package mainimport (	&quot;errors&quot;	&quot;fmt&quot;)//定義一個errNotFound的變量為error類型，並用errors.New產生實例var errNotFound error = errors.New(&quot;NotFoundError&quot;)func">
 <meta name="twitter:image" content="https://i.imgur.com/y40JAgF.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +47,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +144,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/y40JAgF.jpg" rel="gallery_ck79gahyv0034s6q7k6mvwod8">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/y40JAgF.jpg" rel="gallery_ckhlqn48z0039clzx2fbr9kj0 noopener">
         <img src="https://i.imgur.com/y40JAgF.jpg" itemprop="image">
       </a>
     
@@ -153,38 +181,33 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="定義錯誤"><a href="#定義錯誤" class="headerlink" title="定義錯誤"></a>定義錯誤</h1><ul>
-<li><p><code>errors.New(&quot;錯誤碼&quot;)</code> : 生成一個錯誤類型的實例</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"errors"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義一個errNotFound的變量為error類型，並用errors.New產生實例</span></span><br><span class="line"><span class="keyword">var</span> errNotFound error = errors.New(<span class="string">"NotFoundError"</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Printf(<span class="string">"error : %v"</span>,errNotFound)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>在函數外定義錯誤，在函數內引用</p>
-</li>
+<li><code>errors.New(&quot;錯誤碼&quot;)</code> : 生成一個錯誤類型的實例<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;errors&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義一個errNotFound的變量為error類型，並用errors.New產生實例</span></span><br><span class="line"><span class="keyword">var</span> errNotFound error = errors.New(<span class="string">&quot;NotFoundError&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;error : %v&quot;</span>,errNotFound)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>在函數外定義錯誤，在函數內引用</li>
 </ul>
 <a id="more"></a>
 <hr>
 <h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><ul>
-<li><p><code>error</code>類型並<strong>不是結構體(struct)類別</strong>，而是<code>interface</code><br><a href="https://golang.org/pkg/builtin/#error" target="_blank" rel="noopener">https://golang.org/pkg/builtin/#error</a></p>
+<li><p><code>error</code>類型並<strong>不是結構體(struct)類別</strong>，而是<code>interface</code><br><a target="_blank" rel="noopener" href="https://golang.org/pkg/builtin/#error">https://golang.org/pkg/builtin/#error</a></p>
 </li>
 <li><p>只要實現<code>error</code>接口，我們也可自定義錯誤類型</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span>&#123;</span><br><span class="line">	Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>絕大多數情況下使用 <code>errors.New()</code> 就能滿足自定義錯的需求</p>
-</li>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> error <span class="keyword">interface</span>&#123;</span><br><span class="line">	Error() <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>絕大多數情況下使用 <code>errors.New()</code> 就能滿足自定義錯的需求</li>
 </ul>
 <hr>
 <h1 id="自定義錯誤類型-struct"><a href="#自定義錯誤類型-struct" class="headerlink" title="自定義錯誤類型(struct)"></a>自定義錯誤類型(struct)</h1><ul>
 <li>欲自定義錯誤類型並返回更多細節，可自定義錯誤類型的struct</li>
 <li>只要結構體實現了<code>Error()</code>這個方法就能實現<code>error</code>這個接口</li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義一個結構體紀錄錯誤細節的信息</span></span><br><span class="line"><span class="keyword">type</span> FileNotFoundError <span class="keyword">struct</span> &#123;</span><br><span class="line">	FileName <span class="keyword">string</span></span><br><span class="line">	Path <span class="keyword">string</span></span><br><span class="line">	Time <span class="keyword">string</span></span><br><span class="line">	operation <span class="keyword">string</span></span><br><span class="line">	message <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//FileNotFoundError這個結構體實現了Error()方法並返回string類型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *FileNotFoundError)</span><span class="title">Error</span><span class="params">()</span><span class="title">string</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">"FileNotFound:\n %s/%s\n Time:%s\n operation:%s\n Message:%s\n"</span>,</span><br><span class="line">		self.Path,</span><br><span class="line">		self.FileName,</span><br><span class="line">		self.Time,</span><br><span class="line">		self.operation,</span><br><span class="line">		self.message)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//請注意期返回值error為接口 而不是結構體</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadDoc</span> <span class="params">(filename <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	File,err :=  os.Open(filename)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> &amp;FileNotFoundError&#123;</span><br><span class="line">			FileName : filename,</span><br><span class="line">			Path : <span class="string">"somewhere"</span>,</span><br><span class="line">			Time : fmt.Sprintf(<span class="string">"%v"</span>,time.Now()),</span><br><span class="line">			operation : <span class="string">"Read"</span>,</span><br><span class="line">			message : err.Error(),</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> File.Close()</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(ReadDoc(<span class="string">"fasdfsdf.txt"</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FileNotFound:</span><br><span class="line"> somewhere/fasdfsdf.txt</span><br><span class="line"> Time:2018-05-08 01:51:52.93837283 +0800 CST m=+0.000345825</span><br><span class="line"> operation:Read</span><br><span class="line"> Message:open fasdfsdf.txt: no such file or directory</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;os&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定義一個結構體紀錄錯誤細節的信息</span></span><br><span class="line"><span class="keyword">type</span> FileNotFoundError <span class="keyword">struct</span> &#123;</span><br><span class="line">	FileName <span class="keyword">string</span></span><br><span class="line">	Path <span class="keyword">string</span></span><br><span class="line">	Time <span class="keyword">string</span></span><br><span class="line">	operation <span class="keyword">string</span></span><br><span class="line">	message <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//FileNotFoundError這個結構體實現了Error()方法並返回string類型</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(self *FileNotFoundError)</span><span class="title">Error</span><span class="params">()</span><span class="title">string</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> fmt.Sprintf(<span class="string">&quot;FileNotFound:\n %s/%s\n Time:%s\n operation:%s\n Message:%s\n&quot;</span>,</span><br><span class="line">		self.Path,</span><br><span class="line">		self.FileName,</span><br><span class="line">		self.Time,</span><br><span class="line">		self.operation,</span><br><span class="line">		self.message)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//請注意期返回值error為接口 而不是結構體</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ReadDoc</span> <span class="params">(filename <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	File,err :=  os.Open(filename)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> &amp;FileNotFoundError&#123;</span><br><span class="line">			FileName : filename,</span><br><span class="line">			Path : <span class="string">&quot;somewhere&quot;</span>,</span><br><span class="line">			Time : fmt.Sprintf(<span class="string">&quot;%v&quot;</span>,time.Now()),</span><br><span class="line">			operation : <span class="string">&quot;Read&quot;</span>,</span><br><span class="line">			message : err.Error(),</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> File.Close()</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(ReadDoc(<span class="string">&quot;fasdfsdf.txt&quot;</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FileNotFound:</span><br><span class="line"> somewhere&#x2F;fasdfsdf.txt</span><br><span class="line"> Time:2018-05-08 01:51:52.93837283 +0800 CST m&#x3D;+0.000345825</span><br><span class="line"> operation:Read</span><br><span class="line"> Message:open fasdfsdf.txt: no such file or directory</span><br></pre></td></tr></table></figure>
 <hr>
 <h1 id="判斷錯誤屬於何種類型"><a href="#判斷錯誤屬於何種類型" class="headerlink" title="判斷錯誤屬於何種類型"></a>判斷錯誤屬於何種類型</h1><ul>
 <li>判斷錯誤是否為自定義的錯誤類型</li>
 <li>可使用<strong>類型斷言</strong>來判斷，因為<code>error</code>類型為<code>interface</code></li>
 </ul>
-<h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	err := ReadDoc(<span class="string">"adfsdfsfd.txt"</span>)</span><br><span class="line">	_, ok := err.(*FileNotFoundError)</span><br><span class="line">	<span class="keyword">if</span> ok &#123;</span><br><span class="line">		fmt.Println(<span class="string">"It's FileNotFoundError Type"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">It&apos;s FileNotFoundError Type</span><br></pre></td></tr></table></figure>
-<h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 使用switch搭配.type使用類型斷言判斷</span></span><br><span class="line">	<span class="keyword">switch</span> ReadDoc(<span class="string">"fasdfsdf.txt"</span>).(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> *FileNotFoundError:</span><br><span class="line">		fmt.Println(v, <span class="string">"is type FileNotFoundError type"</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">"Default"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="example-1"><a href="#example-1" class="headerlink" title="example 1"></a>example 1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	err := ReadDoc(<span class="string">&quot;adfsdfsfd.txt&quot;</span>)</span><br><span class="line">	_, ok := err.(*FileNotFoundError)</span><br><span class="line">	<span class="keyword">if</span> ok &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;It&#x27;s FileNotFoundError Type&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">It&#39;s FileNotFoundError Type</span><br></pre></td></tr></table></figure>
+<h2 id="example-2"><a href="#example-2" class="headerlink" title="example 2"></a>example 2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 使用switch搭配.type使用類型斷言判斷</span></span><br><span class="line">	<span class="keyword">switch</span> ReadDoc(<span class="string">&quot;fasdfsdf.txt&quot;</span>).(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> *FileNotFoundError:</span><br><span class="line">		fmt.Println(v, <span class="string">&quot;is type FileNotFoundError type&quot;</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">&quot;Default&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">is type FileNotFoundError type</span><br></pre></td></tr></table></figure>
 <h2 id="tips-1"><a href="#tips-1" class="headerlink" title="tips"></a>tips</h2><ul>
 <li>實際業務開發中使用<code>errors.New()</code>方法還是比較多</li>
@@ -203,13 +226,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/錯誤處理/">錯誤處理</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86/" rel="tag">錯誤處理</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -289,7 +312,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#定義錯誤"><span class="nav-number">1.</span> <span class="nav-text">定義錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">1.1.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定義錯誤類型-struct"><span class="nav-number">2.</span> <span class="nav-text">自定義錯誤類型(struct)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#判斷錯誤屬於何種類型"><span class="nav-number">3.</span> <span class="nav-text">判斷錯誤屬於何種類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">3.3.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#panic-amp-recover"><span class="nav-number">4.</span> <span class="nav-text">panic &amp; recover</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9A%E7%BE%A9%E9%8C%AF%E8%AA%A4"><span class="nav-number">1.</span> <span class="nav-text">定義錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">1.1.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E7%BE%A9%E9%8C%AF%E8%AA%A4%E9%A1%9E%E5%9E%8B-struct"><span class="nav-number">2.</span> <span class="nav-text">自定義錯誤類型(struct)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%88%A4%E6%96%B7%E9%8C%AF%E8%AA%A4%E5%B1%AC%E6%96%BC%E4%BD%95%E7%A8%AE%E9%A1%9E%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">判斷錯誤屬於何種類型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#example-1"><span class="nav-number">3.1.</span> <span class="nav-text">example 1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#example-2"><span class="nav-number">3.2.</span> <span class="nav-text">example 2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips-1"><span class="nav-number">3.3.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#panic-amp-recover"><span class="nav-number">4.</span> <span class="nav-text">panic &amp; recover</span></a></li></ol>
     
     </div>
   </aside>
@@ -343,6 +366,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -382,13 +408,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -415,7 +451,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -427,7 +463,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

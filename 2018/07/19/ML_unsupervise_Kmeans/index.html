@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-非監督學習- K-means | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)">
+  <meta name="keywords" content="Python2018演算法機器學習(Machine Learning)" />
   
   
   
   
   <meta name="description" content="Introduction 非監督學習：dataset只有特徵值，沒有真實標籤(目標值) PCA降維算是無監督學習的一種   把具有相近特徵的數據歸為一個類別，稱為聚類(物以類聚，人以群分) 聚類演算法又叫做無監督分類 聚類通常在分類之前進行，才進行分類(預測類別) 聚類演算法又稱為無監督分類 可用於降維(decomposistion) 可用於矢量量化(vector quantization) 將高">
-<meta name="keywords" content="Python,2018,演算法,機器學習(Machine Learning)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-非監督學習- K-means">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/19/ML_unsupervise_Kmeans/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 非監督學習：dataset只有特徵值，沒有真實標籤(目標值) PCA降維算是無監督學習的一種   把具有相近特徵的數據歸為一個類別，稱為聚類(物以類聚，人以群分) 聚類演算法又叫做無監督分類 聚類通常在分類之前進行，才進行分類(預測類別) 聚類演算法又稱為無監督分類 可用於降維(decomposistion) 可用於矢量量化(vector quantization) 將高">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/hNXuhHR.jpg">
-<meta property="og:updated_time" content="2019-07-22T14:42:55.000Z">
+<meta property="article:published_time" content="2018-07-18T17:50:00.000Z">
+<meta property="article:modified_time" content="2019-07-22T14:42:55.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="演算法">
+<meta property="article:tag" content="機器學習(Machine Learning)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-非監督學習- K-means">
-<meta name="twitter:description" content="Introduction 非監督學習：dataset只有特徵值，沒有真實標籤(目標值) PCA降維算是無監督學習的一種   把具有相近特徵的數據歸為一個類別，稱為聚類(物以類聚，人以群分) 聚類演算法又叫做無監督分類 聚類通常在分類之前進行，才進行分類(預測類別) 聚類演算法又稱為無監督分類 可用於降維(decomposistion) 可用於矢量量化(vector quantization) 將高">
 <meta name="twitter:image" content="https://i.imgur.com/hNXuhHR.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/hNXuhHR.jpg" rel="gallery_ck79gai1000abs6q7tczdt1hy">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/hNXuhHR.jpg" rel="gallery_ckhlqn4d900alclzxffsj0s2q noopener">
         <img src="https://i.imgur.com/hNXuhHR.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -232,7 +261,7 @@
 </li>
 </ul>
 <hr>
-<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">X = load_iris().data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cluster</span><span class="params">()</span>:</span></span><br><span class="line">    KM = KMeans(n_clusters=<span class="number">3</span>)</span><br><span class="line">    KM.fit(X)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 回傳標記的結果</span></span><br><span class="line">    predict_y = KM.predict(X)</span><br><span class="line">    print(predict_y)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 多少n_clusters就使用多少顏色標記</span></span><br><span class="line">    color_list = [<span class="string">"red"</span>,<span class="string">"blue"</span>,<span class="string">"green"</span>]</span><br><span class="line">    point_color = [color_list[i] <span class="keyword">for</span> i <span class="keyword">in</span> predict_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    fig = plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">    ax = Axes3D(fig, rect=[<span class="number">0</span>, <span class="number">0</span>, <span class="number">.95</span>, <span class="number">1</span>], elev=<span class="number">48</span>, azim=<span class="number">134</span>)</span><br><span class="line">    ax.scatter(X[:,<span class="number">3</span>],X[:,<span class="number">0</span>],X[:,<span class="number">2</span>],color=point_color,edgecolor=<span class="string">"k"</span>,s=<span class="number">100</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 去除scale</span></span><br><span class="line">    ax.w_xaxis.set_ticklabels([])</span><br><span class="line">    ax.w_yaxis.set_ticklabels([])</span><br><span class="line">    ax.w_zaxis.set_ticklabels([])</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#設置不同軸的label</span></span><br><span class="line">    ax.set_xlabel(<span class="string">'Petal width'</span>)</span><br><span class="line">    ax.set_ylabel(<span class="string">'Sepal length'</span>)</span><br><span class="line">    ax.set_zlabel(<span class="string">'Petal length'</span>)</span><br><span class="line">    ax.dist = <span class="number">12</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> name, label <span class="keyword">in</span> [(<span class="string">'Setosa'</span>, <span class="number">0</span>),</span><br><span class="line">                        (<span class="string">'Versicolour'</span>, <span class="number">1</span>),</span><br><span class="line">                        (<span class="string">'Virginica'</span>, <span class="number">2</span>)]:</span><br><span class="line">        ax.text3D(X[predict_y == label, <span class="number">3</span>].mean(),</span><br><span class="line">                  X[predict_y == label, <span class="number">0</span>].mean(),</span><br><span class="line">                  X[predict_y == label, <span class="number">2</span>].mean() + <span class="number">2</span>, name,</span><br><span class="line">                  horizontalalignment=<span class="string">'center'</span>,</span><br><span class="line">                  bbox=dict(alpha=<span class="number">.2</span>, edgecolor=<span class="string">'w'</span>, facecolor=<span class="string">'w'</span>))</span><br><span class="line"></span><br><span class="line">    fig.show()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cluster()</span><br></pre></td></tr></table></figure>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">X = load_iris().data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cluster</span>():</span></span><br><span class="line">    KM = KMeans(n_clusters=<span class="number">3</span>)</span><br><span class="line">    KM.fit(X)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 回傳標記的結果</span></span><br><span class="line">    predict_y = KM.predict(X)</span><br><span class="line">    print(predict_y)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 多少n_clusters就使用多少顏色標記</span></span><br><span class="line">    color_list = [<span class="string">&quot;red&quot;</span>,<span class="string">&quot;blue&quot;</span>,<span class="string">&quot;green&quot;</span>]</span><br><span class="line">    point_color = [color_list[i] <span class="keyword">for</span> i <span class="keyword">in</span> predict_y]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    fig = plt.figure(figsize=(<span class="number">10</span>,<span class="number">10</span>))</span><br><span class="line">    ax = Axes3D(fig, rect=[<span class="number">0</span>, <span class="number">0</span>, <span class="number">.95</span>, <span class="number">1</span>], elev=<span class="number">48</span>, azim=<span class="number">134</span>)</span><br><span class="line">    ax.scatter(X[:,<span class="number">3</span>],X[:,<span class="number">0</span>],X[:,<span class="number">2</span>],color=point_color,edgecolor=<span class="string">&quot;k&quot;</span>,s=<span class="number">100</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 去除scale</span></span><br><span class="line">    ax.w_xaxis.set_ticklabels([])</span><br><span class="line">    ax.w_yaxis.set_ticklabels([])</span><br><span class="line">    ax.w_zaxis.set_ticklabels([])</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#設置不同軸的label</span></span><br><span class="line">    ax.set_xlabel(<span class="string">&#x27;Petal width&#x27;</span>)</span><br><span class="line">    ax.set_ylabel(<span class="string">&#x27;Sepal length&#x27;</span>)</span><br><span class="line">    ax.set_zlabel(<span class="string">&#x27;Petal length&#x27;</span>)</span><br><span class="line">    ax.dist = <span class="number">12</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> name, label <span class="keyword">in</span> [(<span class="string">&#x27;Setosa&#x27;</span>, <span class="number">0</span>),</span><br><span class="line">                        (<span class="string">&#x27;Versicolour&#x27;</span>, <span class="number">1</span>),</span><br><span class="line">                        (<span class="string">&#x27;Virginica&#x27;</span>, <span class="number">2</span>)]:</span><br><span class="line">        ax.text3D(X[predict_y == label, <span class="number">3</span>].mean(),</span><br><span class="line">                  X[predict_y == label, <span class="number">0</span>].mean(),</span><br><span class="line">                  X[predict_y == label, <span class="number">2</span>].mean() + <span class="number">2</span>, name,</span><br><span class="line">                  horizontalalignment=<span class="string">&#x27;center&#x27;</span>,</span><br><span class="line">                  bbox=<span class="built_in">dict</span>(alpha=<span class="number">.2</span>, edgecolor=<span class="string">&#x27;w&#x27;</span>, facecolor=<span class="string">&#x27;w&#x27;</span>))</span><br><span class="line"></span><br><span class="line">    fig.show()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    cluster()</span><br></pre></td></tr></table></figure>
 <h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line"> 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span><br><span class="line"> 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 2 2 2 2 1 2 2 2 2</span><br><span class="line"> 2 2 1 1 2 2 2 2 1 2 1 2 1 2 2 1 1 2 2 2 2 2 1 2 2 2 2 1 2 2 2 1 2 2 2 1 2</span><br><span class="line"> 2 1]</span><br></pre></td></tr></table></figure>
 <p><img src="https://i.imgur.com/Gq25r8P.png" alt="result"></p>
 <hr>
@@ -272,8 +301,8 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
 <li>labels: 被聚類標記的目標值</li>
 </ul>
 <hr>
-<h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"></span><br><span class="line">X = load_iris().data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cluster</span><span class="params">()</span>:</span></span><br><span class="line">    KM = KMeans(n_clusters=<span class="number">3</span>)</span><br><span class="line">    KM.fit(X)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 回傳標記的結果</span></span><br><span class="line">    predict_y = KM.predict(X)</span><br><span class="line">    print(predict_y)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 輪廓係數計算</span></span><br><span class="line">    score = silhouette_score(X,predict_y)</span><br><span class="line">    print(<span class="string">"score = "</span>,score)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    cluster()</span><br></pre></td></tr></table></figure>
-<h4 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line"> 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span><br><span class="line"> 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 2 2 2 2 1 2 2 2 2</span><br><span class="line"> 2 2 1 1 2 2 2 2 1 2 1 2 1 2 2 1 1 2 2 2 2 2 1 2 2 2 2 1 2 2 2 1 2 2 2 1 2</span><br><span class="line"> 2 1]</span><br><span class="line">score =  0.5525919445213676</span><br></pre></td></tr></table></figure>
+<h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> silhouette_score</span><br><span class="line"></span><br><span class="line">X = load_iris().data</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cluster</span>():</span></span><br><span class="line">    KM = KMeans(n_clusters=<span class="number">3</span>)</span><br><span class="line">    KM.fit(X)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 回傳標記的結果</span></span><br><span class="line">    predict_y = KM.predict(X)</span><br><span class="line">    print(predict_y)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 輪廓係數計算</span></span><br><span class="line">    score = silhouette_score(X,predict_y)</span><br><span class="line">    print(<span class="string">&quot;score = &quot;</span>,score)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    cluster()</span><br></pre></td></tr></table></figure>
+<h4 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span><br><span class="line"> 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1</span><br><span class="line"> 1 1 1 2 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 2 1 2 2 2 2 1 2 2 2 2</span><br><span class="line"> 2 2 1 1 2 2 2 2 1 2 1 2 1 2 2 1 1 2 2 2 2 2 1 2 2 2 2 1 2 2 2 1 2 2 2 1 2</span><br><span class="line"> 2 1]</span><br><span class="line">score &#x3D;  0.5525919445213676</span><br></pre></td></tr></table></figure>
 <hr>
 <h4 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h4><p>在不知道類別數目(n_clusters)的情況下，<br>可使用silhouette_score評估，並把n_clusters作為超參數，<br>進行多次驗證查看哪個輪廓係數最高</p>
 <hr>
@@ -285,17 +314,17 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/演算法/">演算法</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%BC%94%E7%AE%97%E6%B3%95/" rel="tag">演算法</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -375,7 +404,7 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#流程"><span class="nav-number">2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn中的聚類演算法"><span class="nav-number">3.</span> <span class="nav-text">sklearn中的聚類演算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn中k-means-API"><span class="nav-number">4.</span> <span class="nav-text">sklearn中k-means API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KMeans-n-cluster-8-init-’k-means-’"><span class="nav-number">4.1.</span> <span class="nav-text">KMeans(n_cluster=8, init=’k-means++’)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">4.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kmeans性能評估標準"><span class="nav-number">5.</span> <span class="nav-text">Kmeans性能評估標準</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#輪廓係數"><span class="nav-number">5.1.</span> <span class="nav-text">輪廓係數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kmeans性能評估指標API"><span class="nav-number">5.2.</span> <span class="nav-text">Kmeans性能評估指標API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#silhouette-score-X-labels"><span class="nav-number">5.2.1.</span> <span class="nav-text">silhouette_score(X, labels)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Result-1"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">Result</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tips"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特點分析"><span class="nav-number">6.1.</span> <span class="nav-text">特點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缺點"><span class="nav-number">6.2.</span> <span class="nav-text">缺點</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn%E4%B8%AD%E7%9A%84%E8%81%9A%E9%A1%9E%E6%BC%94%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">sklearn中的聚類演算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#sklearn%E4%B8%ADk-means-API"><span class="nav-number">4.</span> <span class="nav-text">sklearn中k-means API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#KMeans-n-cluster-8-init-%E2%80%99k-means-%E2%80%99"><span class="nav-number">4.1.</span> <span class="nav-text">KMeans(n_cluster&#x3D;8, init&#x3D;’k-means++’)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">4.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">4.2.1.</span> <span class="nav-text">Result</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kmeans%E6%80%A7%E8%83%BD%E8%A9%95%E4%BC%B0%E6%A8%99%E6%BA%96"><span class="nav-number">5.</span> <span class="nav-text">Kmeans性能評估標準</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BC%AA%E5%BB%93%E4%BF%82%E6%95%B8"><span class="nav-number">5.1.</span> <span class="nav-text">輪廓係數</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kmeans%E6%80%A7%E8%83%BD%E8%A9%95%E4%BC%B0%E6%8C%87%E6%A8%99API"><span class="nav-number">5.2.</span> <span class="nav-text">Kmeans性能評估指標API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#silhouette-score-X-labels"><span class="nav-number">5.2.1.</span> <span class="nav-text">silhouette_score(X, labels)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Example-1"><span class="nav-number">5.2.2.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Result-1"><span class="nav-number">5.2.2.1.</span> <span class="nav-text">Result</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#tips"><span class="nav-number">5.2.2.2.</span> <span class="nav-text">tips</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">6.</span> <span class="nav-text">總結</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%B9%E9%BB%9E%E5%88%86%E6%9E%90"><span class="nav-number">6.1.</span> <span class="nav-text">特點分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%BA%E9%BB%9E"><span class="nav-number">6.2.</span> <span class="nav-text">缺點</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -429,6 +458,9 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -468,13 +500,23 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -501,7 +543,7 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -513,7 +555,7 @@ sc_i = \frac {b_i-a_i}{max(b_i,a_i)}</script><ul>
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

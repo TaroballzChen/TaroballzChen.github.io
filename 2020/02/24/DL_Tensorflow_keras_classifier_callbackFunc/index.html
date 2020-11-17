@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+<head>
+  <meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Tensorflow2-tensorflow-keras-回調函數 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2020">
+  <meta name="keywords" content="Pythontensorflow深度學習(Deep Learning)2020" />
   
   
   
   
   <meta name="description" content="Introduction 回調函數的API類位於tf.keras.callbacks類中 通常在模型訓練的過程中，常常會額外作一些非模型訓練的事情  EarlyStopping:應用在當訓練模型的過程中，如果loss值不再下降，便可提前停止訓練  keras.callbacks.EarlyStopping(monitor, min_delta) monitor:指定要關注的指標之值，一般情況都是關">
-<meta name="keywords" content="Python,tensorflow,深度學習(Deep Learning),2020">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tensorflow2-tensorflow-keras-回調函數">
 <meta property="og:url" content="http://www.taroballz.com/2020/02/24/DL_Tensorflow_keras_classifier_callbackFunc/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 回調函數的API類位於tf.keras.callbacks類中 通常在模型訓練的過程中，常常會額外作一些非模型訓練的事情  EarlyStopping:應用在當訓練模型的過程中，如果loss值不再下降，便可提前停止訓練  keras.callbacks.EarlyStopping(monitor, min_delta) monitor:指定要關注的指標之值，一般情況都是關">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/d2KShHv.jpg">
-<meta property="og:updated_time" content="2020-02-24T15:16:25.000Z">
+<meta property="article:published_time" content="2020-02-24T14:54:00.000Z">
+<meta property="article:modified_time" content="2020-02-24T15:16:22.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="tensorflow">
+<meta property="article:tag" content="深度學習(Deep Learning)">
+<meta property="article:tag" content="2020">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tensorflow2-tensorflow-keras-回調函數">
-<meta name="twitter:description" content="Introduction 回調函數的API類位於tf.keras.callbacks類中 通常在模型訓練的過程中，常常會額外作一些非模型訓練的事情  EarlyStopping:應用在當訓練模型的過程中，如果loss值不再下降，便可提前停止訓練  keras.callbacks.EarlyStopping(monitor, min_delta) monitor:指定要關注的指標之值，一般情況都是關">
 <meta name="twitter:image" content="https://i.imgur.com/d2KShHv.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/d2KShHv.jpg" rel="gallery_ck79gahy4000rs6q7mdri8o4v">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/d2KShHv.jpg" rel="gallery_ckhlqn46z000rclzxhjoi8zz2 noopener">
         <img src="https://i.imgur.com/d2KShHv.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -179,7 +208,7 @@
 <li>其須指定<code>logdir</code>位置為一資料夾</li>
 </ul>
 </li>
-<li>其他回調函數皆收錄於 <a href="https://www.tensorflow.org/api_docs/python/tf/keras/callbacks" target="_blank" rel="noopener">https://www.tensorflow.org/api_docs/python/tf/keras/callbacks</a> 中</li>
+<li>其他回調函數皆收錄於 <a target="_blank" rel="noopener" href="https://www.tensorflow.org/api_docs/python/tf/keras/callbacks">https://www.tensorflow.org/api_docs/python/tf/keras/callbacks</a> 中</li>
 </ul>
 </li>
 </ul>
@@ -189,11 +218,11 @@
 <li>通常會定義一個<code>callbacks</code>的列表，再將其作為參數傳入到模型<code>fit</code>的參數中</li>
 </ul>
 <h1 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h1><p><script src="https://libs.baidu.com/jquery/2.0.0/jquery.js"></script><br>
-<iframe id="ipynb" marginheight="0" frameborder="0" width="924px" srcdoc="<!DOCTYPE html>
+<iframe id='ipynb'   marginheight="0" frameborder="0" width='924px' srcdoc="<!DOCTYPE html>
 <html>
 <head><meta charset='utf-8' />
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><title>tf_keras_classification_model-callbacks</title>
+<title>tf_keras_classification_model-callbacks</title>
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'></script>
@@ -13138,8 +13167,13 @@ ul.typeahead-list  > li > a.pull-right {
 /*# sourceMappingURL=style.min.css.map */
     </style>
 <style type='text/css'>
-    .highlight .hll { background-color: #ffffcc }
-.highlight  { background: #f8f8f8; }
+    pre { line-height: 125%; margin: 0; }
+td.linenos pre { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #000000; background-color: #f0f0f0; padding-left: 5px; padding-right: 5px; }
+td.linenos pre.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
 .highlight .c { color: #408080; font-style: italic } /* Comment */
 .highlight .err { border: 1px solid #FF0000 } /* Error */
 .highlight .k { color: #008000; font-weight: bold } /* Keyword */
@@ -13208,45 +13242,6 @@ ul.typeahead-list  > li > a.pull-right {
 .highlight .vm { color: #19177C } /* Name.Variable.Magic */
 .highlight .il { color: #666666 } /* Literal.Number.Integer.Long */
     </style>
-<style type='text/css'>
-    
-/* Temporary definitions which will become obsolete with Notebook release 5.0 */
-.ansi-black-fg { color: #3E424D; }
-.ansi-black-bg { background-color: #3E424D; }
-.ansi-black-intense-fg { color: #282C36; }
-.ansi-black-intense-bg { background-color: #282C36; }
-.ansi-red-fg { color: #E75C58; }
-.ansi-red-bg { background-color: #E75C58; }
-.ansi-red-intense-fg { color: #B22B31; }
-.ansi-red-intense-bg { background-color: #B22B31; }
-.ansi-green-fg { color: #00A250; }
-.ansi-green-bg { background-color: #00A250; }
-.ansi-green-intense-fg { color: #007427; }
-.ansi-green-intense-bg { background-color: #007427; }
-.ansi-yellow-fg { color: #DDB62B; }
-.ansi-yellow-bg { background-color: #DDB62B; }
-.ansi-yellow-intense-fg { color: #B27D12; }
-.ansi-yellow-intense-bg { background-color: #B27D12; }
-.ansi-blue-fg { color: #208FFB; }
-.ansi-blue-bg { background-color: #208FFB; }
-.ansi-blue-intense-fg { color: #0065CA; }
-.ansi-blue-intense-bg { background-color: #0065CA; }
-.ansi-magenta-fg { color: #D160C4; }
-.ansi-magenta-bg { background-color: #D160C4; }
-.ansi-magenta-intense-fg { color: #A03196; }
-.ansi-magenta-intense-bg { background-color: #A03196; }
-.ansi-cyan-fg { color: #60C6C8; }
-.ansi-cyan-bg { background-color: #60C6C8; }
-.ansi-cyan-intense-fg { color: #258F8F; }
-.ansi-cyan-intense-bg { background-color: #258F8F; }
-.ansi-white-fg { color: #C5C1B4; }
-.ansi-white-bg { background-color: #C5C1B4; }
-.ansi-white-intense-fg { color: #A1A6B2; }
-.ansi-white-intense-bg { background-color: #A1A6B2; }
-
-.ansi-bold { font-weight: bold; }
-
-    </style>
 
 
 <style type='text/css'>
@@ -13299,9 +13294,9 @@ div#notebook {
         }
     });
     </script>
-    <!-- End of mathjax configuration --><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+    <!-- End of mathjax configuration --></head>
 <body>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div tabindex='-1' id='notebook' class='border-box-sizing'>
+  <div tabindex='-1' id='notebook' class='border-box-sizing'>
     <div class='container' id='notebook-container'>
 
 <div class='cell border-box-sizing code_cell rendered'>
@@ -13311,7 +13306,7 @@ div#notebook {
     <div class='input_area'>
 <div class=' highlight hl-ipython3'><pre><span></span><span class='kn'>import</span> <span class='nn'>matplotlib</span> <span class='k'>as</span> <span class='nn'>mpl</span>
 <span class='kn'>import</span> <span class='nn'>matplotlib.pyplot</span> <span class='k'>as</span> <span class='nn'>plt</span>
-<span class='o'>%</span><span class='k'>matplotlib</span> inline
+<span class='o'>%</span><span class='n'>matplotlib</span> <span class='n'>inline</span>
 
 <span class='kn'>import</span> <span class='nn'>numpy</span> <span class='k'>as</span> <span class='nn'>np</span>
 <span class='kn'>import</span> <span class='nn'>sklearn</span>
@@ -13319,7 +13314,7 @@ div#notebook {
 <span class='kn'>import</span> <span class='nn'>os</span><span class='o'>,</span><span class='nn'>sys</span><span class='o'>,</span><span class='nn'>time</span>
 <span class='kn'>import</span> <span class='nn'>tensorflow</span> <span class='k'>as</span> <span class='nn'>tf</span>
 
-<span class='kn'>from</span> <span class='nn'>tensorflow</span> <span class='k'>import</span> <span class='n'>keras</span>
+<span class='kn'>from</span> <span class='nn'>tensorflow</span> <span class='kn'>import</span> <span class='n'>keras</span>
 </pre></div>
 
     </div>
@@ -13435,7 +13430,7 @@ div#notebook {
 <div class='prompt input_prompt'>In&nbsp;[7]:</div>
 <div class='inner_cell'>
     <div class='input_area'>
-<div class=' highlight hl-ipython3'><pre><span></span><span class='kn'>from</span> <span class='nn'>sklearn.preprocessing</span> <span class='k'>import</span> <span class='n'>StandardScaler</span>
+<div class=' highlight hl-ipython3'><pre><span></span><span class='kn'>from</span> <span class='nn'>sklearn.preprocessing</span> <span class='kn'>import</span> <span class='n'>StandardScaler</span>
 
 <span class='n'>scaler</span> <span class='o'>=</span> <span class='n'>StandardScaler</span><span class='p'>()</span>
 </pre></div>
@@ -13632,30 +13627,13 @@ Epoch 10/10
 
 </div>
     </div>
-  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type=" text x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
-
+  </div>
+</body>
 
  
 
 
-
+</html>
 "  style="scrolling:no;">
 </iframe>
 
@@ -13672,9 +13650,9 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
 <h1 id="使用tensorboard可視化"><a href="#使用tensorboard可視化" class="headerlink" title="使用tensorboard可視化"></a>使用tensorboard可視化</h1><ul>
 <li><a href="http://www.taroballz.com/2018/07/29/DL_Visualization_tensorboard/">http://www.taroballz.com/2018/07/29/DL_Visualization_tensorboard/</a></li>
 </ul>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir="儲存model的文件夾位置"</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=&quot;儲存model的文件夾位置&quot;</span><br></pre></td></tr></table></figure>
 <ul>
-<li><a href="http://localhost:6006/" target="_blank" rel="noopener">http://localhost:6006/</a></li>
+<li><a target="_blank" rel="noopener" href="http://localhost:6006/">http://localhost:6006/</a></li>
 <li>PROFILE：是用來記錄記憶體及CPU的使用量</li>
 </ul>
 <h2 id="SCALARS"><a href="#SCALARS" class="headerlink" title="SCALARS"></a>SCALARS</h2><p><img src="https://i.imgur.com/hqhhQ6N.png" alt="tensorboard_SCALARS"></p>
@@ -13685,17 +13663,17 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/tensorflow深度學習/">tensorflow深度學習</a>
+    <a class="article-category-link" href="/categories/tensorflow%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92/">tensorflow深度學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2020/">2020</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/深度學習-Deep-Learning/">深度學習(Deep Learning)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2020/" rel="tag">2020</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%B8%E7%BF%92-Deep-Learning/" rel="tag">深度學習(Deep Learning)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -13775,7 +13753,7 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">2.</span> <span class="nav-text">Usage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#callbacks文件夾目錄結構"><span class="nav-number">4.</span> <span class="nav-text">callbacks文件夾目錄結構</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用tensorboard可視化"><span class="nav-number">5.</span> <span class="nav-text">使用tensorboard可視化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SCALARS"><span class="nav-number">5.1.</span> <span class="nav-text">SCALARS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRAPHS"><span class="nav-number">5.2.</span> <span class="nav-text">GRAPHS</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">2.</span> <span class="nav-text">Usage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#callbacks%E6%96%87%E4%BB%B6%E5%A4%BE%E7%9B%AE%E9%8C%84%E7%B5%90%E6%A7%8B"><span class="nav-number">4.</span> <span class="nav-text">callbacks文件夾目錄結構</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8tensorboard%E5%8F%AF%E8%A6%96%E5%8C%96"><span class="nav-number">5.</span> <span class="nav-text">使用tensorboard可視化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SCALARS"><span class="nav-number">5.1.</span> <span class="nav-text">SCALARS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GRAPHS"><span class="nav-number">5.2.</span> <span class="nav-text">GRAPHS</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -13829,6 +13807,9 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -13868,13 +13849,23 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -13899,23 +13890,6 @@ document.getElementById('ipynb').height=$("#ipynb").contents().find("#notebook")
   </div>
 
   <a id="rocket" href="#top" class=""></a>
-  <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
 </body>
 </html>

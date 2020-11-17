@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day10-閉包(closure) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang閉包">
+  <meta name="keywords" content="2018Golang閉包" />
   
   
   
   
   <meta name="description" content="introduction閉包可以用來在一個函式與一組「私有」變數之間建立關聯關係。在給定函式被多次呼叫的過程中，這些私有變數能夠保持其永續性。變數的作用域僅限於包含它們的函式，因此無法從其它程式代碼部分進行存取。不過，變數的生存期是可以很長，在一次函式呼叫期間所建立所生成的值在下次函式呼叫時仍然存在  一個函數和與其相關的引用環境組合而成的實體">
-<meta name="keywords" content="2018,Golang,閉包">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day10-閉包(closure)">
 <meta property="og:url" content="http://www.taroballz.com/2018/04/01/Go_closure/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="introduction閉包可以用來在一個函式與一組「私有」變數之間建立關聯關係。在給定函式被多次呼叫的過程中，這些私有變數能夠保持其永續性。變數的作用域僅限於包含它們的函式，因此無法從其它程式代碼部分進行存取。不過，變數的生存期是可以很長，在一次函式呼叫期間所建立所生成的值在下次函式呼叫時仍然存在  一個函數和與其相關的引用環境組合而成的實體">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-03-31T19:04:48.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-03-31T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-03-31T19:04:48.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="閉包">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day10-閉包(closure)">
-<meta name="twitter:description" content="introduction閉包可以用來在一個函式與一組「私有」變數之間建立關聯關係。在給定函式被多次呼叫的過程中，這些私有變數能夠保持其永續性。變數的作用域僅限於包含它們的函式，因此無法從其它程式代碼部分進行存取。不過，變數的生存期是可以很長，在一次函式呼叫期間所建立所生成的值在下次函式呼叫時仍然存在  一個函數和與其相關的引用環境組合而成的實體">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +45,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -146,20 +174,20 @@
 </ul>
 <a id="more"></a>
 <hr>
-<h1 id="example"><a href="#example" class="headerlink" title="example"></a>example</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SaveAdd</span><span class="params">()</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;   <span class="comment">//[1]</span></span><br><span class="line">	<span class="keyword">var</span> x <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(add <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;   <span class="comment">//[2]</span></span><br><span class="line">		x += add        </span><br><span class="line">		<span class="keyword">return</span> x</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	f := SaveAdd()   <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(f(<span class="number">1</span>))      <span class="comment">//[4]</span></span><br><span class="line">	fmt.Println(f(<span class="number">100</span>))</span><br><span class="line">	fmt.Println(f(<span class="number">1000</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="example"><a href="#example" class="headerlink" title="example"></a>example</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SaveAdd</span><span class="params">()</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;   <span class="comment">//[1]</span></span><br><span class="line">	<span class="keyword">var</span> x <span class="keyword">int</span></span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(add <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;   <span class="comment">//[2]</span></span><br><span class="line">		x += add        </span><br><span class="line">		<span class="keyword">return</span> x</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	f := SaveAdd()   <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(f(<span class="number">1</span>))      <span class="comment">//[4]</span></span><br><span class="line">	fmt.Println(f(<span class="number">100</span>))</span><br><span class="line">	fmt.Println(f(<span class="number">1000</span>))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] <code>SaveAdd</code>函數的返回值為一個函數<br>[2] <code>return</code>的匿名函數引用了函數外的變量<code>x</code>，使得<code>return</code>的這個匿名函數成為了閉包，而被綁定的<code>x</code>變量會記得被調用的狀態，等待下次再被調用<br>[3] <code>f</code>為一個被<strong>已執行函數</strong>賦值的變量<br>[4] <code>f</code>的參數為[2]<code>return</code>匿名函數的參數</p>
 <h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">101</span><br><span class="line">1101</span><br></pre></td></tr></table></figure>
 <p>因<code>f</code>一直存在，其中的<code>x</code>變量指向的值仍為同一塊內存空間，故保留了函數<code>return</code>匿名函數對<code>x</code>的操作並返回<code>x</code>之值</p>
 <hr>
 <h1 id="換句話說-python"><a href="#換句話說-python" class="headerlink" title="換句話說 (python)"></a>換句話說 (python)</h1><p>可將整個函數當成一個<code>class</code>，對<code>class</code>內部的函數來說<br><strong>外部變量</strong>就相當於<code>class</code>的<strong>屬性</strong><br>內部的函數操作<strong>類屬性</strong>時，類屬性會改變，且會記住被操作的最後狀態，並等待下次被其他內部函數操作</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">outerFunction</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.outervar = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner_function</span><span class="params">(self,var)</span>:</span></span><br><span class="line">        self.outervar += var</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    f = outerFunction()</span><br><span class="line">    print(<span class="string">"outervar ="</span>,f.outervar)</span><br><span class="line">    f.inner_function(<span class="number">2</span>)</span><br><span class="line">    print(<span class="string">"outervar ="</span>,f.outervar)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">outerFunction</span>():</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        self.outervar = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner_function</span>(<span class="params">self,var</span>):</span></span><br><span class="line">        self.outervar += var</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    f = outerFunction()</span><br><span class="line">    print(<span class="string">&quot;outervar =&quot;</span>,f.outervar)</span><br><span class="line">    f.inner_function(<span class="number">2</span>)</span><br><span class="line">    print(<span class="string">&quot;outervar =&quot;</span>,f.outervar)</span><br></pre></td></tr></table></figure>
 <h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
 <p><code>f</code>物件並未消失，所以<strong>類屬性</strong>被<strong>內部類函數</strong>操作時，仍會記住其屬性狀態</p>
 <hr>
-<h1 id="檢測文件後綴名"><a href="#檢測文件後綴名" class="headerlink" title="檢測文件後綴名"></a>檢測文件後綴名</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"strings"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">detect_extension</span><span class="params">(extension <span class="keyword">string</span>)</span> <span class="title">func</span><span class="params">(<span class="keyword">string</span> <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(filename <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> strings.HasSuffix(filename,extension) == <span class="literal">false</span> &#123;      <span class="comment">//[1]</span></span><br><span class="line">			<span class="keyword">return</span> filename + extension</span><br><span class="line">		&#125;</span><br><span class="line">	    <span class="keyword">return</span> filename</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	bmp := detect_extension(<span class="string">".bmp"</span>)   <span class="comment">//[2]</span></span><br><span class="line">	jpg := detect_extension(<span class="string">".jpg"</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(bmp(<span class="string">"test"</span>))         <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(bmp(<span class="string">"test_2.bmp"</span>))</span><br><span class="line">	fmt.Println(jpg(<span class="string">"TEST"</span>))</span><br><span class="line">	fmt.Println(jpg(<span class="string">"TEST_2.jpg"</span>))</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="檢測文件後綴名"><a href="#檢測文件後綴名" class="headerlink" title="檢測文件後綴名"></a>檢測文件後綴名</h1><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;strings&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">detect_extension</span><span class="params">(extension <span class="keyword">string</span>)</span> <span class="title">func</span><span class="params">(<span class="keyword">string</span> <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(filename <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> strings.HasSuffix(filename,extension) == <span class="literal">false</span> &#123;      <span class="comment">//[1]</span></span><br><span class="line">			<span class="keyword">return</span> filename + extension</span><br><span class="line">		&#125;</span><br><span class="line">	    <span class="keyword">return</span> filename</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	bmp := detect_extension(<span class="string">&quot;.bmp&quot;</span>)   <span class="comment">//[2]</span></span><br><span class="line">	jpg := detect_extension(<span class="string">&quot;.jpg&quot;</span>)</span><br><span class="line">	</span><br><span class="line">	fmt.Println(bmp(<span class="string">&quot;test&quot;</span>))         <span class="comment">//[3]</span></span><br><span class="line">	fmt.Println(bmp(<span class="string">&quot;test_2.bmp&quot;</span>))</span><br><span class="line">	fmt.Println(jpg(<span class="string">&quot;TEST&quot;</span>))</span><br><span class="line">	fmt.Println(jpg(<span class="string">&quot;TEST_2.jpg&quot;</span>))</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>[1] 內部匿名函數引用了外部的變量<code>extension</code><br>[2] 調用函數並綁定了<code>extension</code>變量<br>[3] 對內部的匿名函數傳參</p>
 <h2 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test.bmp</span><br><span class="line">test_2.bmp</span><br><span class="line">TEST.jpg</span><br><span class="line">TEST_2.jpg</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)">https://zh.wikipedia.org/wiki/%E9%97%AD%E5%8C%85_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)</a></p>
 
       
     </div>
@@ -170,13 +198,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/閉包/">閉包</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%96%89%E5%8C%85/" rel="tag">閉包</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -256,7 +284,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#example"><span class="nav-number">2.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#換句話說-python"><span class="nav-number">3.</span> <span class="nav-text">換句話說 (python)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#檢測文件後綴名"><span class="nav-number">4.</span> <span class="nav-text">檢測文件後綴名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-2"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#example"><span class="nav-number">2.</span> <span class="nav-text">example</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%9B%E5%8F%A5%E8%A9%B1%E8%AA%AA-python"><span class="nav-number">3.</span> <span class="nav-text">換句話說 (python)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AA%A2%E6%B8%AC%E6%96%87%E4%BB%B6%E5%BE%8C%E7%B6%B4%E5%90%8D"><span class="nav-number">4.</span> <span class="nav-text">檢測文件後綴名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-2"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol>
     
     </div>
   </aside>
@@ -310,6 +338,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -349,13 +380,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -382,7 +423,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -394,7 +435,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-day11-排序與查找 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang排序(sort)">
+  <meta name="keywords" content="2018Golang排序(sort)" />
   
   
   
   
-  <meta name="description" content="introductionGo語言本身已有內置的官方package可無痛實現排序功能  位於sort包，導入即可使用 網址：https://golang.org/pkg/sort/">
-<meta name="keywords" content="2018,Golang,排序(sort)">
+  <meta name="description" content="introductionGo語言本身已有內置的官方package可無痛實現排序功能  位於sort包，導入即可使用 網址：https:&#x2F;&#x2F;golang.org&#x2F;pkg&#x2F;sort&#x2F;">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-day11-排序與查找">
 <meta property="og:url" content="http://www.taroballz.com/2018/04/02/Go_sort/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
-<meta property="og:description" content="introductionGo語言本身已有內置的官方package可無痛實現排序功能  位於sort包，導入即可使用 網址：https://golang.org/pkg/sort/">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:description" content="introductionGo語言本身已有內置的官方package可無痛實現排序功能  位於sort包，導入即可使用 網址：https:&#x2F;&#x2F;golang.org&#x2F;pkg&#x2F;sort&#x2F;">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/NHq3z9D.png">
-<meta property="og:updated_time" content="2018-04-02T10:15:04.000Z">
+<meta property="article:published_time" content="2018-04-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-04-02T10:15:04.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="排序(sort)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-day11-排序與查找">
-<meta name="twitter:description" content="introductionGo語言本身已有內置的官方package可無痛實現排序功能  位於sort包，導入即可使用 網址：https://golang.org/pkg/sort/">
 <meta name="twitter:image" content="https://i.imgur.com/NHq3z9D.png">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +47,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +144,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/NHq3z9D.png" rel="gallery_ck79gahzu006as6q77c01rb3r">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/NHq3z9D.png" rel="gallery_ckhlqn4b2006gclzxglqxflxr noopener">
         <img src="https://i.imgur.com/NHq3z9D.png" itemprop="image">
       </a>
     
@@ -155,7 +183,7 @@
         <h1 id="introduction"><a href="#introduction" class="headerlink" title="introduction"></a>introduction</h1><p>Go語言本身已有內置的官方package可無痛實現排序功能</p>
 <ul>
 <li>位於<code>sort</code>包，導入即可使用</li>
-<li>網址：<a href="https://golang.org/pkg/sort/" target="_blank" rel="noopener">https://golang.org/pkg/sort/</a><a id="more"></a>
+<li>網址：<a target="_blank" rel="noopener" href="https://golang.org/pkg/sort/">https://golang.org/pkg/sort/</a><a id="more"></a>
 </li>
 </ul>
 <hr>
@@ -165,20 +193,19 @@
 <li><strong>必須為切片類型才能進行排序</strong></li>
 </ul>
 <hr>
-<h1 id="排序整數"><a href="#排序整數" class="headerlink" title="排序整數"></a>排序整數</h1><p>使用<code>sort.Ints([]int)</code>排序整數類型的切片<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IntSort</span><span class="params">(slice []<span class="keyword">int</span>)</span></span>&#123;      </span><br><span class="line">	sort.Ints(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">468</span>,<span class="number">48</span>,<span class="number">456</span>,<span class="number">465</span>,<span class="number">465</span>,<span class="number">48</span>,<span class="number">4</span>,<span class="number">46</span>,<span class="number">54</span>,<span class="number">54</span>,<span class="number">8</span>,<span class="number">43</span>,<span class="number">2</span>,<span class="number">41</span>,<span class="number">98</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">16</span>,<span class="number">489</span>,<span class="number">4689</span>,<span class="number">788948</span>,<span class="number">4689</span>,<span class="number">489</span>,<span class="number">4</span>,&#125;</span><br><span class="line">	IntSort(list[:])  <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>[1] 傳入<code>list</code>陣列的全切片</p>
+<h1 id="排序整數"><a href="#排序整數" class="headerlink" title="排序整數"></a>排序整數</h1><p>使用<code>sort.Ints([]int)</code>排序整數類型的切片<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sort&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">IntSort</span><span class="params">(slice []<span class="keyword">int</span>)</span></span>&#123;      </span><br><span class="line">	sort.Ints(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">468</span>,<span class="number">48</span>,<span class="number">456</span>,<span class="number">465</span>,<span class="number">465</span>,<span class="number">48</span>,<span class="number">4</span>,<span class="number">46</span>,<span class="number">54</span>,<span class="number">54</span>,<span class="number">8</span>,<span class="number">43</span>,<span class="number">2</span>,<span class="number">41</span>,<span class="number">98</span>,<span class="number">1</span>,<span class="number">6</span>,<span class="number">16</span>,<span class="number">489</span>,<span class="number">4689</span>,<span class="number">788948</span>,<span class="number">4689</span>,<span class="number">489</span>,<span class="number">4</span>,&#125;</span><br><span class="line">	IntSort(list[:])  <span class="comment">//[1]</span></span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>[1] 傳入<code>list</code>陣列的全切片</p>
 <h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[1 1 2 4 4 6 8 16 41 43 46 48 48 54 54 98 456 465 465 468 489 489 4689 4689 788948]</span><br></pre></td></tr></table></figure>
 <p>切片是指向陣列的，可以發現陣列也發生了排序</p>
 <hr>
 <h1 id="排序字符串"><a href="#排序字符串" class="headerlink" title="排序字符串"></a>排序字符串</h1><p>使用<code>sort.Strings([]string)</code>排序字符串類型的切片</p>
 <ul>
 <li>默認是從ASCII碼由小到大排列</li>
-<li><a href="https://zh.wikipedia.org/wiki/ASCII" target="_blank" rel="noopener">ASCII</a><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">StringSort</span><span class="params">(slice []<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	sort.Strings(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">string</span>&#123;<span class="string">"Apple"</span>,<span class="string">"banana"</span>,<span class="string">"Cake"</span>,<span class="string">"dog"</span>,<span class="string">"EGG"</span>,<span class="string">"elephant"</span>,<span class="string">"Fox"</span>,<span class="string">"@"</span>,<span class="string">"*"</span>,<span class="string">"&amp;"</span>,<span class="string">" "</span>&#125;</span><br><span class="line">	StringSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/ASCII">ASCII</a><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sort&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">StringSort</span><span class="params">(slice []<span class="keyword">string</span>)</span></span>&#123;</span><br><span class="line">	sort.Strings(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">string</span>&#123;<span class="string">&quot;Apple&quot;</span>,<span class="string">&quot;banana&quot;</span>,<span class="string">&quot;Cake&quot;</span>,<span class="string">&quot;dog&quot;</span>,<span class="string">&quot;EGG&quot;</span>,<span class="string">&quot;elephant&quot;</span>,<span class="string">&quot;Fox&quot;</span>,<span class="string">&quot;@&quot;</span>,<span class="string">&quot;*&quot;</span>,<span class="string">&quot;&amp;&quot;</span>,<span class="string">&quot; &quot;</span>&#125;</span><br><span class="line">	StringSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[  &amp; * @ Apple Cake EGG Fox banana dog elephant]</span><br></pre></td></tr></table></figure>
 <hr>
-<h1 id="排序浮點數"><a href="#排序浮點數" class="headerlink" title="排序浮點數"></a>排序浮點數</h1><p>使用<code>sort.Float64s([]float64)</code>排序浮點數類型的切片<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FloatSort</span><span class="params">(slice []<span class="keyword">float64</span>)</span></span>&#123;</span><br><span class="line">	sort.Float64s(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">float64</span>&#123;<span class="number">1531.6181</span>,<span class="number">843.4848</span>,<span class="number">0.484</span>,<span class="number">6198.54984</span>,<span class="number">0.000584894</span>,<span class="number">0.00541818184</span>&#125;</span><br><span class="line">	FloatSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h1 id="排序浮點數"><a href="#排序浮點數" class="headerlink" title="排序浮點數"></a>排序浮點數</h1><p>使用<code>sort.Float64s([]float64)</code>排序浮點數類型的切片<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sort&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FloatSort</span><span class="params">(slice []<span class="keyword">float64</span>)</span></span>&#123;</span><br><span class="line">	sort.Float64s(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">float64</span>&#123;<span class="number">1531.6181</span>,<span class="number">843.4848</span>,<span class="number">0.484</span>,<span class="number">6198.54984</span>,<span class="number">0.000584894</span>,<span class="number">0.00541818184</span>&#125;</span><br><span class="line">	FloatSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2 id="result-2"><a href="#result-2" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0.000584894 0.00541818184 0.484 843.4848 1531.6181 6198.54984]</span><br></pre></td></tr></table></figure>
 <h1 id="查找元素於切片的位置"><a href="#查找元素於切片的位置" class="headerlink" title="查找元素於切片的位置"></a>查找元素於切片的位置</h1><p><code>sort</code>包中有相關的<code>search</code>函數可以<strong>查找已排序的切片中特定元素</strong>位於切片中的index值</p>
 <ul>
@@ -189,8 +216,8 @@
 <li>查找<code>Int</code>型，使用<code>sort.SearchInts</code></li>
 <li>查找<code>float64</code>型，使用<code>sort.SearchFloat64s</code></li>
 </ol>
-<h2 id="以查找float64為範例"><a href="#以查找float64為範例" class="headerlink" title="以查找float64為範例"></a>以查找float64為範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"sort"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FloatSort</span><span class="params">(slice []<span class="keyword">float64</span>)</span></span>&#123;</span><br><span class="line">	sort.Float64s(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">search</span><span class="params">(target <span class="keyword">float64</span>,slice []<span class="keyword">float64</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> sort.SearchFloat64s(slice,target)       <span class="comment">//*</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">float64</span>&#123;<span class="number">1531.6181</span>,<span class="number">843.4848</span>,<span class="number">0.484</span>,<span class="number">6198.54984</span>,<span class="number">0.000584894</span>,<span class="number">0.00541818184</span>&#125;</span><br><span class="line">	FloatSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">	result := search(<span class="number">1531.6181</span>,list[:])</span><br><span class="line">	fmt.Println(<span class="string">"result ="</span>,result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[0.000584894 0.00541818184 0.484 843.4848 1531.6181 6198.54984]</span><br><span class="line">result = 4</span><br></pre></td></tr></table></figure>
+<h2 id="以查找float64為範例"><a href="#以查找float64為範例" class="headerlink" title="以查找float64為範例"></a>以查找float64為範例</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;sort&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">FloatSort</span><span class="params">(slice []<span class="keyword">float64</span>)</span></span>&#123;</span><br><span class="line">	sort.Float64s(slice)        <span class="comment">//*</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">search</span><span class="params">(target <span class="keyword">float64</span>,slice []<span class="keyword">float64</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">	<span class="keyword">return</span> sort.SearchFloat64s(slice,target)       <span class="comment">//*</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> list = [...]<span class="keyword">float64</span>&#123;<span class="number">1531.6181</span>,<span class="number">843.4848</span>,<span class="number">0.484</span>,<span class="number">6198.54984</span>,<span class="number">0.000584894</span>,<span class="number">0.00541818184</span>&#125;</span><br><span class="line">	FloatSort(list[:])</span><br><span class="line">	fmt.Println(list)</span><br><span class="line">	result := search(<span class="number">1531.6181</span>,list[:])</span><br><span class="line">	fmt.Println(<span class="string">&quot;result =&quot;</span>,result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="result-3"><a href="#result-3" class="headerlink" title="result"></a>result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[0.000584894 0.00541818184 0.484 843.4848 1531.6181 6198.54984]</span><br><span class="line">result &#x3D; 4</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -201,13 +228,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/排序-sort/">排序(sort)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8E%92%E5%BA%8F-sort/" rel="tag">排序(sort)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -287,7 +314,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">2.</span> <span class="nav-text">Notice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序整數"><span class="nav-number">3.</span> <span class="nav-text">排序整數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序字符串"><span class="nav-number">4.</span> <span class="nav-text">排序字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#排序浮點數"><span class="nav-number">5.</span> <span class="nav-text">排序浮點數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-2"><span class="nav-number">5.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#查找元素於切片的位置"><span class="nav-number">6.</span> <span class="nav-text">查找元素於切片的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#以查找float64為範例"><span class="nav-number">6.1.</span> <span class="nav-text">以查找float64為範例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-3"><span class="nav-number">6.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">2.</span> <span class="nav-text">Notice</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E6%95%B4%E6%95%B8"><span class="nav-number">3.</span> <span class="nav-text">排序整數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">4.</span> <span class="nav-text">排序字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">4.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E6%B5%AE%E9%BB%9E%E6%95%B8"><span class="nav-number">5.</span> <span class="nav-text">排序浮點數</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-2"><span class="nav-number">5.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E6%96%BC%E5%88%87%E7%89%87%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="nav-number">6.</span> <span class="nav-text">查找元素於切片的位置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A5%E6%9F%A5%E6%89%BEfloat64%E7%82%BA%E7%AF%84%E4%BE%8B"><span class="nav-number">6.1.</span> <span class="nav-text">以查找float64為範例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#result-3"><span class="nav-number">6.1.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol></li></ol>
     
     </div>
   </aside>
@@ -341,6 +368,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -380,13 +410,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -413,7 +453,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -425,7 +465,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

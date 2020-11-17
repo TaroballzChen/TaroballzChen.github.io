@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Python模塊-multiprocessing多進程 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python多進程">
+  <meta name="keywords" content="Python多進程" />
   
   
   
   
   <meta name="description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
-<meta name="keywords" content="Python,多進程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python模塊-multiprocessing多進程">
 <meta property="og:url" content="http://www.taroballz.com/2018/01/09/multiprocessing/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2018-12-02T10:59:33.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-01-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-02T10:59:33.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="多進程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python模塊-multiprocessing多進程">
-<meta name="twitter:description" content="Preface: Python中同時間一個進程只能有一個線程通過GIL交給其中一個CPU執行 同時間要完成多任務能透過創建多進程(multiprocessing)交給不同CPU執行 進程： 程序是未運行的EXE檔：其還沒運行之前，無法調度系統的資源(內存、設備如滑鼠鍵盤等) 進程是運行起來的程序檔案：其能調度系統資源，稱為進程 操作系統分配資源的基本單位      Introduction: mu">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +44,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -130,7 +157,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -164,33 +191,32 @@
 <li>進程之間應避免共享的資源,只要透過第三方進行交流，必定會降低執行程序的效率</li>
 <li>windows系統下，如想啟動一個子進程,與進程相關的語句要寫在<code>if __name__ == &quot;__main__&quot;</code>之下</li>
 </ul>
-<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Example-I-直接調用"><a href="#Example-I-直接調用" class="headerlink" title="Example I: (直接調用)"></a>Example I: (直接調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span><span class="params">(name)</span>:</span></span><br><span class="line">    print(<span class="string">'My name is %s'</span>%name)</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    process_list = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        pro = Process(target=func, args=(<span class="string">'taroballz'</span>,))  <span class="comment"># 創建一個進程物件</span></span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()  <span class="comment"># 進程開始工作</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()  <span class="comment">#等待子進程們回到主進程</span></span><br><span class="line">        </span><br><span class="line">    print(<span class="string">'The end of mulitprocessing performance'</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="Usage"><a href="#Usage" class="headerlink" title="Usage:"></a>Usage:</h1><h2 id="Example-I-直接調用"><a href="#Example-I-直接調用" class="headerlink" title="Example I: (直接調用)"></a>Example I: (直接調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func</span>(<span class="params">name</span>):</span></span><br><span class="line">    print(<span class="string">&#x27;My name is %s&#x27;</span>%name)</span><br><span class="line">       </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    process_list = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        pro = Process(target=func, args=(<span class="string">&#x27;taroballz&#x27;</span>,))  <span class="comment"># 創建一個進程物件</span></span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()  <span class="comment"># 進程開始工作</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()  <span class="comment">#等待子進程們回到主進程</span></span><br><span class="line">        </span><br><span class="line">    print(<span class="string">&#x27;The end of mulitprocessing performance&#x27;</span>)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>根據以上的code可表示創建了三個子進程，加上主進程共有四個進程於四個CPU上執行不同工作</li>
 <li>要是執行的進程數大於CPU本身的執行緒數，CPU會使用<strong>切換</strong>的方式來完成多進程運作</li>
 </ul>
-<h2 id="Example-II-繼承類調用"><a href="#Example-II-繼承類調用" class="headerlink" title="Example II: (繼承類調用)"></a>Example II: (繼承類調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">New_Process</span><span class="params">(Process)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(New_Process,self).__init__()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span>  <span class="comment">#將進程要執行的任務寫在run方法中</span></span><br><span class="line">        print(<span class="string">"My Process_name is %s"</span>%self.name)   </span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    process_list=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        pro = New_Process()     </span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()</span><br><span class="line">        </span><br><span class="line">    print(<span class="string">'The end of mulitprocessing performance'</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="Relation-between-Processes"><a href="#Relation-between-Processes" class="headerlink" title="Relation between Processes:"></a>Relation between Processes:</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_process_info</span><span class="params">(processname)</span>:</span></span><br><span class="line">    print(processname)</span><br><span class="line">    print(<span class="string">"process __name__ is"</span>,__name__)</span><br><span class="line">    print(<span class="string">"parents process ID(PPID): "</span>,os.getppid())</span><br><span class="line">    print(<span class="string">"self process ID(PID): "</span>,os.getpid(),<span class="string">'\n'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    show_process_info(<span class="string">'main_process'</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=show_process_info,args=(<span class="string">"Process-%d"</span>%i, ))</span><br><span class="line">        proc.start()</span><br><span class="line">        proc.join()</span><br><span class="line">    print(<span class="string">"The End ! !"</span>)</span><br></pre></td></tr></table></figure>
-<p>執行結果如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">main_process</span><br><span class="line">process __name__ is __main__</span><br><span class="line">parents process ID(PPID):  3460</span><br><span class="line">self process ID(PID):  13512 </span><br><span class="line"></span><br><span class="line">Process-0</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  13636 </span><br><span class="line"></span><br><span class="line">Process-1</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  11412 </span><br><span class="line"></span><br><span class="line">The End ! !</span><br></pre></td></tr></table></figure></p>
-<p>從結果我們可以知道新創建的子進程都為主進程所創造 且 隸屬於原本的主進程<br>(兩個子進程的PPID皆屬於主進程自身的PID)</p>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html" target="_blank" rel="noopener">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
+<h2 id="Example-II-繼承類調用"><a href="#Example-II-繼承類調用" class="headerlink" title="Example II: (繼承類調用)"></a>Example II: (繼承類調用)</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">New_Process</span>(<span class="params">Process</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="built_in">super</span>(New_Process,self).__init__()</span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span>(<span class="params">self</span>):</span>  <span class="comment">#將進程要執行的任務寫在run方法中</span></span><br><span class="line">        print(<span class="string">&quot;My Process_name is %s&quot;</span>%self.name)   </span><br><span class="line">        </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    process_list=[]</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">3</span>):</span><br><span class="line">        pro = New_Process()     </span><br><span class="line">        process_list.append(pro)</span><br><span class="line">        pro.start()</span><br><span class="line">    <span class="keyword">for</span> each_process <span class="keyword">in</span> process_list:</span><br><span class="line">        each_process.join()</span><br><span class="line">        </span><br><span class="line">    print(<span class="string">&#x27;The end of mulitprocessing performance&#x27;</span>)    </span><br></pre></td></tr></table></figure>
+<h1 id="Relation-between-Processes"><a href="#Relation-between-Processes" class="headerlink" title="Relation between Processes:"></a>Relation between Processes:</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">show_process_info</span>(<span class="params">processname</span>):</span></span><br><span class="line">    print(processname)</span><br><span class="line">    print(<span class="string">&quot;process __name__ is&quot;</span>,__name__)</span><br><span class="line">    print(<span class="string">&quot;parents process ID(PPID): &quot;</span>,os.getppid())</span><br><span class="line">    print(<span class="string">&quot;self process ID(PID): &quot;</span>,os.getpid(),<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    show_process_info(<span class="string">&#x27;main_process&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">2</span>):</span><br><span class="line">        proc = Process(target=show_process_info,args=(<span class="string">&quot;Process-%d&quot;</span>%i, ))</span><br><span class="line">        proc.start()</span><br><span class="line">        proc.join()</span><br><span class="line">    print(<span class="string">&quot;The End ! !&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>執行結果如下所示<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">main_process</span><br><span class="line">process __name__ is __main__</span><br><span class="line">parents process ID(PPID):  3460</span><br><span class="line">self process ID(PID):  13512 </span><br><span class="line"></span><br><span class="line">Process-0</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  13636 </span><br><span class="line"></span><br><span class="line">Process-1</span><br><span class="line">process __name__ is __mp_main__</span><br><span class="line">parents process ID(PPID):  13512</span><br><span class="line">self process ID(PID):  11412 </span><br><span class="line"></span><br><span class="line">The End ! !</span><br></pre></td></tr></table></figure><br>從結果我們可以知道新創建的子進程都為主進程所創造 且 隸屬於原本的主進程<br>(兩個子進程的PPID皆屬於主進程自身的PID)</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference:"></a>Reference:</h1><p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/yuanchenqi/articles/5745958.html">http://www.cnblogs.com/yuanchenqi/articles/5745958.html</a></p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python模塊/">Python模塊</a>
+    <a class="article-category-link" href="/categories/Python%E6%A8%A1%E5%A1%8A/">Python模塊</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多進程/">多進程</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E9%80%B2%E7%A8%8B/" rel="tag">多進程</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -270,7 +296,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">3.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">4.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-直接調用"><span class="nav-number">4.1.</span> <span class="nav-text">Example I: (直接調用)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-繼承類調用"><span class="nav-number">4.2.</span> <span class="nav-text">Example II: (繼承類調用)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relation-between-Processes"><span class="nav-number">5.</span> <span class="nav-text">Relation between Processes:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference:</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Preface"><span class="nav-number">1.</span> <span class="nav-text">Preface:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">2.</span> <span class="nav-text">Introduction:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Notice"><span class="nav-number">3.</span> <span class="nav-text">Notice:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Usage"><span class="nav-number">4.</span> <span class="nav-text">Usage:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-I-%E7%9B%B4%E6%8E%A5%E8%AA%BF%E7%94%A8"><span class="nav-number">4.1.</span> <span class="nav-text">Example I: (直接調用)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-II-%E7%B9%BC%E6%89%BF%E9%A1%9E%E8%AA%BF%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text">Example II: (繼承類調用)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Relation-between-Processes"><span class="nav-number">5.</span> <span class="nav-text">Relation between Processes:</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference:</span></a></li></ol>
     
     </div>
   </aside>
@@ -324,6 +350,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -363,13 +392,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -396,7 +435,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -408,7 +447,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

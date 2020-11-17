@@ -1,30 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Go初識-正則表達式 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang正則表達式">
+  <meta name="keywords" content="2018Golang正則表達式" />
   
   
   
   
   <meta name="description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
-<meta name="keywords" content="2018,Golang,正則表達式">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Go初識-正則表達式">
 <meta property="og:url" content="http://www.taroballz.com/2019/03/30/Go_Regular_Expression/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/Rz5B4zu.jpg">
-<meta property="og:updated_time" content="2019-03-30T17:32:18.000Z">
+<meta property="article:published_time" content="2019-03-29T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-03-30T17:32:18.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="正則表達式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Go初識-正則表達式">
-<meta name="twitter:description" content="Introduction 正則表達式常用來處理字符串的匹配 Go語言標準庫內建提供了regexp包，來處理正則表達式的問題">
 <meta name="twitter:image" content="https://i.imgur.com/Rz5B4zu.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +47,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +144,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/Rz5B4zu.jpg" rel="gallery_ck79gahz1003ks6q7krks0m7p">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/Rz5B4zu.jpg" rel="gallery_ckhlqn499003tclzx5vtxbp5g noopener">
         <img src="https://i.imgur.com/Rz5B4zu.jpg" itemprop="image">
       </a>
     
@@ -169,9 +197,9 @@
 <li><code>*</code>：重複零次或更多次</li>
 <li><code>+</code>:重複一次或更多次</li>
 <li><code>?</code>:重複零次或一次</li>
-<li><code>{n}</code>:重複<code>n</code>次</li>
-<li><code>{n,}</code>：重複n次或更多次</li>
-<li><code>{n,m}</code>：重複<code>n</code>到<code>m</code>次</li>
+<li><code>&#123;n&#125;</code>:重複<code>n</code>次</li>
+<li><code>&#123;n,&#125;</code>：重複n次或更多次</li>
+<li><code>&#123;n,m&#125;</code>：重複<code>n</code>到<code>m</code>次</li>
 </ul>
 <hr>
 <h1 id="Golang中的正則匹配"><a href="#Golang中的正則匹配" class="headerlink" title="Golang中的正則匹配"></a>Golang中的正則匹配</h1><h2 id="是否匹配到該字符串"><a href="#是否匹配到該字符串" class="headerlink" title="是否匹配到該字符串"></a>是否匹配到該字符串</h2><ul>
@@ -191,7 +219,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">"He"</span></span><br><span class="line">	matchbool,err := regexp.MatchString(<span class="string">"[a-zA-Z]&#123;3&#125;"</span>,s)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">"wow!!"</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">"match:"</span>,matchbool)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;regexp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">&quot;He&quot;</span></span><br><span class="line">	matchbool,err := regexp.MatchString(<span class="string">&quot;[a-zA-Z]&#123;3&#125;&quot;</span>,s)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">		<span class="built_in">panic</span>(<span class="string">&quot;wow!!&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Println(<span class="string">&quot;match:&quot;</span>,matchbool)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">match: false</span><br></pre></td></tr></table></figure>
 <h2 id="返回匹配到的字符串"><a href="#返回匹配到的字符串" class="headerlink" title="返回匹配到的字符串"></a>返回匹配到的字符串</h2><p>以下兩函式常搭配一起使用</p>
 <ul>
@@ -210,7 +238,7 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">"Hello World"</span></span><br><span class="line">	</span><br><span class="line">	re := regexp.MustCompile(<span class="string">"\\w&#123;3&#125;"</span>)    <span class="comment">//填入欲匹配的正則表達式（有斜槓時須轉譯）</span></span><br><span class="line">	result := re.FindAllString(s,<span class="number">-1</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;regexp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> s = <span class="string">&quot;Hello World&quot;</span></span><br><span class="line">	</span><br><span class="line">	re := regexp.MustCompile(<span class="string">&quot;\\w&#123;3&#125;&quot;</span>)    <span class="comment">//填入欲匹配的正則表達式（有斜槓時須轉譯）</span></span><br><span class="line">	result := re.FindAllString(s,<span class="number">-1</span>)</span><br><span class="line">	fmt.Println(result)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <h1 id="捕獲"><a href="#捕獲" class="headerlink" title="捕獲"></a>捕獲</h1><ul>
 <li>捕獲(exp)：匹配exp,並捕獲文本到自動命名的組裡<ul>
 <li><code>(?&lt;name&gt;exp)</code>:匹配exp，並捕獲文本到名稱為name的組裡，也可以寫成<code>(?&#39;name&#39;exp)</code></li>
@@ -222,7 +250,7 @@
 <li><code>s</code>:被匹配的字符串(字符串格式)</li>
 <li>返回一個字符串陣列<ul>
 <li>字符串陣列的第0個值為匹配到的字符串</li>
-<li>第1個值之後為欲捕獲<code>()</code>中的字符串<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"regexp"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	flysnowRegexp := regexp.MustCompile(<span class="string">`^http://www.flysnow.org/([\d]&#123;4&#125;)/([\d]&#123;2&#125;)/([\d]&#123;2&#125;)/([\w-]+).html$`</span>)</span><br><span class="line">	params := flysnowRegexp.FindStringSubmatch(<span class="string">"http://www.flysnow.org/2018/01/20/golang-goquery-examples-selector.html"</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"年份为："</span>+params[<span class="number">1</span>])</span><br><span class="line">	fmt.Println(<span class="string">"月份为："</span>+params[<span class="number">2</span>])</span><br><span class="line">	fmt.Println(<span class="string">"天数为："</span>+params[<span class="number">3</span>])</span><br><span class="line">	fmt.Println(<span class="string">"文章名为："</span>+params[<span class="number">4</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>第1個值之後為欲捕獲<code>()</code>中的字符串<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;regexp&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	flysnowRegexp := regexp.MustCompile(<span class="string">`^http://www.flysnow.org/([\d]&#123;4&#125;)/([\d]&#123;2&#125;)/([\d]&#123;2&#125;)/([\w-]+).html$`</span>)</span><br><span class="line">	params := flysnowRegexp.FindStringSubmatch(<span class="string">&quot;http://www.flysnow.org/2018/01/20/golang-goquery-examples-selector.html&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">&quot;年份为：&quot;</span>+params[<span class="number">1</span>])</span><br><span class="line">	fmt.Println(<span class="string">&quot;月份为：&quot;</span>+params[<span class="number">2</span>])</span><br><span class="line">	fmt.Println(<span class="string">&quot;天数为：&quot;</span>+params[<span class="number">3</span>])</span><br><span class="line">	fmt.Println(<span class="string">&quot;文章名为：&quot;</span>+params[<span class="number">4</span>])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
@@ -230,7 +258,7 @@
 </li>
 </ul>
 <h2 id="Result-1"><a href="#Result-1" class="headerlink" title="Result"></a>Result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">年份为：2018</span><br><span class="line">月份为：01</span><br><span class="line">天数为：20</span><br><span class="line">文章名为：golang-goquery-examples-selector</span><br></pre></td></tr></table></figure>
-<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a href="https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html" target="_blank" rel="noopener">https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html</a></p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html">https://www.flysnow.org/2018/02/09/go-regexp-extract-text.html</a></p>
 
       
     </div>
@@ -241,13 +269,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正則表達式/">正則表達式</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%AD%A3%E5%89%87%E8%A1%A8%E9%81%94%E5%BC%8F/" rel="tag">正則表達式</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -327,7 +355,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正則表達式規則"><span class="nav-number">2.</span> <span class="nav-text">正則表達式規則</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配字符"><span class="nav-number">2.1.</span> <span class="nav-text">匹配字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配數量"><span class="nav-number">2.2.</span> <span class="nav-text">匹配數量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang中的正則匹配"><span class="nav-number">3.</span> <span class="nav-text">Golang中的正則匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#是否匹配到該字符串"><span class="nav-number">3.1.</span> <span class="nav-text">是否匹配到該字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回匹配到的字符串"><span class="nav-number">3.2.</span> <span class="nav-text">返回匹配到的字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#捕獲"><span class="nav-number">4.</span> <span class="nav-text">捕獲</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result-1"><span class="nav-number">4.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AD%A3%E5%89%87%E8%A1%A8%E9%81%94%E5%BC%8F%E8%A6%8F%E5%89%87"><span class="nav-number">2.</span> <span class="nav-text">正則表達式規則</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E5%AD%97%E7%AC%A6"><span class="nav-number">2.1.</span> <span class="nav-text">匹配字符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%B9%E9%85%8D%E6%95%B8%E9%87%8F"><span class="nav-number">2.2.</span> <span class="nav-text">匹配數量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Golang%E4%B8%AD%E7%9A%84%E6%AD%A3%E5%89%87%E5%8C%B9%E9%85%8D"><span class="nav-number">3.</span> <span class="nav-text">Golang中的正則匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%98%AF%E5%90%A6%E5%8C%B9%E9%85%8D%E5%88%B0%E8%A9%B2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.1.</span> <span class="nav-text">是否匹配到該字符串</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Result"><span class="nav-number">3.1.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%94%E5%9B%9E%E5%8C%B9%E9%85%8D%E5%88%B0%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">3.2.</span> <span class="nav-text">返回匹配到的字符串</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%95%E7%8D%B2"><span class="nav-number">4.</span> <span class="nav-text">捕獲</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Result-1"><span class="nav-number">4.1.</span> <span class="nav-text">Result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol>
     
     </div>
   </aside>
@@ -381,6 +409,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -420,13 +451,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -453,7 +494,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -465,7 +506,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

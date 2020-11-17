@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-特徵工程-特徵選擇-嵌入法 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程">
+  <meta name="keywords" content="Python2019機器學習(Machine Learning)特徵工程" />
   
   
   
   
   <meta name="description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
-<meta name="keywords" content="Python,2019,機器學習(Machine Learning),特徵工程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-特徵工程-特徵選擇-嵌入法">
 <meta property="og:url" content="http://www.taroballz.com/2019/06/14/ML_feature_selection_embedded_method/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/blIlhIK.jpg">
-<meta property="og:updated_time" content="2019-06-21T17:30:53.000Z">
+<meta property="article:published_time" content="2019-06-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-06-21T17:30:53.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2019">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="特徵工程">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-特徵工程-特徵選擇-嵌入法">
-<meta name="twitter:description" content="Introduction 嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法 特徵選擇 及 演算法訓練 同時進行 特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程 Embedded method 最後得到各個特徵的權值，根據權值從大到小選擇特徵     相比過濾法，嵌入法的篩選的特徵更為精確，對模型更有效 缺點1：無法有效界定有用特徵 權值係數的臨界值 不像過濾法有p值可幫助我們">
 <meta name="twitter:image" content="https://i.imgur.com/blIlhIK.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +48,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +145,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/blIlhIK.jpg" rel="gallery_ck79gai0u009rs6q7c62jf0ob">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/blIlhIK.jpg" rel="gallery_ckhlqn4d000a0clzx3pm50juu noopener">
         <img src="https://i.imgur.com/blIlhIK.jpg" itemprop="image">
       </a>
     
@@ -142,7 +171,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -156,7 +185,7 @@
 <li>嵌入法(Embedded)是讓演算法自己決定使用那些特徵的方法<ul>
 <li>特徵選擇 及 演算法訓練 <strong>同時進行</strong></li>
 <li>特徵的選擇是依賴模型的表現來進行選擇，因此為一循環過程</li>
-<li><a href="https://i.imgur.com/30KO8Y1.png" target="_blank" rel="noopener">Embedded method</a><ul>
+<li><a target="_blank" rel="noopener" href="https://i.imgur.com/30KO8Y1.png">Embedded method</a><ul>
 <li>最後得到各個特徵的權值，根據權值從大到小選擇特徵</li>
 </ul>
 </li>
@@ -206,7 +235,8 @@
 </ul>
 <h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="fit-transform"><a href="#fit-transform" class="headerlink" title="fit_transform"></a>fit_transform</h3><p>與其他轉換器不一樣的是<code>fit_transform</code>參數中須放入兩個參數</p>
 <ul>
-<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X_Embedded = SelectFromModel(estimator=RFC_,threshold=<span class="number">0.005</span>).fit_transform(X,y)</span><br></pre></td></tr></table></figure>
+<li><pre><code class="lang-python">X_Embedded = SelectFromModel(estimator=RFC_,threshold=0.005).fit_transform(X,y)
+</code></pre>
 <ul>
 <li>第一個參數須放入欲轉換的feature矩陣<code>X</code></li>
 <li>第二個參數為Label矩陣<code>y</code></li>
@@ -227,17 +257,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2019/" rel="tag">2019</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/" rel="tag">特徵工程</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -317,7 +347,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SelectFromModel"><span class="nav-number">2.</span> <span class="nav-text">SelectFromModel</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#重要參數"><span class="nav-number">2.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#estimator"><span class="nav-number">2.1.1.</span> <span class="nav-text">estimator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threshold"><span class="nav-number">2.1.2.</span> <span class="nav-text">threshold</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform"><span class="nav-number">2.2.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#總結"><span class="nav-number">3.</span> <span class="nav-text">總結</span></a></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Introduction"><span class="nav-number">1.</span> <span class="nav-text">Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SelectFromModel"><span class="nav-number">2.</span> <span class="nav-text">SelectFromModel</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E5%8F%83%E6%95%B8"><span class="nav-number">2.1.</span> <span class="nav-text">重要參數</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#estimator"><span class="nav-number">2.1.1.</span> <span class="nav-text">estimator</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threshold"><span class="nav-number">2.1.2.</span> <span class="nav-text">threshold</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform"><span class="nav-number">2.2.1.</span> <span class="nav-text">fit_transform</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B8%BD%E7%B5%90"><span class="nav-number">3.</span> <span class="nav-text">總結</span></a></li></ol>
     
     </div>
   </aside>
@@ -371,6 +401,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -410,13 +443,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -443,7 +486,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -455,7 +498,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

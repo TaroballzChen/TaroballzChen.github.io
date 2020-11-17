@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Git基礎使用 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Git">
+  <meta name="keywords" content="2018Git" />
   
   
   
   
   <meta name="description" content="建立git庫在當前的文件夾下建立git庫(初始化一個git數據庫)1git init  使用此命令後當前文件夾下的所有文件均能進行版本管理 當前文件夾下會多一個.git文件夾">
-<meta name="keywords" content="2018,Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git基礎使用">
 <meta property="og:url" content="http://www.taroballz.com/2018/06/25/GitNote1/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="建立git庫在當前的文件夾下建立git庫(初始化一個git數據庫)1git init  使用此命令後當前文件夾下的所有文件均能進行版本管理 當前文件夾下會多一個.git文件夾">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/3IdxkCr.jpg">
-<meta property="og:updated_time" content="2018-07-01T14:43:30.000Z">
+<meta property="article:published_time" content="2018-06-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-07-01T14:43:30.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Git">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git基礎使用">
-<meta name="twitter:description" content="建立git庫在當前的文件夾下建立git庫(初始化一個git數據庫)1git init  使用此命令後當前文件夾下的所有文件均能進行版本管理 當前文件夾下會多一個.git文件夾">
 <meta name="twitter:image" content="https://i.imgur.com/3IdxkCr.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +46,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +143,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/3IdxkCr.jpg" rel="gallery_ck79gahyr002os6q7c9fa3vug">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/3IdxkCr.jpg" rel="gallery_ckhlqn48o002qclzx4tonawmy noopener">
         <img src="https://i.imgur.com/3IdxkCr.jpg" itemprop="image">
       </a>
     
@@ -221,7 +248,7 @@
 <ul>
 <li>於<code>.gitignore</code>文件中設置不需要管理的文件</li>
 <li><code>.gitignore</code>須參與版本管理</li>
-<li>詳細設置請參考<a href="https://git-scm.com/docs/gitignore" target="_blank" rel="noopener">https://git-scm.com/docs/gitignore</a></li>
+<li>詳細設置請參考<a target="_blank" rel="noopener" href="https://git-scm.com/docs/gitignore">https://git-scm.com/docs/gitignore</a></li>
 </ul>
 <h2 id="忽略管理文件"><a href="#忽略管理文件" class="headerlink" title="忽略管理文件"></a>忽略管理文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo *.tmp &gt; .gitignore  #忽略管理.tmp後綴的文件</span><br></pre></td></tr></table></figure>
 <ul>
@@ -239,13 +266,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/">Git</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Git/" rel="tag">Git</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -325,7 +352,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#建立git庫"><span class="nav-number">1.</span> <span class="nav-text">建立git庫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git設置"><span class="nav-number">2.</span> <span class="nav-text">git設置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看當前git設置"><span class="nav-number">2.1.</span> <span class="nav-text">查看當前git設置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局用戶名設置"><span class="nav-number">2.2.</span> <span class="nav-text">全局用戶名設置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用戶名"><span class="nav-number">2.2.1.</span> <span class="nav-text">用戶名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#信箱"><span class="nav-number">2.2.2.</span> <span class="nav-text">信箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#設置高亮顯示"><span class="nav-number">2.2.3.</span> <span class="nav-text">設置高亮顯示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-config幫助文檔查看"><span class="nav-number">2.3.</span> <span class="nav-text">git config幫助文檔查看</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交"><span class="nav-number">3.</span> <span class="nav-text">提交</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看當前文件夾的狀態"><span class="nav-number">3.1.</span> <span class="nav-text">查看當前文件夾的狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件增加至索引區-add"><span class="nav-number">3.2.</span> <span class="nav-text">文件增加至索引區(add)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加入單文件"><span class="nav-number">3.2.1.</span> <span class="nav-text">加入單文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加入多文件"><span class="nav-number">3.2.2.</span> <span class="nav-text">加入多文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加入當前文件夾中所有文件"><span class="nav-number">3.2.3.</span> <span class="nav-text">加入當前文件夾中所有文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#提交文件至本地庫-commit"><span class="nav-number">3.3.</span> <span class="nav-text">提交文件至本地庫(commit)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更新最後的提交-—amend"><span class="nav-number">3.3.1.</span> <span class="nav-text">更新最後的提交(—amend)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#提交記錄-log"><span class="nav-number">4.</span> <span class="nav-text">提交記錄(log)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#指定條數顯示"><span class="nav-number">4.1.</span> <span class="nav-text">指定條數顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#單行顯示"><span class="nav-number">4.2.</span> <span class="nav-text">單行顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#詳細顯示"><span class="nav-number">4.3.</span> <span class="nav-text">詳細顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#顯示統計信息"><span class="nav-number">4.4.</span> <span class="nav-text">顯示統計信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#幫助文檔"><span class="nav-number">4.5.</span> <span class="nav-text">幫助文檔</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#恢復文件"><span class="nav-number">5.</span> <span class="nav-text">恢復文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#未git-add"><span class="nav-number">5.1.</span> <span class="nav-text">未git add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#已git-add"><span class="nav-number">5.2.</span> <span class="nav-text">已git add</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#比較修改內容-diff"><span class="nav-number">6.</span> <span class="nav-text">比較修改內容(diff)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#比較當前文件夾與git庫HEAD的差異"><span class="nav-number">6.1.</span> <span class="nav-text">比較當前文件夾與git庫HEAD的差異</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比較不同版本文件的差異"><span class="nav-number">6.2.</span> <span class="nav-text">比較不同版本文件的差異</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#比較git庫文件的差異"><span class="nav-number">6.3.</span> <span class="nav-text">比較git庫文件的差異</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件操作"><span class="nav-number">7.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#刪除文件"><span class="nav-number">7.1.</span> <span class="nav-text">刪除文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更名-移動-文件"><span class="nav-number">7.2.</span> <span class="nav-text">更名(移動)文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#忽略管理-gitignore"><span class="nav-number">8.</span> <span class="nav-text">忽略管理(.gitignore)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#忽略管理文件"><span class="nav-number">8.1.</span> <span class="nav-text">忽略管理文件</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8Bgit%E5%BA%AB"><span class="nav-number">1.</span> <span class="nav-text">建立git庫</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#git%E8%A8%AD%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">git設置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%95%B6%E5%89%8Dgit%E8%A8%AD%E7%BD%AE"><span class="nav-number">2.1.</span> <span class="nav-text">查看當前git設置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%A8%E5%B1%80%E7%94%A8%E6%88%B6%E5%90%8D%E8%A8%AD%E7%BD%AE"><span class="nav-number">2.2.</span> <span class="nav-text">全局用戶名設置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B6%E5%90%8D"><span class="nav-number">2.2.1.</span> <span class="nav-text">用戶名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%A1%E7%AE%B1"><span class="nav-number">2.2.2.</span> <span class="nav-text">信箱</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A8%AD%E7%BD%AE%E9%AB%98%E4%BA%AE%E9%A1%AF%E7%A4%BA"><span class="nav-number">2.2.3.</span> <span class="nav-text">設置高亮顯示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#git-config%E5%B9%AB%E5%8A%A9%E6%96%87%E6%AA%94%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.3.</span> <span class="nav-text">git config幫助文檔查看</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4"><span class="nav-number">3.</span> <span class="nav-text">提交</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E7%95%B6%E5%89%8D%E6%96%87%E4%BB%B6%E5%A4%BE%E7%9A%84%E7%8B%80%E6%85%8B"><span class="nav-number">3.1.</span> <span class="nav-text">查看當前文件夾的狀態</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%A2%9E%E5%8A%A0%E8%87%B3%E7%B4%A2%E5%BC%95%E5%8D%80-add"><span class="nav-number">3.2.</span> <span class="nav-text">文件增加至索引區(add)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E5%96%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.1.</span> <span class="nav-text">加入單文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E5%A4%9A%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.2.</span> <span class="nav-text">加入多文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8A%A0%E5%85%A5%E7%95%B6%E5%89%8D%E6%96%87%E4%BB%B6%E5%A4%BE%E4%B8%AD%E6%89%80%E6%9C%89%E6%96%87%E4%BB%B6"><span class="nav-number">3.2.3.</span> <span class="nav-text">加入當前文件夾中所有文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E6%96%87%E4%BB%B6%E8%87%B3%E6%9C%AC%E5%9C%B0%E5%BA%AB-commit"><span class="nav-number">3.3.</span> <span class="nav-text">提交文件至本地庫(commit)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0%E6%9C%80%E5%BE%8C%E7%9A%84%E6%8F%90%E4%BA%A4-%E2%80%94amend"><span class="nav-number">3.3.1.</span> <span class="nav-text">更新最後的提交(—amend)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8F%90%E4%BA%A4%E8%A8%98%E9%8C%84-log"><span class="nav-number">4.</span> <span class="nav-text">提交記錄(log)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%A2%9D%E6%95%B8%E9%A1%AF%E7%A4%BA"><span class="nav-number">4.1.</span> <span class="nav-text">指定條數顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%96%AE%E8%A1%8C%E9%A1%AF%E7%A4%BA"><span class="nav-number">4.2.</span> <span class="nav-text">單行顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A9%B3%E7%B4%B0%E9%A1%AF%E7%A4%BA"><span class="nav-number">4.3.</span> <span class="nav-text">詳細顯示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%AF%E7%A4%BA%E7%B5%B1%E8%A8%88%E4%BF%A1%E6%81%AF"><span class="nav-number">4.4.</span> <span class="nav-text">顯示統計信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%AB%E5%8A%A9%E6%96%87%E6%AA%94"><span class="nav-number">4.5.</span> <span class="nav-text">幫助文檔</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%81%A2%E5%BE%A9%E6%96%87%E4%BB%B6"><span class="nav-number">5.</span> <span class="nav-text">恢復文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AAgit-add"><span class="nav-number">5.1.</span> <span class="nav-text">未git add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%B2git-add"><span class="nav-number">5.2.</span> <span class="nav-text">已git add</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%AF%94%E8%BC%83%E4%BF%AE%E6%94%B9%E5%85%A7%E5%AE%B9-diff"><span class="nav-number">6.</span> <span class="nav-text">比較修改內容(diff)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83%E7%95%B6%E5%89%8D%E6%96%87%E4%BB%B6%E5%A4%BE%E8%88%87git%E5%BA%ABHEAD%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="nav-number">6.1.</span> <span class="nav-text">比較當前文件夾與git庫HEAD的差異</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83%E4%B8%8D%E5%90%8C%E7%89%88%E6%9C%AC%E6%96%87%E4%BB%B6%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="nav-number">6.2.</span> <span class="nav-text">比較不同版本文件的差異</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AF%94%E8%BC%83git%E5%BA%AB%E6%96%87%E4%BB%B6%E7%9A%84%E5%B7%AE%E7%95%B0"><span class="nav-number">6.3.</span> <span class="nav-text">比較git庫文件的差異</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%93%8D%E4%BD%9C"><span class="nav-number">7.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%AA%E9%99%A4%E6%96%87%E4%BB%B6"><span class="nav-number">7.1.</span> <span class="nav-text">刪除文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%B4%E5%90%8D-%E7%A7%BB%E5%8B%95-%E6%96%87%E4%BB%B6"><span class="nav-number">7.2.</span> <span class="nav-text">更名(移動)文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E7%AE%A1%E7%90%86-gitignore"><span class="nav-number">8.</span> <span class="nav-text">忽略管理(.gitignore)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%BD%E7%95%A5%E7%AE%A1%E7%90%86%E6%96%87%E4%BB%B6"><span class="nav-number">8.1.</span> <span class="nav-text">忽略管理文件</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -379,6 +406,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -418,13 +448,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -451,7 +491,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -463,7 +503,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

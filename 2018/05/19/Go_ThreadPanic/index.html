@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>Golang多線程初識-day28-線程異常(panic) | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="2018Golang錯誤處理多線程goroutine">
+  <meta name="keywords" content="2018Golang錯誤處理多線程goroutine" />
   
   
   
   
   <meta name="description" content="introduction在實際業務開發中，我們可能會創建上萬個goroutine，當其中某個goroutine panic了，且沒有捕獲(recover)錯誤，那麼整個程序將會崩潰。所以，養成好習慣，每當創建一個goroutine，請記得於函數內寫下recover">
-<meta name="keywords" content="2018,Golang,錯誤處理,多線程,goroutine">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Golang多線程初識-day28-線程異常(panic)">
 <meta property="og:url" content="http://www.taroballz.com/2018/05/19/Go_ThreadPanic/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="introduction在實際業務開發中，我們可能會創建上萬個goroutine，當其中某個goroutine panic了，且沒有捕獲(recover)錯誤，那麼整個程序將會崩潰。所以，養成好習慣，每當創建一個goroutine，請記得於函數內寫下recover">
-<meta property="og:locale" content="zh-tw">
+<meta property="og:locale" content="zh_TW">
 <meta property="og:image" content="https://i.imgur.com/sfpa1Qg.jpg">
-<meta property="og:updated_time" content="2018-05-19T14:40:40.000Z">
+<meta property="article:published_time" content="2018-05-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-05-19T14:40:40.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="Golang">
+<meta property="article:tag" content="錯誤處理">
+<meta property="article:tag" content="多線程">
+<meta property="article:tag" content="goroutine">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Golang多線程初識-day28-線程異常(panic)">
-<meta name="twitter:description" content="introduction在實際業務開發中，我們可能會創建上萬個goroutine，當其中某個goroutine panic了，且沒有捕獲(recover)錯誤，那麼整個程序將會崩潰。所以，養成好習慣，每當創建一個goroutine，請記得於函數內寫下recover">
 <meta name="twitter:image" content="https://i.imgur.com/sfpa1Qg.jpg">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
@@ -45,27 +49,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -116,7 +146,7 @@
 <div class="article-gallery">
   <div class="article-gallery-photos">
     
-      <a class="article-gallery-img fancybox" href="https://i.imgur.com/sfpa1Qg.jpg" rel="gallery_ck79gahz4003rs6q76hl8ca2q">
+      <a class="article-gallery-img fancybox" target="_blank" href="https://i.imgur.com/sfpa1Qg.jpg" rel="gallery_ckhlqn49d0040clzx3mulfgw8 noopener">
         <img src="https://i.imgur.com/sfpa1Qg.jpg" itemprop="image">
       </a>
     
@@ -156,15 +186,15 @@
 <a id="more"></a>
 <hr>
 <h1 id="未捕獲錯誤"><a href="#未捕獲錯誤" class="headerlink" title="未捕獲錯誤"></a>未捕獲錯誤</h1><p>即使創建上萬個goroutine，只要其中一個<code>panic</code>，<br>程序亦無法正常執行</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map_operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">    <span class="comment">//map未初始化而panic</span></span><br><span class="line">	</span><br><span class="line">	a[<span class="string">"123"</span>] = <span class="string">"456"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunInNoError</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"I'm no Error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> RunInNoError()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> map_operation()</span><br><span class="line">	time.Sleep(time.Second*<span class="number">10</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">...</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">panic: assignment to entry in nil map</span><br><span class="line"></span><br><span class="line">oroutine 10005 [running]:</span><br><span class="line">main.magp_operation()</span><br><span class="line">	/.../main.go:12 +0x4b</span><br><span class="line">created by main.main</span><br><span class="line">	/.../main.go:22 +0x66</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map_operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">    <span class="comment">//map未初始化而panic</span></span><br><span class="line">	</span><br><span class="line">	a[<span class="string">&quot;123&quot;</span>] = <span class="string">&quot;456&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunInNoError</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;I&#x27;m no Error&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> RunInNoError()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> map_operation()</span><br><span class="line">	time.Sleep(time.Second*<span class="number">10</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result"><a href="#result" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">...</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">panic: assignment to entry in nil map</span><br><span class="line"></span><br><span class="line">oroutine 10005 [running]:</span><br><span class="line">main.magp_operation()</span><br><span class="line">	&#x2F;...&#x2F;main.go:12 +0x4b</span><br><span class="line">created by main.main</span><br><span class="line">	&#x2F;...&#x2F;main.go:22 +0x66</span><br></pre></td></tr></table></figure>
 <ul>
 <li>其中一個goroutine發生panic導致主程序全數崩潰無法正常運行</li>
 </ul>
 <hr>
 <h1 id="捕獲-recover-錯誤"><a href="#捕獲-recover-錯誤" class="headerlink" title="捕獲(recover)錯誤"></a>捕獲(recover)錯誤</h1><p>養成好習慣，不管是在匿名函數或是函數中使用goroutine，<br><strong>請務必記得，於函數開始使用<code>defer</code>搭配<code>recover</code>捕獲錯誤</strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map_operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//於函數開始使用defer搭配recover捕獲錯誤</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> err := <span class="built_in">recover</span>(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">"Error:"</span>,err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">    <span class="comment">//map未初始化而panic</span></span><br><span class="line">    </span><br><span class="line">	a[<span class="string">"123"</span>] = <span class="string">"456"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunInNoError</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">"I'm no Error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> RunInNoError()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> map_operation()</span><br><span class="line">	time.Sleep(time.Second*<span class="number">10</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">...</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">Error: assignment to entry in nil map</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">I&apos;m no Error</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">map_operation</span><span class="params">()</span></span>&#123;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">//於函數開始使用defer搭配recover捕獲錯誤</span></span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="keyword">if</span> err := <span class="built_in">recover</span>(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			fmt.Println(<span class="string">&quot;Error:&quot;</span>,err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">var</span> a <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span></span><br><span class="line">    <span class="comment">//map未初始化而panic</span></span><br><span class="line">    </span><br><span class="line">	a[<span class="string">&quot;123&quot;</span>] = <span class="string">&quot;456&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RunInNoError</span><span class="params">()</span></span>&#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;I&#x27;m no Error&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">	<span class="keyword">for</span> i:=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++&#123;</span><br><span class="line">		<span class="keyword">go</span> RunInNoError()</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">go</span> map_operation()</span><br><span class="line">	time.Sleep(time.Second*<span class="number">10</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="result-1"><a href="#result-1" class="headerlink" title="result"></a>result</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">...</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">Error: assignment to entry in nil map</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">I&#39;m no Error</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <ul>
 <li>即使其中有個goroutine發生<code>panic</code>仍不影響，其他業務及主程序的運行</li>
 </ul>
@@ -178,13 +208,13 @@
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/goroutine/">goroutine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/多線程/">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/錯誤處理/">錯誤處理</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/goroutine/" rel="tag">goroutine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%9A%E7%B7%9A%E7%A8%8B/" rel="tag">多線程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%8C%AF%E8%AA%A4%E8%99%95%E7%90%86/" rel="tag">錯誤處理</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -264,7 +294,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#未捕獲錯誤"><span class="nav-number">2.</span> <span class="nav-text">未捕獲錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#捕獲-recover-錯誤"><span class="nav-number">3.</span> <span class="nav-text">捕獲(recover)錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#introduction"><span class="nav-number">1.</span> <span class="nav-text">introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%AA%E6%8D%95%E7%8D%B2%E9%8C%AF%E8%AA%A4"><span class="nav-number">2.</span> <span class="nav-text">未捕獲錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result"><span class="nav-number">2.1.</span> <span class="nav-text">result</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8D%95%E7%8D%B2-recover-%E9%8C%AF%E8%AA%A4"><span class="nav-number">3.</span> <span class="nav-text">捕獲(recover)錯誤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#result-1"><span class="nav-number">3.1.</span> <span class="nav-text">result</span></a></li></ol></li></ol>
     
     </div>
   </aside>
@@ -318,6 +348,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -357,13 +390,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -390,7 +433,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -402,7 +445,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->

@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <script data-ad-client="ca-pub-5037436714641355" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <title>機器學習-特徵工程-文本特徵抽取 | Taroballz StudyNotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵工程特徵抽取(feature extraction)">
+  <meta name="keywords" content="Python2018機器學習(Machine Learning)特徵工程特徵抽取(feature extraction)" />
   
   
   
   
   <meta name="description" content="文本特徵抽取 對文本數據進行特徵值化 把單詞出現的次數作為特徵對文本進行特徵值化   使用sklearn.feature_extraction.text.CountVectorizer 應用場景：文本分類、情感分析">
-<meta name="keywords" content="Python,2018,機器學習(Machine Learning),特徵工程,特徵抽取(feature extraction)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="機器學習-特徵工程-文本特徵抽取">
 <meta property="og:url" content="http://www.taroballz.com/2018/07/05/ML_TextFeatureExtraction/index.html">
 <meta property="og:site_name" content="Taroballz StudyNotes">
 <meta property="og:description" content="文本特徵抽取 對文本數據進行特徵值化 把單詞出現的次數作為特徵對文本進行特徵值化   使用sklearn.feature_extraction.text.CountVectorizer 應用場景：文本分類、情感分析">
-<meta property="og:locale" content="zh-tw">
-<meta property="og:updated_time" content="2019-04-07T06:47:32.000Z">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2018-07-04T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-04-07T06:47:32.000Z">
+<meta property="article:author" content="Taroballz">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="2018">
+<meta property="article:tag" content="機器學習(Machine Learning)">
+<meta property="article:tag" content="特徵工程">
+<meta property="article:tag" content="特徵抽取(feature extraction)">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="機器學習-特徵工程-文本特徵抽取">
-<meta name="twitter:description" content="文本特徵抽取 對文本數據進行特徵值化 把單詞出現的次數作為特徵對文本進行特徵值化   使用sklearn.feature_extraction.text.CountVectorizer 應用場景：文本分類、情感分析">
   
     <link rel="alternate" href="/atom.xml" title="Taroballz StudyNotes" type="application/atom+xml">
   
@@ -43,27 +47,53 @@
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
 
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Oswald%3A300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="/js/jquery-3.1.1.min.js"></script>
+
+  
+<script src="/js/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="/css/bootstrap.css">
-  <link rel="stylesheet" href="/css/fashion.css">
-  <link rel="stylesheet" href="/css/glyphs.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <link rel="stylesheet" href="/css/bootstrap.css" >
+  <link rel="stylesheet" href="/css/fashion.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
 
-</head>
-</html>
+<meta name="generator" content="Hexo 5.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+
 
 
   <body data-spy="scroll" data-target="#toc" data-offset="50">
 
 
   
+  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="site-header-image">
+    <img id="originBg" width="100%" alt="Hike News" src="">
+  </div>
+
+  <div id="header-blur" class="site-header-image blur" style="position: absolute; top:0; height: 207px; min-height: 207px; min-width: 100%;">
+    <img id="blurBg" width="100%" style="top: 96%" alt="Hike News" src="">
+  </div>
+
+  <script>
+        var imgUrls = "css/images/pose01.jpg,https://source.unsplash.com/collection/954550/1920x1080,https://source.unsplash.com/collection/954550/1920x1081".split(",");
+        var random = Math.floor((Math.random() * imgUrls.length ));
+        if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+          document.getElementById("originBg").src=imgUrls[random];
+          document.getElementById("blurBg").src=imgUrls[random];
+        } else {
+          document.getElementById("originBg").src='/' + imgUrls[random];
+          document.getElementById("blurBg").src='/' + imgUrls[random];
+        }
+    </script>
 
 
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><header id="allheader" class="site-header" role="banner" 
-   >
+
+
+<header id="allheader" class="site-header" role="banner" 
+   style="width: 100%; position: absolute; top:0; background: rgba(255,255,255,.8);"  >
   <div class="clearfix container">
       <div class="site-branding">
 
@@ -130,7 +160,7 @@
 
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
  
       
 	<span id="busuanzi_container_page_pv">
@@ -173,7 +203,7 @@
 <li>對每篇文章，在此的列表裡進行統計每個詞的出現次數並返回矩陣</li>
 </ol>
 <h4 id="get-feature-names"><a href="#get-feature-names" class="headerlink" title="get_feature_names()"></a>get_feature_names()</h4><p>返回值: 為一列表存放文章所出現的單詞</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[&apos;an&apos;, &apos;apple&apos;, &apos;away&apos;, &apos;bird&apos;, </span><br><span class="line">&apos;bridge&apos;, &apos;bush&apos;, &apos;come&apos;, &apos;cross&apos;, </span><br><span class="line">&apos;day&apos;, &apos;doctor&apos;, &apos;hand&apos;, &apos;in&apos;, &apos;is&apos;, </span><br><span class="line">&apos;it&apos;, &apos;keeps&apos;, &apos;that&apos;, &apos;the&apos;, &apos;to&apos;, </span><br><span class="line">&apos;two&apos;, &apos;we&apos;, &apos;when&apos;, &apos;worth&apos;]</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[&#39;an&#39;, &#39;apple&#39;, &#39;away&#39;, &#39;bird&#39;, </span><br><span class="line">&#39;bridge&#39;, &#39;bush&#39;, &#39;come&#39;, &#39;cross&#39;, </span><br><span class="line">&#39;day&#39;, &#39;doctor&#39;, &#39;hand&#39;, &#39;in&#39;, &#39;is&#39;, </span><br><span class="line">&#39;it&#39;, &#39;keeps&#39;, &#39;that&#39;, &#39;the&#39;, &#39;to&#39;, </span><br><span class="line">&#39;two&#39;, &#39;we&#39;, &#39;when&#39;, &#39;worth&#39;]</span><br></pre></td></tr></table></figure>
 <h3 id="inverse-transform-X"><a href="#inverse-transform-X" class="headerlink" title="inverse_transform(X)"></a>inverse_transform(X)</h3><p>X: array陣列或者sparse矩陣<br>返回值： 轉換之前數據格式</p>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><ol>
 <li>實例化類<code>CountVectorizer</code></li>
@@ -182,7 +212,7 @@
 <ul>
 <li>注意返回格式,利用<code>toarray()</code>進行<strong>sparse矩陣轉換array陣列</strong></li>
 </ul>
-<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">textData = [</span><br><span class="line">    <span class="string">"an apple a day keeps the doctor away"</span>,</span><br><span class="line">    <span class="string">"a bird in the hand is worth two the bush"</span>,</span><br><span class="line">    <span class="string">"cross that bridge when we come to it"</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#對文本進行特徵值化</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">countvec</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    cv = CountVectorizer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    cv_data = cv.fit_transform(textData)</span><br><span class="line"></span><br><span class="line">    print(cv_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    countvec()</span><br></pre></td></tr></table></figure>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line"></span><br><span class="line">textData = [</span><br><span class="line">    <span class="string">&quot;an apple a day keeps the doctor away&quot;</span>,</span><br><span class="line">    <span class="string">&quot;a bird in the hand is worth two the bush&quot;</span>,</span><br><span class="line">    <span class="string">&quot;cross that bridge when we come to it&quot;</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment">#對文本進行特徵值化</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">countvec</span>():</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    cv = CountVectorizer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    cv_data = cv.fit_transform(textData)</span><br><span class="line"></span><br><span class="line">    print(cv_data)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    countvec()</span><br></pre></td></tr></table></figure>
 <h3 id="返回sparse矩陣"><a href="#返回sparse矩陣" class="headerlink" title="返回sparse矩陣"></a>返回sparse矩陣</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">  (0, 2)	1</span><br><span class="line">  (0, 9)	1</span><br><span class="line">  (0, 16)	1</span><br><span class="line">  (0, 14)	1</span><br><span class="line">  (0, 8)	1</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <h3 id="得到一般矩陣"><a href="#得到一般矩陣" class="headerlink" title="得到一般矩陣"></a>得到一般矩陣</h3><ul>
 <li>須調用sparse矩陣的<code>toarray()</code>方法 —-&gt; <code>cv_data.toarray()</code><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[1 1 1 0 0 0 0 0 1 1 0 0 0 0 1 0 1 0 0 0 0 0]</span><br><span class="line"> [0 0 0 1 0 1 0 0 0 0 1 1 1 0 0 0 2 0 1 0 0 1]</span><br><span class="line"> [0 0 0 0 1 0 1 1 0 0 0 0 0 1 0 1 0 1 0 1 1 0]]</span><br></pre></td></tr></table></figure>
@@ -191,7 +221,7 @@
 <hr>
 <h1 id="中文分詞處理-jieba"><a href="#中文分詞處理-jieba" class="headerlink" title="中文分詞處理(jieba)"></a>中文分詞處理(jieba)</h1><p>須對中文文本進行特徵抽取的前處理</p>
 <h2 id="下載"><a href="#下載" class="headerlink" title="下載"></a>下載</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install jieba</span><br></pre></td></tr></table></figure>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">new_text = jieba.cut(<span class="string">"我熱愛機器學習"</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line">new_text = jieba.cut(<span class="string">&quot;我熱愛機器學習&quot;</span>)</span><br></pre></td></tr></table></figure>
 <h2 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h2><p>返回值：詞語產生器(generator)</p>
 <ol>
 <li>用list()方法得到分詞的結果<br> <code>new_text = list(new_text)</code></li>
@@ -231,7 +261,7 @@
 <h4 id="get-feature-names-1"><a href="#get-feature-names-1" class="headerlink" title="get_feature_names()"></a>get_feature_names()</h4><ul>
 <li>返回值：單詞列表</li>
 </ul>
-<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"></span><br><span class="line">Text_Data = [<span class="string">"ㄧ個人的快樂， 不是因為他擁有的多，而是因為他計較得少。"</span>,</span><br><span class="line">             <span class="string">"人的心地是一畦田，土地沒有播下好種子，也長不出好的果實。"</span>,</span><br><span class="line">             <span class="string">"人生的煩惱，是不分貧富貴賤的，透過煩惱轉成智慧，這個煩惱才有意義。"</span>,</span><br><span class="line">             <span class="string">"真正的快樂是施捨後的那份清靜、安慰與喜悅。"</span>]</span><br><span class="line">NewTextData = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jieba_cut</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> text <span class="keyword">in</span> Text_Data:</span><br><span class="line">        split_result = list(jieba.cut(text))</span><br><span class="line">        sentence = <span class="string">" "</span>.join(split_result)</span><br><span class="line">        NewTextData.append(sentence)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tfidfvec</span><span class="params">()</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    tfidf = TfidfVectorizer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    trans_data = tfidf.fit_transform(NewTextData)</span><br><span class="line"></span><br><span class="line">    print(trans_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    jieba_cut()</span><br><span class="line">    tfidfvec()</span><br></pre></td></tr></table></figure>
+<h2 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfVectorizer</span><br><span class="line"></span><br><span class="line">Text_Data = [<span class="string">&quot;ㄧ個人的快樂， 不是因為他擁有的多，而是因為他計較得少。&quot;</span>,</span><br><span class="line">             <span class="string">&quot;人的心地是一畦田，土地沒有播下好種子，也長不出好的果實。&quot;</span>,</span><br><span class="line">             <span class="string">&quot;人生的煩惱，是不分貧富貴賤的，透過煩惱轉成智慧，這個煩惱才有意義。&quot;</span>,</span><br><span class="line">             <span class="string">&quot;真正的快樂是施捨後的那份清靜、安慰與喜悅。&quot;</span>]</span><br><span class="line">NewTextData = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">jieba_cut</span>():</span></span><br><span class="line">    <span class="keyword">for</span> text <span class="keyword">in</span> Text_Data:</span><br><span class="line">        split_result = <span class="built_in">list</span>(jieba.cut(text))</span><br><span class="line">        sentence = <span class="string">&quot; &quot;</span>.join(split_result)</span><br><span class="line">        NewTextData.append(sentence)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tfidfvec</span>():</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 實例化</span></span><br><span class="line">    tfidf = TfidfVectorizer()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 調用fit_transform</span></span><br><span class="line">    trans_data = tfidf.fit_transform(NewTextData)</span><br><span class="line"></span><br><span class="line">    print(trans_data)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    jieba_cut()</span><br><span class="line">    tfidfvec()</span><br></pre></td></tr></table></figure>
 <h3 id="返回sparse矩陣-1"><a href="#返回sparse矩陣-1" class="headerlink" title="返回sparse矩陣"></a>返回sparse矩陣</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">  (0, 9)	0.2685092134645423</span><br><span class="line">  (0, 2)	0.34056989045654285</span><br><span class="line">  (0, 5)	0.6811397809130857</span><br><span class="line">  (0, 11)	0.34056989045654285</span><br><span class="line">  (0, 21)	0.34056989045654285</span><br><span class="line">  (0, 22)	0.34056989045654285</span><br><span class="line">  (1, 8)	0.3535533905932738</span><br><span class="line">  (1, 18)	0.3535533905932738</span><br><span class="line">...</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
 <h3 id="得到一般矩陣-1"><a href="#得到一般矩陣-1" class="headerlink" title="得到一般矩陣"></a>得到一般矩陣</h3><ul>
 <li><code>trans_data.toarray()</code></li>
@@ -243,17 +273,17 @@
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/Python機器學習/">Python機器學習</a>
+    <a class="article-category-link" href="/categories/Python%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92/">Python機器學習</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/機器學習-Machine-Learning/">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵工程/">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/特徵抽取-feature-extraction/">特徵抽取(feature extraction)</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/2018/" rel="tag">2018</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92-Machine-Learning/" rel="tag">機器學習(Machine Learning)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E5%B7%A5%E7%A8%8B/" rel="tag">特徵工程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%89%B9%E5%BE%B5%E6%8A%BD%E5%8F%96-feature-extraction/" rel="tag">特徵抽取(feature extraction)</a></li></ul>
 
       
         
 	<section id="comments" class="comment">
 	  <div id="disqus_thread">
-	  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	  <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 	  </div>
 	</section>
 
@@ -333,7 +363,7 @@
     <div id="toc" class="toc-article">
     <strong class="toc-title">Contents</strong>
     
-      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文本特徵抽取"><span class="nav-number">1.</span> <span class="nav-text">文本特徵抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountVectorizer-stop-words"><span class="nav-number">1.1.</span> <span class="nav-text">CountVectorizer(stop_words=[])</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">1.1.1.</span> <span class="nav-text">fit_transform(X)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get-feature-names"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">get_feature_names()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">1.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">1.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">1.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回sparse矩陣"><span class="nav-number">1.3.1.</span> <span class="nav-text">返回sparse矩陣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#得到一般矩陣"><span class="nav-number">1.3.2.</span> <span class="nav-text">得到一般矩陣</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#中文分詞處理-jieba"><span class="nav-number">2.</span> <span class="nav-text">中文分詞處理(jieba)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下載"><span class="nav-number">2.1.</span> <span class="nav-text">下載</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">2.3.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-idf分析"><span class="nav-number">3.</span> <span class="nav-text">tf-idf分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#作用"><span class="nav-number">3.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文本特徵抽取-Tfidf"><span class="nav-number">3.2.</span> <span class="nav-text">文本特徵抽取-Tfidf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TfidfVectorizer-stop-words-None-…"><span class="nav-number">3.2.1.</span> <span class="nav-text">TfidfVectorizer(stop_words=None,…)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inverse-transform-X-1"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get-feature-names-1"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">get_feature_names()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">3.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#返回sparse矩陣-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">返回sparse矩陣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#得到一般矩陣-1"><span class="nav-number">3.3.2.</span> <span class="nav-text">得到一般矩陣</span></a></li></ol></li></ol></li></ol>
+      <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E7%89%B9%E5%BE%B5%E6%8A%BD%E5%8F%96"><span class="nav-number">1.</span> <span class="nav-text">文本特徵抽取</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountVectorizer-stop-words"><span class="nav-number">1.1.</span> <span class="nav-text">CountVectorizer(stop_words&#x3D;[])</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fit-transform-X"><span class="nav-number">1.1.1.</span> <span class="nav-text">fit_transform(X)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#get-feature-names"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">get_feature_names()</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#inverse-transform-X"><span class="nav-number">1.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">1.2.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">1.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9Esparse%E7%9F%A9%E9%99%A3"><span class="nav-number">1.3.1.</span> <span class="nav-text">返回sparse矩陣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%97%E5%88%B0%E4%B8%80%E8%88%AC%E7%9F%A9%E9%99%A3"><span class="nav-number">1.3.2.</span> <span class="nav-text">得到一般矩陣</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%AD%E6%96%87%E5%88%86%E8%A9%9E%E8%99%95%E7%90%86-jieba"><span class="nav-number">2.</span> <span class="nav-text">中文分詞處理(jieba)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">下載</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#tips"><span class="nav-number">2.3.</span> <span class="nav-text">tips</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tf-idf%E5%88%86%E6%9E%90"><span class="nav-number">3.</span> <span class="nav-text">tf-idf分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8"><span class="nav-number">3.1.</span> <span class="nav-text">作用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E7%89%B9%E5%BE%B5%E6%8A%BD%E5%8F%96-Tfidf"><span class="nav-number">3.2.</span> <span class="nav-text">文本特徵抽取-Tfidf</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TfidfVectorizer-stop-words-None-%E2%80%A6"><span class="nav-number">3.2.1.</span> <span class="nav-text">TfidfVectorizer(stop_words&#x3D;None,…)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fit-transform-X-1"><span class="nav-number">3.2.1.1.</span> <span class="nav-text">fit_transform(X)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#inverse-transform-X-1"><span class="nav-number">3.2.1.2.</span> <span class="nav-text">inverse_transform(X)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#get-feature-names-1"><span class="nav-number">3.2.1.3.</span> <span class="nav-text">get_feature_names()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example-1"><span class="nav-number">3.3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%94%E5%9B%9Esparse%E7%9F%A9%E9%99%A3-1"><span class="nav-number">3.3.1.</span> <span class="nav-text">返回sparse矩陣</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%97%E5%88%B0%E4%B8%80%E8%88%AC%E7%9F%A9%E9%99%A3-1"><span class="nav-number">3.3.2.</span> <span class="nav-text">得到一般矩陣</span></a></li></ol></li></ol></li></ol>
     
     </div>
   </aside>
@@ -387,6 +417,9 @@
 
     <!-- headerblur min height -->
     
+      var headerblur = document.getElementById("header-blur");
+      headerblur.style.minHeight = window.getComputedStyle(document.getElementById("allheader"), null).height;
+    
     
 </script>
     
@@ -426,13 +459,23 @@
 </script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
 
 
 <script src="/js/script.js"></script>
+
+
 <script src="/js/bootstrap.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 
@@ -459,7 +502,7 @@
   <a id="rocket" href="#top" class=""></a>
   <script type="text/javascript" src="/js/totop.js" async=""></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+  MathJax.Hub.Config({{ JSON.stringify(config) }});
 </script>
 
 <script type="text/x-mathjax-config">
@@ -471,7 +514,7 @@
   });
 </script>
 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+<script type="text/javascript" src="{{ src }}">
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
